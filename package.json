@@ -9,7 +9,7 @@
     "build": "rush rebuild",
     "test": "rush test",
     "test-clone": "rm -rf ../typescript-plugins-of-mine-test && mkdir ../typescript-plugins-of-mine-test && cd ../typescript-plugins-of-mine-test && git clone ../typescript-plugins-of-mine/.git &&  cd typescript-plugins-of-mine  && npm install && npm test",
-    "postinstall": "rush link && rush build && ln-cli sample-ts-plugin1 --force --path common/temp/node_modules"
+    "postinstall": "rush install && rush link && rush build && ln-cli sample-ts-plugin1 --force --path common/temp/node_modules"
   },
   "devDependencies": {
     "@microsoft/rush": "^4.3.2",
