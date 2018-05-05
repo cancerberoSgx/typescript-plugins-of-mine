@@ -4,7 +4,7 @@
   "description": "https://github.com/Microsoft/TypeScript/wiki/Writing-a-Language-Service-Plugin",
   "main": "dist/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "echo \"Error: no test specified\" && exit 0",
     "build": "tsc"
   },
   "keywords": [],

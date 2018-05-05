@@ -1,0 +1,10 @@
+internal/modules/cjs/loader.js:550
+    throw err;
+    ^
+
+Error: Cannot find module '/home/sg/git/typescript-plugins-of-mine/typescript-compiler-ast-tests/dist'
+    at Function.Module._resolveFilename (internal/modules/cjs/loader.js:548:15)
+    at Function.Module._load (internal/modules/cjs/loader.js:475:25)
+    at Function.Module.runMain (internal/modules/cjs/loader.js:695:10)
+    at startup (internal/bootstrap/node.js:201:19)
+    at bootstrapNodeJSCore (internal/bootstrap/node.js:516:3)

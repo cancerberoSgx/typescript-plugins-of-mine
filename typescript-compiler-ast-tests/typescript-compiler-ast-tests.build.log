@@ -1,0 +1,2 @@
+>>> typescript-compiler-ast-tests
+ts-node src/test-all.ts 

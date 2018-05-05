@@ -1,0 +1,12 @@
+{
+  "$schema": "https://dev.office.com/json-schemas/rush/command-line.schema.json",
+  "customCommands": [
+    {
+      "name": "test",
+      "summary": "test",
+      "documentation": "test",
+      "parallelized": true
+    }
+  ]
+
+}

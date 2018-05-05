@@ -1,0 +1,12 @@
+{
+  "files": {
+    "sample-ts-plugin1-sample-project/.vscode/settings.json": "3662b3700e22ee7aadcc181f09f9f5bb070ab5c2",
+    "sample-ts-plugin1-sample-project/package.json": "d0b0b5a910168250f6dd34f0d3e0e40f7e3aa9c0",
+    "sample-ts-plugin1-sample-project/src/test1.ts": "5e512a94b9c30b5382590d9313900dc06294408d",
+    "sample-ts-plugin1-sample-project/tsconfig.json": "860dd82bc0e4a4865201f1abd9a4b318827b1d3f",
+    "sample-ts-plugin1-sample-project/package-deps.json": "eff5e610e88d9c3029841ff9f5d26c0ae45d4861",
+    "sample-ts-plugin1-sample-project/sample-ts-plugin1-sample-project.build.log": "3ce790a0708b89e1241f430fd1644631a7cf16d4",
+    "common/config/rush/npm-shrinkwrap.json": "1275ad2b1d44772dae84b1cc5c686a8ba358b384"
+  },
+  "arguments": "echo \"Error: no test specified\" && exit 0 "
+}

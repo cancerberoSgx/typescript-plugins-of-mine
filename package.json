@@ -1,12 +1,15 @@
 {
   "name": "typescript-plugins-of-mine",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "description": "typescript plugins , test and experiments of cancerberosgx",
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "scripts": {
+    "build": "rush rebuild",
+    "test": "rush rebuild && rush test"
+  },
+  "devDependencies": {
+    "@microsoft/rush": "^4.3.2"
+  }
 }
