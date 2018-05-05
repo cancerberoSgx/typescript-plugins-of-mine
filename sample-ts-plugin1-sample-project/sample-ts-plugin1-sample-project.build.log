@@ -1,4 +1,3 @@
 >>> sample-ts-plugin1-sample-project
-Found mismatch: "sample-ts-plugin1-sample-project/package-deps.json": "eff5e610e88d9c3029841ff9f5d26c0ae45d4861" !== "5cd1fa4c362bf50271e46b933a5cb03739882834"
 echo "Error: no test specified" && exit 0 
 Error: no test specified

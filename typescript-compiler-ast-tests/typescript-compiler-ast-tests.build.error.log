@@ -1,10 +1,15 @@
-internal/modules/cjs/loader.js:550
-    throw err;
-    ^
 
-Error: Cannot find module '/home/sg/git/typescript-plugins-of-mine/typescript-compiler-ast-tests/dist'
-    at Function.Module._resolveFilename (internal/modules/cjs/loader.js:548:15)
-    at Function.Module._load (internal/modules/cjs/loader.js:475:25)
-    at Function.Module.runMain (internal/modules/cjs/loader.js:695:10)
-    at startup (internal/bootstrap/node.js:201:19)
-    at bootstrapNodeJSCore (internal/bootstrap/node.js:516:3)
+/home/sg/git/typescript-plugins-of-mine/typescript-compiler-ast-tests/src/ts-util-test.ts:30
+ok(false)
+^
+AssertionError [ERR_ASSERTION]: false == true
+    at Object.<anonymous> (/home/sg/git/typescript-plugins-of-mine/typescript-compiler-ast-tests/src/ts-util-test.ts:30:1)
+    at Module._compile (internal/modules/cjs/loader.js:654:30)
+    at Module.m._compile (/home/sg/git/typescript-plugins-of-mine/common/temp/node_modules/ts-node/src/index.ts:403:23)
+    at Module._extensions..js (internal/modules/cjs/loader.js:665:10)
+    at Object.require.extensions.(anonymous function) [as .ts] (/home/sg/git/typescript-plugins-of-mine/common/temp/node_modules/ts-node/src/index.ts:406:12)
+    at Module.load (internal/modules/cjs/loader.js:566:32)
+    at tryModuleLoad (internal/modules/cjs/loader.js:506:12)
+    at Function.Module._load (internal/modules/cjs/loader.js:498:3)
+    at Module.require (internal/modules/cjs/loader.js:598:17)
+    at require (internal/modules/cjs/helpers.js:11:18)

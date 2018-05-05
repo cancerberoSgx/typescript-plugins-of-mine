@@ -25,8 +25,7 @@ function compileProjectTest() {
 
 export function tsUtilTest(){
   compileFileTest()
-  compileProjectTest()
-  
+  compileProjectTest() 
 }
 // ok(false)
 // function refactorTry1() {
