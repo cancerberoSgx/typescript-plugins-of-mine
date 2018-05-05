@@ -1,8 +1,7 @@
 {
   "files": {
-    "sample-ts-plugin1/package-deps.json": "f60652cf9ed59dda648eb952e9f23c86f4a1a1dc",
+    "sample-ts-plugin1/package-deps.json": "5a2ba36aac4112f8244e6b8bfc6164ffcd5f5282",
     "sample-ts-plugin1/package.json": "56184cfe65b18fdda5c8582ec57e1eb178e40130",
-    "sample-ts-plugin1/sample-ts-plugin1.build.log": "269b2f1cbe32cecfd46749b49664147360a91907",
     "sample-ts-plugin1/src/index.ts": "49b75ec02158de4fcf7d4da367ed840f35959658",
     "sample-ts-plugin1/tsconfig.json": "c6ad0ff31146ea0f6d704cdb0b6545fbb01d6aae",
     "common/config/rush/npm-shrinkwrap.json": "1275ad2b1d44772dae84b1cc5c686a8ba358b384"
