@@ -8,7 +8,7 @@
   "scripts": {
     "build": "rush rebuild",
     "test": "rush test",
-    "test-clone": "rm -rf ../typescript-plugins-of-mine-test && mkdir ../typescript-plugins-of-mine-test && cd ../typescript-plugins-of-mine-test && git clone ../typescript-plugins-of-mine/.git &&  cd typescript-plugins-of-mine  && npm install  && npm test"
+    "test-clone": "rm -rf ../typescript-plugins-of-mine-test && mkdir ../typescript-plugins-of-mine-test && cd ../typescript-plugins-of-mine-test && git clone ../typescript-plugins-of-mine/.git &&  cd typescript-plugins-of-mine  && rush install && npm test"
   },
   "devDependencies": {
     "@microsoft/rush": "^4.3.2"
