@@ -15,3 +15,15 @@ How to test plugins. For example, we have sample-ts-plugin1 and sample-ts-plugin
 * now make a change in the plugin, like changing the string "sebarefactiondesc", run "rush rebuild", restart ts server in vscode and that label should be shown as refactor suggestion label. 
 * for debugging and seeing messages from plugin in tsserver exec: 
  `export TSS_LOG="-logToFile true -file `pwd`/tsserver_log.log -level verbose"`
+
+
+## useful links
+ * https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API
+ * https://github.com/Microsoft/TypeScript/wiki/Writing-a-Language-Service-Plugin
+
+ * https://github.com/angular/angular/blob/master/packages/language-service/src/
+
+
+## TODO
+
+ * sample-ts-plugin docco and static pages - is a ts plugin tutorial!!!

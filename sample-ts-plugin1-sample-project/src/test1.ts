@@ -1,11 +1,17 @@
-class A{
-  si: any;
-  callee=1
-  caller=2
-  getDay(){}
-  thissitheonlyautocompleted=99
+class Banana {
+  callee = 1
+  caller = 2
+  getDay() { }
+  thisIsTheOnlyThatWillAutoComplete = 99
 }
+const banana = new Banana()
 
-const a = new A()
+/*
+first we show that autocomplete in banana filter some 
+members like callee, caller and getDay
 
-// a.
+Second, we show that when we select the class identifier
+'banana' our refactor is suggested and it works, but
+when we select other identifiers the suggestion is not 
+shown
+*/

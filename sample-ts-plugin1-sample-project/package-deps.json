@@ -1,9 +1,9 @@
 {
   "files": {
     "sample-ts-plugin1-sample-project/.vscode/settings.json": "3662b3700e22ee7aadcc181f09f9f5bb070ab5c2",
-    "sample-ts-plugin1-sample-project/package-deps.json": "1c40fa96f9454cd26429f438916366ad62b0e746",
+    "sample-ts-plugin1-sample-project/package-deps.json": "9b6c20ecafe6120c9e40e7a377d1099beb61dad8",
     "sample-ts-plugin1-sample-project/package.json": "d0b0b5a910168250f6dd34f0d3e0e40f7e3aa9c0",
-    "sample-ts-plugin1-sample-project/src/test1.ts": "f714ca630ecc40735f7376454739483cdfd3577e",
+    "sample-ts-plugin1-sample-project/src/test1.ts": "f3140e28c1583dff335fffa79d364386c855fe2b",
     "sample-ts-plugin1-sample-project/tsconfig.json": "860dd82bc0e4a4865201f1abd9a4b318827b1d3f",
     "common/config/rush/npm-shrinkwrap.json": "1275ad2b1d44772dae84b1cc5c686a8ba358b384"
   },

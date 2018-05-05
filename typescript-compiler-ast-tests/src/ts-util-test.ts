@@ -1,18 +1,23 @@
 import { dumpAst, compileFile, compileProject } from './ts-util';
-import { ok, equal, } from 'assert';
+import { ok, equal, fail, } from 'assert';
 import { resolve, join } from 'path';
 import ts from 'typescript';
 
 function compileFileTest() {
   const filePath = './tests/assets/file1.ts'
   const ast = compileFile(filePath).getSourceFile(filePath)
-  ok(ast)
   if (ast) {
     const dumped = dumpAst(ast)
+    console.log(dumped);
+    
     ok(dumped.includes('InterfaceDeclaration'))
     ok(dumped.includes('ClassDeclaration'))
     ok(dumped.includes('HeritageClause'))
   }
+  else{
+    fail('no ast')
+  }
+  
 }
 
 
