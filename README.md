@@ -1,4 +1,4 @@
-Some experiments with typescript compiler, and Language Service plugins.
+Experiments with typescript compiler API, and Language Service plugins.
 
 Note: this is a monorepo made with http://rushjs.io/
 
