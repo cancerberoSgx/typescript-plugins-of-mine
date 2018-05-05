@@ -1,3 +1,0 @@
->>> sample-ts-plugin1-sample-project
-echo "Error: no test specified" && exit 0 
-Error: no test specified

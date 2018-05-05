@@ -1,12 +1,13 @@
 {
   "files": {
     "sample-ts-plugin1-sample-project/.vscode/settings.json": "3662b3700e22ee7aadcc181f09f9f5bb070ab5c2",
-    "sample-ts-plugin1-sample-project/package-deps.json": "b3a10fa04f3c738bcb882a3870570adf93ef07b4",
+    "sample-ts-plugin1-sample-project/package-deps.json": "8fdb8a8a42009dfd12e60d371908809d9daa9c9d",
     "sample-ts-plugin1-sample-project/package.json": "d0b0b5a910168250f6dd34f0d3e0e40f7e3aa9c0",
-    "sample-ts-plugin1-sample-project/sample-ts-plugin1-sample-project.build.log": "64ad416292182bf13cd34c18ddbf06dcf0fbde9d",
-    "sample-ts-plugin1-sample-project/src/test1.ts": "5e512a94b9c30b5382590d9313900dc06294408d",
+    "sample-ts-plugin1-sample-project/src/test1.ts": "c79e210513472bee2e1002e034916ef64f2207dc",
     "sample-ts-plugin1-sample-project/tsconfig.json": "860dd82bc0e4a4865201f1abd9a4b318827b1d3f",
+    "sample-ts-plugin1-sample-project/ti-31190.log": "8686236a229ab3a96b0b9147df6f313dee0260ca",
+    "sample-ts-plugin1-sample-project/tsserver_log.txt": "78074e1812aa38e06ffd3f608e5b476380fd10d0",
     "common/config/rush/npm-shrinkwrap.json": "1275ad2b1d44772dae84b1cc5c686a8ba358b384"
   },
-  "arguments": "echo \"Error: no test specified\" && exit 0 "
+  "arguments": "tsc "
 }

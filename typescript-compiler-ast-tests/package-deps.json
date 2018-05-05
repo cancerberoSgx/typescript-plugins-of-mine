@@ -1,7 +1,7 @@
 {
   "files": {
     "typescript-compiler-ast-tests/.vscode/settings.json": "3662b3700e22ee7aadcc181f09f9f5bb070ab5c2",
-    "typescript-compiler-ast-tests/package-deps.json": "83391b8d7bcbbe1103f804dab799df1520e47e03",
+    "typescript-compiler-ast-tests/package-deps.json": "9697036c3c1db4c12fd54cba76d34aa37405e61f",
     "typescript-compiler-ast-tests/package.json": "ec7075ab19bbcd8f3ccd2c10b42bd5320db5a949",
     "typescript-compiler-ast-tests/src/assets/simpletsconfig.json": "5902acffe279ae28047035c684432e271038ea72",
     "typescript-compiler-ast-tests/src/refactor-try1-test.ts": "d17b6266b7db6bedb392f6875a3f84e036db9bee",
@@ -17,8 +17,8 @@
     "typescript-compiler-ast-tests/tests/transpileFileTest.ts": "ee9d014c60837df38b24e7bb2efc55922969af89",
     "typescript-compiler-ast-tests/tsconfig.json": "860dd82bc0e4a4865201f1abd9a4b318827b1d3f",
     "typescript-compiler-ast-tests/typescript-compiler-ast-tests.build.error.log": "45efd2c53e20a2696212c776efe0a76ae81ab070",
-    "typescript-compiler-ast-tests/typescript-compiler-ast-tests.build.log": "927a5b83554ff447b5f518a4599aaec92647d911",
+    "typescript-compiler-ast-tests/typescript-compiler-ast-tests.build.log": "11539b89c23f1ca5b390eeb28972acd14efab919",
     "common/config/rush/npm-shrinkwrap.json": "1275ad2b1d44772dae84b1cc5c686a8ba358b384"
   },
-  "arguments": "ts-node src/test-all.ts "
+  "arguments": "tsc "
 }

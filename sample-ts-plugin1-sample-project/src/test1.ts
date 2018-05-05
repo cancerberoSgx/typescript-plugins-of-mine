@@ -3,8 +3,9 @@ class A{
   callee=1
   caller=2
   getDay(){}
-  sisepuede=99
+  thissitheonlyautocompleted=99
 }
 
 const a = new A()
-// a.si
+
+// a.
