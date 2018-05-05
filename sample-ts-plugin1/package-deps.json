@@ -1,6 +1,6 @@
 {
   "files": {
-    "sample-ts-plugin1/package-deps.json": "5a2ba36aac4112f8244e6b8bfc6164ffcd5f5282",
+    "sample-ts-plugin1/package-deps.json": "9d3ac5066ee48f10a333b65e121522580114182d",
     "sample-ts-plugin1/package.json": "56184cfe65b18fdda5c8582ec57e1eb178e40130",
     "sample-ts-plugin1/src/index.ts": "49b75ec02158de4fcf7d4da367ed840f35959658",
     "sample-ts-plugin1/tsconfig.json": "c6ad0ff31146ea0f6d704cdb0b6545fbb01d6aae",

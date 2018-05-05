@@ -1,7 +1,7 @@
 {
   "files": {
     "typescript-compiler-ast-tests/.vscode/settings.json": "3662b3700e22ee7aadcc181f09f9f5bb070ab5c2",
-    "typescript-compiler-ast-tests/package-deps.json": "93eb6cd3e575fca6ecab99f0733a0de5b262cdae",
+    "typescript-compiler-ast-tests/package-deps.json": "0f42a3857ac0264aa177bc7a7ab41afddc177f8c",
     "typescript-compiler-ast-tests/package.json": "ec7075ab19bbcd8f3ccd2c10b42bd5320db5a949",
     "typescript-compiler-ast-tests/src/assets/simpletsconfig.json": "5902acffe279ae28047035c684432e271038ea72",
     "typescript-compiler-ast-tests/src/refactor-try1-test.ts": "d17b6266b7db6bedb392f6875a3f84e036db9bee",
