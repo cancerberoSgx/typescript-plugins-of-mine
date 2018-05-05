@@ -3,7 +3,9 @@
 // 
 // Also it implements a refactor suggestion, that appears when user has cursor over a class or interface declaration name. It will replace that name with a fixed string - nothing useful. 
 //
-// [See it in action]('../plugin-screencast.gif)
+// **Screencast**: 
+// 
+// ![See it in action](../plugin-screencast.gif)
 
 import * as ts_module from '../node_modules/typescript/lib/tsserverlibrary'
 

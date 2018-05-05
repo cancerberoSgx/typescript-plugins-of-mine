@@ -3,7 +3,10 @@ Experiments with typescript compiler API, and Language Service plugins.
 Note: this is a monorepo made with http://rushjs.io/
 
 
-## testing sample-ts-plugin1
+## sample-ts-plugin1
+
+My first plugin that customize autocomplete suggestions and add a refactor suggestion. See the tutorial - with code and screen-cast here : 
+https://cancerberosgx.github.io/typescript-plugins-of-mine/sample-ts-plugin1/src/
 
 How to test plugins. For example, we have sample-ts-plugin1 and sample-ts-plugin1-sample-project
 
