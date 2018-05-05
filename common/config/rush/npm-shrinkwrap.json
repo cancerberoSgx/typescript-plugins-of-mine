@@ -1,0 +1,27 @@
+{
+  "name": "rush-common",
+  "version": "0.0.0",
+  "lockfileVersion": 1,
+  "requires": true,
+  "dependencies": {
+    "@rush-temp/sample-ts-plugin1": {
+      "version": "file:projects/sample-ts-plugin1.tgz",
+      "integrity": "sha512-CD/MohIw6wiuG8nkRJD5ZxhPe8C8/IdSa2gc6qQt9IHmOBByPU3XSa9Xh0u7fxqXwjeJDeyTw7+oPfzn70WT+g==",
+      "requires": {
+        "typescript": "2.8.3"
+      }
+    },
+    "@rush-temp/typescript-compiler-ast-tests": {
+      "version": "file:projects/typescript-compiler-ast-tests.tgz",
+      "integrity": "sha512-iz5nlhbF/ahfc9QdFR6V7Te7g654sBb6mJLwt/v8AKZ+rxHTwijWvdXBDPDAcpyfHS6aHFMyIxsPM3DHNKqDKA==",
+      "requires": {
+        "typescript": "2.8.3"
+      }
+    },
+    "typescript": {
+      "version": "2.8.3",
+      "resolved": "https://registry.npmjs.org/typescript/-/typescript-2.8.3.tgz",
+      "integrity": "sha512-K7g15Bb6Ra4lKf7Iq2l/I5/En+hLIHmxWZGq3D4DIRNFxMNV6j2SHSvDOqs2tGd4UvD/fJvrwopzQXjLrT7Itw=="
+    }
+  }
+}

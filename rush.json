@@ -1,0 +1,23 @@
+{
+  "rushVersion": "4.3.2",
+  "npmVersion": "5.8.0",
+  "nodeSupportedVersionRange": ">=8.9.0",
+
+  "projects": [
+    {
+      "packageName": "sample-ts-plugin1",
+      "projectFolder": "sample-ts-plugin1",
+      "shouldPublish": false
+    },
+    {
+      "packageName": "sample-ts-plugin1-sample-project",
+      "projectFolder": "sample-ts-plugin1-sample-project",
+      "shouldPublish": false
+    },
+    {
+      "packageName": "typescript-compiler-ast-tests",
+      "projectFolder": "typescript-compiler-ast-tests",
+      "shouldPublish": false
+    }
+  ]
+}

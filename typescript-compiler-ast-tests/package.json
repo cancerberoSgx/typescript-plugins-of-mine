@@ -1,0 +1,16 @@
+{
+  "name": "typescript-compiler-ast-tests",
+  "version": "1.0.0",
+  "description": "https://github.com/Microsoft/TypeScript/wiki/Writing-a-Language-Service-Plugin",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "typescript": "^2.8.3"
+  }
+}
