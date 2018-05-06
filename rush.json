@@ -28,6 +28,13 @@
       "packageName": "typescript-plugin-extract-interface-client-project1",
       "projectFolder": "typescript-plugin-extract-interface-client-project1",
       "shouldPublish": false
+    },
+    {
+      "packageName": "typescript-ast-util",
+      "projectFolder": "typescript-ast-util",
+      "shouldPublish": true
     }
+    
+    
   ]
 }

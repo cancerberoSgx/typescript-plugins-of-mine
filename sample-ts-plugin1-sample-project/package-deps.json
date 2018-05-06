@@ -1,11 +1,11 @@
 {
   "files": {
     "sample-ts-plugin1-sample-project/.vscode/settings.json": "3662b3700e22ee7aadcc181f09f9f5bb070ab5c2",
-    "sample-ts-plugin1-sample-project/package-deps.json": "9b6c20ecafe6120c9e40e7a377d1099beb61dad8",
-    "sample-ts-plugin1-sample-project/package.json": "d0b0b5a910168250f6dd34f0d3e0e40f7e3aa9c0",
-    "sample-ts-plugin1-sample-project/src/test1.ts": "f3140e28c1583dff335fffa79d364386c855fe2b",
+    "sample-ts-plugin1-sample-project/package-deps.json": "dccb30670cbd0bf8f17f91f6b90dc81963bebae7",
+    "sample-ts-plugin1-sample-project/package.json": "e14f5d6c93328c1e4a70c513e6cd6d7e8d880a4b",
+    "sample-ts-plugin1-sample-project/src/test1.ts": "211834194d7c865864276c726c15071ac233a14b",
     "sample-ts-plugin1-sample-project/tsconfig.json": "860dd82bc0e4a4865201f1abd9a4b318827b1d3f",
-    "common/config/rush/npm-shrinkwrap.json": "1275ad2b1d44772dae84b1cc5c686a8ba358b384"
+    "common/config/rush/npm-shrinkwrap.json": "5d08c5ca8c5958326c24c3b8a805df8cc4d751fc"
   },
-  "arguments": "tsc "
+  "arguments": "echo nothing && exit 0 "
 }

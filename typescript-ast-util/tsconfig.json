@@ -4,12 +4,8 @@
     "module": "commonjs", 
     "lib": ["es2018"],  
     "outDir": "./dist", 
+    "rootDir": "src",
     "strict": true,           
-    "esModuleInterop": true,
-    "removeComments": false,
-    "noImplicitAny": true,
-    "plugins": [{
-        "name": "typescript-plugin-extract-interface"
-    }]
+    "esModuleInterop": true
   }
 }

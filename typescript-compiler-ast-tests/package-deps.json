@@ -1,13 +1,13 @@
 {
   "files": {
     "typescript-compiler-ast-tests/.vscode/settings.json": "3662b3700e22ee7aadcc181f09f9f5bb070ab5c2",
-    "typescript-compiler-ast-tests/package-deps.json": "8b7104c5e033206ea531f35e72d6e144bc701e43",
-    "typescript-compiler-ast-tests/package.json": "ec7075ab19bbcd8f3ccd2c10b42bd5320db5a949",
+    "typescript-compiler-ast-tests/package-deps.json": "ff088a27c27c856ebaf8efe218c0a227e48e3831",
+    "typescript-compiler-ast-tests/package.json": "8e388e348f2b3ae285e8a10b99b607c428a15222",
     "typescript-compiler-ast-tests/src/assets/simpletsconfig.json": "5902acffe279ae28047035c684432e271038ea72",
     "typescript-compiler-ast-tests/src/refactor-try1-test.ts": "d17b6266b7db6bedb392f6875a3f84e036db9bee",
     "typescript-compiler-ast-tests/src/test-all.ts": "d41cc73e37c4a34abf54305185f7c8ca27444a78",
     "typescript-compiler-ast-tests/src/ts-util-test.ts": "d54198893fb186fbe6cfc268e8df17a50cdd7a22",
-    "typescript-compiler-ast-tests/src/ts-util.ts": "18b2ace6e3a13e14bbf47eb5b156e136304292b6",
+    "typescript-compiler-ast-tests/src/ts-util.ts": "d6613919894a05b316ce980526506dabdfa383aa",
     "typescript-compiler-ast-tests/tests/assets/file1.ts": "43327a09760d81bbd3724169377a31db2185eb68",
     "typescript-compiler-ast-tests/tests/assets/tsissue1/file1.ts": "6e17b1cf804711002f1a026c4fc9a1fde66e4f65",
     "typescript-compiler-ast-tests/tests/assets/tsissue1/issue1.ts": "52797c3c0ade5ec572846686b6c01edf5dbda11c",
@@ -16,7 +16,7 @@
     "typescript-compiler-ast-tests/tests/test1.js": "32eea935b6ab682578e882bb60b7023ea753d1e6",
     "typescript-compiler-ast-tests/tests/transpileFileTest.ts": "ee9d014c60837df38b24e7bb2efc55922969af89",
     "typescript-compiler-ast-tests/tsconfig.json": "860dd82bc0e4a4865201f1abd9a4b318827b1d3f",
-    "common/config/rush/npm-shrinkwrap.json": "1275ad2b1d44772dae84b1cc5c686a8ba358b384"
+    "common/config/rush/npm-shrinkwrap.json": "5d08c5ca8c5958326c24c3b8a805df8cc4d751fc"
   },
-  "arguments": "tsc "
+  "arguments": "echo nothing && exit 0 "
 }

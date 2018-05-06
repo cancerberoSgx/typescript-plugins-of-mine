@@ -6,6 +6,12 @@
       "summary": "test",
       "documentation": "test",
       "parallelized": true
+    },
+    {
+      "name": "doc",
+      "summary": "doc",
+      "documentation": "doc",
+      "parallelized": true
     }
   ]
 

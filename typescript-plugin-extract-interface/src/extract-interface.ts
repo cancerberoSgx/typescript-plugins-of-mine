@@ -6,7 +6,7 @@ import { Modifier } from 'typescript/lib/tsserverlibrary';
 // import * as ts_module from '../node_modules/typescript/lib/tsserverlibrary'
 
 
-function printNode(node: ts.Node): string {
+function printNode(node: ts.Node, originalNode:ts.ClassElement): string {
   const printer = ts.createPrinter({
     newLine: ts.NewLineKind.LineFeed,
   },
@@ -20,40 +20,40 @@ function printNode(node: ts.Node): string {
     }
   );
   const result = printer.printNode(ts.EmitHint.Unspecified, node, ts.createSourceFile('temp.ts', '', ScriptTarget.Latest));
+
+  // const jsdoc = ts.getJSDocTags(node)
+  // const jsdocComment = jsdoc? jsdoc.map(tag=>tag.getFullText()).join('\n') : ''
+  // return jsdocComment + result
   return result
 }
+
 export function extractInterface(node: ts.ClassDeclaration): string {
   const members: string[] = []
   const debug: string[] = []
   const excludeMembersWithKeywords = [ts.SyntaxKind.StaticKeyword, ts.SyntaxKind.PrivateKeyword, ts.SyntaxKind.ProtectedKeyword]
 
   node.members
-
     .filter(member => !(member.modifiers && member.modifiers.map(m => m.kind).find(modifier => excludeMembersWithKeywords.includes(modifier))))
-
-    // .map(member=>{
-    // debug.push(member.getText()+' - '+ ((member.modifiers||[]) as ts.ModifiersArray). map(m=>m.kind).join(' '));  return member})
-
     .forEach(member => {
       if (ts.isMethodDeclaration(member)) {
         const method = member as ts.MethodDeclaration
+        // const jsdoc = ts.getJSDocTags(method)
         const methodSignature = ts.createMethodSignature(method.typeParameters, method.parameters, method.type, method.name, method.questionToken)
-        members.push(printNode(methodSignature))
+        members.push(printNode(methodSignature, member))
+        
+        
       }
-
       if (ts.isPropertyDeclaration(member)) {
         const property = member as ts.PropertyDeclaration
         const propertySignature = ts.createPropertySignature(property.modifiers, property.name, property.questionToken, property.type, property.initializer)
-        members.push(printNode(propertySignature))
+        members.push(printNode(propertySignature, member))
       }
     })
   let name = node.name ? 'I' + node.name.escapedText : 'IAnonymousClass'
   return `
 export interface ${name} {
-  ${members.join('\n')}
+${members.join('\n  ')}
 }
-
-${debug.join('\n')}
 `
 }
 

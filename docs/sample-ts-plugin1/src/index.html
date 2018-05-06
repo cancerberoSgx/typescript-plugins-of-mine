@@ -178,9 +178,10 @@ overriding getApplicableRefactors we add our refactor metadata only if the user 
             </div>
             
             <div class="content"><div class='highlight'><pre>    proxy.getApplicableRefactors = (fileName, positionOrRange): ts_<span class="hljs-built_in">module</span>.ApplicableRefactorInfo[] =&gt; {
+      <span class="hljs-keyword">const</span> refactors = info.languageService.getApplicableRefactors(fileName, positionOrRange) || []
       <span class="hljs-keyword">const</span> sourceFile = info.languageService.getProgram().getSourceFile(fileName)
       <span class="hljs-keyword">if</span> (!sourceFile) {
-        <span class="hljs-keyword">throw</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'no source file '</span> + fileName)
+        <span class="hljs-keyword">return</span> refactors
       }</pre></div></div>
             
         </li>
@@ -201,8 +202,7 @@ overriding getApplicableRefactors we add our refactor metadata only if the user 
         description: <span class="hljs-string">'useless rename desc'</span>,
         actions: [{ name: <span class="hljs-string">'useless-rename'</span>, description: <span class="hljs-string">'Useless Rename'</span> }],
       }
-      <span class="hljs-keyword">const</span> refactors = info.languageService.getApplicableRefactors(fileName, positionOrRange) || []
-      <span class="hljs-keyword">const</span> nodeAtCursor = findNode(sourceFile, positionOrRangeToNumber(positionOrRange))
+      <span class="hljs-keyword">const</span> nodeAtCursor = findChildContainingPosition(sourceFile, positionOrRangeToNumber(positionOrRange))
       <span class="hljs-keyword">if</span> (nodeAtCursor &amp;&amp;
         nodeAtCursor.kind === ts.SyntaxKind.Identifier &amp;&amp;
         nodeAtCursor.parent &amp;&amp;</pre></div></div>
@@ -241,7 +241,8 @@ overriding getApplicableRefactors we add our refactor metadata only if the user 
       <span class="hljs-keyword">return</span> refactors
     }
 
-    proxy.getEditsForRefactor = <span class="hljs-function">(<span class="hljs-params">fileName, formatOptions, positionOrRange, refactorName, actionName</span>) =&gt;</span> {</pre></div></div>
+    proxy.getEditsForRefactor = <span class="hljs-function">(<span class="hljs-params">fileName, formatOptions, positionOrRange, refactorName, actionName</span>) =&gt;</span> {
+      <span class="hljs-keyword">const</span> refactors = info.languageService.getEditsForRefactor(fileName, formatOptions, positionOrRange, refactorName, actionName)</pre></div></div>
             
         </li>
         
@@ -256,16 +257,7 @@ overriding getApplicableRefactors we add our refactor metadata only if the user 
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">if</span> (actionName !== <span class="hljs-string">'useless-rename'</span>) {
-        <span class="hljs-keyword">return</span> info.languageService.getEditsForRefactor(fileName, formatOptions, positionOrRange, refactorName, actionName)
-      }
-      <span class="hljs-keyword">const</span> sourceFile = info.languageService.getProgram().getSourceFile(fileName)
-      <span class="hljs-keyword">if</span> (!sourceFile) {
-        <span class="hljs-keyword">return</span>
-      }
-      <span class="hljs-keyword">const</span> range = positionOrRangeToRange(positionOrRange)
-
-      <span class="hljs-keyword">const</span> nodeAtCursor = findNode(sourceFile, positionOrRangeToNumber(positionOrRange))</pre></div></div>
+            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">if</span> (actionName !== <span class="hljs-string">'useless-rename'</span>) {</pre></div></div>
             
         </li>
         
@@ -276,11 +268,18 @@ overriding getApplicableRefactors we add our refactor metadata only if the user 
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-14">&#182;</a>
               </div>
-              <p>let renameTo = ‘Beautiful’</p>
+              <p>in case we can’t find what we want we return this array, but we could return also undefined or empty array</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">if</span> ((nodeAtCursor !== <span class="hljs-literal">undefined</span> &amp;&amp; nodeAtCursor.kind === ts.SyntaxKind.Identifier)) {</pre></div></div>
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">return</span> refactors 
+      }
+      <span class="hljs-keyword">const</span> sourceFile = info.languageService.getProgram().getSourceFile(fileName)
+      <span class="hljs-keyword">if</span> (!sourceFile) {
+        <span class="hljs-keyword">return</span> refactors
+      }
+      <span class="hljs-keyword">const</span> nodeAtCursor = findChildContainingPosition(sourceFile, positionOrRangeToNumber(positionOrRange))
+      <span class="hljs-keyword">if</span> ((nodeAtCursor !== <span class="hljs-literal">undefined</span> &amp;&amp; nodeAtCursor.kind === ts.SyntaxKind.Identifier)) {</pre></div></div>
             
         </li>
         
@@ -295,7 +294,11 @@ overriding getApplicableRefactors we add our refactor metadata only if the user 
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">const</span> renameTo = <span class="hljs-string">'Beautiful'</span> + (nodeAtCursor <span class="hljs-keyword">as</span> ts.Identifier).escapedText</pre></div></div>
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">const</span> renameTo = <span class="hljs-string">'Beautiful'</span> + (nodeAtCursor <span class="hljs-keyword">as</span> ts.Identifier).escapedText
+        <span class="hljs-keyword">const</span> range = positionOrRangeToRange(positionOrRange)
+        <span class="hljs-keyword">return</span> {
+          edits: [{
+            fileName,</pre></div></div>
             
         </li>
         
@@ -306,14 +309,25 @@ overriding getApplicableRefactors we add our refactor metadata only if the user 
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-16">&#182;</a>
               </div>
-              <p>TextSpan is used to reference a fragment of the source code string</p>
+              <p>Notice how the change is represented as an action object (not a function but a command)</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">const</span> editSpan: ts_<span class="hljs-built_in">module</span>.TextSpan = { start: range.pos, length: range.end - range.pos }
-        <span class="hljs-keyword">return</span> {
-          edits: [{
-            fileName,</pre></div></div>
+            <div class="content"><div class='highlight'><pre>            textChanges: [{ 
+              span: { start: range.pos, length: range.end - range.pos }, <span class="hljs-comment">// the segment of code that will be replaced</span>
+              newText: renameTo 
+            }],
+          }],
+          renameFilename: <span class="hljs-literal">undefined</span>,
+          renameLocation: <span class="hljs-literal">undefined</span>,
+        }
+      }
+      <span class="hljs-keyword">else</span> {
+        <span class="hljs-keyword">return</span> refactors
+      }
+    }
+    <span class="hljs-keyword">return</span> proxy
+  }</pre></div></div>
             
         </li>
         
@@ -324,33 +338,27 @@ overriding getApplicableRefactors we add our refactor metadata only if the user 
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-17">&#182;</a>
               </div>
-              <p>And the change in the source is defined as an action object</p>
+              <p>Helper functions used in this tutorial</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>            textChanges: [{ span: editSpan, newText: renameTo }],
-          }],
-          renameFilename: <span class="hljs-literal">undefined</span>,
-          renameLocation: <span class="hljs-literal">undefined</span>,
-        }
-      }
-    }
-    <span class="hljs-keyword">return</span> proxy
-  }
-
+            <div class="content"><div class='highlight'><pre>
+  <span class="hljs-comment">/**normalize the parameter so we are sure is of type Range */</span>
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">positionOrRangeToRange</span>(<span class="hljs-params">positionOrRange: <span class="hljs-built_in">number</span> | ts_module.TextRange</span>): <span class="hljs-title">ts_module</span>.<span class="hljs-title">TextRange</span> </span>{
     <span class="hljs-keyword">return</span> <span class="hljs-keyword">typeof</span> positionOrRange === <span class="hljs-string">'number'</span>
       ? { pos: positionOrRange, end: positionOrRange }
       : positionOrRange
   }
 
+  <span class="hljs-comment">/**normalize the parameter so we are sure is of type number */</span>
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">positionOrRangeToNumber</span>(<span class="hljs-params">positionOrRange: <span class="hljs-built_in">number</span> | ts_module.TextRange</span>): <span class="hljs-title">number</span> </span>{
     <span class="hljs-keyword">return</span> <span class="hljs-keyword">typeof</span> positionOrRange === <span class="hljs-string">'number'</span> ?
       positionOrRange :
       (positionOrRange <span class="hljs-keyword">as</span> ts_<span class="hljs-built_in">module</span>.TextRange).pos
   }
 
-  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">findNode</span>(<span class="hljs-params">sourceFile: ts.SourceFile, position: <span class="hljs-built_in">number</span></span>): <span class="hljs-title">ts</span>.<span class="hljs-title">Node</span> | <span class="hljs-title">undefined</span> </span>{
+  <span class="hljs-comment">/** from given position we find the child node that contains it */</span>
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">findChildContainingPosition</span>(<span class="hljs-params">sourceFile: ts.SourceFile, position: <span class="hljs-built_in">number</span></span>): <span class="hljs-title">ts</span>.<span class="hljs-title">Node</span> | <span class="hljs-title">undefined</span> </span>{
     <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">find</span>(<span class="hljs-params">node: ts.Node</span>): <span class="hljs-title">ts</span>.<span class="hljs-title">Node</span> | <span class="hljs-title">undefined</span> </span>{
       <span class="hljs-keyword">if</span> (position &gt;= node.getStart() &amp;&amp; position &lt; node.getEnd()) {
         <span class="hljs-keyword">return</span> ts.forEachChild(node, find) || node

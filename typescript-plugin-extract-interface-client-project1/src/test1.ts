@@ -8,14 +8,12 @@ export class Transport implements IThing {
 export class Vehicle extends Transport {
   engine: {iron:number, gas: Array<string>}={iron: 3, gas: []}
 
+  /**
+   * 
+   * @param strong will start the engines of this vehicle which is necessary to start moving
+   */
   public async startEngine(strong: string[]): Promise<boolean>{return false}
   private p1(): boolean{return false}
   static s1():  boolean{return false}
   none(){}
 }
-export interface IVehicle {
-  startEngine(strong: string[]): Promise<boolean>;
-none();
-}
-
-

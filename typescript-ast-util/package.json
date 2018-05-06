@@ -1,0 +1,20 @@
+{
+  "name": "typescript-ast-util",
+  "version": "1.0.0",
+  "description": "general utilities for traversing, selecting, manipulating typescript ast ",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 0",
+    "build": "tsc",
+    "doc": "typedoc -mode modules --out ../docs/typescript-ast-util src/index.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "typescript": "^2.8.3"
+  },
+  "devDependencies": {
+    "typedoc": "^0.11.1"
+  }
+}
