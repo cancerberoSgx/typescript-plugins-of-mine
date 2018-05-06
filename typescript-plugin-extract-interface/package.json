@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 0",
     "build": "tsc",
-    "doc": "docco -o ../docs/sample-ts-plugin1 src/index.ts"
+    "doc": ""
   },
   "keywords": [],
   "author": "",
@@ -16,6 +16,5 @@
     "typescript-ast-util": "1.0.0"
   },
   "devDependencies": {
-    "docco": "^0.8.0"
   }
 }

@@ -1,7 +1,7 @@
 {
   "files": {
     "typescript-compiler-ast-tests/.vscode/settings.json": "3662b3700e22ee7aadcc181f09f9f5bb070ab5c2",
-    "typescript-compiler-ast-tests/package-deps.json": "9e4f2c1c0323d52653e2ece4a1bcc8d0b6068d0f",
+    "typescript-compiler-ast-tests/package-deps.json": "ed8823f0c52f8034ad74ed86c6f495767f4093e3",
     "typescript-compiler-ast-tests/package.json": "8e388e348f2b3ae285e8a10b99b607c428a15222",
     "typescript-compiler-ast-tests/src/assets/simpletsconfig.json": "5902acffe279ae28047035c684432e271038ea72",
     "typescript-compiler-ast-tests/src/refactor-try1-test.ts": "d17b6266b7db6bedb392f6875a3f84e036db9bee",
@@ -17,7 +17,7 @@
     "typescript-compiler-ast-tests/tests/transpileFileTest.ts": "ee9d014c60837df38b24e7bb2efc55922969af89",
     "typescript-compiler-ast-tests/tests/usingTypeChecker.ts": "7b586f0c55efcde77cab9e5f451f7aad201fc073",
     "typescript-compiler-ast-tests/tsconfig.json": "860dd82bc0e4a4865201f1abd9a4b318827b1d3f",
-    "common/config/rush/npm-shrinkwrap.json": "423da892b360e9bca366b137b0122f5ff596da5e"
+    "common/config/rush/npm-shrinkwrap.json": "1f9b740d15bfb2c483df328480191ab9f27d0107"
   },
   "arguments": "echo nothing && exit 0 "
 }

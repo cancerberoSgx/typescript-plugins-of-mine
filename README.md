@@ -2,6 +2,27 @@ Experiments with typescript compiler API, and Language Service plugins.
 
 Note: this is a monorepo made with http://rushjs.io/
 
+
+## TypeScript LanguageService Plugin Tutorial
+
+ * **[Tutorial with code](https://cancerberosgx.github.io/typescript-plugins-of-mine/sample-ts-plugin1/src/)**
+ * [Project][https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/sample-ts-plugin1]
+ * ![Screencast][https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/sample-ts-plugin1/doc-assets/plugin-screencast.gif?raw=true]
+
+## typescript-plugin-extract-interface
+
+ * **WIP**
+ * While inside a class, when you select something it activates and suggest "Extract interface". It generates the interface right after the class declaration. 
+ * [Project][https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/sample-ts-plugin1]
+ * ![Screencast][https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-extract-interface/doc-assets/extract-interface.gif?raw=true]
+
+## typescript-plugin-print-ast
+
+ * very simple way of inspecting the AST of the node where the cursor is
+ * prints a very simplied version of the AST
+ * Useful when developing Typescript plugins to understand the AST
+ * jsut make a minimal selection and it will suggest "Print AST"
+ * AST will be dumped as a template string right after the node (watch out could break your code!)
 ## plugin ideas
 
  * extract interface from class
@@ -10,24 +31,7 @@ Note: this is a monorepo made with http://rushjs.io/
  * add explicit type: select an identifier without explicit type - a refactor add its type based on the inferred one. x
  * show the ast tree (simplified) of current keyword (DONE!)
  * show all subclasses of current class/interface - show all implementors off current interface. 
-
-## sample-ts-plugin1
-
-My first plugin that customize autocomplete suggestions and add a refactor suggestion. So I made kind of a tutorial example with detailed explanations. See the tutorial - with code and screen-cast here : https://cancerberosgx.github.io/typescript-plugins-of-mine/sample-ts-plugin1/src/
-
-## How to test plugins.
-
- For example, we have sample-ts-plugin1 and sample-ts-plugin1-sample-project
-* `code sample-ts-plugin1-sample-project`
-* because it has .vscode/settings.json -  "typescript.tsdk": "node_modules/typescript/lib"  it vscode should use typescript version from its node_modules. 
-* ** verify in vscode "select typescript version" of the workspace. and reload tsserver
-* because tsconfig.json has `plugins` installing sample-ts-plugin1 that plugin should be loaded by tsserver. 
-(https://cancerberosgx.github.io/typescript-plugins-of-mine/sample-ts-plugin1/plugin-screencast.gif)[see screencast]
-* select one identifier in the editor and you will see refactor suggestions. Also it wont autocomplete a.caller , only thisIsTheOnlyThatWillAutoComplete proeprty
-* now make a change in the plugin, like changing the string "sebarefactiondesc", run "rush rebuild", restart ts server in vscode and that label should be shown as refactor suggestion label. 
-* for debugging and seeing messages from plugin in tsserver exec: 
- `export TSS_LOG="-logToFile true -file `pwd`/tsserver_log.log -level verbose"`
-
+ * yeoman generator for ts plugins ? 
 
 ## useful links
 
@@ -35,7 +39,7 @@ My first plugin that customize autocomplete suggestions and add a refactor sugge
  * https://github.com/Microsoft/TypeScript/wiki/Writing-a-Language-Service-Plugin
 
 
-## typescript plugins I've found over there:
+### typescript plugins I've found over there:
 
 Would be good to have a gallery to share knowledge!
  * 
@@ -52,7 +56,7 @@ Would be good to have a gallery to share knowledge!
  * https://github.com/RyanCavanaugh/sample-ts-plugin2#readme External Files Walkthrough
 
 
-## other related tools 
+### other related tools 
 
  * https://github.com/wessberg/TypescriptASTUtil
  * https://github.com/wessberg/CodeAnalyzer

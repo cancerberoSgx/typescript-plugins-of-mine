@@ -14,7 +14,6 @@ let ts: typeof ts_module
 let info: ts_module.server.PluginCreateInfo
 
 function init(modules: { typescript: typeof ts_module }) {
-
   ts = modules.typescript
 
   function create(anInfo: ts_module.server.PluginCreateInfo) {
@@ -33,7 +32,6 @@ function init(modules: { typescript: typeof ts_module }) {
 
     return proxy
   }
-
   return { create }
 }
 

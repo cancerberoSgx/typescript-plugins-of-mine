@@ -3,10 +3,8 @@ import { SyntaxKind, MethodDeclaration } from 'typescript/lib/tsserverlibrary';
 import { filterChildren, getKindName, findIdentifierString, log } from 'typescript-ast-util'
 import { ScriptTarget } from 'typescript/lib/tsserverlibrary';
 import { Modifier } from 'typescript/lib/tsserverlibrary';
-// import * as ts_module from '../node_modules/typescript/lib/tsserverlibrary'
 
-
-function printNode(node: ts.Node, originalNode:ts.ClassElement): string {
+function printNode(node: ts.Node): string {
   const printer = ts.createPrinter({
     newLine: ts.NewLineKind.LineFeed,
   },
@@ -21,9 +19,6 @@ function printNode(node: ts.Node, originalNode:ts.ClassElement): string {
   );
   const result = printer.printNode(ts.EmitHint.Unspecified, node, ts.createSourceFile('temp.ts', '', ScriptTarget.Latest));
 
-  // const jsdoc = ts.getJSDocTags(node)
-  // const jsdocComment = jsdoc? jsdoc.map(tag=>tag.getFullText()).join('\n') : ''
-  // return jsdocComment + result
   return result
 }
 
@@ -39,14 +34,14 @@ export function extractInterface(node: ts.ClassDeclaration): string {
         const method = member as ts.MethodDeclaration
         // const jsdoc = ts.getJSDocTags(method)
         const methodSignature = ts.createMethodSignature(method.typeParameters, method.parameters, method.type, method.name, method.questionToken)
-        members.push(printNode(methodSignature, member))
+        members.push(printNode(methodSignature))
         
         
       }
       if (ts.isPropertyDeclaration(member)) {
         const property = member as ts.PropertyDeclaration
         const propertySignature = ts.createPropertySignature(property.modifiers, property.name, property.questionToken, property.type, property.initializer)
-        members.push(printNode(propertySignature, member))
+        members.push(printNode(propertySignature))
       }
     })
   let name = node.name ? 'I' + node.name.escapedText : 'IAnonymousClass'

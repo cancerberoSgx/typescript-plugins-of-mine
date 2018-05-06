@@ -6,7 +6,7 @@
   "dependencies": {
     "@rush-temp/sample-ts-plugin1": {
       "version": "file:projects/sample-ts-plugin1.tgz",
-      "integrity": "sha512-SfInjUcvQq2wwLlIVcjaqjCBUH1eE6bF8Pn47+AJgAbY9OSNGRyNmPNGKGD7gUO/QjLogbxAa1ER8ZGZCHTD1w==",
+      "integrity": "sha512-pkhKb6Iny97+o70hz0f3o4UGgBnZHpXIuho3FO0T2FW9Limjf+w0QR9ddyBOHz0g1LKLb50Q7XwrZ4Y6T0kMxQ==",
       "requires": {
         "docco": "0.8.0",
         "typescript": "2.8.3"
@@ -14,14 +14,14 @@
     },
     "@rush-temp/sample-ts-plugin1-sample-project": {
       "version": "file:projects/sample-ts-plugin1-sample-project.tgz",
-      "integrity": "sha512-8Ktprmth+BLpIyIAZ3lBXmpRgP21zDHRO+nKxtKHba6RMK11K7t3RGCMoMLAEIWVEd1AE395D6gpcCb77XwTXw==",
+      "integrity": "sha512-NFrZzm4mmA1QjQH4EEKKGtVXiz6YeRChu6yRsg1QB4VE0L39lYPbe0Zwf9brQdjg8TkM9a56DfWHUjbbMo63+w==",
       "requires": {
         "typescript": "2.8.3"
       }
     },
     "@rush-temp/typescript-ast-util": {
       "version": "file:projects/typescript-ast-util.tgz",
-      "integrity": "sha512-8r1roy7Dmuo/8/7CEWN9699KzpZv6L257QcCOJ5/oQwH6P3JmLK5hTvIh0G8fFE2wHGGVbOwpIJ2PUGmVaDoRg==",
+      "integrity": "sha512-GA9FeU1EALGT4q3Vr1b0wTuwN70hvB1/eKD+WINunmhOV1GurGP8dPWJ7QLqDpwIHIFoTjmWXlSOuqTIKC6AZQ==",
       "requires": {
         "typedoc": "0.11.1",
         "typescript": "2.8.3"
@@ -29,7 +29,7 @@
     },
     "@rush-temp/typescript-compiler-ast-tests": {
       "version": "file:projects/typescript-compiler-ast-tests.tgz",
-      "integrity": "sha512-l4m9oF/JPvaWzf29s+f7pipV8vOz5TtviEckZPBDGCzCSFVyUP2JcVxED+3mghE7RCB2abuvh50bSBy3Nykmmw==",
+      "integrity": "sha512-k+oD2+aB1H83Ey3FdxuXwC+O2rdnCbdCNqj4OZbHwkEgLsyjxGLd7uPRFerIYaF7SnTBKBAUho0gWllKZkjtEg==",
       "requires": {
         "@types/node": "10.0.4",
         "ts-node": "6.0.2",
@@ -38,15 +38,14 @@
     },
     "@rush-temp/typescript-plugin-extract-interface": {
       "version": "file:projects/typescript-plugin-extract-interface.tgz",
-      "integrity": "sha512-XhtC/eGcCj0odzG/mnA7dj2YWnbFbpiKBfvjXMLZtw8q8LrkbufD76DJ6HpMwusYoLcDgAmd8Qs+42NAcUNO+Q==",
+      "integrity": "sha512-l+PeqyNqUVW+vpUT0zQmbHQTkX5uPMeA8sqU7m+SeQre7cb5z6ZvWHeYdu/+F3ZWymIUAH2XdWETXw+yN7Nw3A==",
       "requires": {
-        "docco": "0.8.0",
         "typescript": "2.8.3"
       }
     },
     "@rush-temp/typescript-plugin-extract-interface-client-project1": {
       "version": "file:projects/typescript-plugin-extract-interface-client-project1.tgz",
-      "integrity": "sha512-iuc9zGxJrPzraXDvHJaXGFQwfAtGzI3n3P9Yu8qNyYYxZuDDnXzWY4Ld+9UdlkSIbOrYRnJZo7HSDfV8XdfvEg==",
+      "integrity": "sha512-BZMuMHWa7L4unuUBugibZ4BGyM79iPbQtTk6SwNUaek0y5SPmAuL0sOqPTWRVVDqcD3QjnMUZrwO3e58z49gvw==",
       "requires": {
         "typescript": "2.8.3"
       }
