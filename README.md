@@ -6,15 +6,15 @@ Note: this is a monorepo made with http://rushjs.io/
 ## TypeScript LanguageService Plugin Tutorial
 
  * **[Tutorial with code](https://cancerberosgx.github.io/typescript-plugins-of-mine/sample-ts-plugin1/src/)**
- * [Project][https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/sample-ts-plugin1]
- * ![Screencast][https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/sample-ts-plugin1/doc-assets/plugin-screencast.gif?raw=true]
+ * [Project](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/sample-ts-plugin1)
+ * See it in Action: ![See it in action](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/sample-ts-plugin1/doc-assets/plugin-screencast.gif?raw=true?t=.gif)
 
 ## typescript-plugin-extract-interface
 
  * **WIP**
  * While inside a class, when you select something it activates and suggest "Extract interface". It generates the interface right after the class declaration. 
- * [Project][https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/sample-ts-plugin1]
- * ![Screencast][https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-extract-interface/doc-assets/extract-interface.gif?raw=true]
+ * [Project](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/sample-ts-plugin1)
+ * See it in Action: ![See it in Action: ](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-extract-interface/doc-assets/extract-interface.gif?raw=true?p=.gif)
 
 ## typescript-plugin-print-ast
 
@@ -23,6 +23,18 @@ Note: this is a monorepo made with http://rushjs.io/
  * Useful when developing Typescript plugins to understand the AST
  * jsut make a minimal selection and it will suggest "Print AST"
  * AST will be dumped as a template string right after the node (watch out could break your code!)
+
+ TODO: project, readme and screencast
+
+## typescript-plugin-subclasses
+
+ * when inside a class declaration it offers two suggestions : "Show direct subclasses" and "Show all Subclasses"
+ * when inside an interface declaration it offers the following suggestions: "Show direct sub-interfaces", "Show All SUb-interfaces" "Show direct implementor classes" "Show all implementor classes"
+ * It prints all this information right after the node declaration
+ * enhance: we could print this info in a separate file, that implrts everything so user can navigate there. 
+
+ TODO: project, readme and screencast
+
 ## plugin ideas
 
  * extract interface from class
