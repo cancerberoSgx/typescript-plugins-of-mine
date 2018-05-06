@@ -1,9 +1,9 @@
 {
   "files": {
-    "typescript-plugin-extract-interface-client-project1/.vscode/settings.json": "3662b3700e22ee7aadcc181f09f9f5bb070ab5c2",
-    "typescript-plugin-extract-interface-client-project1/package-deps.json": "df3215e15757c637cf40f56196dba011494f03f4",
+    "typescript-plugin-extract-interface-client-project1/.vscode/settings.json": "f4569b6c0c3a8bbc917bd1aef636c9f1162d059f",
+    "typescript-plugin-extract-interface-client-project1/package-deps.json": "218a3dff315b9276cf7ad6a44e078aee1b1a702a",
     "typescript-plugin-extract-interface-client-project1/package.json": "72917c1a06a8695ee59fba74bac080c10f115f1f",
-    "typescript-plugin-extract-interface-client-project1/src/test1.ts": "64b991393dd59d14c18626068c2b73d8f0959163",
+    "typescript-plugin-extract-interface-client-project1/src/test1.ts": "734f5a81646603607605ca48cc2822b6e8caadad",
     "typescript-plugin-extract-interface-client-project1/tsconfig.json": "3f2a10092c79eadf19165f32bd8e77f94dd99d5d",
     "common/config/rush/npm-shrinkwrap.json": "423da892b360e9bca366b137b0122f5ff596da5e"
   },

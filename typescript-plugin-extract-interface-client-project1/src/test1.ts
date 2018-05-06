@@ -13,7 +13,10 @@ export class Vehicle extends Transport {
    * @param strong will start the engines of this vehicle which is necessary to start moving
    */
   public async startEngine(strong: string[]): Promise<boolean>{return false}
+  
   private p1(): boolean{return false}
+  
   static s1():  boolean{return false}
+
   none(){}
 }
