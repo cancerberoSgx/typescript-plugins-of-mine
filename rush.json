@@ -23,6 +23,11 @@
       "packageName": "typescript-plugin-extract-interface",
       "projectFolder": "typescript-plugin-extract-interface",
       "shouldPublish": true
+    },
+    {
+      "packageName": "typescript-plugin-extract-interface-client-project1",
+      "projectFolder": "typescript-plugin-extract-interface-client-project1",
+      "shouldPublish": false
     }
   ]
 }

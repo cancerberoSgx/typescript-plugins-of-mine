@@ -1,5 +1,5 @@
 {
-  "name": "client-project1",
+  "name": "typescript-plugin-extract-interface-client-project1",
   "version": "1.0.0",
   "description": "for testing this plugin as client project",
   "main": "index.js",

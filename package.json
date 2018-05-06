@@ -10,7 +10,7 @@
     "test": "rush test",
     "test-clone": "rm -rf ../typescript-plugins-of-mine-test && mkdir ../typescript-plugins-of-mine-test && cd ../typescript-plugins-of-mine-test && git clone ../typescript-plugins-of-mine/.git &&  cd typescript-plugins-of-mine  && npm install && npm test",
     "postinstall": "rush install && rush link && rush build && npm run link-missing-modules",
-    "link-missing-modules": "ln-cli sample-ts-plugin1 --force --path common/temp/node_modules",
+    "link-missing-modules": "ln-cli sample-ts-plugin1 --force --path common/temp/node_modules && ln-cli typescript-plugin-extract-interface --force --path common/temp/node_modules",
     "doc": "cd sample-ts-plugin1; npm run doc; cd .."
   },
   "devDependencies": {
