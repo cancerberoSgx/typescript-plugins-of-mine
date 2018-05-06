@@ -65,7 +65,7 @@ function init(modules: { typescript: typeof ts_module }) {
         description: 'useless rename desc',
         actions: [{ name: 'useless-rename', description: 'Useless Rename' }],
       }
-      const nodeAtCursor = findNode(sourceFile, positionOrRangeToNumber(positionOrRange))
+      const nodeAtCursor = findChildContainingPosition(sourceFile, positionOrRangeToNumber(positionOrRange))
       if (nodeAtCursor &&
         nodeAtCursor.kind === ts.SyntaxKind.Identifier &&
         nodeAtCursor.parent &&
@@ -82,46 +82,56 @@ function init(modules: { typescript: typeof ts_module }) {
       const refactors = info.languageService.getEditsForRefactor(fileName, formatOptions, positionOrRange, refactorName, actionName)
       // did the user select our refactor suggestion ? 
       if (actionName !== 'useless-rename') {
-        return refactors
+        // in case we can't find what we want we return this array, but we could return also undefined or empty array
+        return refactors 
       }
       const sourceFile = info.languageService.getProgram().getSourceFile(fileName)
       if (!sourceFile) {
         return refactors
       }
-      const range = positionOrRangeToRange(positionOrRange)
-      const nodeAtCursor = findNode(sourceFile, positionOrRangeToNumber(positionOrRange))
+      const nodeAtCursor = findChildContainingPosition(sourceFile, positionOrRangeToNumber(positionOrRange))
       if ((nodeAtCursor !== undefined && nodeAtCursor.kind === ts.SyntaxKind.Identifier)) {
         // we prefix the word Beautiful to te current identifier name
         const renameTo = 'Beautiful' + (nodeAtCursor as ts.Identifier).escapedText
-        // TextSpan is used to reference a fragment of the source code string
-        const editSpan: ts_module.TextSpan = { start: range.pos, length: range.end - range.pos }
+        const range = positionOrRangeToRange(positionOrRange)
         return {
           edits: [{
             fileName,
-            // And the change in the source is defined as an action object
-            textChanges: [{ span: editSpan, newText: renameTo }],
+            // Notice how the change is represented as an action object (not a function but a command)
+            textChanges: [{ 
+              span: { start: range.pos, length: range.end - range.pos }, // the segment of code that will be replaced
+              newText: renameTo 
+            }],
           }],
           renameFilename: undefined,
           renameLocation: undefined,
         }
       }
+      else {
+        return refactors
+      }
     }
     return proxy
   }
 
+  // Helper functions used in this tutorial
+
+  /**normalize the parameter so we are sure is of type Range */
   function positionOrRangeToRange(positionOrRange: number | ts_module.TextRange): ts_module.TextRange {
     return typeof positionOrRange === 'number'
       ? { pos: positionOrRange, end: positionOrRange }
       : positionOrRange
   }
 
+  /**normalize the parameter so we are sure is of type number */
   function positionOrRangeToNumber(positionOrRange: number | ts_module.TextRange): number {
     return typeof positionOrRange === 'number' ?
       positionOrRange :
       (positionOrRange as ts_module.TextRange).pos
   }
 
-  function findNode(sourceFile: ts.SourceFile, position: number): ts.Node | undefined {
+  /** from given position we find the child node that contains it */
+  function findChildContainingPosition(sourceFile: ts.SourceFile, position: number): ts.Node | undefined {
     function find(node: ts.Node): ts.Node | undefined {
       if (position >= node.getStart() && position < node.getEnd()) {
         return ts.forEachChild(node, find) || node

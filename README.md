@@ -2,12 +2,14 @@ Experiments with typescript compiler API, and Language Service plugins.
 
 Note: this is a monorepo made with http://rushjs.io/
 
-## Refactor plugin ideas
+## plugin ideas
 
  * extract interface from class
  * move method to other class (complicated - move interfaces also or classes hierarchy!)
  * move node (class, interf, function to other file) - complicatoin: exported nodes! must change other's imports
  * add explicit type: select an identifier without explicit type - a refactor add its type based on the inferred one.
+ * show the ast tree (simplified) of current keyword (DONE!)
+ * show all subclasses of current class/interface - show all implementors off current interface. 
 
 ## sample-ts-plugin1
 

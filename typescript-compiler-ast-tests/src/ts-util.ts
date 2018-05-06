@@ -17,7 +17,7 @@ function getEnumKey(anEnum: any, value: any): string {
 }
 
 
-export function dumpAst(ast: ts.SourceFile) {
+export function dumpAst(ast:ts.Node) : string{
   function visit(node: Node, visitor: (node: Node, index?: number, level?: number) => void, index: number = 0, level: number = 0) {
     if (!node) {
       return
