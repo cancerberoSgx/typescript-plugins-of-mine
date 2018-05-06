@@ -5,7 +5,7 @@ class Banana {
   thisIsTheOnlyThatWillAutoComplete = 99
 }
 const banana = new Banana()
-
+// banana.thisIsTheOnlyThatWillAutoComplete
 /*
 first we show that autocomplete in banana filter some 
 members like callee, caller and getDay

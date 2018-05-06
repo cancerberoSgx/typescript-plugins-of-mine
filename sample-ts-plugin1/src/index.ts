@@ -54,9 +54,10 @@ function init(modules: { typescript: typeof ts_module }) {
     // Here starts our second behavior: a refactor that will always be suggested no matter where is the cursor and does nothing
     // overriding getApplicableRefactors we add our refactor metadata only if the user has the cursor on the place we desire, in our case a class or interface declaration identifier
     proxy.getApplicableRefactors = (fileName, positionOrRange): ts_module.ApplicableRefactorInfo[] => {
+      const refactors = info.languageService.getApplicableRefactors(fileName, positionOrRange) || []
       const sourceFile = info.languageService.getProgram().getSourceFile(fileName)
       if (!sourceFile) {
-        throw Error('no source file ' + fileName)
+        return refactors
       }
       // Here we define the refactor metadata, the most important part is its actions name, 'useless-rename' which weill be used later when we define the "refactor edit" for implementing that action
       const refactorInfo: ts_module.ApplicableRefactorInfo = {
@@ -64,7 +65,6 @@ function init(modules: { typescript: typeof ts_module }) {
         description: 'useless rename desc',
         actions: [{ name: 'useless-rename', description: 'Useless Rename' }],
       }
-      const refactors = info.languageService.getApplicableRefactors(fileName, positionOrRange) || []
       const nodeAtCursor = findNode(sourceFile, positionOrRangeToNumber(positionOrRange))
       if (nodeAtCursor &&
         nodeAtCursor.kind === ts.SyntaxKind.Identifier &&
@@ -79,19 +79,17 @@ function init(modules: { typescript: typeof ts_module }) {
     }
 
     proxy.getEditsForRefactor = (fileName, formatOptions, positionOrRange, refactorName, actionName) => {
+      const refactors = info.languageService.getEditsForRefactor(fileName, formatOptions, positionOrRange, refactorName, actionName)
       // did the user select our refactor suggestion ? 
       if (actionName !== 'useless-rename') {
-        return info.languageService.getEditsForRefactor(fileName, formatOptions, positionOrRange, refactorName, actionName)
+        return refactors
       }
       const sourceFile = info.languageService.getProgram().getSourceFile(fileName)
       if (!sourceFile) {
-        return
+        return refactors
       }
       const range = positionOrRangeToRange(positionOrRange)
-
       const nodeAtCursor = findNode(sourceFile, positionOrRangeToNumber(positionOrRange))
-
-      // let renameTo = 'Beautiful'
       if ((nodeAtCursor !== undefined && nodeAtCursor.kind === ts.SyntaxKind.Identifier)) {
         // we prefix the word Beautiful to te current identifier name
         const renameTo = 'Beautiful' + (nodeAtCursor as ts.Identifier).escapedText

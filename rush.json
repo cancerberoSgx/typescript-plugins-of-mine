@@ -18,6 +18,11 @@
       "packageName": "typescript-compiler-ast-tests",
       "projectFolder": "typescript-compiler-ast-tests",
       "shouldPublish": false
+    },
+    {
+      "packageName": "typescript-plugin-extract-interface",
+      "projectFolder": "typescript-plugin-extract-interface",
+      "shouldPublish": true
     }
   ]
 }

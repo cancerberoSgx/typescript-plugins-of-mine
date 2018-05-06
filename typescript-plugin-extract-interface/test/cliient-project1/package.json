@@ -1,0 +1,19 @@
+{
+  "name": "client-project1",
+  "version": "1.0.0",
+  "description": "for testing this plugin as client project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 0",
+    "build": "tsc"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+  },
+  "devDependencies": {
+    "typescript-plugin-extract-interface": "1.0.0",
+    "typescript": "^2.8.3"
+  }
+}
