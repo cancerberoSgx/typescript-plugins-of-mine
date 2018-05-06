@@ -1,0 +1,11 @@
+{
+  "files": {
+    "typescript-ast-util/README.md": "12cf1bb2a21c6eb4996cd07bb76ebee2e36ed6e8",
+    "typescript-ast-util/package-lock.json": "e3a4a88852b98d9900cbcbfcdcc95bdedee80396",
+    "typescript-ast-util/package.json": "99ca46f652e8e646fdf811ed8b0b5e9681b214e1",
+    "typescript-ast-util/src/index.ts": "4076147b6ce91e67c0ecf9fb76c6a4d7f846b118",
+    "typescript-ast-util/tsconfig.json": "11082a4ed75f6ee28ecf42d76f59aa0ca6ed669c",
+    "common/config/rush/npm-shrinkwrap.json": "423da892b360e9bca366b137b0122f5ff596da5e"
+  },
+  "arguments": "tsc "
+}

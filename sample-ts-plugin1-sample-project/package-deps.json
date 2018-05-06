@@ -1,11 +1,11 @@
 {
   "files": {
     "sample-ts-plugin1-sample-project/.vscode/settings.json": "3662b3700e22ee7aadcc181f09f9f5bb070ab5c2",
-    "sample-ts-plugin1-sample-project/package-deps.json": "dccb30670cbd0bf8f17f91f6b90dc81963bebae7",
+    "sample-ts-plugin1-sample-project/package-deps.json": "f05eb615c7ebd8952cbf4698c3fee31714033a7f",
     "sample-ts-plugin1-sample-project/package.json": "e14f5d6c93328c1e4a70c513e6cd6d7e8d880a4b",
     "sample-ts-plugin1-sample-project/src/test1.ts": "211834194d7c865864276c726c15071ac233a14b",
     "sample-ts-plugin1-sample-project/tsconfig.json": "860dd82bc0e4a4865201f1abd9a4b318827b1d3f",
-    "common/config/rush/npm-shrinkwrap.json": "5d08c5ca8c5958326c24c3b8a805df8cc4d751fc"
+    "common/config/rush/npm-shrinkwrap.json": "423da892b360e9bca366b137b0122f5ff596da5e"
   },
-  "arguments": "echo nothing && exit 0 "
+  "arguments": "tsc "
 }

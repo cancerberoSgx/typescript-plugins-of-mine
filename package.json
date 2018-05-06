@@ -11,7 +11,9 @@
     "test-clone": "rm -rf ../typescript-plugins-of-mine-test && mkdir ../typescript-plugins-of-mine-test && cd ../typescript-plugins-of-mine-test && git clone ../typescript-plugins-of-mine/.git &&  cd typescript-plugins-of-mine  && npm install && npm test",
     "postinstall": "rush install && rush link && rush build && npm run link-missing-modules",
     "link-missing-modules": "ln-cli sample-ts-plugin1 --force --path common/temp/node_modules && ln-cli typescript-plugin-extract-interface --force --path common/temp/node_modules",
-    "doc": "rush doc"
+    "doc": "rush doc",
+    "all": "npm run clean && rush generate && rush install && rush link && rush build && rush test && rush doc",
+    "clean": "find . -name \"node_modules\" -exec rm -rf '{}' + ;  rm -rf common/temp/; find . -name \"package-lock.json\" -exec rm -rf '{}' +"
   },
   "devDependencies": {
     "@microsoft/rush": "^4.3.2",

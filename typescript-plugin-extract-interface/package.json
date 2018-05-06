@@ -12,7 +12,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "typescript": "^2.8.3"
+    "typescript": "^2.8.3",
+    "typescript-ast-util": "1.0.0"
   },
   "devDependencies": {
     "docco": "^0.8.0"
