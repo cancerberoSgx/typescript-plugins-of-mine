@@ -1,0 +1,13 @@
+{
+  "files": {
+    "typescript-plugin-extract-interface/README.md": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+    "typescript-plugin-extract-interface/package.json": "d756e929f30b1dd77b57cd35899f23d42d82485f",
+    "typescript-plugin-extract-interface/src/ast-util.ts": "7ca84b7bf839ac7684f4119b5dfa4eed07945ff8",
+    "typescript-plugin-extract-interface/src/extract-interface.ts": "031c72ca1747c984794fdc2b671797e753c63bc9",
+    "typescript-plugin-extract-interface/src/index.ts": "16f255c3aad3ae909fe1e0c78fd731032d07253a",
+    "typescript-plugin-extract-interface/tsconfig.json": "b589ea145b77f1ebd508e6f0bc3a21ebd288caf3",
+    "typescript-plugin-extract-interface/package-deps.json": "e8175dbb50f72fc3ba7d48909aabf8f2c61d8212",
+    "common/config/rush/npm-shrinkwrap.json": "423da892b360e9bca366b137b0122f5ff596da5e"
+  },
+  "arguments": "docco -o ../docs/sample-ts-plugin1 src/index.ts "
+}

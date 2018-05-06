@@ -6,10 +6,12 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 0",
     "build": "tsc",
-    "doc": "typedoc -mode modules --out ../docs/typescript-ast-util src/index.ts"
+    "doc": "typedoc -mode modules --out ../docs/typescript-ast-util src/index.ts",
+    "postinstall": "tsc"
   },
   "keywords": [],
-  "author": "",
+  "types": "dist/index.d.ts",
+  "author": "Sebastian Gurin",
   "license": "ISC",
   "dependencies": {
     "typescript": "^2.8.3"

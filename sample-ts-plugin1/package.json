@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 0",
     "build": "tsc",
-    "doc": "docco -o ../docs/sample-ts-plugin1 src/index.ts"
+    "doc": "docco -o ../docs/sample-ts-plugin1 src/index.ts && cp docs-assets/plugin-screencast.gif ../docs/sample-ts-plugin1"
   },
   "keywords": [],
   "author": "",

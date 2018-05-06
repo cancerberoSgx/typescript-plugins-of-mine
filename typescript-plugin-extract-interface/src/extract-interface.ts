@@ -1,6 +1,6 @@
 import * as ts from 'typescript'
 import { SyntaxKind, MethodDeclaration } from 'typescript/lib/tsserverlibrary';
-import { filterChildren, getKindName, findIdentifierString, log } from 'typescript-ast-utill'
+import { filterChildren, getKindName, findIdentifierString, log } from 'typescript-ast-util'
 import { ScriptTarget } from 'typescript/lib/tsserverlibrary';
 import { Modifier } from 'typescript/lib/tsserverlibrary';
 // import * as ts_module from '../node_modules/typescript/lib/tsserverlibrary'

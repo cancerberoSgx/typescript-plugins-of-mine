@@ -1,11 +1,10 @@
 {
   "files": {
-    "sample-ts-plugin1/package-deps.json": "7a9a044c0b1f366854a758a9e5b4a60f54e0ba8a",
-    "sample-ts-plugin1/package-lock.json": "27c58dc266b89ef80ede6ab574b0e948e4877358",
+    "sample-ts-plugin1/package-deps.json": "826f526b36df9918f73d0449eef3c0dc908b229a",
     "sample-ts-plugin1/package.json": "473d67ac26eff3625aee4f34d8f1bfa6f8ecc14d",
     "sample-ts-plugin1/src/index.ts": "baf59ede24af623dd0b8d4c7e69f41c878e51be9",
     "sample-ts-plugin1/tsconfig.json": "c6ad0ff31146ea0f6d704cdb0b6545fbb01d6aae",
     "common/config/rush/npm-shrinkwrap.json": "423da892b360e9bca366b137b0122f5ff596da5e"
   },
-  "arguments": "tsc "
+  "arguments": "docco -o ../docs/sample-ts-plugin1 src/index.ts "
 }
