@@ -6,18 +6,18 @@ Note: this is a monorepo made with http://rushjs.io/
 
  * extract interface from class
  * move method to other class (complicated - move interfaces also or classes hierarchy!)
- * move node (class, interf, function to other file) - complicatoin: exported nodes! must change other's imports
- * add explicit type: select an identifier without explicit type - a refactor add its type based on the inferred one.
+ * move node (class, interf, function to other file) - complication: exported nodes! must change other's imports
+ * add explicit type: select an identifier without explicit type - a refactor add its type based on the inferred one. x
  * show the ast tree (simplified) of current keyword (DONE!)
  * show all subclasses of current class/interface - show all implementors off current interface. 
 
 ## sample-ts-plugin1
 
-My first plugin that customize autocomplete suggestions and add a refactor suggestion. See the tutorial - with code and screen-cast here : 
-https://cancerberosgx.github.io/typescript-plugins-of-mine/sample-ts-plugin1/src/
+My first plugin that customize autocomplete suggestions and add a refactor suggestion. So I made kind of a tutorial example with detailed explanations. See the tutorial - with code and screen-cast here : https://cancerberosgx.github.io/typescript-plugins-of-mine/sample-ts-plugin1/src/
 
-How to test plugins. For example, we have sample-ts-plugin1 and sample-ts-plugin1-sample-project
+## How to test plugins.
 
+ For example, we have sample-ts-plugin1 and sample-ts-plugin1-sample-project
 * `code sample-ts-plugin1-sample-project`
 * because it has .vscode/settings.json -  "typescript.tsdk": "node_modules/typescript/lib"  it vscode should use typescript version from its node_modules. 
 * ** verify in vscode "select typescript version" of the workspace. and reload tsserver
@@ -30,6 +30,7 @@ How to test plugins. For example, we have sample-ts-plugin1 and sample-ts-plugin
 
 
 ## useful links
+
  * https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API
  * https://github.com/Microsoft/TypeScript/wiki/Writing-a-Language-Service-Plugin
 
@@ -57,6 +58,11 @@ Would be good to have a gallery to share knowledge!
  * https://github.com/wessberg/CodeAnalyzer
 
  
+# Some helpful notes
+
+ * know the type by the jsdoc comment or inferring: (let constructorType = checker.getTypeOfSymbolAtLocation(symbol, symbol.valueDeclaration!);)
+ * how to know which modifiers a node has ( return (ts.getCombinedModifierFlags(node) & ts.ModifierFlags.Export) !== 0 || (!!node.parent && node.parent.kind === ts.SyntaxKind.SourceFile);)
+
 ## TODO
 
  * sample-ts-plugin docco and static pages - is a ts plugin tutorial!!!
