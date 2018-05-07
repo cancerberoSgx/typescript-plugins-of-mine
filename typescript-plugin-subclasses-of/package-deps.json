@@ -5,8 +5,8 @@
     "typescript-plugin-subclasses-of/LICENSE": "dedc6df6b3be7344793767ce0a4de8f20b8d627a",
     "typescript-plugin-subclasses-of/README.md": "d4aee86bf423e621d8d1efbc4768b4efd20e1fae",
     "typescript-plugin-subclasses-of/doc-assets/screencast.gif": "e75554c09065029b3ce9fdc9d463e0d306daab66",
-    "typescript-plugin-subclasses-of/package-deps.json": "8c2a09eddcfd3d3a57cd454d9c90f0ad535ac84b",
-    "typescript-plugin-subclasses-of/package.json": "c1f7828a0dea346b1f7b76315f4a9e90f84b59dc",
+    "typescript-plugin-subclasses-of/package-deps.json": "b62c8a7412bdb3eb17d26a554fbd008504064ca6",
+    "typescript-plugin-subclasses-of/package.json": "bda9fe8b0e85d9e296daa12e02d732e8c0818b42",
     "typescript-plugin-subclasses-of/src/index.ts": "7f6e2448c6a1fc9a06900cef511e9ee214f12e82",
     "typescript-plugin-subclasses-of/tsconfig.json": "b589ea145b77f1ebd508e6f0bc3a21ebd288caf3",
     "common/config/rush/npm-shrinkwrap.json": "a09f8a7238c85a346456131345b3c2c883942d81"

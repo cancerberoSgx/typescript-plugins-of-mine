@@ -1,7 +1,7 @@
 {
   "files": {
     "typescript-plugin-extract-interface-client-project1/.vscode/settings.json": "17e468c7b4ed78a00aed4fb463809067b4215cf5",
-    "typescript-plugin-extract-interface-client-project1/package-deps.json": "56d8bcc0d42258debaeeb7577ba269a5035b4bd1",
+    "typescript-plugin-extract-interface-client-project1/package-deps.json": "acf49fd26d7be9c1187eb74f9cebf6a055b1ddc5",
     "typescript-plugin-extract-interface-client-project1/package.json": "9b4b2623c94e43255d2153a3ed8c264e8215710d",
     "typescript-plugin-extract-interface-client-project1/src/test1.ts": "29699928882693a58f77bf8e5081e037a1fbe5a5",
     "typescript-plugin-extract-interface-client-project1/src/test2.ts": "a7bfd9eaf80af0b5b026b66a43a16b64a76c5d7d",
