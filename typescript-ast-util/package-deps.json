@@ -4,14 +4,15 @@
     "typescript-ast-util/.npmignore": "3b6c27b5ac6eba6841726519c8dcbc602550cab9",
     "typescript-ast-util/LICENSE": "dedc6df6b3be7344793767ce0a4de8f20b8d627a",
     "typescript-ast-util/README.md": "12cf1bb2a21c6eb4996cd07bb76ebee2e36ed6e8",
-    "typescript-ast-util/package-lock.json": "832d94705342ad8c218ab7e778f4e38f5c5bc0e6",
-    "typescript-ast-util/package.json": "bb0b1dfe8c70f17a9c60e570164c0a65b318a7fa",
+    "typescript-ast-util/package-deps.json": "90d81446e62281dee6e6a34ca20bff6906af33c4",
+    "typescript-ast-util/package-lock.json": "ed40befa4cf2af7aab2abc33cc6652c1f88ae33b",
+    "typescript-ast-util/package.json": "1c88094384e666a5fa05aec7d6c9fd1f5b6d3f9b",
     "typescript-ast-util/spec/findChildgetJsDocSpec.ts": "645c6d6bcb6c7a5204a59865cb0890943f7f5a87",
     "typescript-ast-util/spec/support/jasmine.json": "bb6cd3d8b81d366415e181539db7ced86787b7d4",
     "typescript-ast-util/src/assets/simpletsconfig.json": "5902acffe279ae28047035c684432e271038ea72",
     "typescript-ast-util/src/index.ts": "badb106e42c007cca1aee6ce9dc209739eccfd36",
     "typescript-ast-util/tsconfig.json": "3f26a7a14e23ce70ae28e0e287b1cc08fa96b52b",
-    "common/config/rush/npm-shrinkwrap.json": "a09f8a7238c85a346456131345b3c2c883942d81"
+    "common/config/rush/npm-shrinkwrap.json": "ae337f31c914c9b619487f44c19c973d90cd4321"
   },
   "arguments": "tsc "
 }

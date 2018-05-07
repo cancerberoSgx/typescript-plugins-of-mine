@@ -1,4 +1,4 @@
-import { compileSource, getKindName, findChild, getJsDoc, visitChildrenRecursiveDeepFirst } from "../src";
+import { compileSource, getKindName, findChild, getJsDoc, visitChildrenRecursiveDeepFirst } from "..";
 import * as ts from 'typescript'
 
 describe('compileSource, findChildren and getJsDoc', () => {
