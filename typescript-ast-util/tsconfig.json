@@ -5,12 +5,12 @@
     "lib": ["es2018"],  
     "outDir": "./dist", 
     "rootDir": "src",
-    "strict": true,           
+    "strict": true,  
+    "strictNullChecks": false,         
     "esModuleInterop": true,
     "declaration": true
   },
   "exclude": [
-    "spec", "dist"
-  ],
-
+    "dist"
+  ]
 }

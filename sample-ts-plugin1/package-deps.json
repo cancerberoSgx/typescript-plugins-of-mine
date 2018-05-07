@@ -2,11 +2,11 @@
   "files": {
     "sample-ts-plugin1/README.md": "17eff27cc3ea24cf63dddb737d35b56b42ed0ca0",
     "sample-ts-plugin1/doc-assets/plugin-screencast.gif": "d892d265895264fee2d8001a8b11ba38c9e67b0a",
-    "sample-ts-plugin1/package-deps.json": "7e7ff87ca34619eb6d636cd93da7287b4390b6fc",
+    "sample-ts-plugin1/package-deps.json": "57bc11d02a92ebc47ffee31238dc8c4ac420c98c",
     "sample-ts-plugin1/package.json": "90eaf21d60d41654a0421e5853f94d09aec22d27",
     "sample-ts-plugin1/src/index.ts": "baf59ede24af623dd0b8d4c7e69f41c878e51be9",
     "sample-ts-plugin1/tsconfig.json": "c6ad0ff31146ea0f6d704cdb0b6545fbb01d6aae",
-    "common/config/rush/npm-shrinkwrap.json": "1f9b740d15bfb2c483df328480191ab9f27d0107"
+    "common/config/rush/npm-shrinkwrap.json": "a09f8a7238c85a346456131345b3c2c883942d81"
   },
   "arguments": "tsc "
 }

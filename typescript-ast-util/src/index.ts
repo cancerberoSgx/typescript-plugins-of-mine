@@ -19,6 +19,19 @@ export function positionOrRangeToNumber(positionOrRange: number | ts.TextRange):
 }
 
 
+/** Gets the JSDoc of any node. For performance reasons this function should only be called when `canHaveJsDoc` return true. */
+export function getJsDoc(node: ts.Node, sourceFile?: ts.SourceFile): ts.JSDoc[] {
+  const result = [];
+  for (const child of node.getChildren(sourceFile)) {
+    if (child.kind !== ts.SyntaxKind.JSDocComment)
+      break;
+    result.push(child)
+  }
+  return result as ts.JSDoc[]
+}
+
+
+
 // parent helpers
 /**
  * Find the parent for given node that comply with iven predicate
@@ -124,7 +137,7 @@ export function filterChildren(
   //     }
   //   }
   // }
-  parent.forEachChild(child=>{
+  parent.forEachChild(child => {
     // if((child as any).__sebaMark){
     //   console.log('ya pasamos')
     //   return 
@@ -147,40 +160,65 @@ export function filterChildren(
 export function findChild(
   parent: ts.Node | undefined,
   predicate: (child: ts.Node) => boolean,
-  recursive: boolean = false)
+  recursive: boolean = true)
   : ts.Node | undefined {
-  return findChild_(true, parent, predicate, recursive)
+    if (!parent) {
+      return
+    }
+    let found:ts.Node|undefined
+    if(recursive){
+      visitChildrenRecursiveDeepFirst(parent, child=>{
+        if (predicate(child)) {
+          found= child
+        }
+        // if (!found && recursive) {
+        //   found = findChild(child, predicate, recursive)       
+        // }
+      })
+    }
+    else {
+      parent.forEachChild(child => {
+        if(predicate(child)){
+          found = child
+        }
+      })
+    }
+    return found
+
+  // return findChild_(true, parent, predicate, recursive)
 }
 
-const findChildCache = {}
+// const findChildCache = {}
 
-function findChild_(
-  firstTime: boolean = false,
-  parent: ts.Node | undefined,
-  predicate: (child: ts.Node) => boolean,
-  recursive: boolean = false)
-  : ts.Node | undefined {
-  if (!parent) {
-    return
-  }
-  const childCount = parent.getChildCount() // TODO: use  visitChildrenRecursiveDeepFirst
-  for (let i = 0; i < childCount; i++) {
-    const child: ts.Node | undefined = parent.getChildAt(i)
-    // if(!!findChildCache[ts.getGeneratedNameForNode(child).escapedText+'']){
-    //   continue
-    // }
-    // ts.getGeneratedNameForNode(node).escapedText
-    if (predicate(child)) {
-      return child
-    }
-    if (recursive) {
-      const recursionResult = findChild(child, predicate, recursive)
-      if (recursionResult) {
-        return recursionResult
-      }
-    }
-  }
-}
+// function findChild_(
+//   firstTime: boolean = false,
+//   parent: ts.Node | undefined,
+//   predicate: (child: ts.Node) => boolean,
+//   recursive: boolean = false)
+//   : ts.Node | undefined {
+//   if (!parent) {
+//     return
+//   }
+//   let found:ts.Node|undefined
+//   if(recursive){
+//     visitChildrenRecursiveDeepFirst(parent, child=>{
+//       if (predicate(child)) {
+//         found= child
+//       }
+//       if (!found && recursive) {
+//         found = findChild(child, predicate, recursive)       
+//       }
+//     })
+//   }
+//   else {
+//     parent.forEachChild(child => {
+//       if(predicate(child)){
+//         found = child
+//       }
+//     })
+//   }
+//   return found
+// }
 
 
 //identifiers helpers
