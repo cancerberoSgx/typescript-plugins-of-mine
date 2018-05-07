@@ -56,26 +56,3 @@ export class Vehicle<T> {
     }
   }
 }
-/**
- * the description for a Vehicle
- */
-export interface IVehicle {
-
-constructor (iron: number): Vehicle <T>
-  
-n: number;
-  
-engine: {
-    iron: number;
-    gas: Array<string>;
-};
-  /**
-   * start the engine is the first thing before moving we need to do in a vehicle
-   * @param strong ohw strong should be the the hand that pull tht trigger?
-   */
-startEngine(strong: string[]): Promise<boolean>;
-  /**
-   * hello
-   */
-none(): void;
-}

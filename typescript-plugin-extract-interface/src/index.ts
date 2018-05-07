@@ -46,8 +46,8 @@ function getApplicableRefactors(fileName: string, positionOrRange: number | ts.T
   if (!refs || !refs.length) {
     return refactors
   }
-  const selectedDefs: ts.ReferencedSymbol[] = refs.filter(r => 
-    r.definition && r.definition.kind === ts.ScriptElementKind.classElement && r.definition.fileName===fileName)
+  const selectedDefs: ts.ReferencedSymbol[] = refs.filter(r =>
+    r.definition && r.definition.kind === ts.ScriptElementKind.classElement && r.definition.fileName === fileName)
   if (!selectedDefs || !selectedDefs.length) {
     return refactors
   }
@@ -57,7 +57,7 @@ function getApplicableRefactors(fileName: string, positionOrRange: number | ts.T
     description: 'Extract interface',
     actions: [
       { name: REFACTOR_ACTION_NAME, description: 'Extract interface from ' + selectedDef.definition.name },
-      { name: 'print-ast', description: 'Print AST' } // TODO: remove print ast to its own project
+      // { name: 'print-ast', description: 'Print AST' } // TODO: remove print ast to its own project
     ],
   })
   return refactors
@@ -68,18 +68,20 @@ function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSetti
   positionOrRange: number | ts_module.TextRange, refactorName: string,
   actionName: string): ts.RefactorEditInfo | undefined {
 
-  let targetNode, newText
-  if (actionName == REFACTOR_ACTION_NAME) {
-    // find the first parent that is a class declaration starting from given position
-    targetNode = findParentFromPosition(info, fileName, positionOrRange,
-      parent => parent.kind === ts.SyntaxKind.ClassDeclaration)
-    newText = extractInterface(targetNode as ts_module.ClassDeclaration)
-  }
-  else if (actionName == 'print-ast') { // TODO: remove print ast to its own project
-    targetNode = findParentFromPosition(info, fileName, positionOrRange, parent => true)
-    newText = '\n`' + dumpAst(targetNode) + '`\n'
-  }
+  const refactors = info.languageService.getEditsForRefactor(fileName, formatOptions, positionOrRange, refactorName, actionName)
+  if (actionName != REFACTOR_ACTION_NAME) {
+    return refactors
 
+  }
+  // else if (actionName == 'print-ast') { // TODO: remove print ast to its own project
+  //   targetNode = findParentFromPosition(info, fileName, positionOrRange, parent => true)
+  //   newText = '\n`' + dumpAst(targetNode) + '`\n'
+  // }
+
+  // find the first parent that is a class declaration starting from given position
+  const targetNode = findParentFromPosition(info, fileName, positionOrRange,
+    parent => parent.kind === ts.SyntaxKind.ClassDeclaration)
+  const newText = extractInterface(targetNode as ts_module.ClassDeclaration)
   if (targetNode && newText) {
     return {
       edits: [{
@@ -94,7 +96,7 @@ function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSetti
     }
   }
   else {
-    return info.languageService.getEditsForRefactor(fileName, formatOptions, positionOrRange, refactorName, actionName)
+    return refactors
   }
 
 }
