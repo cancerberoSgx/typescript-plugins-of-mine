@@ -38,8 +38,12 @@ class B{}
       return fail()
     }
 
+    // c.forEachChild(c=>{console.log(getKindName(c.kind))})
+    // c.getChildren().forEach(c=>{console.log(getKindName(c.kind))})
+
     const jsdoc = getJsDoc(c)
     expect(jsdoc.length).toBe(1)
+    console.log(jsdoc[0].getText())
     expect(jsdoc[0].comment).toContain('description of something classy')
     expect(jsdoc[0].comment).toContain('a = 1')
     expect(jsdoc[0].tags).toBe(undefined)

@@ -1,10 +1,8 @@
 import * as ts from 'typescript'
-import { SyntaxKind, MethodDeclaration } from 'typescript/lib/tsserverlibrary';
-import { filterChildren, getKindName, findIdentifierString, log } from 'typescript-ast-util'
-import { ScriptTarget } from 'typescript/lib/tsserverlibrary';
-import { Modifier } from 'typescript/lib/tsserverlibrary';
+import { SyntaxKind, MethodDeclaration, ScriptTarget, Modifier } from 'typescript/lib/tsserverlibrary';
+import { filterChildren, getKindName, findIdentifierString, log, getJsDoc } from 'typescript-ast-util'
 
-function printNode(node: ts.Node): string {
+function printNode(signature: ts.TypeElement, originalNode: ts.ClassElement): string {
   const printer = ts.createPrinter({
     newLine: ts.NewLineKind.LineFeed,
   },
@@ -16,10 +14,16 @@ function printNode(node: ts.Node): string {
         return node
       }
     }
-  );
-  const result = printer.printNode(ts.EmitHint.Unspecified, node, ts.createSourceFile('temp.ts', '', ScriptTarget.Latest));
+  )
 
-  return result
+  let jsdocPrefix = ''
+  const nodeChildren = originalNode.getChildren()
+  if(nodeChildren && nodeChildren.length && nodeChildren[0].kind===ts.SyntaxKind.JSDocComment){
+    jsdocPrefix += nodeChildren[0].getText()
+  } 
+  const result = printer.printNode(ts.EmitHint.Unspecified, signature, ts.createSourceFile('temp.ts', '', ScriptTarget.Latest));
+
+  return jsdocPrefix+'\n'+result
 }
 
 export function extractInterface(node: ts.ClassDeclaration): string {
@@ -27,25 +31,29 @@ export function extractInterface(node: ts.ClassDeclaration): string {
   const debug: string[] = []
   const excludeMembersWithKeywords = [ts.SyntaxKind.StaticKeyword, ts.SyntaxKind.PrivateKeyword, ts.SyntaxKind.ProtectedKeyword]
 
+  let classJsdoc = ''
+  const nodeChildren = node.getChildren()
+  if(nodeChildren && nodeChildren.length && nodeChildren[0].kind===ts.SyntaxKind.JSDocComment){
+    classJsdoc += nodeChildren[0].getText()
+  } 
   node.members
     .filter(member => !(member.modifiers && member.modifiers.map(m => m.kind).find(modifier => excludeMembersWithKeywords.includes(modifier))))
     .forEach(member => {
       if (ts.isMethodDeclaration(member)) {
         const method = member as ts.MethodDeclaration
-        // const jsdoc = ts.getJSDocTags(method)
         const methodSignature = ts.createMethodSignature(method.typeParameters, method.parameters, method.type, method.name, method.questionToken)
-        members.push(printNode(methodSignature))
-        
-        
+        members.push(printNode(methodSignature, method))
       }
       if (ts.isPropertyDeclaration(member)) {
         const property = member as ts.PropertyDeclaration
         const propertySignature = ts.createPropertySignature(property.modifiers, property.name, property.questionToken, property.type, property.initializer)
-        members.push(printNode(propertySignature))
+        members.push(printNode(propertySignature, property))
       }
     })
   let name = node.name ? 'I' + node.name.escapedText : 'IAnonymousClass'
+
   return `
+${classJsdoc}
 export interface ${name} {
 ${members.join('\n  ')}
 }

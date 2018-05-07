@@ -40,6 +40,7 @@ export = init
 
 function getApplicableRefactors(fileName: string, positionOrRange: number | ts.TextRange): ts_module.ApplicableRefactorInfo[] {
   const refactors = info.languageService.getApplicableRefactors(fileName, positionOrRange) || []
+  //TODO: use getReferences like in subclass-of and let user select the id so we dont contaminate the whole experience everywhere. 
   const targetNode = findParentFromPosition(info, fileName, positionOrRange, parent => parent.kind === ts.SyntaxKind.ClassDeclaration)
   if (!targetNode) {
     return refactors
@@ -48,9 +49,8 @@ function getApplicableRefactors(fileName: string, positionOrRange: number | ts.T
     name: `${PLUGIN_NAME}-refactor-info`,
     description: 'Extract interface',
     actions: [
-
       { name: REFACTOR_ACTION_NAME, description: 'Extract interface' },
-      { name: 'print-ast', description: 'Print AST' }// TODO: remove print ast to its own project
+      { name: 'print-ast', description: 'Print AST' } // TODO: remove print ast to its own project
     ],
   }
   refactors.push(refactorInfo)
@@ -61,8 +61,10 @@ function getApplicableRefactors(fileName: string, positionOrRange: number | ts.T
 function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSettings,
   positionOrRange: number | ts_module.TextRange, refactorName: string,
   actionName: string): ts.RefactorEditInfo | undefined {
-  let targetNode, newText
 
+    let targetNode, newText
+  // try {
+    
   if (actionName == REFACTOR_ACTION_NAME) {
     // find the first parent that is a class declaration starting from given position
     targetNode = findParentFromPosition(info, fileName, positionOrRange, 
@@ -79,7 +81,7 @@ function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSetti
       edits: [{
         fileName,
         textChanges: [{
-          span: { start: targetNode.getEnd(), length: targetNode.getEnd() }, // add it right after the class decl
+          span: { start: targetNode.getEnd(), length: newText.length}, // add it right after the class decl
           newText: newText
         }],
       }],
@@ -90,5 +92,9 @@ function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSetti
   else {
     return info.languageService.getEditsForRefactor(fileName, formatOptions, positionOrRange, refactorName, actionName)
   }
+
+// } catch (error) {
+//   newText = error+' - '+error.stack
+// }
 
 }

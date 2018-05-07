@@ -94,7 +94,8 @@ Would be good to have a gallery to share knowledge!
  * how to know which modifiers a node has ( return (ts.getCombinedModifierFlags(node) & ts.ModifierFlags.Export) !== 0 || (!!node.parent && node.parent.kind === ts.SyntaxKind.SourceFile);)
  * for getting where a method or a class ir used we could use this: 
   info.languageService.findReferences(fileName, positionOrRangeToNumber(positionOrRange)).map(s=>s.references)
-
+* for debugging and seeing messages from plugin in tsserver exec: 
+ export TSS_LOG="-logToFile true -file `pwd`/tsserver_log.log -level verbose"
 
 ## TODO
 
