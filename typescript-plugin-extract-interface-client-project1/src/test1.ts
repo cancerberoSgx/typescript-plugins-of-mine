@@ -1,10 +1,12 @@
 export interface IThing { }
 export interface ITransport extends IThing { }
+
 export class Transport implements ITransport {
   maxSpeed: number = 1
   go(to: { x: number, y: number }): Promise<number> { return Promise.resolve(1) }
 }
 
+const o : Object = {};
 
 /**
  * the description for a Vehicle
@@ -35,4 +37,7 @@ export class Vehicle extends Transport {
       console.error();
     }
   }
+}
+class Car extends Vehicle {
+  
 }

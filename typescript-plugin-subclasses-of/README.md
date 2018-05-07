@@ -1,10 +1,15 @@
 # typescript-plugin-subclasses-of
 
-A TypeScript Language Server Plugin that, given a class or a interface, prints the classes (direct or indirect) it has or how many implementations, direct or indirect an interface have (and how many sub-interfaces)
+A TypeScript Language Server Plugin that, given a class or a interface, prints the classes or interfaces that (directly or indirectly) are extending/implementing it. 
+
+ * user has to select (part of) the name of class of interface for refactor to be suggested
+ * prints the output at the end of current file with links to the exact position (ctrl-click will take you there)
+
+
 
 **WIP - **
 
-<!-- ![extract interface screencast WIP](doc-assets/subclasses-of.gif) -->
+<!-- ![subclasses-of screencast WIP](doc-assets/subclasses-of.gif) -->
 
 #How to use: 
 ```sh

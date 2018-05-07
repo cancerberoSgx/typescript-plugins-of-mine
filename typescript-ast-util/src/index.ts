@@ -220,6 +220,7 @@ export function dumpAst(ast: ts.Node | undefined): string {
 /// testing 
 
 import * as shell from 'shelljs'
+import { homedir } from 'os';
 shell.config.silent = true
 export function compileSource(sourceCode: string, tsconfigPath: string = join(__dirname, 'assets', 'simpletsconfig.json')): { project: ts.Program, fileName: string, tsconfigPath: string } {
   const fileName = shell.tempdir() + '/' + 'tmpFile_' + Date.now() + '.ts'
@@ -264,6 +265,6 @@ export function compileProject(projectFolder: string, rootFiles: Array<string> =
 
 
 export function log(s: string) {
-  const logFile = join(__dirname, 'test.log')
+  const logFile = join(homedir(), 'typescript-ast-util.log')
   appendFileSync(logFile, s)
 }
