@@ -1,8 +1,11 @@
 export interface IThing { }
-export class Transport implements IThing {
+export interface ITransport extends IThing { }
+export class Transport implements ITransport {
   maxSpeed: number = 1
   go(to: { x: number, y: number }): Promise<number> { return Promise.resolve(1) }
 }
+
+
 /**
  * the description for a Vehicle
  */

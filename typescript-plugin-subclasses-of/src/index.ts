@@ -1,6 +1,6 @@
 import * as ts_module from '../node_modules/typescript/lib/tsserverlibrary'
 import { findChildContainingPosition, findParent, positionOrRangeToNumber, positionOrRangeToRange, findParentFromPosition, dumpAst, getKindName } from 'typescript-ast-util'
-import { getAllReferencesToSymbolInPosition, findDefinitionsToSymbolAtPosition } from './subclass-finder';
+// import { getAllReferencesToSymbolInPosition, findDefinitionsToSymbolAtPosition } from './subclass-finder';
 
 const PLUGIN_NAME = 'typescript-plugin-subclasses-of'
 const ACTION_NAME_DIRECT_SUBCLASSES = `${PLUGIN_NAME}-direct-subclasses-refactor-action`
@@ -31,7 +31,7 @@ function init(modules: { typescript: typeof ts_module }) {
 
 export = init
 
-let selectedDef: ts.ReferencedSymbol|undefined
+let selectedDef: ts.ReferencedSymbol | undefined
 function getApplicableRefactors(fileName: string, positionOrRange: number | ts.TextRange)
   : ts_module.ApplicableRefactorInfo[] {
   const refactors = info.languageService.getApplicableRefactors(fileName, positionOrRange) || []
@@ -40,16 +40,17 @@ function getApplicableRefactors(fileName: string, positionOrRange: number | ts.T
   if (!refs || !refs.length) {
     return refactors
   }
-  selectedDef = refs.find(r => !!(r.definition&&r.definition.kind===ts.ScriptElementKind.classElement))
-  if (!selectedDef) {
+  const selectedDefs: ts.ReferencedSymbol[] = refs.filter(r => !!(r.definition && (r.definition.kind === ts.ScriptElementKind.classElement || r.definition.kind === ts.ScriptElementKind.interfaceElement)))
+  if (!selectedDefs || !selectedDefs.length) {
     return refactors
   }
+  selectedDef = selectedDefs[0]
   const sourceFile = info.languageService.getProgram().getSourceFile(fileName)
   if (!sourceFile) {
     return refactors
   }
   const actions = []
-  actions.push({ name: ACTION_NAME_DIRECT_SUBCLASSES, description: 'Show Direct Subclasses of ' + selectedDef.definition.name })
+  actions.push({ name: ACTION_NAME_DIRECT_SUBCLASSES, description: 'Show Direct subclasses/implementations of ' + selectedDef.definition.name })
   const refactorInfo: ts_module.ApplicableRefactorInfo = {
     name: `${PLUGIN_NAME}-refactor-info`,
     description: 'Subclasses of',
@@ -65,55 +66,61 @@ function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSetti
   actionName: string)
   : ts.RefactorEditInfo | undefined {
 
-  
-  // let targetNode, newText
   const refactors = info.languageService.getEditsForRefactor(fileName, formatOptions, positionOrRange, refactorName, actionName)
 
-  if (!selectedDef||actionName != ACTION_NAME_DIRECT_SUBCLASSES) {
+  if (!selectedDef || actionName != ACTION_NAME_DIRECT_SUBCLASSES) {
     return refactors;
   }
-  
-
   const sourceFile = info.languageService.getProgram().getSourceFile(fileName)
   if (!sourceFile) {
     return refactors
   }
-  const newText =  selectedDef.definition.fileName + ' ' +sourceFile.getLineAndCharacterOfPosition(selectedDef.definition.textSpan.start).line
-  // sourceFile.getLineAndCharacterOfPosition(pos)
-  // const newText = findDefinitionsToSymbolAtPosition(sourceFile, info, positionOrRange);
-  //  if ( newText) {
+  const targetSourceFile = info.languageService.getProgram().getSourceFile(selectedDef.definition.fileName)
+  if (!targetSourceFile) {
+    return refactors
+  }
+  const subclasses: Array<ts.ClassDeclaration | ts.InterfaceDeclaration> = getClassExtendingReference(fileName, positionOrRange);
+  let newText = '\n/*\nDirect subclasses/implementations of ' + selectedDef.definition.name + ':\n' + subclasses.map(c => {
+    const sf = c.getSourceFile()
+    const pos = sf.getLineAndCharacterOfPosition(c.getStart())
+    const type = c.kind === ts.SyntaxKind.ClassDeclaration ? 'class' : 'interface'
+    return type + ' ' + (c.name && c.name.getText()) + ' in file:/' + sf.fileName + '#' + (pos.line + 1) + ',' + (pos.character + 1)
+  }).join('\n')
+
   return {
     edits: [{
       fileName,
       textChanges: [{
-        span: { start: sourceFile.getEnd(), length: newText.length }, // add it right after the class decl
+        span: { start: sourceFile.getEnd(), length: newText.length },
         newText: newText
       }],
     }],
     renameFilename: undefined,
     renameLocation: undefined,
   }
-  //  }
-
-  // find the first parent that is a class declaration starting from given position
-  // targetNode = findParentFromPosition(info, fileName, positionOrRange, 
-  //   parent => parent.kind === ts.SyntaxKind.ClassDeclaration)
-  // try {
+}
 
 
-  // // newText = getAllReferencesToSymbolInPosition(targetNode as ts_module.ClassDeclaration, info, true, positionOrRange)
-  // // console.log(
-  //   newText = findDefinitionsToSymbolAtPosition(sourceFile, info, positionOrRange );
-
-
-  // } catch (error) {
-  //   newText=error+' ' + error.stack 
-  // }
-
-
-
-  // else {
-  //   return 
-  // }
-
+function getClassExtendingReference(fileName: string, positionOrRange: number | ts_module.TextRange): Array<ts.ClassDeclaration | ts.InterfaceDeclaration> {
+  const references1: Array<ts.ClassDeclaration | ts.InterfaceDeclaration> = [];
+  const classDefinitions = info.languageService.findReferences(fileName, positionOrRangeToNumber(positionOrRange)).forEach(ref => {
+    ref.references.forEach(r => {
+      const sf = info.languageService.getProgram().getSourceFile(r.fileName);
+      if (!sf) {
+        return;
+      }
+      const refNode = findChildContainingPosition(sf, r.textSpan.start);
+      if (!refNode) {
+        return;
+      }
+      const heritageClause: ts.HeritageClause | undefined = findParent(refNode, (p => p.kind === ts.SyntaxKind.HeritageClause)) as ts.HeritageClause;
+      if (!heritageClause) {
+        return;
+      }
+      if (heritageClause.parent && (heritageClause.parent.kind === ts.SyntaxKind.ClassDeclaration || heritageClause.parent.kind === ts.SyntaxKind.InterfaceDeclaration)) {
+        references1.push(heritageClause.parent as ts.ClassDeclaration);
+      }
+    });
+  });
+  return references1;
 }

@@ -1,3 +1,6 @@
-import { Transport } from "./test1";
+import { Transport, Vehicle } from "./test1";
 
-let t: Transport ; /home/sg/git/typescript-plugins-of-mine/typescript-plugin-extract-interface-client-project1/src/test1.ts [object Object]
+class Boat extends Transport{}
+let t: Transport ;
+
+let v : Vehicle
