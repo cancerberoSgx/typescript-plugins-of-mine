@@ -1,5 +1,6 @@
 import * as ts_module from '../node_modules/typescript/lib/tsserverlibrary'
-import { findChildContainingPosition, findParent, positionOrRangeToNumber, positionOrRangeToRange, findParentFromPosition, dumpAst, getKindName, findChild } from 'typescript-ast-util'
+import { findChildContainingPosition, findParent, positionOrRangeToNumber, positionOrRangeToRange, findParentFromPosition, dumpAst, getKindName, findChild, log } from 'typescript-ast-util'
+
 
 const PLUGIN_NAME = 'typescript-plugin-subclasses-of'
 const ACTION_NAME_DIRECT_SUBCLASSES = `${PLUGIN_NAME}-direct-subclasses-refactor-action`
@@ -137,13 +138,21 @@ function getDirectDeclarationReferencesExtending(fileName: string, positionOrRan
 }
 
 
-function getIndirectDeclarationReferencesExtending(fileName: string, positionOrRange: number | ts_module.TextRange)
+function getIndirectDeclarationReferencesExtending(fileName: string, positionOrRange: number | ts_module.TextRange, 
+  supers: Array<ts.ClassDeclaration | ts.InterfaceDeclaration> =[], processedDeclNames:Array<string>=[])
 : Array<ts.ClassDeclaration | ts.InterfaceDeclaration> {
-  let supers: Array<ts.ClassDeclaration | ts.InterfaceDeclaration> = getDirectDeclarationReferencesExtending(fileName, positionOrRange)
-  if (!supers) {
-    return []
+
+  const nodes = getDirectDeclarationReferencesExtending(fileName, positionOrRange)
+  if (!nodes) {
+    return supers
   }
-  supers.forEach(superNode => {
+  if(supers.length && !nodes.find(n=>!!supers.find(s=>s.name!=n.name))){
+    return supers
+  }
+  nodes.forEach(superNode => {
+    if(!supers.find(s=>s.name===superNode.name)){ // add only if not already
+      supers.push(superNode)
+    }
     const superId = findChild(superNode, c=>c.kind===ts.SyntaxKind.Identifier)
     if(!superId){
       return 
@@ -151,16 +160,23 @@ function getIndirectDeclarationReferencesExtending(fileName: string, positionOrR
     const refs = info.languageService.findReferences(superNode.getSourceFile().fileName, superId.getStart())
     if(!refs){
       return
-    }  
+    }
     refs.forEach(ref => {
+      // processedDeclNames is for protecting of infinite recursion - for example happens with EventEmitter
+      if(processedDeclNames.includes(ref.definition.name)) {
+        return
+      }
+      processedDeclNames.push(ref.definition.name)
       ref.references && ref.references.forEach(r => {
-        const subs = getIndirectDeclarationReferencesExtending(r.fileName, r.textSpan.start)
+        const subs = getIndirectDeclarationReferencesExtending(r.fileName, r.textSpan.start, supers, processedDeclNames)
         subs.forEach(sub=>{
+          // if(sub.name){
+          //   log(sub.name.getText()+'\n')
+          // }
           if(!supers.find(s=>s.name===sub.name)){ // add only if not already
             supers.push(sub)
           }
         })
-        supers = supers.concat()
       })
     })
   })

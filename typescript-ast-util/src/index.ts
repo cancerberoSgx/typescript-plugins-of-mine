@@ -246,7 +246,6 @@ export function compileFile(fileName: string = '', tsconfigPath: string = join(_
   return ts.createProgram([fileName], options, compilerHost);
 }
 
-
 export function compileProject(projectFolder: string, rootFiles: Array<string> = [], tsconfigPath: string = join(__dirname, 'assets', 'simpletsconfig.json')): ts.Program {
   const tsConfigJson = ts.parseConfigFileTextToJson(tsconfigPath, readFileSync(tsconfigPath).toString())
   if (tsConfigJson.error) {
@@ -262,7 +261,6 @@ export function compileProject(projectFolder: string, rootFiles: Array<string> =
   }
   return ts.createProgram(rootFiles, compilerOptions.options, compilerHost);
 }
-
 
 export function log(s: string) {
   const logFile = join(homedir(), 'typescript-ast-util.log')
