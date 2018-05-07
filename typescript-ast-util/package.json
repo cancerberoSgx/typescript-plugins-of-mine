@@ -10,9 +10,9 @@
     "doc": "typedoc -mode modules --out ../docs/typescript-ast-util src/index.ts",
     "postinstall": "tsc"
   },
-  "keywords": [],
+  "keywords": ["TypeScript", "TypeScript Language Service", "plugin"],
   "author": "Sebastian Gurin",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "shelljs": "^0.8.1",
     "typescript": "^2.8.3"
@@ -22,5 +22,6 @@
     "jasmine": "^3.1.0",
     "tsconfig-paths": "^3.3.1",
     "typedoc": "^0.11.1"
-  }
+  },
+  "repository": "https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-ast-util"
 }
