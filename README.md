@@ -12,7 +12,8 @@ Experiments with typescript compiler API, and Language Service plugins.
  * **WIP**
  * While inside a class, when you select something it activates and suggest "Extract interface". It generates the interface right after the class declaration. 
  * [Project](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/sample-ts-plugin1)
- * See it in Action: ![See it in Action: ](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-extract-interface/doc-assets/extract-interface.gif?raw=true?p=.gif)
+ * See it in Action: 
+ *![See it in Action: ](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-extract-interface/doc-assets/extract-interface.gif?raw=true?p=.gif)
 
 
 ## typescript-plugin-subclasses
@@ -21,8 +22,9 @@ Experiments with typescript compiler API, and Language Service plugins.
 
  * user has to select (part of) the name of class of interface for refactor to be suggested
  * prints the output at the end of current file with links to the exact position (ctrl-click will take you there)
- * See it in action: [subclasses-of screencast WIP](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-subclasses-of/doc-assets/screencast.gif?raw=true?p=.gif)
- 
+ * See it in action: 
+ * ![subclasses-of screencast WIP](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-subclasses-of/doc-assets/screencast.gif?raw=true?p=.gif)
+
 ## typescript-plugin-print-ast
 
  * very simple way of inspecting the AST of the node where the cursor is
