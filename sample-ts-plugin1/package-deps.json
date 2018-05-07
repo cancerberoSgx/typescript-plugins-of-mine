@@ -3,8 +3,9 @@
     "sample-ts-plugin1/LICENSE": "dedc6df6b3be7344793767ce0a4de8f20b8d627a",
     "sample-ts-plugin1/README.md": "17eff27cc3ea24cf63dddb737d35b56b42ed0ca0",
     "sample-ts-plugin1/doc-assets/plugin-screencast.gif": "d892d265895264fee2d8001a8b11ba38c9e67b0a",
+    "sample-ts-plugin1/package-deps.json": "d072c91f5b710de1870e48e7cb5a13d52d1cd779",
     "sample-ts-plugin1/package.json": "7fdbc2edd10b20cc1f609a52d34551ead6231721",
-    "sample-ts-plugin1/src/index.ts": "baf59ede24af623dd0b8d4c7e69f41c878e51be9",
+    "sample-ts-plugin1/src/index.ts": "ae2e3db9c1af658640514b25ae7d1f1dd0c20732",
     "sample-ts-plugin1/tsconfig.json": "c6ad0ff31146ea0f6d704cdb0b6545fbb01d6aae",
     "common/config/rush/npm-shrinkwrap.json": "a09f8a7238c85a346456131345b3c2c883942d81"
   },

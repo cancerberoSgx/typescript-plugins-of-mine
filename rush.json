@@ -4,6 +4,12 @@
   "nodeSupportedVersionRange": ">=8.9.0",
 
   "projects": [
+
+    {
+      "packageName": "typescript-ast-util",
+      "projectFolder": "typescript-ast-util",
+      "shouldPublish": true
+    },
     {
       "packageName": "sample-ts-plugin1",
       "projectFolder": "sample-ts-plugin1",
@@ -28,11 +34,6 @@
       "packageName": "typescript-plugin-extract-interface-client-project1",
       "projectFolder": "typescript-plugin-extract-interface-client-project1",
       "shouldPublish": false
-    },
-    {
-      "packageName": "typescript-ast-util",
-      "projectFolder": "typescript-ast-util",
-      "shouldPublish": true
     },
     {
       "packageName": "typescript-plugin-subclasses-of",
