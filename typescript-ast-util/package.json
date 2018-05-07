@@ -1,14 +1,13 @@
 {
   "name": "typescript-ast-util",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "general utilities for traversing, selecting, manipulating typescript ast ",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "test": "ts-node -r tsconfig-paths/register node_modules/jasmine/bin/jasmine ",
     "build": "tsc",
-    "doc": "typedoc -mode modules --out ../docs/typescript-ast-util src/index.ts",
-    "postinstall": "tsc"
+    "doc": "typedoc -mode modules --out ../docs/typescript-ast-util src/index.ts"
   },
   "keywords": ["TypeScript", "TypeScript Language Service", "plugin"],
   "author": "Sebastian Gurin",

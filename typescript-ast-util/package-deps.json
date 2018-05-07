@@ -1,9 +1,12 @@
 {
   "files": {
+    "typescript-ast-util/.gitignore": "74b6c92b079a7b2c5568a1b232cb0dfc4aca8af3",
+    "typescript-ast-util/.npmignore": "4f069921fb12f27966277d0e5d0e787329c77500",
+    "typescript-ast-util/LICENSE": "dedc6df6b3be7344793767ce0a4de8f20b8d627a",
     "typescript-ast-util/README.md": "12cf1bb2a21c6eb4996cd07bb76ebee2e36ed6e8",
-    "typescript-ast-util/package-deps.json": "4f989f8ae9b98a098dc13316faf99dd029381fee",
+    "typescript-ast-util/package-deps.json": "93088f02d6fd666d9e65e00b69be82758e0e4f8f",
     "typescript-ast-util/package-lock.json": "832d94705342ad8c218ab7e778f4e38f5c5bc0e6",
-    "typescript-ast-util/package.json": "c67ac11cff41e90611578631c0bdb540be13c87b",
+    "typescript-ast-util/package.json": "bf2a7fe246e370233d21aa4e17de0b5444f0c8f2",
     "typescript-ast-util/spec/findChildgetJsDocSpec.ts": "645c6d6bcb6c7a5204a59865cb0890943f7f5a87",
     "typescript-ast-util/spec/support/jasmine.json": "bb6cd3d8b81d366415e181539db7ced86787b7d4",
     "typescript-ast-util/src/assets/simpletsconfig.json": "5902acffe279ae28047035c684432e271038ea72",
