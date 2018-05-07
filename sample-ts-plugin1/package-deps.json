@@ -2,7 +2,7 @@
   "files": {
     "sample-ts-plugin1/README.md": "17eff27cc3ea24cf63dddb737d35b56b42ed0ca0",
     "sample-ts-plugin1/doc-assets/plugin-screencast.gif": "d892d265895264fee2d8001a8b11ba38c9e67b0a",
-    "sample-ts-plugin1/package-deps.json": "c6082a2d47b10a93d402c6e800337e7b09027cf0",
+    "sample-ts-plugin1/package-deps.json": "ae002000be37ef256d92c1475bc4f7e04f7a0b4d",
     "sample-ts-plugin1/package.json": "90eaf21d60d41654a0421e5853f94d09aec22d27",
     "sample-ts-plugin1/src/index.ts": "baf59ede24af623dd0b8d4c7e69f41c878e51be9",
     "sample-ts-plugin1/tsconfig.json": "c6ad0ff31146ea0f6d704cdb0b6545fbb01d6aae",

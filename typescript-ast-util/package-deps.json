@@ -1,6 +1,7 @@
 {
   "files": {
     "typescript-ast-util/README.md": "12cf1bb2a21c6eb4996cd07bb76ebee2e36ed6e8",
+    "typescript-ast-util/package-deps.json": "dda5380905df4709306b6227deca65cc8de62e47",
     "typescript-ast-util/package-lock.json": "832d94705342ad8c218ab7e778f4e38f5c5bc0e6",
     "typescript-ast-util/package.json": "c67ac11cff41e90611578631c0bdb540be13c87b",
     "typescript-ast-util/spec/findChildgetJsDocSpec.ts": "645c6d6bcb6c7a5204a59865cb0890943f7f5a87",
@@ -8,7 +9,6 @@
     "typescript-ast-util/src/assets/simpletsconfig.json": "5902acffe279ae28047035c684432e271038ea72",
     "typescript-ast-util/src/index.ts": "badb106e42c007cca1aee6ce9dc209739eccfd36",
     "typescript-ast-util/tsconfig.json": "3f26a7a14e23ce70ae28e0e287b1cc08fa96b52b",
-    "typescript-ast-util/package-deps.json": "deffe2b0525ab51433b8aa9c09cb1ead498bc47a",
     "common/config/rush/npm-shrinkwrap.json": "a09f8a7238c85a346456131345b3c2c883942d81"
   },
   "arguments": "tsc "
