@@ -4,7 +4,7 @@
 // 
 // ![See it in action](../plugin-screencast.gif)
 
-import * as ts_module from '../node_modules/typescript/lib/tsserverlibrary'
+import * as ts_module from 'typescript/lib/tsserverlibrary'
 import { findChildContainingPosition, findParent, positionOrRangeToNumber, positionOrRangeToRange, findParentFromPosition, dumpAst } from 'typescript-ast-util'
 import { extractInterface } from './extract-interface'
 

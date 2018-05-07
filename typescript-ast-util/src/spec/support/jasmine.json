@@ -1,5 +1,5 @@
 {
-  "spec_dir": "spec",
+  "spec_dir": "src/spec",
   "spec_files": [
     "**/*[sS]pec.ts"
   ],

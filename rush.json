@@ -10,36 +10,36 @@
       "projectFolder": "typescript-ast-util",
       "shouldPublish": true
     },
-    {
-      "packageName": "sample-ts-plugin1",
-      "projectFolder": "sample-ts-plugin1",
-      "shouldPublish": false
-    },
-    {
-      "packageName": "sample-ts-plugin1-sample-project",
-      "projectFolder": "sample-ts-plugin1-sample-project",
-      "shouldPublish": false
-    },
-    {
-      "packageName": "typescript-compiler-ast-tests",
-      "projectFolder": "typescript-compiler-ast-tests",
-      "shouldPublish": false
-    },
+    // {
+    //   "packageName": "sample-ts-plugin1",
+    //   "projectFolder": "sample-ts-plugin1",
+    //   "shouldPublish": false
+    // },
+    // {
+    //   "packageName": "sample-ts-plugin1-sample-project",
+    //   "projectFolder": "sample-ts-plugin1-sample-project",
+    //   "shouldPublish": false
+    // },
+    // {
+    //   "packageName": "typescript-compiler-ast-tests",
+    //   "projectFolder": "typescript-compiler-ast-tests",
+    //   "shouldPublish": false
+    // },
     {
       "packageName": "typescript-plugin-extract-interface",
       "projectFolder": "typescript-plugin-extract-interface",
       "shouldPublish": true
     },
-    {
-      "packageName": "typescript-plugin-extract-interface-client-project1",
-      "projectFolder": "typescript-plugin-extract-interface-client-project1",
-      "shouldPublish": false
-    },
-    {
-      "packageName": "typescript-plugin-subclasses-of",
-      "projectFolder": "typescript-plugin-subclasses-of",
-      "shouldPublish": true
-    }
+    // {
+    //   "packageName": "typescript-plugin-extract-interface-client-project1",
+    //   "projectFolder": "typescript-plugin-extract-interface-client-project1",
+    //   "shouldPublish": false
+    // },
+    // {
+    //   "packageName": "typescript-plugin-subclasses-of",
+    //   "projectFolder": "typescript-plugin-subclasses-of",
+    //   "shouldPublish": true
+    // }
     
     
   ]

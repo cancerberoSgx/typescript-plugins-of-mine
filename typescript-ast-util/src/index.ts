@@ -1,8 +1,8 @@
 import * as ts from 'typescript'
-import * as ts_module from '../node_modules/typescript/lib/tsserverlibrary'
+import * as ts_module from 'typescript/lib/tsserverlibrary'
 import { join, sep, dirname } from 'path';
 import { appendFileSync, readFileSync } from 'fs';
-import { StringLiteral } from '../node_modules/typescript/lib/tsserverlibrary';
+import { StringLiteral } from 'typescript/lib/tsserverlibrary';
 
 // position & range helpers
 /** given a positionOrRange (common when developing LanguageServicePlugins) it will return en equivalent Range  */
