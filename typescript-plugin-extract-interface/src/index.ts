@@ -38,22 +38,27 @@ function init(modules: { typescript: typeof ts_module }) {
 export = init
 
 
+let selectedDef: ts.ReferencedSymbol | undefined
+
 function getApplicableRefactors(fileName: string, positionOrRange: number | ts.TextRange): ts_module.ApplicableRefactorInfo[] {
   const refactors = info.languageService.getApplicableRefactors(fileName, positionOrRange) || []
-  //TODO: use getReferences like in subclass-of and let user select the id so we dont contaminate the whole experience everywhere. 
-  const targetNode = findParentFromPosition(info, fileName, positionOrRange, parent => parent.kind === ts.SyntaxKind.ClassDeclaration)
-  if (!targetNode) {
+  const refs = info.languageService.findReferences(fileName, positionOrRangeToNumber(positionOrRange))
+  if (!refs || !refs.length) {
     return refactors
   }
-  const refactorInfo: ts_module.ApplicableRefactorInfo = {
+  const selectedDefs: ts.ReferencedSymbol[] = refs.filter(r => r.definition && r.definition.kind === ts.ScriptElementKind.classElement && r.definition.fileName===fileName)
+  if (!selectedDefs || !selectedDefs.length) {
+    return refactors
+  }
+  selectedDef = selectedDefs[0]
+  refactors.push({
     name: `${PLUGIN_NAME}-refactor-info`,
     description: 'Extract interface',
     actions: [
-      { name: REFACTOR_ACTION_NAME, description: 'Extract interface' },
+      { name: REFACTOR_ACTION_NAME, description: 'Extract interface from ' + selectedDef.definition.name },
       { name: 'print-ast', description: 'Print AST' } // TODO: remove print ast to its own project
     ],
-  }
-  refactors.push(refactorInfo)
+  })
   return refactors
 }
 
@@ -62,18 +67,16 @@ function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSetti
   positionOrRange: number | ts_module.TextRange, refactorName: string,
   actionName: string): ts.RefactorEditInfo | undefined {
 
-    let targetNode, newText
-  // try {
-    
+  let targetNode, newText
   if (actionName == REFACTOR_ACTION_NAME) {
     // find the first parent that is a class declaration starting from given position
-    targetNode = findParentFromPosition(info, fileName, positionOrRange, 
+    targetNode = findParentFromPosition(info, fileName, positionOrRange,
       parent => parent.kind === ts.SyntaxKind.ClassDeclaration)
     newText = extractInterface(targetNode as ts_module.ClassDeclaration)
   }
   else if (actionName == 'print-ast') { // TODO: remove print ast to its own project
     targetNode = findParentFromPosition(info, fileName, positionOrRange, parent => true)
-    newText = '\n`'+dumpAst(targetNode)+'`\n'
+    newText = '\n`' + dumpAst(targetNode) + '`\n'
   }
 
   if (targetNode && newText) {
@@ -81,7 +84,7 @@ function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSetti
       edits: [{
         fileName,
         textChanges: [{
-          span: { start: targetNode.getEnd(), length: newText.length}, // add it right after the class decl
+          span: { start: targetNode.getSourceFile().getEnd(), length: newText.length }, // add it right after the class decl
           newText: newText
         }],
       }],
@@ -92,9 +95,5 @@ function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSetti
   else {
     return info.languageService.getEditsForRefactor(fileName, formatOptions, positionOrRange, refactorName, actionName)
   }
-
-// } catch (error) {
-//   newText = error+' - '+error.stack
-// }
 
 }

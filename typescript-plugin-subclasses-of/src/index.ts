@@ -43,15 +43,14 @@ function getApplicableRefactors(fileName: string, positionOrRange: number | ts.T
   if (!refs || !refs.length) {
     return refactors
   }
-  const selectedDefs: ts.ReferencedSymbol[] = refs.filter(r => !!(r.definition && (r.definition.kind === ts.ScriptElementKind.classElement || r.definition.kind === ts.ScriptElementKind.interfaceElement)))
+  const selectedDefs: ts.ReferencedSymbol[] = refs.filter(r => !!(r.definition && 
+    (r.definition.kind === ts.ScriptElementKind.classElement || r.definition.kind === ts.ScriptElementKind.interfaceElement) && 
+    r.definition.fileName===fileName))
+    
   if (!selectedDefs || !selectedDefs.length) {
     return refactors
   }
   selectedDef = selectedDefs[0]
-  const sourceFile = info.languageService.getProgram().getSourceFile(fileName)
-  if (!sourceFile) {
-    return refactors
-  }
   refactors.push( {
     name: `${PLUGIN_NAME}-refactor-info`,
     description: 'Subclasses of',
@@ -68,9 +67,7 @@ function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSetti
   positionOrRange: number | ts_module.TextRange, refactorName: string,
   actionName: string)
   : ts.RefactorEditInfo | undefined {
- 
 
-      
   const refactors = info.languageService.getEditsForRefactor(fileName, formatOptions, positionOrRange, refactorName, actionName)
 
   if (!selectedDef || (actionName != ACTION_NAME_DIRECT_SUBCLASSES && actionName != ACTION_NAME_INDIRECT_SUBCLASSES)) {
