@@ -25,10 +25,11 @@ class A {
 /**
  * the description for a Vehicle
  */
-export class Vehicle extends Transport {
+export class Vehicle<T> {
   constructor(iron: number) {
-    super()
+    this.n=1
   }
+  n:number
   engine: { iron: number, gas: Array<string> } = { iron: 3, gas: [] }
   /**
    * start the engine is the first thing before moving we need to do in a vehicle
@@ -59,7 +60,11 @@ export class Vehicle extends Transport {
  * the description for a Vehicle
  */
 export interface IVehicle {
-  constructor():IVehicle;
+
+constructor (iron: number): Vehicle <T>
+  
+n: number;
+  
 engine: {
     iron: number;
     gas: Array<string>;
@@ -74,4 +79,3 @@ startEngine(strong: string[]): Promise<boolean>;
    */
 none(): void;
 }
-

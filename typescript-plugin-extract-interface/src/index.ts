@@ -46,7 +46,8 @@ function getApplicableRefactors(fileName: string, positionOrRange: number | ts.T
   if (!refs || !refs.length) {
     return refactors
   }
-  const selectedDefs: ts.ReferencedSymbol[] = refs.filter(r => r.definition && r.definition.kind === ts.ScriptElementKind.classElement && r.definition.fileName===fileName)
+  const selectedDefs: ts.ReferencedSymbol[] = refs.filter(r => 
+    r.definition && r.definition.kind === ts.ScriptElementKind.classElement && r.definition.fileName===fileName)
   if (!selectedDefs || !selectedDefs.length) {
     return refactors
   }

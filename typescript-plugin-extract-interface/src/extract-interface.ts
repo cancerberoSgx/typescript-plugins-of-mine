@@ -1,6 +1,7 @@
 import * as ts from 'typescript'
 import { SyntaxKind, MethodDeclaration, ScriptTarget, Modifier } from 'typescript/lib/tsserverlibrary';
-import { filterChildren, getKindName, findIdentifierString, log, getJsDoc } from 'typescript-ast-util'
+import { filterChildren, getKindName, findIdentifierString, log, getJsDoc, findChild } from 'typescript-ast-util'
+import { print } from 'util';
 
 function printNode(signature: ts.TypeElement, originalNode: ts.ClassElement): string {
   const printer = ts.createPrinter({
@@ -18,12 +19,12 @@ function printNode(signature: ts.TypeElement, originalNode: ts.ClassElement): st
 
   let jsdocPrefix = ''
   const nodeChildren = originalNode.getChildren()
-  if(nodeChildren && nodeChildren.length && nodeChildren[0].kind===ts.SyntaxKind.JSDocComment){
+  if (nodeChildren && nodeChildren.length && nodeChildren[0].kind === ts.SyntaxKind.JSDocComment) {
     jsdocPrefix += nodeChildren[0].getText()
-  } 
+  }
   const result = printer.printNode(ts.EmitHint.Unspecified, signature, ts.createSourceFile('temp.ts', '', ScriptTarget.Latest));
 
-  return jsdocPrefix+'\n'+result
+  return jsdocPrefix + '\n' + result
 }
 
 export function extractInterface(node: ts.ClassDeclaration): string {
@@ -33,9 +34,9 @@ export function extractInterface(node: ts.ClassDeclaration): string {
 
   let classJsdoc = ''
   const nodeChildren = node.getChildren()
-  if(nodeChildren && nodeChildren.length && nodeChildren[0].kind===ts.SyntaxKind.JSDocComment){
+  if (nodeChildren && nodeChildren.length && nodeChildren[0].kind === ts.SyntaxKind.JSDocComment) {
     classJsdoc += nodeChildren[0].getText()
-  } 
+  }
   node.members
     .filter(member => !(member.modifiers && member.modifiers.map(m => m.kind).find(modifier => excludeMembersWithKeywords.includes(modifier))))
     .forEach(member => {
@@ -49,9 +50,26 @@ export function extractInterface(node: ts.ClassDeclaration): string {
         const propertySignature = ts.createPropertySignature(property.modifiers, property.name, property.questionToken, property.type, property.initializer)
         members.push(printNode(propertySignature, property))
       }
+      if (ts.isConstructorDeclaration(member)) {
+        const constructor = member as ts.ConstructorDeclaration
+        const propertySignature = ts.createConstructSignature(
+          constructor.typeParameters as ts.TypeParameterDeclaration[] | undefined,
+          constructor.parameters as any, constructor.type)  // TODO: had to cast dont know how safe
+        let printed = printNode(propertySignature, constructor) // not ready yet will be something like this: new (iron: number);
+        printed = printed.replace(/new/, 'constructor')
+        if (node.name) {
+          printed = printed.substring(0, printed.length - 1) + ': ' + node.name.getText()
+          if(node.typeParameters){
+            printed += ' <' + node.typeParameters.map(tp=>tp.getText()).join(', ') + '>'
+          }
+        }
+        members.push(printed)
+      }
     })
   let name = node.name ? 'I' + node.name.escapedText : 'IAnonymousClass'
-
+  if(node.typeParameters){
+    name += ' <' + node.typeParameters.map(tp=>tp.getText()).join(', ') + '>'
+  }
   return `
 ${classJsdoc}
 export interface ${name} {
