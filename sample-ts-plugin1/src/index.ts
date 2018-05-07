@@ -7,7 +7,7 @@
 // 
 // ![See it in action](../plugin-screencast.gif)
 
-import * as ts_module from '../node_modules/typescript/lib/tsserverlibrary'
+import * as ts_module from 'typescript/lib/tsserverlibrary'
 
 function init(modules: { typescript: typeof ts_module }) {
 

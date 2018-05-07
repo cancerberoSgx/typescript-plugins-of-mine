@@ -4,21 +4,50 @@
   "lockfileVersion": 1,
   "requires": true,
   "dependencies": {
+    "@rush-temp/sample-ts-plugin1": {
+      "version": "file:projects/sample-ts-plugin1.tgz",
+      "integrity": "sha512-JG1zYCaqtxQ2tnZHUylfsgwva97r5rWrx7RCxKqQBafAiPTQH2VYTs1cjwhF2AfkAKB2NSwRuc5lGwz1ceH11g==",
+      "requires": {
+        "docco": "0.8.0",
+        "typescript": "2.8.3"
+      }
+    },
+    "@rush-temp/sample-ts-plugin1-sample-project": {
+      "version": "file:projects/sample-ts-plugin1-sample-project.tgz",
+      "integrity": "sha512-MxcDkBZNVGb9MNzDb3cXraQXk9YelHxuOdd6e2jizxmkVz+fwog2iZw4XkKrGbzz6/MfttyMv0aVFsTBij6lfA==",
+      "requires": {
+        "typescript": "2.8.3"
+      }
+    },
     "@rush-temp/typescript-ast-util": {
       "version": "file:projects/typescript-ast-util.tgz",
-      "integrity": "sha512-mVKtn6C5iKVUgLtdpvGl6RPipxEvyHbhi4faM6VtCS+LnPHOBK5GRviS6gIM80XR4LbGes48WRfJD8jGSgsiTA==",
+      "integrity": "sha512-3mNyLaPy+DNEQwKhbKZpsxV9q4rHVWQB+xoiQ2ebSXPDX71etZOgM7prD+DpYkAjAYDrzIU4BZSxL2hnZ2G1kg==",
       "requires": {
         "@types/jasmine": "2.8.7",
         "jasmine": "3.1.0",
         "shelljs": "0.8.1",
-        "tsconfig-paths": "3.3.1",
+        "tsconfig-paths": "3.3.2",
         "typedoc": "0.11.1",
         "typescript": "2.8.3"
       }
     },
     "@rush-temp/typescript-plugin-extract-interface": {
       "version": "file:projects/typescript-plugin-extract-interface.tgz",
-      "integrity": "sha512-M3WO4LHcGRPh+HFUU9kUY31yKd26lQpFs+RxNylk72MEyrWIfNgcqVtpyiVt33EmU7OzBYkb2GLNfXqN7Trq3w==",
+      "integrity": "sha512-9a7j4LmUqz+YuY/sE4XHGu8djO2UmDEekala0EQ8HNb4jKj0gCPl/KzVDz8sihuQVBv6KDKAl8tUWkbuHdJMUw==",
+      "requires": {
+        "typescript": "2.8.3"
+      }
+    },
+    "@rush-temp/typescript-plugin-extract-interface-client-project1": {
+      "version": "file:projects/typescript-plugin-extract-interface-client-project1.tgz",
+      "integrity": "sha512-epM9wG/BO3cQkmyUPMQtNrnsoaxhbaWSUu3t51LGwEzHzHb/ZbrLufA41aJbd7OC+sY1vCY+r/TCG90te5N1Rg==",
+      "requires": {
+        "typescript": "2.8.3"
+      }
+    },
+    "@rush-temp/typescript-plugin-subclasses-of": {
+      "version": "file:projects/typescript-plugin-subclasses-of.tgz",
+      "integrity": "sha512-UG5UOg77W/UAo3n8yBsd0hzwM+tDxR55jA4+HxknP1Ya6iItnCKvo3xAh7HSx8+Qnu4lBNpyzLcYkfyccAu3Tg==",
       "requires": {
         "typescript": "2.8.3"
       }
@@ -114,6 +143,11 @@
         "concat-map": "0.0.1"
       }
     },
+    "commander": {
+      "version": "2.15.1",
+      "resolved": "https://registry.npmjs.org/commander/-/commander-2.15.1.tgz",
+      "integrity": "sha512-VlfT9F3V0v+jr4yxPc5gg9s62/fIVWsd2Bk2iD435um1NlGMYdVCq+MjcXnhYq2icNOizHr1kK+5TI6H0Hy0ag=="
+    },
     "concat-map": {
       "version": "0.0.1",
       "resolved": "https://registry.npmjs.org/concat-map/-/concat-map-0.0.1.tgz",
@@ -124,10 +158,22 @@
       "resolved": "https://registry.npmjs.org/deepmerge/-/deepmerge-2.1.0.tgz",
       "integrity": "sha512-Q89Z26KAfA3lpPGhbF6XMfYAm3jIV3avViy6KOJ2JLzFbeWHOvPQUu5aSJIWXap3gDZC2y1eF5HXEPI2wGqgvw=="
     },
+    "docco": {
+      "version": "0.8.0",
+      "resolved": "https://registry.npmjs.org/docco/-/docco-0.8.0.tgz",
+      "integrity": "sha512-QcWBDnnGaT+rgC0wqynznXv0/4hd6nAFdWNs2fN4FvkH2yAnCYVeRU7GIZXNCeUQ955Lufq+TmZcSXiBa1cGQQ==",
+      "requires": {
+        "commander": "2.15.1",
+        "fs-extra": "6.0.0",
+        "highlight.js": "9.12.0",
+        "marked": "0.3.19",
+        "underscore": "1.9.0"
+      }
+    },
     "fs-extra": {
-      "version": "5.0.0",
-      "resolved": "https://registry.npmjs.org/fs-extra/-/fs-extra-5.0.0.tgz",
-      "integrity": "sha512-66Pm4RYbjzdyeuqudYqhFiNBbCIuI9kgRqLPSHIlXHidW8NIQtVdkM1yeZ4lXwuhbTETv3EUGMNHAAw6hiundQ==",
+      "version": "6.0.0",
+      "resolved": "https://registry.npmjs.org/fs-extra/-/fs-extra-6.0.0.tgz",
+      "integrity": "sha512-lk2cUCo8QzbiEWEbt7Cw3m27WMiRG321xsssbcIpfMhpRjrlC08WBOVQqj1/nQYYNnPtyIhP1oqLO3QwT2tPCw==",
       "requires": {
         "graceful-fs": "4.1.11",
         "jsonfile": "4.0.0",
@@ -320,9 +366,9 @@
       "integrity": "sha1-PFMZQukIwml8DsNEhYwobHygpgo="
     },
     "tsconfig-paths": {
-      "version": "3.3.1",
-      "resolved": "https://registry.npmjs.org/tsconfig-paths/-/tsconfig-paths-3.3.1.tgz",
-      "integrity": "sha512-NDoPsyNh5auc3NrTPP9x7htaROU4JXaSoc53O7fvvJJrU639Jcz7NJgntoyiLDVIPItPXYWUYPf94Wfqqf14pg==",
+      "version": "3.3.2",
+      "resolved": "https://registry.npmjs.org/tsconfig-paths/-/tsconfig-paths-3.3.2.tgz",
+      "integrity": "sha512-21VLRJIXGZDaZ0YVml12IXwSyEcluxvBZjS9xY5ZiKle0iF9NmNg7Hatb77FDg5Ahkas3dfvST8IDldMYpCH0g==",
       "requires": {
         "deepmerge": "2.1.0",
         "minimist": "1.2.0",
@@ -354,6 +400,16 @@
         "typescript": "2.7.2"
       },
       "dependencies": {
+        "fs-extra": {
+          "version": "5.0.0",
+          "resolved": "https://registry.npmjs.org/fs-extra/-/fs-extra-5.0.0.tgz",
+          "integrity": "sha512-66Pm4RYbjzdyeuqudYqhFiNBbCIuI9kgRqLPSHIlXHidW8NIQtVdkM1yeZ4lXwuhbTETv3EUGMNHAAw6hiundQ==",
+          "requires": {
+            "graceful-fs": "4.1.11",
+            "jsonfile": "4.0.0",
+            "universalify": "0.1.1"
+          }
+        },
         "typescript": {
           "version": "2.7.2",
           "resolved": "https://registry.npmjs.org/typescript/-/typescript-2.7.2.tgz",
@@ -370,6 +426,11 @@
       "version": "2.8.3",
       "resolved": "https://registry.npmjs.org/typescript/-/typescript-2.8.3.tgz",
       "integrity": "sha512-K7g15Bb6Ra4lKf7Iq2l/I5/En+hLIHmxWZGq3D4DIRNFxMNV6j2SHSvDOqs2tGd4UvD/fJvrwopzQXjLrT7Itw=="
+    },
+    "underscore": {
+      "version": "1.9.0",
+      "resolved": "https://registry.npmjs.org/underscore/-/underscore-1.9.0.tgz",
+      "integrity": "sha512-4IV1DSSxC1QK48j9ONFK1MoIAKKkbE8i7u55w2R6IqBqbT7A/iG7aZBCR2Bi8piF0Uz+i/MG1aeqLwl/5vqF+A=="
     },
     "universalify": {
       "version": "0.1.1",

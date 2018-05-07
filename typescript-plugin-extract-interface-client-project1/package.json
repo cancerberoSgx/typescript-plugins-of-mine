@@ -12,9 +12,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/node": "^10.0.4"
   },
   "devDependencies": {
-    "typescript-plugin-extract-interface": "1.0.0",
+    "typescript-plugin-extract-interface": "1.0.2",
     "typescript-plugin-subclasses-of": "1.0.0",
     "typescript": "^2.8.3"
   }
