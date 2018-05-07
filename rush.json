@@ -33,6 +33,11 @@
       "packageName": "typescript-ast-util",
       "projectFolder": "typescript-ast-util",
       "shouldPublish": true
+    },
+    {
+      "packageName": "typescript-plugin-subclasses-of",
+      "projectFolder": "typescript-plugin-subclasses-of",
+      "shouldPublish": true
     }
     
     

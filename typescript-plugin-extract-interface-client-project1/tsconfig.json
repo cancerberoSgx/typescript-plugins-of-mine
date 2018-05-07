@@ -1,15 +1,22 @@
 {
   "compilerOptions": {
-    "target": "es2018",   
-    "module": "commonjs", 
-    "lib": ["es2018"],  
-    "outDir": "./dist", 
-    "strict": true,           
+    "target": "es2018",
+    "module": "commonjs",
+    "lib": [
+      "es2018"
+    ],
+    "outDir": "./dist",
+    "strict": true,
     "esModuleInterop": true,
     "removeComments": false,
     "noImplicitAny": true,
-    "plugins": [{
+    "plugins": [
+      {
         "name": "typescript-plugin-extract-interface"
-    }]
+      },
+      {
+        "name": "typescript-plugin-subclasses-of"
+      }
+      ]
+    }
   }
-}

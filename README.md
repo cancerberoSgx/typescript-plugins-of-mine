@@ -1,7 +1,5 @@
 Experiments with typescript compiler API, and Language Service plugins.
 
-Note: this is a monorepo made with http://rushjs.io/
-
 
 ## TypeScript LanguageService Plugin Tutorial
 
@@ -40,10 +38,23 @@ Note: this is a monorepo made with http://rushjs.io/
  * extract interface from class
  * move method to other class (complicated - move interfaces also or classes hierarchy!)
  * move node (class, interf, function to other file) - complication: exported nodes! must change other's imports
- * add explicit type: select an identifier without explicit type - a refactor add its type based on the inferred one. x
+ * add explicit type: select an identifier without explicit type - a refactor add its type based on the inferred one. 
+ * when adding an extra parameter to a function call a refactor should allow me to add this new parameter to the function/method declaration automatically
+ * method delegation to a property member
  * show the ast tree (simplified) of current keyword (DONE!)
  * show all subclasses of current class/interface - show all implementors off current interface. 
+ * go to definition / goto implementation
+ * views that shows the content of large.d.ts like node.d.ts, tsserverlibrary.d.ts, etc a more tree-view like for examine the structure and search
  * yeoman generator for ts plugins ? 
+ * return type not compatible with actual return - fix declared return type
+
+## About this project
+
+ * very new, just a research
+ * I didn't found refactor plugins like move method, move class, extract interface, method delegate. etc. Search a lot didn't found anythign and that's strange
+ In a couple of days I was about to grasp Typescript Language Service architecture, but is poorly documented and there are very few examples. That's the main motivation for this project, try to unite examples, and describe how to implement these plugins
+
+ * This project is a monorepo made with http://rushjs.io/
 
 ## useful links
 
@@ -62,7 +73,6 @@ Would be good to have a gallery to share knowledge!
  * https://github.com/wessberg/TypescriptLanguageService  A host-implementation of Typescripts LanguageService.
  * https://github.com/spion/typescript-workspace-plugin Simple plugin that adds support for yarn-like workspaces to typescript
  * https://github.com/wix/stylable-intelligence
-
  * https://github.com/knisterpeter/typescript-patternplate-resolver  TypeScript server plugin to inject pattern resolution algorithm in the language service
  * https://github.com/angelozerr/tsserver-plugins Load TypeScript 2.3.x tsserver plugins with TypeScript < 2.3.x
  * https://github.com/RyanCavanaugh/sample-ts-plugin2#readme External Files Walkthrough
@@ -78,7 +88,11 @@ Would be good to have a gallery to share knowledge!
 
  * know the type by the jsdoc comment or inferring: (let constructorType = checker.getTypeOfSymbolAtLocation(symbol, symbol.valueDeclaration!);)
  * how to know which modifiers a node has ( return (ts.getCombinedModifierFlags(node) & ts.ModifierFlags.Export) !== 0 || (!!node.parent && node.parent.kind === ts.SyntaxKind.SourceFile);)
+ * for getting where a method or a class ir used we could use this: 
+  info.languageService.findReferences(fileName, positionOrRangeToNumber(positionOrRange)).map(s=>s.references)
+
 
 ## TODO
 
- * sample-ts-plugin docco and static pages - is a ts plugin tutorial!!!
+
+  Check this for getting the node under the cursor: info.languageService.findReferences(fileName, position) 

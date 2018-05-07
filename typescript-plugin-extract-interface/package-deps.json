@@ -1,0 +1,13 @@
+{
+  "files": {
+    "typescript-plugin-extract-interface/README.md": "7b42f697c9cb3f63a4899393c8021dbc72187a83",
+    "typescript-plugin-extract-interface/doc-assets/extract-interface.gif": "91922e43f015ca77e875653d29db671ecc3c21c3",
+    "typescript-plugin-extract-interface/package.json": "0c97df74c3f0144b6bd1f2db9a9302c00b36b62c",
+    "typescript-plugin-extract-interface/src/extract-interface.ts": "ee946b2f7698b60d69dee1026ab26e8a379e3204",
+    "typescript-plugin-extract-interface/src/index.ts": "af0d6ff54f783751bea96007c803f484793b34ae",
+    "typescript-plugin-extract-interface/tsconfig.json": "b589ea145b77f1ebd508e6f0bc3a21ebd288caf3",
+    "typescript-plugin-extract-interface/package-deps.json": "cf0d6f9e2aaf317c7a83c4a2792ed311044db443",
+    "common/config/rush/npm-shrinkwrap.json": "1f9b740d15bfb2c483df328480191ab9f27d0107"
+  },
+  "arguments": "tsc "
+}

@@ -4,13 +4,8 @@
     "module": "commonjs", 
     "lib": ["es2018"],  
     "outDir": "./dist", 
-    "rootDir": "src",
+    "rootDir": "./src",
     "strict": true,           
-    "esModuleInterop": true,
-    "declaration": true
-  },
-  "exclude": [
-    "spec", "dist"
-  ],
-
+    "esModuleInterop": true
+  }
 }

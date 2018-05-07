@@ -6,7 +6,7 @@ export class Transport implements IThing {
 /**
  * the description for a Vehicle
  */
-export class Vehicle extends Transport implements IVehicle {
+export class Vehicle extends Transport {
   constructor(iron: number) {
     super()
   }
@@ -33,12 +33,3 @@ export class Vehicle extends Transport implements IVehicle {
     }
   }
 }
-export interface IVehicle {
-  engine: {
-    iron: number;
-    gas: Array<string>;
-  };
-  startEngine(strong: string[]): Promise<boolean>;
-  none(): void;
-}
-

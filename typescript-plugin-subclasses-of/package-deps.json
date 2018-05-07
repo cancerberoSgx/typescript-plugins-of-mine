@@ -1,0 +1,12 @@
+{
+  "files": {
+    "typescript-plugin-subclasses-of/README.md": "063872478edd2ea6cfc007f4f365e04f564a75cd",
+    "typescript-plugin-subclasses-of/package-deps.json": "2e66998eaf9210a85c37909cac8757fcaf449f1a",
+    "typescript-plugin-subclasses-of/package.json": "2a007eb595c4c34a0d72a403cd8919c1ab0c4c42",
+    "typescript-plugin-subclasses-of/src/index.ts": "fe65d4fd0fd188ac7a50d4283da873cba3ab4176",
+    "typescript-plugin-subclasses-of/src/subclass-finder.ts": "de558034e15c1f2c1d3a7ddc63274bdbf71505a1",
+    "typescript-plugin-subclasses-of/tsconfig.json": "b589ea145b77f1ebd508e6f0bc3a21ebd288caf3",
+    "common/config/rush/npm-shrinkwrap.json": "1f9b740d15bfb2c483df328480191ab9f27d0107"
+  },
+  "arguments": "tsc "
+}

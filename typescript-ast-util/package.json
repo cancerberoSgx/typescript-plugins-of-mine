@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 0",
+    "test": "ts-node -r tsconfig-paths/register node_modules/jasmine/bin/jasmine ",
     "build": "tsc",
     "doc": "typedoc -mode modules --out ../docs/typescript-ast-util src/index.ts",
     "postinstall": "tsc"
@@ -14,9 +14,13 @@
   "author": "Sebastian Gurin",
   "license": "ISC",
   "dependencies": {
+    "shelljs": "^0.8.1",
     "typescript": "^2.8.3"
   },
   "devDependencies": {
+    "@types/jasmine": "^2.8.7",
+    "jasmine": "^3.1.0",
+    "tsconfig-paths": "^3.3.1",
     "typedoc": "^0.11.1"
   }
 }

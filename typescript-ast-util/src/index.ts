@@ -1,7 +1,7 @@
 import * as ts from 'typescript'
 import * as ts_module from '../node_modules/typescript/lib/tsserverlibrary'
-import { join } from 'path';
-import { appendFileSync } from 'fs';
+import { join, sep, dirname } from 'path';
+import { appendFileSync, readFileSync } from 'fs';
 import { StringLiteral } from '../node_modules/typescript/lib/tsserverlibrary';
 
 // position & range helpers
@@ -110,19 +110,37 @@ export function filterChildren(
   if (!parent) {
     return []
   }
-  const childCount = parent.getChildCount()
-  for (let i = 0; i < childCount; i++) {
-    const child = parent.getChildAt(i)
+  // const childCount = parent.getChildCount()
+  // for (let i = 0; i < childCount; i++) {
+  //   const child = parent.getChildAt(i)
+  //   if (predicate(child)) {
+  //     children.push(child)
+  //   }
+  //   if (recursive) {
+  //     const recursionResult = filterChildren(child, predicate, recursive, children)
+  //     if (recursionResult) {
+  //       console.log(children.length, recursionResult.length, getKindName(child.kind), child.getSourceFile().fileName, child.getFullText(), ts.getGeneratedNameForNode(child).escapedText)
+  //       children = children.concat(recursionResult)
+  //     }
+  //   }
+  // }
+  parent.forEachChild(child=>{
+    // if((child as any).__sebaMark){
+    //   console.log('ya pasamos')
+    //   return 
+    // }
+    // (child as any).__sebaMark=true
     if (predicate(child)) {
       children.push(child)
     }
     if (recursive) {
       const recursionResult = filterChildren(child, predicate, recursive, children)
       if (recursionResult) {
+        // console.log(children.length, recursionResult.length, getKindName(child.kind), child.getSourceFile().fileName, child.getFullText(), ts.getGeneratedNameForNode(child).escapedText)
         children = children.concat(recursionResult)
       }
     }
-  }
+  })
   return children
 }
 
@@ -131,12 +149,27 @@ export function findChild(
   predicate: (child: ts.Node) => boolean,
   recursive: boolean = false)
   : ts.Node | undefined {
+  return findChild_(true, parent, predicate, recursive)
+}
+
+const findChildCache = {}
+
+function findChild_(
+  firstTime: boolean = false,
+  parent: ts.Node | undefined,
+  predicate: (child: ts.Node) => boolean,
+  recursive: boolean = false)
+  : ts.Node | undefined {
   if (!parent) {
     return
   }
-  const childCount = parent.getChildCount()
+  const childCount = parent.getChildCount() // TODO: use  visitChildrenRecursiveDeepFirst
   for (let i = 0; i < childCount; i++) {
-    const child = parent.getChildAt(i)
+    const child: ts.Node | undefined = parent.getChildAt(i)
+    // if(!!findChildCache[ts.getGeneratedNameForNode(child).escapedText+'']){
+    //   continue
+    // }
+    // ts.getGeneratedNameForNode(node).escapedText
     if (predicate(child)) {
       return child
     }
@@ -182,7 +215,55 @@ export function dumpAst(ast: ts.Node | undefined): string {
 
 
 
-export function log(s:string){
-const logFile = join(__dirname, 'test.log')
-appendFileSync(logFile,s)
+
+
+/// testing 
+
+import * as shell from 'shelljs'
+shell.config.silent = true
+export function compileSource(sourceCode: string, tsconfigPath: string = join(__dirname, 'assets', 'simpletsconfig.json')): { project: ts.Program, fileName: string, tsconfigPath: string } {
+  const fileName = shell.tempdir() + '/' + 'tmpFile_' + Date.now() + '.ts'
+  shellWrite(sourceCode, fileName)
+  return { project: compileFile(fileName, tsconfigPath), fileName, tsconfigPath }
+}
+
+const shellWrite = function (s: string, file: string): void {
+  (shell as any).ShellString(s).to(file)
+}
+
+export function compileFile(fileName: string = '', tsconfigPath: string = join(__dirname, 'assets', 'simpletsconfig.json')): ts.Program {
+  const tsConfigJson = ts.parseConfigFileTextToJson(tsconfigPath, readFileSync(tsconfigPath).toString())
+
+  let { options, errors } = ts.convertCompilerOptionsFromJson(tsConfigJson.config.compilerOptions, dirname(tsconfigPath))
+  if (errors.length) {
+    throw errors
+  }
+  const compilerHost: ts.CompilerHost = {
+    ...ts.createCompilerHost(options),
+    getSourceFile: (fileName, languageVersion) => ts.createSourceFile(fileName, readFileSync(fileName).toString(), ts.ScriptTarget.Latest, true)
+  }
+  return ts.createProgram([fileName], options, compilerHost);
+}
+
+
+export function compileProject(projectFolder: string, rootFiles: Array<string> = [], tsconfigPath: string = join(__dirname, 'assets', 'simpletsconfig.json')): ts.Program {
+  const tsConfigJson = ts.parseConfigFileTextToJson(tsconfigPath, readFileSync(tsconfigPath).toString())
+  if (tsConfigJson.error) {
+    throw tsConfigJson.error
+  }
+  const compilerOptions = ts.convertCompilerOptionsFromJson(tsConfigJson.config.compilerOptions, projectFolder, tsconfigPath)
+  if (compilerOptions.errors.length) {
+    throw compilerOptions.errors
+  }
+  const compilerHost: ts.CompilerHost = {
+    ...ts.createCompilerHost(compilerOptions.options),
+    getSourceFile: (fileName, languageVersion) => ts.createSourceFile(fileName, readFileSync(fileName).toString(), ts.ScriptTarget.Latest, true)
+  }
+  return ts.createProgram(rootFiles, compilerOptions.options, compilerHost);
+}
+
+
+export function log(s: string) {
+  const logFile = join(__dirname, 'test.log')
+  appendFileSync(logFile, s)
 }
