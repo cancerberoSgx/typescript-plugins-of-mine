@@ -82,7 +82,8 @@ Would be good to have a gallery to share knowledge!
 
  
 # Some helpful notes
-
+ * edit SourceFile and worth with TextChangeRange: spec/updateSourceFileSpec.ts
+ * get infered types for variables without type: /home/sg/git/typescript-plugins-of-mine/typescript-ast-util/spec/inferTypeSpec.ts
  * know the type by the jsdoc comment or inferring: (let constructorType = checker.getTypeOfSymbolAtLocation(symbol, symbol.valueDeclaration!);)
  * how to know which modifiers a node has ( return (ts.getCombinedModifierFlags(node) & ts.ModifierFlags.Export) !== 0 || (!!node.parent && node.parent.kind === ts.SyntaxKind.SourceFile);)
  * for getting where a method or a class ir used we could use this: 
@@ -92,5 +93,4 @@ Would be good to have a gallery to share knowledge!
 
 ## TODO
 
-
-  Check this for getting the node under the cursor: info.languageService.findReferences(fileName, position) 
+ * build "Incremental build support using the language services" from https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API so we can debug the whole experience in debugger instead of debugging using plugin manually in the editor!

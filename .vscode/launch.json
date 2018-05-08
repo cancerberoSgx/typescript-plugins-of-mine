@@ -8,9 +8,9 @@
             "type": "node",
             "request": "launch",
             "protocol": "inspector",
-            "name": "inferTypeSpec",
+            "name": "ast-util spec",
             "args": [
-                "inferTypeSpec",
+                "updateSourceFileSpec",
             ],
             "runtimeArgs": [
                 "--inspect",

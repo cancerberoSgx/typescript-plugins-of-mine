@@ -5,6 +5,7 @@
     "lib": ["es2018"],  
     "outDir": "./dist", 
     "strict": true,           
-    "esModuleInterop": true 
+    "esModuleInterop": true,
+    "removeComments": false
   }
 }
