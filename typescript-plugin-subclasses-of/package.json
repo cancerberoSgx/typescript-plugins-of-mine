@@ -1,7 +1,7 @@
 {
   "name": "typescript-plugin-subclasses-of",
   "version": "1.0.1",
-  "description": "know what are all the sub classes (direct or indirect) a class have. Know which classes implement an interface implementations, direct or indirect an interface have (and how many sub-interfaces)",
+  "description": "TypeScript Language Service plugin that shows what are all the sub classes (direct or indirect) a class have. The same for interfaces. ",
   "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 0",

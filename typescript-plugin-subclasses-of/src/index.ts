@@ -1,10 +1,12 @@
-import { findChild2, findChildContainingPosition, findParent, positionOrRangeToNumber } from 'typescript-ast-util';
+import { findChild2, findChildContainingPosition, findParent, positionOrRangeToNumber, findIdentifierString, findChild } from 'typescript-ast-util';
 import * as ts_module from 'typescript/lib/tsserverlibrary';
 
 
 const PLUGIN_NAME = 'typescript-plugin-subclasses-of'
 const ACTION_NAME_DIRECT_SUBCLASSES = `${PLUGIN_NAME}-direct-subclasses-refactor-action`
 const ACTION_NAME_INDIRECT_SUBCLASSES = `${PLUGIN_NAME}-indirect-subclasses-refactor-action`
+const ACTION_NAME_INHERITANCE = `${PLUGIN_NAME}-inheritance-refactor-action`
+
 
 let ts: typeof ts_module
 let info: ts_module.server.PluginCreateInfo
@@ -57,7 +59,8 @@ function getApplicableRefactors(fileName: string, positionOrRange: number | ts.T
     description: 'Subclasses of',
     actions: [
       { name: ACTION_NAME_DIRECT_SUBCLASSES, description: 'Show Direct subclasses/implementations of ' + selectedDef.definition.name },
-      { name: ACTION_NAME_INDIRECT_SUBCLASSES, description: 'Show Indirect subclasses/implementations of ' + selectedDef.definition.name }
+      { name: ACTION_NAME_INDIRECT_SUBCLASSES, description: 'Show Indirect subclasses/implementations of ' + selectedDef.definition.name },
+      // { name: ACTION_NAME_INHERITANCE, description: 'Show inheritance of' + selectedDef.definition.name }
     ]
   })
   return refactors
@@ -71,7 +74,7 @@ function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSetti
 
   const refactors = info.languageService.getEditsForRefactor(fileName, formatOptions, positionOrRange, refactorName, actionName)
 
-  if (!selectedDef || (actionName != ACTION_NAME_DIRECT_SUBCLASSES && actionName != ACTION_NAME_INDIRECT_SUBCLASSES)) {
+  if (!selectedDef || (actionName != ACTION_NAME_DIRECT_SUBCLASSES && actionName != ACTION_NAME_INDIRECT_SUBCLASSES && actionName!== ACTION_NAME_INHERITANCE)) {
     return refactors;
   }
   const sourceFile = info.languageService.getProgram().getSourceFile(fileName)
@@ -79,11 +82,11 @@ function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSetti
     return refactors
   }
   let newText
-  try {
-    const targetSourceFile = info.languageService.getProgram().getSourceFile(selectedDef.definition.fileName)
-    if (!targetSourceFile) {
-      return refactors
-    }
+  // try {
+    // const targetSourceFile = info.languageService.getProgram().getSourceFile(selectedDef.definition.fileName)
+    // if (!targetSourceFile) {
+    //   return refactors
+    // }
     const isDirect = actionName == ACTION_NAME_DIRECT_SUBCLASSES
     const subclasses: Array<ts.ClassDeclaration | ts.InterfaceDeclaration> = (isDirect ? getDirectDeclarationReferencesExtending(fileName, positionOrRange) : getIndirectDeclarationReferencesExtending(fileName, positionOrRange));
 
@@ -94,9 +97,9 @@ function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSetti
       return type + ' ' + (c.name && c.name.getText()) + ' in file:/' + sf.fileName + '#' + (pos.line + 1) + ',' + (pos.character + 1)
     }).join('\n') + '\n*/'
 
-  } catch (error) {
-    newText = error + ' - ' + error.stack
-  }
+  // } catch (error) {
+  //   newText = error + ' - ' + error.stack
+  // }
 
   return {
     edits: [{
@@ -135,7 +138,6 @@ function getDirectDeclarationReferencesExtending(fileName: string, positionOrRan
   return supers;
 }
 
-
 function getIndirectDeclarationReferencesExtending(fileName: string, positionOrRange: number | ts_module.TextRange,
   supers: Array<ts.ClassDeclaration | ts.InterfaceDeclaration> = [], processedDeclNames: Array<string> = [])
   : Array<ts.ClassDeclaration | ts.InterfaceDeclaration> {
@@ -168,9 +170,6 @@ function getIndirectDeclarationReferencesExtending(fileName: string, positionOrR
       ref.references && ref.references.forEach(r => {
         const subs = getIndirectDeclarationReferencesExtending(r.fileName, r.textSpan.start, supers, processedDeclNames)
         subs.forEach(sub => {
-          // if(sub.name){
-          //   log(sub.name.getText()+'\n')
-          // }
           if (!supers.find(s => s.name === sub.name)) { // add only if not already
             supers.push(sub)
           }
@@ -180,3 +179,40 @@ function getIndirectDeclarationReferencesExtending(fileName: string, positionOrR
   })
   return supers;
 }
+
+
+// function getInheritance()
+//   : Array<ts.ClassDeclaration | ts.InterfaceDeclaration> {
+//     const a: Array<ts.ClassDeclaration | ts.InterfaceDeclaration> = []
+//     if(!selectedDef){
+//       return a
+//     }
+
+//     const sourceFile = info.languageService.getProgram().getSourceFile(fileName)
+//     if (!sourceFile) {
+//       return a
+//     }
+//     const sf = info.project.getSourceFile(selectedDef.definition.fileName.toString())
+//     const node = findChildContainingPosition(sourceFile, selectedDef.definition.textSpan.start)
+//     if (!node) {
+//       return a
+//     }
+//     return a
+// }
+
+// function getInheritanceRec(n:ts.ClassDeclaration | ts.InterfaceDeclaration|undefined): Array<ts.ClassDeclaration | ts.InterfaceDeclaration> {
+//   let a : Array<ts.ClassDeclaration | ts.InterfaceDeclaration> = []
+//   if(!n){
+//     return a
+//   }
+//   a.push(n)
+//   const heritage = findChild(n, c=>c.kind===ts.SyntaxKind.HeritageClause) as ts.HeritageClause
+//   if(!heritage || ! heritage.types || !heritage.types.length){
+//     return a
+//   }
+//   heritage.types[0].
+//   // if(n.parent){
+//   a = a.concat(a, getInheritanceRec(heritage.types[0]))
+//   // }
+//   return a
+// }

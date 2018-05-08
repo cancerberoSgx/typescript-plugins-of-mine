@@ -31,6 +31,11 @@
       "shouldPublish": true
     },
     {
+      "packageName": "typescript-plugin-ast-inspector",
+      "projectFolder": "typescript-plugin-ast-inspector",
+      "shouldPublish": true
+    },
+    {
       "packageName": "typescript-plugin-extract-interface-client-project1",
       "projectFolder": "typescript-plugin-extract-interface-client-project1",
       "shouldPublish": false

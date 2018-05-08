@@ -6,7 +6,7 @@
   "dependencies": {
     "@rush-temp/sample-ts-plugin1": {
       "version": "file:projects/sample-ts-plugin1.tgz",
-      "integrity": "sha512-+i4WZwZABhbVEcYrsVZWaQllDffox8ebLFKF+sTenDocPLQKM+fwQzvdKGkSWnOH5YSdv8b4nQX7fSjWC7lnhQ==",
+      "integrity": "sha512-E8igYej3ewaipEmtHrQS0qQUGAMP1wbAyEqet0PB34HbjM0p3o9k7enBtkbkz/O596ch7g+JMXgDui+4phvGAw==",
       "requires": {
         "docco": "0.8.0",
         "typescript": "2.8.3"
@@ -14,14 +14,14 @@
     },
     "@rush-temp/sample-ts-plugin1-sample-project": {
       "version": "file:projects/sample-ts-plugin1-sample-project.tgz",
-      "integrity": "sha512-K2RU7cFUyWLK4h3niwDrEKqpDrhBhA5Lkx/7k6uRzDSVaEIJNoYx4JJnRhYbnL7DSzS8mqljwv+sxt9n4fLB9Q==",
+      "integrity": "sha512-u5Sd8kmdvj85jyP3YjpdiFLzijOLWiG5+MQFAVabPpe/QcI8CKXIiK5/GGY9uY1h7ZG3HdnBJ6s5VnH+wrL/+A==",
       "requires": {
         "typescript": "2.8.3"
       }
     },
     "@rush-temp/typescript-ast-util": {
       "version": "file:projects/typescript-ast-util.tgz",
-      "integrity": "sha512-wHJ2NfKMrv0V+Ow1Mfx3eMmP9JiKO6sF6H10ma5C7SoaQfdjuvuK8SF2pJefqycoLKzYEz9xh08pRrK1If8CAg==",
+      "integrity": "sha512-TbcuWHiqPPGu7FDkjdorFFw1soRWNsACZFRxV/2Wc8QmYwl7U3MqhIesEWP9dy+USWWn4svpfilVOPASn/bkYA==",
       "requires": {
         "@types/jasmine": "2.8.7",
         "jasmine": "3.1.0",
@@ -32,25 +32,31 @@
         "typescript": "2.8.3"
       }
     },
+    "@rush-temp/typescript-plugin-ast-inspector": {
+      "version": "file:projects/typescript-plugin-ast-inspector.tgz",
+      "integrity": "sha512-BeJbhYczd/YrelldV6sHGWA8FW3GlDFM7WUwK8ppiIdtRETETJ/PxeoRQsvtZNFo98SmlufvHGWidtckTlpzCA==",
+      "requires": {
+        "typescript": "2.8.3"
+      }
+    },
     "@rush-temp/typescript-plugin-extract-interface": {
       "version": "file:projects/typescript-plugin-extract-interface.tgz",
-      "integrity": "sha512-3yjRwznlPkkr8YiIWEreSEZFRZRoUJ9sGMWurst830D0i/xSHf+6u2ZP5/Tq/8LojRhdCHhGgm8l67UmgaFaNQ==",
+      "integrity": "sha512-Ao1NTB6J/0aP+H2Syh95as6EC0lWJpbtPa14ZNhblwL9ab6TCgkjWEkDl5Ynuf7XQt6I6oI28aFfUk6P4T4A4Q==",
       "requires": {
         "typescript": "2.8.3"
       }
     },
     "@rush-temp/typescript-plugin-extract-interface-client-project1": {
       "version": "file:projects/typescript-plugin-extract-interface-client-project1.tgz",
-      "integrity": "sha512-fsO4eHa2n6m8d7ix44D2mXOms8VB6EU9x3p08sODpPwX/QTCQ9dvylkEmyskk4lsDssBjhq6FwQi3LnlAsIo6w==",
+      "integrity": "sha512-WVaySZg1E7Oo1vuyfUosuUpwDkBLCtedFxXv90Vb1HPmwHkFwF3qdUtjQmhVCUryP3ozOXeBPKyr8joQkZTsgQ==",
       "requires": {
         "@types/node": "10.0.4",
-        "typescript": "2.8.3",
-        "typescript-plugin-subclasses-of": "1.0.0"
+        "typescript": "2.8.3"
       }
     },
     "@rush-temp/typescript-plugin-subclasses-of": {
       "version": "file:projects/typescript-plugin-subclasses-of.tgz",
-      "integrity": "sha512-sRBQa0O2j/sh9rMMchQXW6pkGuu2YAaecIdez6NPDsb4IbUKOeLxuF7MZ+MRi7BgXHudWaQIMS6uFqkZ5LAv3Q==",
+      "integrity": "sha512-W7Dwin2lB18NjxA/uPGDzEaJY8ifTXzDbn3YL9EUbTayAeXrD1uPXrvQ9Dkceq5XhYL0gxHS6SEppXU34eki6Q==",
       "requires": {
         "typescript": "2.8.3"
       }
@@ -544,24 +550,6 @@
       "version": "2.8.3",
       "resolved": "https://registry.npmjs.org/typescript/-/typescript-2.8.3.tgz",
       "integrity": "sha512-K7g15Bb6Ra4lKf7Iq2l/I5/En+hLIHmxWZGq3D4DIRNFxMNV6j2SHSvDOqs2tGd4UvD/fJvrwopzQXjLrT7Itw=="
-    },
-    "typescript-ast-util": {
-      "version": "1.0.3",
-      "resolved": "https://registry.npmjs.org/typescript-ast-util/-/typescript-ast-util-1.0.3.tgz",
-      "integrity": "sha512-vR5aOag3c4mSJBF3o7dIodH/XGtRgcMulMe/ocGVfYkRR00zMbkWFwSgcFfbTWFwvcO+Ax6qgKTCvJ45QwMP+A==",
-      "requires": {
-        "shelljs": "0.8.1",
-        "typescript": "2.8.3"
-      }
-    },
-    "typescript-plugin-subclasses-of": {
-      "version": "1.0.0",
-      "resolved": "https://registry.npmjs.org/typescript-plugin-subclasses-of/-/typescript-plugin-subclasses-of-1.0.0.tgz",
-      "integrity": "sha512-08AYglSFcFQZan3G4SviScwVG4tsB4Bd+vlxm0k/XcofsFzeiwJxSRk2i5vNaSzcb9XvRJivQsaEp++evaxVCQ==",
-      "requires": {
-        "typescript": "2.8.3",
-        "typescript-ast-util": "1.0.3"
-      }
     },
     "underscore": {
       "version": "1.9.0",

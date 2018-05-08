@@ -216,8 +216,10 @@ export function dumpAst(ast: ts.Node | undefined): string {
   }
   function print(node: ts.Node, index: number = 0, level: number = 0) {
     const indent = new Array(level).map(i => '').join('  ')
-    const id = findChild(node, child => child.kind === ts_module.SyntaxKind.Identifier) as ts.Identifier
-    buffer.push(`${indent} #${index} ${findIdentifierString(node)} ${getKindName(node.kind)}`)
+    const name = node.kind===ts.SyntaxKind.Identifier ? ((node as ts.Identifier).text+' ') : '';
+    let shortText = node.getText().split('\n').join('\\n')
+    shortText = shortText.substr(0, Math.min(shortText.length, 20))
+    buffer.push(`${indent} #${index} ${name}${getKindName(node.kind)}  ("${shortText}")`)
   }
   const buffer: Array<string> = []
   visitChildrenRecursiveDeepFirst(ast, print)

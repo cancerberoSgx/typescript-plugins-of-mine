@@ -2,10 +2,13 @@
 
 A TypeScript Language Server Plugin to extract an interface from an existing class. 
 
-**WIP - right know ti generates an interface for methods and properties. **
+Tested: 
+ 
+ * generic parameters, 
+ * methods, properties, constructor
+ * static, protected and private methods won't appera
 
-But The very basics is working (just one day of work it really needs more!). But leave the screencast so we all understand what's this all about: 
-
+ 
 ![extract interface screencast WIP](doc-assets/extract-interface.gif)
 
 #How to use: 

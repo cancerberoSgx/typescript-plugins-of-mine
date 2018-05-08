@@ -3,11 +3,11 @@
     "sample-ts-plugin1/LICENSE": "dedc6df6b3be7344793767ce0a4de8f20b8d627a",
     "sample-ts-plugin1/README.md": "17eff27cc3ea24cf63dddb737d35b56b42ed0ca0",
     "sample-ts-plugin1/doc-assets/plugin-screencast.gif": "d892d265895264fee2d8001a8b11ba38c9e67b0a",
-    "sample-ts-plugin1/package-deps.json": "bee38d4040b30a8abd27105b55982f6a00d6264c",
+    "sample-ts-plugin1/package-deps.json": "418be8da15b75455bf7b269267b4418cc7ae8368",
     "sample-ts-plugin1/package.json": "7fdbc2edd10b20cc1f609a52d34551ead6231721",
     "sample-ts-plugin1/src/index.ts": "ae2e3db9c1af658640514b25ae7d1f1dd0c20732",
     "sample-ts-plugin1/tsconfig.json": "c6ad0ff31146ea0f6d704cdb0b6545fbb01d6aae",
-    "common/config/rush/npm-shrinkwrap.json": "f10a4f77d3a389a9cb7d17c57f1cb0c3c9a723c0"
+    "common/config/rush/npm-shrinkwrap.json": "df10bc2661333d759074547e40f7d6244c1e778e"
   },
-  "arguments": "docco -o ../docs/sample-ts-plugin1 src/index.ts && cp doc-assets/plugin-screencast.gif ../docs/sample-ts-plugin1 "
+  "arguments": "tsc "
 }

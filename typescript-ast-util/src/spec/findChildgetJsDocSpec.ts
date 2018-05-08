@@ -43,7 +43,7 @@ class B{}
 
     const jsdoc = getJsDoc(c)
     expect(jsdoc.length).toBe(1)
-    console.log(jsdoc[0].getText())
+    // console.log(jsdoc[0].getText())
     expect(jsdoc[0].comment).toContain('description of something classy')
     expect(jsdoc[0].comment).toContain('a = 1')
     expect(jsdoc[0].tags).toBe(undefined)

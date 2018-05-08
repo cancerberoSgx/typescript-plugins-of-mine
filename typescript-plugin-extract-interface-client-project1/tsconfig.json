@@ -16,7 +16,11 @@
       },
       {
         "name": "typescript-plugin-subclasses-of"
-      }
+      },
+      {
+        "name": "typescript-plugin-ast-inspector"
+      },
+      
       ]
     }
   }
