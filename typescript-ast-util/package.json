@@ -1,12 +1,12 @@
 {
   "name": "typescript-ast-util",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "general utilities for traversing, selecting, manipulating typescript ast ",
-  "main": "dist/index.js",
-  "typings": "dist/index.d.ts",
-  "types": "dist/index.d.ts",
+  "main": "dist/src/index.js",
+  "typings": "dist/src/index.d.ts",
+  "types": "dist/src/index.d.ts",
   "scripts": {
-    "test": "ts-node -r tsconfig-paths/register node_modules/jasmine/bin/jasmine --config=./src/spec/support/jasmine.json",
+    "test": "ts-node node_modules/jasmine/bin/jasmine",
     "build": "tsc",
     "doc": "typedoc -mode modules --out ../docs/typescript-ast-util src/index.ts"
   },
@@ -25,7 +25,6 @@
     "@types/jasmine": "^2.8.7",
     "jasmine": "^3.1.0",
     "ts-node": "^6.0.3",
-    "tsconfig-paths": "^3.3.1",
     "typedoc": "^0.11.1"
   },
   "repository": "https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-ast-util"

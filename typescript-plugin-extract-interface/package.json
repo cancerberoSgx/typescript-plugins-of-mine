@@ -17,8 +17,9 @@
   "author": "Sebastian Gurin",
   "license": "MIT",
   "dependencies": {
+    "hrtime-now": "^1.0.1",
     "typescript": "^2.8.3",
-    "typescript-ast-util": "1.0.4"
+    "typescript-ast-util": "1.0.5"
   },
   "devDependencies": {},
   "repository": "https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-ast-util",

@@ -1,6 +1,6 @@
-import { compileSource, findChild } from "..";
+import { compileSource, findChild } from "../src";
 import * as ts from 'typescript'
-describe('compileSource, findChildren and getJsDoc', () => {
+xdescribe('compileSource, findChildren and getJsDoc', () => {
   it('1', () => {
     const code1 = `
 /**

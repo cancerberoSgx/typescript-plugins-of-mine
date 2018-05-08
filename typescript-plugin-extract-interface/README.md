@@ -6,10 +6,10 @@ Tested:
  
  * generic parameters, 
  * methods, properties, constructor
- * static, protected and private methods won't appera
+ * static, protected and private methods won't appear
 
  
-![extract interface screencast WIP](doc-assets/extract-interface.gif)
+![extract interface screen cast WIP](doc-assets/extract-interface.gif)
 
 #How to use: 
 ```sh

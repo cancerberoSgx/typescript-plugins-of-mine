@@ -4,9 +4,10 @@
 // 
 // ![See it in action](../plugin-screencast.gif)
 
-import { findParentFromPosition, positionOrRangeToNumber } from 'typescript-ast-util';
-import * as ts_module from 'typescript/lib/tsserverlibrary';
-import { extractInterface } from './extract-interface';
+import { findParentFromPosition, positionOrRangeToNumber } from 'typescript-ast-util'
+import * as ts_module from 'typescript/lib/tsserverlibrary'
+import { extractInterface } from './extract-interface'
+import { now } from 'hrtime-now'
 
 const PLUGIN_NAME = 'typescript-plugin-extract-interface'
 const REFACTOR_ACTION_NAME = `${PLUGIN_NAME}-refactor-action`
@@ -20,7 +21,6 @@ function init(modules: { typescript: typeof ts_module }) {
     info = anInfo
     info.project.projectService.logger.info(`${PLUGIN_NAME} created`)
 
-    // initialize proxy 
     const proxy: ts.LanguageService = Object.create(null)
     for (let k of Object.keys(info.languageService) as Array<keyof ts.LanguageService>) {
       const x = info.languageService[k]
@@ -41,6 +41,7 @@ export = init
 let selectedDef: ts.ReferencedSymbol | undefined
 
 function getApplicableRefactors(fileName: string, positionOrRange: number | ts.TextRange): ts_module.ApplicableRefactorInfo[] {
+  const t0 = now()
   const refactors = info.languageService.getApplicableRefactors(fileName, positionOrRange) || []
   const refs = info.languageService.findReferences(fileName, positionOrRangeToNumber(positionOrRange))
   if (!refs || !refs.length) {
@@ -56,10 +57,11 @@ function getApplicableRefactors(fileName: string, positionOrRange: number | ts.T
     name: `${PLUGIN_NAME}-refactor-info`,
     description: 'Extract interface',
     actions: [
-      { name: REFACTOR_ACTION_NAME, description: 'Extract interface from ' + selectedDef.definition.name },
-      // { name: 'print-ast', description: 'Print AST' } // TODO: remove print ast to its own project
+      { name: REFACTOR_ACTION_NAME, description: 'Extract interface from ' + selectedDef.definition.name }
     ],
   })
+
+  info.project.projectService.logger.info(`${PLUGIN_NAME} getApplicableRefactors took ${now() - t0}`)
   return refactors
 }
 
@@ -67,27 +69,24 @@ function getApplicableRefactors(fileName: string, positionOrRange: number | ts.T
 function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSettings,
   positionOrRange: number | ts_module.TextRange, refactorName: string,
   actionName: string): ts.RefactorEditInfo | undefined {
+  const t0 = now()
 
   const refactors = info.languageService.getEditsForRefactor(fileName, formatOptions, positionOrRange, refactorName, actionName)
   if (actionName != REFACTOR_ACTION_NAME) {
     return refactors
-
   }
-  // else if (actionName == 'print-ast') { // TODO: remove print ast to its own project
-  //   targetNode = findParentFromPosition(info, fileName, positionOrRange, parent => true)
-  //   newText = '\n`' + dumpAst(targetNode) + '`\n'
-  // }
-
   // find the first parent that is a class declaration starting from given position
   const targetNode = findParentFromPosition(info, fileName, positionOrRange,
     parent => parent.kind === ts.SyntaxKind.ClassDeclaration)
   const newText = extractInterface(targetNode as ts_module.ClassDeclaration)
   if (targetNode && newText) {
+    const targetSourceFile = targetNode.getSourceFile()
+    info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor took ${now() - t0}`)
     return {
       edits: [{
         fileName,
         textChanges: [{
-          span: { start: targetNode.getSourceFile().getEnd(), length: newText.length }, // add it right after the class decl
+          span: { start: targetSourceFile.getEnd(), length: newText.length },
           newText: newText
         }],
       }],
