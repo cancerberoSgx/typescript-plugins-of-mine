@@ -6,7 +6,7 @@
   "dependencies": {
     "@rush-temp/sample-ts-plugin1": {
       "version": "file:projects/sample-ts-plugin1.tgz",
-      "integrity": "sha512-E8igYej3ewaipEmtHrQS0qQUGAMP1wbAyEqet0PB34HbjM0p3o9k7enBtkbkz/O596ch7g+JMXgDui+4phvGAw==",
+      "integrity": "sha512-80TZd36xOeME/re3OVAzs9qhJh/IbYG39+0viwRmoqRU9Jzg04A2JOD8xzyWznxB3st82+TrI7ghV8Q+NAiB5g==",
       "requires": {
         "docco": "0.8.0",
         "typescript": "2.8.3"
@@ -14,41 +14,41 @@
     },
     "@rush-temp/sample-ts-plugin1-sample-project": {
       "version": "file:projects/sample-ts-plugin1-sample-project.tgz",
-      "integrity": "sha512-u5Sd8kmdvj85jyP3YjpdiFLzijOLWiG5+MQFAVabPpe/QcI8CKXIiK5/GGY9uY1h7ZG3HdnBJ6s5VnH+wrL/+A==",
+      "integrity": "sha512-WS7HGwSp5dgNam29KmxtRzT1xlUv5q0u9uZBm3Ky0hOl+waxdPEpYQFcMXBfFo9H+DNEOdrZ3p6S0bakyOiw9g==",
       "requires": {
         "typescript": "2.8.3"
       }
     },
     "@rush-temp/typescript-ast-util": {
       "version": "file:projects/typescript-ast-util.tgz",
-      "integrity": "sha512-TbcuWHiqPPGu7FDkjdorFFw1soRWNsACZFRxV/2Wc8QmYwl7U3MqhIesEWP9dy+USWWn4svpfilVOPASn/bkYA==",
+      "integrity": "sha512-7MiPSPxXmSr53xWMZ5dNSAMZs2YEi6K9K3GRjC+h4ZEkDYCo1LnlQ/ZAx984hWIMkk1Chx5K4hZXVA08SKqJfw==",
       "requires": {
         "@types/jasmine": "2.8.7",
         "jasmine": "3.1.0",
-        "shelljs": "0.8.1",
+        "shelljs": "0.8.2",
         "ts-node": "6.0.3",
-        "tsconfig-paths": "3.3.2",
         "typedoc": "0.11.1",
         "typescript": "2.8.3"
       }
     },
     "@rush-temp/typescript-plugin-ast-inspector": {
       "version": "file:projects/typescript-plugin-ast-inspector.tgz",
-      "integrity": "sha512-BeJbhYczd/YrelldV6sHGWA8FW3GlDFM7WUwK8ppiIdtRETETJ/PxeoRQsvtZNFo98SmlufvHGWidtckTlpzCA==",
+      "integrity": "sha512-CtqLXaRgFUn+ylQIgou7Vqls5ZP2azkfZKcMoNLO5J21UHg+Q6rvPdhN2c22iJVVPLrEXkZWl+dP3djNy79FNw==",
       "requires": {
         "typescript": "2.8.3"
       }
     },
     "@rush-temp/typescript-plugin-extract-interface": {
       "version": "file:projects/typescript-plugin-extract-interface.tgz",
-      "integrity": "sha512-Ao1NTB6J/0aP+H2Syh95as6EC0lWJpbtPa14ZNhblwL9ab6TCgkjWEkDl5Ynuf7XQt6I6oI28aFfUk6P4T4A4Q==",
+      "integrity": "sha512-e9zqddieFcee4nZxQDHCs5Pq+yX6XTZVlOXbfwJ6OPWYufkxXlZhw0OpcXr8zuPCZW/Tv1yhAtc9khnHDmmIGw==",
       "requires": {
+        "hrtime-now": "1.0.1",
         "typescript": "2.8.3"
       }
     },
     "@rush-temp/typescript-plugin-extract-interface-client-project1": {
       "version": "file:projects/typescript-plugin-extract-interface-client-project1.tgz",
-      "integrity": "sha512-WVaySZg1E7Oo1vuyfUosuUpwDkBLCtedFxXv90Vb1HPmwHkFwF3qdUtjQmhVCUryP3ozOXeBPKyr8joQkZTsgQ==",
+      "integrity": "sha512-JXZOD1XIkyJdear3Q2xdMCWOgy0WCuzXxvsLtOjLMW2oXPaOqVcvFd2VQjtH/4Pnxd4MigDFC7qtJ18E94u1Ng==",
       "requires": {
         "@types/node": "10.0.4",
         "typescript": "2.8.3"
@@ -56,7 +56,7 @@
     },
     "@rush-temp/typescript-plugin-subclasses-of": {
       "version": "file:projects/typescript-plugin-subclasses-of.tgz",
-      "integrity": "sha512-W7Dwin2lB18NjxA/uPGDzEaJY8ifTXzDbn3YL9EUbTayAeXrD1uPXrvQ9Dkceq5XhYL0gxHS6SEppXU34eki6Q==",
+      "integrity": "sha512-M8xXxz1QNpuwB+J+c2PnNbOsyHTV488gCoyrYL4JOGzHgoKfJ9FQLx0lb1eTPLj4YJ1O3YytPtnJWZBuOXDY3g==",
       "requires": {
         "typescript": "2.8.3"
       }
@@ -203,11 +203,6 @@
       "resolved": "https://registry.npmjs.org/concat-map/-/concat-map-0.0.1.tgz",
       "integrity": "sha1-2Klr13/Wjfd5OnMDajug1UBdR3s="
     },
-    "deepmerge": {
-      "version": "2.1.0",
-      "resolved": "https://registry.npmjs.org/deepmerge/-/deepmerge-2.1.0.tgz",
-      "integrity": "sha512-Q89Z26KAfA3lpPGhbF6XMfYAm3jIV3avViy6KOJ2JLzFbeWHOvPQUu5aSJIWXap3gDZC2y1eF5HXEPI2wGqgvw=="
-    },
     "diff": {
       "version": "3.5.0",
       "resolved": "https://registry.npmjs.org/diff/-/diff-3.5.0.tgz",
@@ -292,6 +287,11 @@
       "version": "9.12.0",
       "resolved": "https://registry.npmjs.org/highlight.js/-/highlight.js-9.12.0.tgz",
       "integrity": "sha1-5tnb5Xy+/mB1HwKvM2GVhwyQwB4="
+    },
+    "hrtime-now": {
+      "version": "1.0.1",
+      "resolved": "https://registry.npmjs.org/hrtime-now/-/hrtime-now-1.0.1.tgz",
+      "integrity": "sha512-hZLQkizrFfnw5TBqOsNeK8zuWf80q68uPHAoZDPl2wRJkbZHOwkFvMSMj6NP+sIKtl6i9ROnuHMI1oXAMohY5w=="
     },
     "inflight": {
       "version": "1.0.6",
@@ -433,9 +433,9 @@
       }
     },
     "shelljs": {
-      "version": "0.8.1",
-      "resolved": "https://registry.npmjs.org/shelljs/-/shelljs-0.8.1.tgz",
-      "integrity": "sha512-YA/iYtZpzFe5HyWVGrb02FjPxc4EMCfpoU/Phg9fQoyMC72u9598OUBrsU8IrtwAKG0tO8IYaqbaLIw+k3IRGA==",
+      "version": "0.8.2",
+      "resolved": "https://registry.npmjs.org/shelljs/-/shelljs-0.8.2.tgz",
+      "integrity": "sha512-pRXeNrCA2Wd9itwhvLp5LZQvPJ0wU6bcjaTMywHHGX5XWhVN2nzSu7WV0q+oUY7mGK3mgSkDDzP3MgjqdyIgbQ==",
       "requires": {
         "glob": "7.1.2",
         "interpret": "1.1.0",
@@ -455,16 +455,6 @@
         "buffer-from": "1.0.0",
         "source-map": "0.6.1"
       }
-    },
-    "strip-bom": {
-      "version": "3.0.0",
-      "resolved": "https://registry.npmjs.org/strip-bom/-/strip-bom-3.0.0.tgz",
-      "integrity": "sha1-IzTBjpx1n3vdVv3vfprj1YjmjtM="
-    },
-    "strip-json-comments": {
-      "version": "2.0.1",
-      "resolved": "https://registry.npmjs.org/strip-json-comments/-/strip-json-comments-2.0.1.tgz",
-      "integrity": "sha1-PFMZQukIwml8DsNEhYwobHygpgo="
     },
     "supports-color": {
       "version": "5.4.0",
@@ -489,17 +479,6 @@
         "yn": "2.0.0"
       }
     },
-    "tsconfig-paths": {
-      "version": "3.3.2",
-      "resolved": "https://registry.npmjs.org/tsconfig-paths/-/tsconfig-paths-3.3.2.tgz",
-      "integrity": "sha512-21VLRJIXGZDaZ0YVml12IXwSyEcluxvBZjS9xY5ZiKle0iF9NmNg7Hatb77FDg5Ahkas3dfvST8IDldMYpCH0g==",
-      "requires": {
-        "deepmerge": "2.1.0",
-        "minimist": "1.2.0",
-        "strip-bom": "3.0.0",
-        "strip-json-comments": "2.0.1"
-      }
-    },
     "typedoc": {
       "version": "0.11.1",
       "resolved": "https://registry.npmjs.org/typedoc/-/typedoc-0.11.1.tgz",
@@ -519,7 +498,7 @@
         "marked": "0.3.19",
         "minimatch": "3.0.4",
         "progress": "2.0.0",
-        "shelljs": "0.8.1",
+        "shelljs": "0.8.2",
         "typedoc-default-themes": "0.5.0",
         "typescript": "2.7.2"
       },
