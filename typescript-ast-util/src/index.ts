@@ -103,6 +103,14 @@ export function findChildContainingPosition(sourceFile: ts.SourceFile, position:
   }
   return find(sourceFile)
 }
+export function findChildContainingRange(sourceFile: ts.SourceFile, r: ts.TextRange): ts.Node | undefined {
+  function find(node: ts.Node): ts.Node | undefined {
+    if (r.pos >= node.getStart() && r.end < node.getEnd()) {
+      return ts.forEachChild(node, find) || node
+    }
+  }
+  return find(sourceFile)
+}
 
 /**https://en.wikipedia.org/wiki/Tree_traversal : for the meaning of "DeepFirst" */
 export function visitChildrenRecursiveDeepFirst(node: ts.Node, visitor: (node: ts.Node, index?: number, level?: number) => void, index: number = 0, level: number = 0) {
