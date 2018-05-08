@@ -3,10 +3,11 @@ Experiments with typescript compiler API, and Language Service plugins.
 
 ## TypeScript LanguageService Plugin Tutorial
 
+The result of my first steps dealing with TypeScript Language Service. I was so happy with my first plugin (useless) that I write a tutorial : 
+
  * **[Tutorial with code](https://cancerberosgx.github.io/typescript-plugins-of-mine/sample-ts-plugin1/src/)**
  * [Project](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/sample-ts-plugin1)
- * See it in Action:
- * ![See it in action](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/sample-ts-plugin1/doc-assets/plugin-screencast.gif?raw=true?t=.gif)
+
 
 ## typescript-plugin-extract-interface
 

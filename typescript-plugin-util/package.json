@@ -6,7 +6,7 @@
   "typings": "dist/src/index.d.ts",
   "scripts": {
     "test": "ts-node node_modules/jasmine/bin/jasmine",
-    "build": "tsc && cp -r src/assets dist/src",
+    "build": "tsc",
     "doc": "typedoc -mode modules --out ../docs/typescript-ast-util src/index.ts"
   },
   "keywords": [

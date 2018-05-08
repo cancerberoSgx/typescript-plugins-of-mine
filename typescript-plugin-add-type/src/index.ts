@@ -3,6 +3,7 @@
 
 import { findParentFromPosition, positionOrRangeToNumber } from 'typescript-ast-util'
 import * as ts_module from 'typescript/lib/tsserverlibrary'
+import { getPluginCreate } from 'typescript-plugin-util'
 import { now } from 'hrtime-now'
 
 const PLUGIN_NAME = 'typescript-plugin-add-type'
@@ -13,10 +14,10 @@ let info: ts_module.server.PluginCreateInfo
 
 
 const pluginDefinition = { getApplicableRefactors, getEditsForRefactor }
-export = getPluginCreate(pluginDefinition, (modules, anInfo)=>{
+export = getPluginCreate(pluginDefinition, (modules, anInfo) => {
   ts = modules.typescript
   info = anInfo
-  info.project.projectService.logger.info(`${PLUGIN_NAME} created`) 
+  info.project.projectService.logger.info(`${PLUGIN_NAME} created`)
 })
 
 
