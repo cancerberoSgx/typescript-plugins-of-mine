@@ -16,5 +16,7 @@
     "typescript-ast-util": "1.0.3"
   },
   "devDependencies": {
-  }
+  },
+  "repository": "https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-ast-util",
+  "readme": "README.md"
 }

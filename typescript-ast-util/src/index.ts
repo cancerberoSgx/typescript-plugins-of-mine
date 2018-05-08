@@ -188,6 +188,45 @@ export function findChild(
   // return findChild_(true, parent, predicate, recursive)
 }
 
+
+export function findChild2(
+  parent: ts.Node | undefined,
+  predicate: (child: ts.Node) => boolean,
+  recursive: boolean = false)
+  : ts.Node | undefined {
+  return findChild2_(true, parent, predicate, recursive)
+}
+
+// const findChildCache = {}
+
+function findChild2_(
+  firstTime: boolean = false,
+  parent: ts.Node | undefined,
+  predicate: (child: ts.Node) => boolean,
+  recursive: boolean = false)
+  : ts.Node | undefined {
+  if (!parent) {
+    return
+  }
+  const childCount = parent.getChildCount() // TODO: use  visitChildrenRecursiveDeepFirst
+  for (let i = 0; i < childCount; i++) {
+    const child: ts.Node | undefined = parent.getChildAt(i)
+    if (predicate(child)) {
+      return child
+    }
+    if (recursive) {
+      const recursionResult = findChild2(child, predicate, recursive)
+      if (recursionResult) {
+        return recursionResult
+      }
+    }
+  }
+}
+
+
+
+
+
 // const findChildCache = {}
 
 // function findChild_(

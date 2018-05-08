@@ -4,9 +4,9 @@
 // 
 // ![See it in action](../plugin-screencast.gif)
 
-import * as ts_module from 'typescript/lib/tsserverlibrary'
-import { findChildContainingPosition, findParent, positionOrRangeToNumber, positionOrRangeToRange, findParentFromPosition, dumpAst } from 'typescript-ast-util'
-import { extractInterface } from './extract-interface'
+import { findParentFromPosition, positionOrRangeToNumber } from 'typescript-ast-util';
+import * as ts_module from 'typescript/lib/tsserverlibrary';
+import { extractInterface } from './extract-interface';
 
 const PLUGIN_NAME = 'typescript-plugin-extract-interface'
 const REFACTOR_ACTION_NAME = `${PLUGIN_NAME}-refactor-action`

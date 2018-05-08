@@ -1,5 +1,5 @@
-import * as ts_module from 'typescript/lib/tsserverlibrary'
-import { findChildContainingPosition, findParent, positionOrRangeToNumber, positionOrRangeToRange, findParentFromPosition, dumpAst, getKindName, findChild, log } from 'typescript-ast-util'
+import { findChild2, findChildContainingPosition, findParent, positionOrRangeToNumber } from 'typescript-ast-util';
+import * as ts_module from 'typescript/lib/tsserverlibrary';
 
 
 const PLUGIN_NAME = 'typescript-plugin-subclasses-of'
@@ -150,7 +150,7 @@ function getIndirectDeclarationReferencesExtending(fileName: string, positionOrR
     if(!supers.find(s=>s.name===superNode.name)){ // add only if not already
       supers.push(superNode)
     }
-    const superId = findChild(superNode, c=>c.kind===ts.SyntaxKind.Identifier)
+    const superId = findChild2(superNode, c=>c.kind===ts.SyntaxKind.Identifier)
     if(!superId){
       return 
     }

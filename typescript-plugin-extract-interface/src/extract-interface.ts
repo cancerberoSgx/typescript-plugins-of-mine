@@ -1,6 +1,6 @@
 import * as ts from 'typescript/lib/tsserverlibrary'
 import { SyntaxKind, MethodDeclaration, ScriptTarget, Modifier } from 'typescript/lib/tsserverlibrary';
-import { filterChildren, getKindName, findIdentifierString, getJsDoc, findChild } from 'typescript-ast-util'
+import { filterChildren, getKindName, findIdentifierString, getJsDoc, findChild2 } from 'typescript-ast-util'
 
 function printNode(signature: ts.TypeElement, originalNode: ts.ClassElement): string {
   const printer = ts.createPrinter({
