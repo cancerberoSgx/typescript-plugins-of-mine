@@ -1,16 +1,24 @@
 # typescript-plugin-ast-inspector
 
-Tools oriented to TypeScript developers, specially those dealing with AST, like Language Service Plugin developers. 
+Tools to discover the AST of current TypeScript document. Oriented to TypeScript developers, specially those dealing Language Service Plugins
+Currently just two refactor tools: "print ast" and "print parent nodes"
 
-* print AST : will print the AST (with easy format) of the selected code
-* print from current node to the top-most parent so we know our "deep" in the AST situation
+## Print AST
 
-<!-- ![subclasses-of screencast WIP](doc-assets/screencast.gif) -->
+Prints a simplified representation of the selected node's AST: 
+
+![print-ast](doc-assets/print-ast.gif)
+
+## Print parent nodes
+
+Prints a simplified representation of the selection's parent nodes in the AST up to the top-most node (SourceFile). 
+
+![print-parent-nodes](doc-assets/print-parent-nodes.gif)
 
 ## How to use: 
 
 ```sh
-npm i --save-dev typescript-plutypescript-plugin-ast-inspector
+npm i --save-dev typescript-plugin-ast-inspector
 ```
 
 in your `tsconfig.json`, add the plugin: 
@@ -20,7 +28,7 @@ in your `tsconfig.json`, add the plugin:
   "compilerOptions": {
     ...
     "plugins": [{
-        "name": "typescript-plutypescript-plugin-ast-inspector"
+        "name": "typescript-plugin-plugin-ast-inspector"
     }]
     ...
   }

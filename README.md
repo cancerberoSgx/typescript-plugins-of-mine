@@ -28,18 +28,11 @@ Experiments with typescript compiler API, and Language Service plugins.
 
 ## typescript-plugin-print-ast
 
- * very simple way of inspecting the AST of the node where the cursor is
- * prints a very simplied version of the AST
- * Useful when developing Typescript plugins to understand the AST
- * jsut make a minimal selection and it will suggest "Print AST"
- * AST will be dumped as a template string right after the node (watch out could break your code!)
-
- TODO: project, readme and screencast
+ * Tools useful for TypeScript Language Service Plugin developers, see demo and description at [Project](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/sample-ts-plugin1)
 
 
 ## plugin ideas
 
- * extract interface from class
  * move method to other class (complicated - move interfaces also or classes hierarchy!)
  * move node (class, interf, function to other file) - complication: exported nodes! must change other's imports
  * add explicit type: select an identifier without explicit type - a refactor add its type based on the inferred one. 
