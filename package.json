@@ -14,7 +14,7 @@
     "test": "rush test",
     "test-clone": "rm -rf ../typescript-plugins-of-mine-test && mkdir ../typescript-plugins-of-mine-test && cd ../typescript-plugins-of-mine-test && git clone ../typescript-plugins-of-mine/.git &&  cd typescript-plugins-of-mine  && npm install && npm test",
     "postinstall": "rush generate && rush install && rush link && npm run link-missing-modules && rush build ",
-    "link-missing-modules": "ln-cli sample-ts-plugin1 --force --path common/temp/node_modules && ln-cli typescript-plugin-extract-interface --force --path common/temp/node_modules && ln-cli typescript-plugin-subclasses-of --force --path common/temp/node_modules && ln-cli typescript-ast-util --force --path common/temp/node_modules && ln-cli typescript-plugin-ast-inspector --force --path common/temp/node_modules",
+    "link-missing-modules": "ln-cli sample-ts-plugin1 --force --path common/temp/node_modules && ln-cli typescript-plugin-extract-interface --force --path common/temp/node_modules && ln-cli typescript-plugin-subclasses-of --force --path common/temp/node_modules && ln-cli typescript-ast-util --force --path common/temp/node_modules && ln-cli typescript-plugin-ast-inspector --force --path common/temp/node_modules && ln-cli typescript-plugin-add-type --force --path common/temp/node_modules",
     "doc": "rush doc",
     "all": "npm run clean && npm i && rush test && rush doc",
     "clean": "find . -name \"node_modules\" -exec rm -rf '{}' + ;  rm -rf common/temp/; find . -name \"package-lock.json\" -exec rm -rf '{}' +; find . -name \"*.log\" -exec rm -rf '{}' +; rm -rf docs; find . -name \"dist\" -exec rm -rf '{}' +"

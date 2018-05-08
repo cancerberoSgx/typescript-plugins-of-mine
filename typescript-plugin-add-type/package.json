@@ -1,0 +1,27 @@
+{
+  "name": "typescript-plugin-add-type",
+  "version": "1.0.2",
+  "description": "TypeScript Language Service plugin to extract an interface from a class",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 0",
+    "build": "tsc",
+    "doc": ""
+  },
+  "keywords": [
+    "TypeScript",
+    "TypeScript Language Service",
+    "plugin",
+    "extract interface"
+  ],
+  "author": "Sebastian Gurin",
+  "license": "MIT",
+  "dependencies": {
+    "hrtime-now": "^1.0.1",
+    "typescript": "^2.8.3",
+    "typescript-ast-util": "1.0.5"
+  },
+  "devDependencies": {},
+  "repository": "https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-ast-util",
+  "readme": "README.md"
+}

@@ -4,6 +4,8 @@ import { join, sep, dirname } from 'path';
 import { appendFileSync, readFileSync } from 'fs';
 import { StringLiteral } from 'typescript/lib/tsserverlibrary';
 
+
+
 // position & range helpers
 /** given a positionOrRange (common when developing LanguageServicePlugins) it will return en equivalent Range  */
 export function positionOrRangeToRange(positionOrRange: number | ts.TextRange): ts.TextRange {
@@ -17,6 +19,25 @@ export function positionOrRangeToNumber(positionOrRange: number | ts.TextRange):
     positionOrRange :
     (positionOrRange as ts.TextRange).pos
 }
+
+
+/**
+ * @param sourceFile 
+ * @param positionWhereToAdd (spanStart)
+ * @param textToAdd 
+ * @return the sourceFile with the modifications
+ */
+export function addTextToSourceFile(sourceFile: ts.SourceFile, positionWhereToAdd: number, textToAdd: string, charCountToDeleteFromPos:number=0) : ts.SourceFile{
+  const spanLength = charCountToDeleteFromPos // not removing 
+  const oldTextLength = sourceFile.text.length
+  const newText = sourceFile.text.substring(0, positionWhereToAdd) + textToAdd + sourceFile.text.substring(positionWhereToAdd, sourceFile.text.length)
+  // forcing the newLength so ts asserts wont fail:
+  // ts.Debug.assert((oldText.length - textChangeRange.span.length + textChangeRange.newLength) === newText.length);
+  const newLength = spanLength + newText.length - sourceFile.text.length 
+  return ts.updateSourceFile(sourceFile, newText,  { span: { start: positionWhereToAdd, length: spanLength }, newLength: newLength}, true)
+  // return sourceFile.update(newText, { span: { start: positionWhereToAdd, length: spanLength }, newLength: newLength })
+}
+
 
 
 /** Gets the JSDoc of any node. For performance reasons this function should only be called when `canHaveJsDoc` return true. */
