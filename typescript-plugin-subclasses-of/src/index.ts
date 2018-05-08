@@ -41,17 +41,18 @@ function getApplicableRefactors(fileName: string, positionOrRange: number | ts.T
 
   const refs = info.languageService.findReferences(fileName, positionOrRangeToNumber(positionOrRange))
   if (!refs || !refs.length) {
+    // info.project.projectService.logger.info(`${PLUGIN_NAME} not suggesting because refs is empty`)
     return refactors
   }
-  const selectedDefs: ts.ReferencedSymbol[] = refs.filter(r => !!(r.definition && 
-    (r.definition.kind === ts.ScriptElementKind.classElement || r.definition.kind === ts.ScriptElementKind.interfaceElement) && 
-    r.definition.fileName===fileName))
-    
+  const selectedDefs: ts.ReferencedSymbol[] = refs.filter(r => !!(r.definition &&
+    (r.definition.kind === ts.ScriptElementKind.classElement || r.definition.kind === ts.ScriptElementKind.interfaceElement)))
+
   if (!selectedDefs || !selectedDefs.length) {
+    // info.project.projectService.logger.info(`${PLUGIN_NAME} not suggesting because selectedDefs is empty`)
     return refactors
   }
   selectedDef = selectedDefs[0]
-  refactors.push( {
+  refactors.push({
     name: `${PLUGIN_NAME}-refactor-info`,
     description: 'Subclasses of',
     actions: [
@@ -76,26 +77,26 @@ function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSetti
   const sourceFile = info.languageService.getProgram().getSourceFile(fileName)
   if (!sourceFile) {
     return refactors
-  }    
+  }
   let newText
   try {
-  const targetSourceFile = info.languageService.getProgram().getSourceFile(selectedDef.definition.fileName)
-  if (!targetSourceFile) {
-    return refactors
-  }
-  const isDirect = actionName == ACTION_NAME_DIRECT_SUBCLASSES
-  const subclasses: Array<ts.ClassDeclaration | ts.InterfaceDeclaration> = (isDirect ? getDirectDeclarationReferencesExtending(fileName, positionOrRange) : getIndirectDeclarationReferencesExtending(fileName, positionOrRange)) ;
-
-   newText = '\n/*\n'+(isDirect?'Direct':'Indirect')+' subclasses/implementations of ' + selectedDef.definition.name + ':\n' + subclasses.map(c => {
-    const sf = c.getSourceFile()
-    const pos = sf.getLineAndCharacterOfPosition(c.getStart())
-    const type = c.kind === ts.SyntaxKind.ClassDeclaration ? 'class' : 'interface'
-    return type + ' ' + (c.name && c.name.getText()) + ' in file:/' + sf.fileName + '#' + (pos.line + 1) + ',' + (pos.character + 1)
-  }).join('\n') + '\n*/'
-
-    } catch (error) {
-      newText = error+' - '+error.stack 
+    const targetSourceFile = info.languageService.getProgram().getSourceFile(selectedDef.definition.fileName)
+    if (!targetSourceFile) {
+      return refactors
     }
+    const isDirect = actionName == ACTION_NAME_DIRECT_SUBCLASSES
+    const subclasses: Array<ts.ClassDeclaration | ts.InterfaceDeclaration> = (isDirect ? getDirectDeclarationReferencesExtending(fileName, positionOrRange) : getIndirectDeclarationReferencesExtending(fileName, positionOrRange));
+
+    newText = '\n/*\n' + (isDirect ? 'Direct' : 'Indirect') + ' subclasses/implementations of ' + selectedDef.definition.name + ':\n' + subclasses.map(c => {
+      const sf = c.getSourceFile()
+      const pos = sf.getLineAndCharacterOfPosition(c.getStart())
+      const type = c.kind === ts.SyntaxKind.ClassDeclaration ? 'class' : 'interface'
+      return type + ' ' + (c.name && c.name.getText()) + ' in file:/' + sf.fileName + '#' + (pos.line + 1) + ',' + (pos.character + 1)
+    }).join('\n') + '\n*/'
+
+  } catch (error) {
+    newText = error + ' - ' + error.stack
+  }
 
   return {
     edits: [{
@@ -135,42 +136,42 @@ function getDirectDeclarationReferencesExtending(fileName: string, positionOrRan
 }
 
 
-function getIndirectDeclarationReferencesExtending(fileName: string, positionOrRange: number | ts_module.TextRange, 
-  supers: Array<ts.ClassDeclaration | ts.InterfaceDeclaration> =[], processedDeclNames:Array<string>=[])
-: Array<ts.ClassDeclaration | ts.InterfaceDeclaration> {
+function getIndirectDeclarationReferencesExtending(fileName: string, positionOrRange: number | ts_module.TextRange,
+  supers: Array<ts.ClassDeclaration | ts.InterfaceDeclaration> = [], processedDeclNames: Array<string> = [])
+  : Array<ts.ClassDeclaration | ts.InterfaceDeclaration> {
 
   const nodes = getDirectDeclarationReferencesExtending(fileName, positionOrRange)
   if (!nodes) {
     return supers
   }
-  if(supers.length && !nodes.find(n=>!!supers.find(s=>s.name!=n.name))){
+  if (supers.length && !nodes.find(n => !!supers.find(s => s.name != n.name))) {
     return supers
   }
   nodes.forEach(superNode => {
-    if(!supers.find(s=>s.name===superNode.name)){ // add only if not already
+    if (!supers.find(s => s.name === superNode.name)) { // add only if not already
       supers.push(superNode)
     }
-    const superId = findChild2(superNode, c=>c.kind===ts.SyntaxKind.Identifier)
-    if(!superId){
-      return 
+    const superId = findChild2(superNode, c => c.kind === ts.SyntaxKind.Identifier)
+    if (!superId) {
+      return
     }
     const refs = info.languageService.findReferences(superNode.getSourceFile().fileName, superId.getStart())
-    if(!refs){
+    if (!refs) {
       return
     }
     refs.forEach(ref => {
       // processedDeclNames is for protecting of infinite recursion - for example happens with EventEmitter
-      if(processedDeclNames.includes(ref.definition.name)) {
+      if (processedDeclNames.includes(ref.definition.name)) {
         return
       }
       processedDeclNames.push(ref.definition.name)
       ref.references && ref.references.forEach(r => {
         const subs = getIndirectDeclarationReferencesExtending(r.fileName, r.textSpan.start, supers, processedDeclNames)
-        subs.forEach(sub=>{
+        subs.forEach(sub => {
           // if(sub.name){
           //   log(sub.name.getText()+'\n')
           // }
-          if(!supers.find(s=>s.name===sub.name)){ // add only if not already
+          if (!supers.find(s => s.name === sub.name)) { // add only if not already
             supers.push(sub)
           }
         })

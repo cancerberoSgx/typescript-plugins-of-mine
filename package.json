@@ -13,7 +13,7 @@
     "build": "rush rebuild",
     "test": "rush test",
     "test-clone": "rm -rf ../typescript-plugins-of-mine-test && mkdir ../typescript-plugins-of-mine-test && cd ../typescript-plugins-of-mine-test && git clone ../typescript-plugins-of-mine/.git &&  cd typescript-plugins-of-mine  && npm install && npm test",
-    "postinstall": " rush install && rush link && npm run link-missing-modules && rush build ",
+    "postinstall": "rush generate && rush install && rush link && npm run link-missing-modules && rush build ",
     "link-missing-modules": "ln-cli sample-ts-plugin1 --force --path common/temp/node_modules && ln-cli typescript-plugin-extract-interface --force --path common/temp/node_modules && ln-cli typescript-plugin-subclasses-of --force --path common/temp/node_modules && ln-cli typescript-ast-util --force --path common/temp/node_modules",
     "doc": "rush doc",
     "all": "npm run clean && npm i && rush test && rush doc",

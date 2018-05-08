@@ -1,6 +1,6 @@
 {
   "name": "typescript-ast-util",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "general utilities for traversing, selecting, manipulating typescript ast ",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -24,6 +24,7 @@
   "devDependencies": {
     "@types/jasmine": "^2.8.7",
     "jasmine": "^3.1.0",
+    "ts-node": "^6.0.3",
     "tsconfig-paths": "^3.3.1",
     "typedoc": "^0.11.1"
   },

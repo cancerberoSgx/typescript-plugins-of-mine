@@ -123,33 +123,13 @@ export function filterChildren(
   if (!parent) {
     return []
   }
-  // const childCount = parent.getChildCount()
-  // for (let i = 0; i < childCount; i++) {
-  //   const child = parent.getChildAt(i)
-  //   if (predicate(child)) {
-  //     children.push(child)
-  //   }
-  //   if (recursive) {
-  //     const recursionResult = filterChildren(child, predicate, recursive, children)
-  //     if (recursionResult) {
-  //       console.log(children.length, recursionResult.length, getKindName(child.kind), child.getSourceFile().fileName, child.getFullText(), ts.getGeneratedNameForNode(child).escapedText)
-  //       children = children.concat(recursionResult)
-  //     }
-  //   }
-  // }
   parent.forEachChild(child => {
-    // if((child as any).__sebaMark){
-    //   console.log('ya pasamos')
-    //   return 
-    // }
-    // (child as any).__sebaMark=true
     if (predicate(child)) {
       children.push(child)
     }
     if (recursive) {
       const recursionResult = filterChildren(child, predicate, recursive, children)
       if (recursionResult) {
-        // console.log(children.length, recursionResult.length, getKindName(child.kind), child.getSourceFile().fileName, child.getFullText(), ts.getGeneratedNameForNode(child).escapedText)
         children = children.concat(recursionResult)
       }
     }
@@ -171,9 +151,6 @@ export function findChild(
         if (predicate(child)) {
           found= child
         }
-        // if (!found && recursive) {
-        //   found = findChild(child, predicate, recursive)       
-        // }
       })
     }
     else {
@@ -184,80 +161,38 @@ export function findChild(
       })
     }
     return found
-
-  // return findChild_(true, parent, predicate, recursive)
 }
 
-
+/**
+ * this iterated less childs than findChild, we don't understand why yet...
+ */
 export function findChild2(
   parent: ts.Node | undefined,
   predicate: (child: ts.Node) => boolean,
   recursive: boolean = false)
-  : ts.Node | undefined {
-  return findChild2_(true, parent, predicate, recursive)
-}
-
-// const findChildCache = {}
-
-function findChild2_(
-  firstTime: boolean = false,
-  parent: ts.Node | undefined,
-  predicate: (child: ts.Node) => boolean,
-  recursive: boolean = false)
-  : ts.Node | undefined {
-  if (!parent) {
+  : ts.Node | undefined {if (!parent) {
     return
   }
-  const childCount = parent.getChildCount() // TODO: use  visitChildrenRecursiveDeepFirst
-  for (let i = 0; i < childCount; i++) {
-    const child: ts.Node | undefined = parent.getChildAt(i)
-    if (predicate(child)) {
-      return child
-    }
-    if (recursive) {
-      const recursionResult = findChild2(child, predicate, recursive)
-      if (recursionResult) {
-        return recursionResult
+  let found:ts.Node|undefined
+  if(recursive){
+    visitChildrenRecursiveDeepFirst(parent, child=>{
+      if (predicate(child)) {
+        found= child
       }
-    }
+      if (!found && recursive) {
+        found = findChild2(child, predicate, recursive)       
+      }
+    })
   }
+  else {
+    parent.forEachChild(child => {
+      if(predicate(child)){
+        found = child
+      }
+    })
+  }
+  return found
 }
-
-
-
-
-
-// const findChildCache = {}
-
-// function findChild_(
-//   firstTime: boolean = false,
-//   parent: ts.Node | undefined,
-//   predicate: (child: ts.Node) => boolean,
-//   recursive: boolean = false)
-//   : ts.Node | undefined {
-//   if (!parent) {
-//     return
-//   }
-//   let found:ts.Node|undefined
-//   if(recursive){
-//     visitChildrenRecursiveDeepFirst(parent, child=>{
-//       if (predicate(child)) {
-//         found= child
-//       }
-//       if (!found && recursive) {
-//         found = findChild(child, predicate, recursive)       
-//       }
-//     })
-//   }
-//   else {
-//     parent.forEachChild(child => {
-//       if(predicate(child)){
-//         found = child
-//       }
-//     })
-//   }
-//   return found
-// }
 
 
 //identifiers helpers
