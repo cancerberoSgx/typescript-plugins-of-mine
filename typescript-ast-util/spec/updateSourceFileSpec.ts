@@ -22,8 +22,8 @@ class A {
 /* non jsdoc comment */
 class B{}
 `
-    const { project, fileName, tsconfigPath } = compileSource(code1)
-    const sourceFile = project.getSourceFile(fileName)
+    const { program, fileName, tsconfigPath } = compileSource(code1)
+    const sourceFile = program.getSourceFile(fileName)
     if (!sourceFile) {
       return fail()
     }

@@ -77,7 +77,7 @@ export function findParentFromPosition(
 }
 
 
-// kind helpers
+// kind & type helpers
 
 export function getKindName(kind: number): string {
   return getEnumKey(ts.SyntaxKind, kind)
@@ -89,6 +89,13 @@ function getEnumKey(anEnum: any, value: any): string {
     }
   }
   return ''
+}
+export function getTypeStringFor(node: ts.Node, program: ts.Program): string | undefined {
+  const type = program.getTypeChecker().getTypeAtLocation(node)
+  if (!type) {
+    return
+  }
+  return program.getTypeChecker().typeToString(type) || undefined
 }
 
 
@@ -112,37 +119,52 @@ export function findChildContainingRange(sourceFile: ts.SourceFile, r: ts.TextRa
   return find(sourceFile)
 }
 
-/**https://en.wikipedia.org/wiki/Tree_traversal : for the meaning of "DeepFirst" */
-export function visitChildrenRecursiveDeepFirst(node: ts.Node, 
-  visitor: (node: ts.Node, index?: number, level?: number) => void, index: number = 0, level: number = 0) {
+/**Iterates recursively over all children of given node and apply visitor on each of them. If visitor returns non falsy value then it stops visiting and that value is returned to the caller. See https://en.wikipedia.org/wiki/Tree_traversal for the meaning of "DeepFirst". */
+export function visitChildrenRecursiveDeepFirst(node: ts.Node,
+  visitor: (node: ts.Node, index?: number, level?: number) => ts.Node | undefined | void, index: number = 0, level: number = 0, stopOnTruthy: boolean = false): ts.Node | undefined {
   if (!node) {
     return
   }
-  visitor(node, index, level);
+  const result = visitor(node, index, level);
+  if (stopOnTruthy && result) {
+    return result
+  }
   let i = 0
-  node.forEachChild(child => visitChildrenRecursiveDeepFirst(child, visitor, i++, level + 1))
+  return node.forEachChild(child => visitChildrenRecursiveDeepFirst(child, visitor, i++, level + 1))
 }
 
 export function filterChildren(
   parent: ts.Node | undefined,
   predicate: (child: ts.Node) => boolean,
-  recursive: boolean = false,
+  recursive: boolean = true,
   children: Array<ts.Node> = [])
   : Array<ts.Node> {
+
   if (!parent) {
     return []
   }
-  parent.forEachChild(child => {
-    if (predicate(child)) {
-      children.push(child)
-    }
-    if (recursive) {
-      const recursionResult = filterChildren(child, predicate, recursive, children)
-      if (recursionResult) {
-        children = children.concat(recursionResult)
+  if (!recursive) {
+    ts.forEachChild(parent, child => {
+      if (predicate(child)) {
+        children.push(child)
       }
-    }
-  })
+    })
+  } else {
+
+    visitChildrenRecursiveDeepFirst(parent, child => {
+      if (predicate(child)) {
+        children.push(child)
+      }
+    })
+  }
+
+  //   if (recursive) {
+  //     const recursionResult = filterChildren(child, predicate, recursive, children)
+  //     if (recursionResult) {
+  //       children = children.concat(recursionResult)
+  //     }
+  //   }
+  // })
   return children
 }
 
@@ -173,32 +195,33 @@ export function findChild(
 }
 
 /**
- * this iterated less childs than findChild, we don't understand why yet...
+ * this iterated less childs than findChild, we don't understand why yet... we need this because makes plugin-subclasses-of work (for some reason)
  */
 export function findChild2(
   parent: ts.Node | undefined,
   predicate: (child: ts.Node) => boolean,
   recursive: boolean = false)
   : ts.Node | undefined {
-    if (!parent) {
-      return
-    }
+  if (!parent) {
+    return
+  }
   let found: ts.Node | undefined
   if (recursive) {
     visitChildrenRecursiveDeepFirst(parent, child => {
+
       if (predicate(child)) {
         found = child
       }
-      if (!found && recursive) {
-        found = findChild2(child, predicate, recursive)
-      }
+      // if (!found && recursive) {
+      //   found = findChild2(child, predicate, recursive)
+      // }
     })
   }
   else {
-    parent.forEachChild(child => {
-      if (predicate(child)) {
-        found = child
-      }
+    found = parent.forEachChild(child => {
+      // if (predicate(child)) {
+      return predicate(child) && child
+      // }
     })
   }
   return found
@@ -249,10 +272,10 @@ export function printNode(node: ts.Node, index: number = -1, level: number = 0):
 import * as shell from 'shelljs'
 import { homedir } from 'os';
 shell.config.silent = true
-export function compileSource(sourceCode: string, tsconfigPath: string = join(__dirname, 'assets', 'simpletsconfig.json')): { project: ts.Program, fileName: string, tsconfigPath: string } {
+export function compileSource(sourceCode: string, tsconfigPath: string = join(__dirname, 'assets', 'simpletsconfig.json')): { program: ts.Program, fileName: string, tsconfigPath: string } {
   const fileName = shell.tempdir() + '/' + 'tmpFile_' + Date.now() + '.ts'
   shellWrite(sourceCode, fileName)
-  return { project: compileFile(fileName, tsconfigPath), fileName, tsconfigPath }
+  return { program: compileFile(fileName, tsconfigPath), fileName, tsconfigPath }
 }
 
 const shellWrite = function (s: string, file: string): void {
