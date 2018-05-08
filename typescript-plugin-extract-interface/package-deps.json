@@ -1,0 +1,16 @@
+{
+  "files": {
+    "typescript-plugin-extract-interface/.gitignore": "74b6c92b079a7b2c5568a1b232cb0dfc4aca8af3",
+    "typescript-plugin-extract-interface/.npmignore": "4f069921fb12f27966277d0e5d0e787329c77500",
+    "typescript-plugin-extract-interface/LICENSE": "dedc6df6b3be7344793767ce0a4de8f20b8d627a",
+    "typescript-plugin-extract-interface/README.md": "46d81ae36b4a25b2e9c6e7d369443bd6f50f399e",
+    "typescript-plugin-extract-interface/doc-assets/extract-interface.gif": "d1b7a74eef21d063cd40d4cf97d3d644a8946ba9",
+    "typescript-plugin-extract-interface/package.json": "df04a72b6deeffbfd784d680fac85f9b93339bcb",
+    "typescript-plugin-extract-interface/src/extract-interface.ts": "88b8c4dbc64dfed95d7d7b64cf2d06dde0870442",
+    "typescript-plugin-extract-interface/src/index.ts": "2ee30c7c77d85709ebe290692a2d6f10a584db15",
+    "typescript-plugin-extract-interface/tsconfig.json": "d5e593b594d4167d9a6c8643b1cdc6048c25f363",
+    "typescript-plugin-extract-interface/package-deps.json": "95b03c9dbde097c3f18b53998de07ba20e007e3a",
+    "common/config/rush/npm-shrinkwrap.json": "50b0067d2be4bb1001bc0b4c5f4e6f57e136fa98"
+  },
+  "arguments": "tsc "
+}

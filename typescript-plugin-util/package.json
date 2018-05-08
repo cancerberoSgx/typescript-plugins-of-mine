@@ -1,0 +1,29 @@
+{
+  "name": "typescript-plugin-util",
+  "version": "1.0.0",
+  "description": "Utilities for developing TypeScript Language Server Plugins",
+  "main": "dist/src/index.js",
+  "typings": "dist/src/index.d.ts",
+  "scripts": {
+    "test": "ts-node node_modules/jasmine/bin/jasmine",
+    "build": "tsc && cp -r src/assets dist/src",
+    "doc": "typedoc -mode modules --out ../docs/typescript-ast-util src/index.ts"
+  },
+  "keywords": [
+    "TypeScript",
+    "TypeScript Language Service",
+    "plugin"
+  ],
+  "author": "Sebastian Gurin",
+  "license": "MIT",
+  "dependencies": {
+    "typescript": "^2.8.3"
+  },
+  "devDependencies": {
+    "@types/jasmine": "^2.8.7",
+    "jasmine": "^3.1.0",
+    "ts-node": "^6.0.3",
+    "typedoc": "^0.11.1"
+  },
+  "repository": "https://github.com/cancerberoSgx/typescript-plugin-of-mine/tree/master/typescript-ast-util"
+}

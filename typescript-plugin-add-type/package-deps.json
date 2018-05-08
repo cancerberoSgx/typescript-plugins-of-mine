@@ -1,0 +1,14 @@
+{
+  "files": {
+    "typescript-plugin-add-type/.gitignore": "74b6c92b079a7b2c5568a1b232cb0dfc4aca8af3",
+    "typescript-plugin-add-type/.npmignore": "4f069921fb12f27966277d0e5d0e787329c77500",
+    "typescript-plugin-add-type/LICENSE": "dedc6df6b3be7344793767ce0a4de8f20b8d627a",
+    "typescript-plugin-add-type/README.md": "d7f1d0ed2b9190484063285b1dda8c164c10e04c",
+    "typescript-plugin-add-type/package.json": "a606332cc0e7485f200095fb1528f6a0342a3094",
+    "typescript-plugin-add-type/src/index.ts": "7de5a98eac25d11175622afa3fbf1169bce30227",
+    "typescript-plugin-add-type/tsconfig.json": "d5e593b594d4167d9a6c8643b1cdc6048c25f363",
+    "typescript-plugin-add-type/package-deps.json": "a84c8ba9c79b415c8acb2adf29f9da1bc4d1c085",
+    "common/config/rush/npm-shrinkwrap.json": "50b0067d2be4bb1001bc0b4c5f4e6f57e136fa98"
+  },
+  "arguments": "tsc "
+}

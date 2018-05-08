@@ -1,8 +1,11 @@
+import { appendFileSync, readFileSync } from 'fs'
+import { homedir } from 'os'
+import { dirname, join } from 'path'
+
+/// testing 
+import * as shell from 'shelljs'
 import * as ts from 'typescript'
 import * as ts_module from 'typescript/lib/tsserverlibrary'
-import { join, sep, dirname } from 'path';
-import { appendFileSync, readFileSync } from 'fs';
-import { StringLiteral } from 'typescript/lib/tsserverlibrary';
 
 
 
@@ -32,7 +35,7 @@ export function addTextToSourceFile(sourceFile: ts.SourceFile, positionWhereToAd
   const oldTextLength = sourceFile.text.length
   const newText = sourceFile.text.substring(0, positionWhereToAdd) + textToAdd + sourceFile.text.substring(positionWhereToAdd, sourceFile.text.length)
   // forcing the newLength so ts asserts wont fail:
-  // ts.Debug.assert((oldText.length - textChangeRange.span.length + textChangeRange.newLength) === newText.length);
+  // ts.Debug.assert((oldText.length - textChangeRange.span.length + textChangeRange.newLength) === newText.length)
   const newLength = spanLength + newText.length - sourceFile.text.length 
   return ts.updateSourceFile(sourceFile, newText,  { span: { start: positionWhereToAdd, length: spanLength }, newLength: newLength}, true)
   // return sourceFile.update(newText, { span: { start: positionWhereToAdd, length: spanLength }, newLength: newLength })
@@ -288,10 +291,6 @@ export function printNode(node: ts.Node, index: number = -1, level: number = 0):
 
 
 
-/// testing 
-
-import * as shell from 'shelljs'
-import { homedir } from 'os';
 shell.config.silent = true
 export function compileSource(sourceCode: string, tsconfigPath: string = join(__dirname, 'assets', 'simpletsconfig.json')): { program: ts.Program, fileName: string, tsconfigPath: string } {
   const fileName = shell.tempdir() + '/' + 'tmpFile_' + Date.now() + '.ts'

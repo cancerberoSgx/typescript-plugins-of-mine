@@ -11,6 +11,11 @@
       "shouldPublish": true
     },
     {
+      "packageName": "typescript-plugin-util",
+      "projectFolder": "typescript-plugin-util",
+      "shouldPublish": true
+    },
+    {
       "packageName": "sample-ts-plugin1",
       "projectFolder": "sample-ts-plugin1",
       "shouldPublish": false
@@ -31,11 +36,6 @@
       "shouldPublish": true
     },
     {
-      "packageName": "typescript-plugin-extract-interface-client-project1",
-      "projectFolder": "typescript-plugin-extract-interface-client-project1",
-      "shouldPublish": false
-    },
-    {
       "packageName": "typescript-plugin-subclasses-of",
       "projectFolder": "typescript-plugin-subclasses-of",
       "shouldPublish": true
@@ -44,8 +44,12 @@
       "packageName": "typescript-plugin-add-type",
       "projectFolder": "typescript-plugin-add-type",
       "shouldPublish": true
-    }
-    
+    },
+    {
+      "packageName": "typescript-plugin-extract-interface-client-project1",
+      "projectFolder": "typescript-plugin-extract-interface-client-project1",
+      "shouldPublish": false
+    }   
     
   ]
 }
