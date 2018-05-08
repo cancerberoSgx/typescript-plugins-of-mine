@@ -113,7 +113,8 @@ export function findChildContainingRange(sourceFile: ts.SourceFile, r: ts.TextRa
 }
 
 /**https://en.wikipedia.org/wiki/Tree_traversal : for the meaning of "DeepFirst" */
-export function visitChildrenRecursiveDeepFirst(node: ts.Node, visitor: (node: ts.Node, index?: number, level?: number) => void, index: number = 0, level: number = 0) {
+export function visitChildrenRecursiveDeepFirst(node: ts.Node, 
+  visitor: (node: ts.Node, index?: number, level?: number) => void, index: number = 0, level: number = 0) {
   if (!node) {
     return
   }
@@ -150,25 +151,25 @@ export function findChild(
   predicate: (child: ts.Node) => boolean,
   recursive: boolean = true)
   : ts.Node | undefined {
-    if (!parent) {
-      return
-    }
-    let found:ts.Node|undefined
-    if(recursive){
-      visitChildrenRecursiveDeepFirst(parent, child=>{
-        if (predicate(child)) {
-          found= child
-        }
-      })
-    }
-    else {
-      parent.forEachChild(child => {
-        if(predicate(child)){
-          found = child
-        }
-      })
-    }
-    return found
+  if (!parent) {
+    return
+  }
+  let found: ts.Node | undefined
+  if (recursive) {
+    visitChildrenRecursiveDeepFirst(parent, child => {
+      if (predicate(child)) {
+        found = child
+      }
+    })
+  }
+  else {
+    parent.forEachChild(child => {
+      if (predicate(child)) {
+        found = child
+      }
+    })
+  }
+  return found
 }
 
 /**
@@ -178,23 +179,24 @@ export function findChild2(
   parent: ts.Node | undefined,
   predicate: (child: ts.Node) => boolean,
   recursive: boolean = false)
-  : ts.Node | undefined {if (!parent) {
-    return
-  }
-  let found:ts.Node|undefined
-  if(recursive){
-    visitChildrenRecursiveDeepFirst(parent, child=>{
+  : ts.Node | undefined {
+    if (!parent) {
+      return
+    }
+  let found: ts.Node | undefined
+  if (recursive) {
+    visitChildrenRecursiveDeepFirst(parent, child => {
       if (predicate(child)) {
-        found= child
+        found = child
       }
       if (!found && recursive) {
-        found = findChild2(child, predicate, recursive)       
+        found = findChild2(child, predicate, recursive)
       }
     })
   }
   else {
     parent.forEachChild(child => {
-      if(predicate(child)){
+      if (predicate(child)) {
         found = child
       }
     })
@@ -223,18 +225,21 @@ export function dumpAst(ast: ts.Node | undefined): string {
     return ''
   }
   function print(node: ts.Node, index: number = 0, level: number = 0) {
-    const indent = new Array(level).map(i => '').join('  ')
-    const name = node.kind===ts.SyntaxKind.Identifier ? ((node as ts.Identifier).text+' ') : '';
-    let shortText = node.getText().split('\n').join('\\n')
-    shortText = shortText.substr(0, Math.min(shortText.length, 20))
-    buffer.push(`${indent} #${index} ${name}${getKindName(node.kind)}  ("${shortText}")`)
+    buffer.push(printNode(node, index, level))
   }
   const buffer: Array<string> = []
   visitChildrenRecursiveDeepFirst(ast, print)
   return buffer.join('\n')
 }
 
-
+export function printNode(node: ts.Node, index: number = -1, level: number = 0): string {
+  const indent = new Array(level).map(i => '').join('  ')
+  const name = node.kind === ts.SyntaxKind.Identifier ? ((node as ts.Identifier).text + ' ') : '';
+  const indexStr = index != -1 ? ('#' + index + ' ') : ''
+  let shortText = node.getText().replace(/[\s\n]+/g, ' ')//.split(//).join('\\n')
+  shortText = shortText.substr(0, Math.min(shortText.length, 60))
+  return `${indent}${indexStr}${name}${getKindName(node.kind)} : "${shortText}"`
+}
 
 
 

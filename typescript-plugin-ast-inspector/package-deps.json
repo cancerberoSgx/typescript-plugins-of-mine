@@ -1,0 +1,6 @@
+{
+  "files": {
+    "common/config/rush/npm-shrinkwrap.json": "df10bc2661333d759074547e40f7d6244c1e778e"
+  },
+  "arguments": "tsc "
+}
