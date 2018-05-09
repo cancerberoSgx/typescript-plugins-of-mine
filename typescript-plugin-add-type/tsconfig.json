@@ -7,6 +7,7 @@
     "rootDir": "./src",
     "strict": true,  
     "removeComments": false,      
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "strictNullChecks": false
   }
 }

@@ -24,23 +24,8 @@ export function positionOrRangeToNumber(positionOrRange: number | ts.TextRange):
 }
 
 
-/**
- * @param sourceFile 
- * @param positionWhereToAdd (spanStart)
- * @param textToAdd 
- * @return the sourceFile with the modifications
- */
-export function addTextToSourceFile(sourceFile: ts.SourceFile, positionWhereToAdd: number, textToAdd: string, charCountToDeleteFromPos:number=0) : ts.SourceFile{
-  const spanLength = charCountToDeleteFromPos // not removing 
-  const oldTextLength = sourceFile.text.length
-  const newText = sourceFile.text.substring(0, positionWhereToAdd) + textToAdd + sourceFile.text.substring(positionWhereToAdd, sourceFile.text.length)
-  // forcing the newLength so ts asserts wont fail:
-  // ts.Debug.assert((oldText.length - textChangeRange.span.length + textChangeRange.newLength) === newText.length)
-  const newLength = spanLength + newText.length - sourceFile.text.length 
-  return ts.updateSourceFile(sourceFile, newText,  { span: { start: positionWhereToAdd, length: spanLength }, newLength: newLength}, true)
-  // return sourceFile.update(newText, { span: { start: positionWhereToAdd, length: spanLength }, newLength: newLength })
-}
 
+// node accessors and guards
 
 
 /** Gets the JSDoc of any node. For performance reasons this function should only be called when `canHaveJsDoc` return true. */
@@ -53,12 +38,20 @@ export function getJsDoc(node: ts.Node, sourceFile?: ts.SourceFile): ts.JSDoc[] 
   }
   return result as ts.JSDoc[]
 }
+export function isDeclaration(node: ts.Node): boolean {
+  return getKindName(node.kind).endsWith('Declaration')
+}
+export function hasName(node: ts.Node): boolean {
+  return !!(node as ts.NamedDeclaration).name
+}
+
+
 
 
 
 // parent helpers
 /**
- * Find the parent for given node that comply with iven predicate
+ * Find the parent for given node that comply with given predicate
  * @param node 
  * @param predicate 
  * @param orItSelf if true will first, check if node itself comply and if so returns it
@@ -106,7 +99,7 @@ export function findParentFromPosition(
 export function getKindName(kind: number): string {
   return getEnumKey(ts.SyntaxKind, kind)
 }
-function getEnumKey(anEnum: any, value: any): string {
+export function getEnumKey(anEnum: any, value: any): string {
   for (const key in anEnum) {
     if (value === anEnum[key]) {
       return key
@@ -114,12 +107,74 @@ function getEnumKey(anEnum: any, value: any): string {
   }
   return ''
 }
+
+let syntaxKindMap: { [x: string]: number } | undefined = undefined
+
+export function syntaxKindToMap(): { [x: string]: number } {
+  if (!syntaxKindMap) {
+    syntaxKindMap = {}
+    for (var i in ts.SyntaxKind) {
+      const parsed = parseInt(i)
+      if (parsed || parsed === 0) {
+        syntaxKindMap[ts.SyntaxKind[i]] = parsed
+      }
+    }
+  }
+  return syntaxKindMap
+}
+
+
+let typeFormatFlagsMap: { [x: string]: number } | undefined = undefined
+
+export function typeFormatFlagsToMap(): { [x: string]: number } {
+  if (!typeFormatFlagsMap) {
+    typeFormatFlagsMap = {}
+    for (var i in ts.TypeFormatFlags) {
+      const parsed = parseInt(i)
+      if (parsed || parsed === 0) {
+        typeFormatFlagsMap[ts.TypeFormatFlags[i]] = parsed
+      }
+    }
+  }
+  return typeFormatFlagsMap
+}
+
 export function getTypeStringFor(node: ts.Node, program: ts.Program): string | undefined {
-  const type = program.getTypeChecker().getTypeAtLocation(node)
+  const type = getTypeFor(node, program)
   if (!type) {
     return
   }
-  return program.getTypeChecker().typeToString(type) || undefined
+  return program.getTypeChecker().typeToString(type, node, ts.TypeFormatFlags.None) || undefined
+}
+export function getTypeFor(node: ts.Node, program: ts.Program): ts.Type {
+  return program.getTypeChecker().getTypeAtLocation(node)
+}
+export function hasDeclaredType(node: ts.Node, program: ts.Program): boolean {
+  if (!(node as any).type) {
+    return false;
+  }
+  const type = program.getTypeChecker().getTypeAtLocation(node)
+  if (!type || !type.symbol) {
+    return false
+  } else {
+    return true
+  }
+}
+/**
+ * because getTypeStringFor returns type strings not suitable for declarations, for example, for function like, returns "(args)=>Foo" where for declarations it should be (args):Foo
+ */
+export function getTypeStringForDeclarations(node: ts.Node, program: ts.Program): string {
+  let newText = getTypeStringFor(node, program)
+  if (ts.isFunctionLike(node)) {
+    const result = /\(\s*\)\s*=>/.exec(newText)
+    if (result && result.length) {
+      newText = newText.substring(result.index + result[0].length, newText.length)
+    }
+  }
+  else if (!isDeclaration(node) || ts.isVariableDeclaration(node)) {
+    //no nothing, default value for newText seems to be doing fine
+  }
+  return newText
 }
 
 
@@ -134,6 +189,8 @@ export function findChildContainingPosition(sourceFile: ts.SourceFile, position:
   }
   return find(sourceFile)
 }
+
+//TODO rename to findLowestChildContainingRange
 export function findChildContainingRange(sourceFile: ts.SourceFile, r: ts.TextRange): ts.Node | undefined {
   function find(node: ts.Node): ts.Node | undefined {
     if (r.pos >= node.getStart() && r.end < node.getEnd()) {
@@ -142,8 +199,24 @@ export function findChildContainingRange(sourceFile: ts.SourceFile, r: ts.TextRa
   }
   return find(sourceFile)
 }
+//TODO. rename to findFirstChildContainedRange
+export function findChildContainedRange(sourceFile: ts.SourceFile, r: ts.TextRange): ts.Node | undefined {
+  function find(node: ts.Node): ts.Node | undefined {
+    if (r.pos <= node.getStart() && r.end >= node.getEnd()) {
+      return node
+    }
+    else {
+      return ts.forEachChild(node, find)
+    }
 
-/**Iterates recursively over all children of given node and apply visitor on each of them. If visitor returns non falsy value then it stops visiting and that value is returned to the caller. See https://en.wikipedia.org/wiki/Tree_traversal for the meaning of "DeepFirst". */
+  }
+  return find(sourceFile)
+}
+
+
+/**
+ * Iterates recursively over all children of given node and apply visitor on each of them. If visitor returns non falsy value then it stops visiting and that value is returned to the caller. See https://en.wikipedia.org/wiki/Tree_traversal for the meaning of "DeepFirst". 
+ */
 export function visitChildrenRecursiveDeepFirst(node: ts.Node,
   visitor: (node: ts.Node, index?: number, level?: number) => ts.Node | undefined | void, index: number = 0, level: number = 0, stopOnTruthy: boolean = false): ts.Node | undefined {
   if (!node) {
@@ -181,14 +254,6 @@ export function filterChildren(
       }
     })
   }
-
-  //   if (recursive) {
-  //     const recursionResult = filterChildren(child, predicate, recursive, children)
-  //     if (recursionResult) {
-  //       children = children.concat(recursionResult)
-  //     }
-  //   }
-  // })
   return children
 }
 
@@ -219,7 +284,7 @@ export function findChild(
 }
 
 /**
- * this iterated less childs than findChild, we don't understand why yet... we need this because makes plugin-subclasses-of work (for some reason)
+ * this iterated less child than findChild, we don't understand why yet... we need this because makes plugin-subclasses-of work (for some reason)
  */
 export function findChild2(
   parent: ts.Node | undefined,
@@ -232,40 +297,101 @@ export function findChild2(
   let found: ts.Node | undefined
   if (recursive) {
     visitChildrenRecursiveDeepFirst(parent, child => {
-
       if (predicate(child)) {
         found = child
       }
-      // if (!found && recursive) {
-      //   found = findChild2(child, predicate, recursive)
-      // }
     })
   }
   else {
     found = parent.forEachChild(child => {
-      // if (predicate(child)) {
       return predicate(child) && child
-      // }
     })
   }
   return found
 }
-
+function printDiagnostic(d: ts.Diagnostic) {
+  const character = ts.getLineAndCharacterOfPosition(d.file, d.start).character
+  const line = ts.getLineAndCharacterOfPosition(d.file, d.start).line
+  const lineStr = d.file.getText().split('\n')[line - 1]
+  return 'Diagnostic: ' + d.code + ' ' + d.messageText + '  line: ' + line + ' - ' + d.file.fileName + ' line is: \n' + lineStr + '\n' + new Array(Math.min(0, character - 3)).map(i => '').join(' ') + '|here|'
+}
 
 //identifiers helpers
 
 export function findIdentifier(node: ts.Node | undefined): ts.Identifier {
-  return findChild(node, child => child.kind === ts_module.SyntaxKind.Identifier) as ts.Identifier
+  return node.kind === ts_module.SyntaxKind.Identifier ? node as  ts.Identifier :    findChild(node, child => child.kind === ts_module.SyntaxKind.Identifier, false) as ts.Identifier
 }
 export function findIdentifierString(node: ts.Node | undefined): string {
   const id = findIdentifier(node)
   return id && id.escapedText ? id.escapedText + '' : ''
 }
+// compilation
+
+export function compileFile(fileName: string = '', tsconfigPath: string = join(__dirname, 'assets', 'simpletsconfig.json')): ts.Program {
+  const tsConfigJson = ts.parseConfigFileTextToJson(tsconfigPath, readFileSync(tsconfigPath).toString())
+  if (tsConfigJson.error) {
+    throw tsConfigJson.error
+  }
+  let { options, errors } = ts.convertCompilerOptionsFromJson(tsConfigJson.config.compilerOptions, dirname(tsconfigPath))
+  if (errors.length) {
+    throw errors
+  }
+  const compilerHost: ts.CompilerHost = {
+    ...ts.createCompilerHost(options),
+    getSourceFile: (fileName, languageVersion) => ts.createSourceFile(fileName, readFileSync(fileName).toString(), ts.ScriptTarget.Latest, true)
+  }
+  const program = ts.createProgram([fileName], options, compilerHost);
+  program.getSyntacticDiagnostics().forEach(d => {
+    program.getSyntacticDiagnostics().forEach(d => console.log(printDiagnostic(d)))
+  })
+  return program
+}
+
+export function compileProject(projectFolder: string, rootFiles: Array<string> = [], tsconfigPath: string = join(__dirname, 'assets', 'simpletsconfig.json')): ts.Program {
+  const tsConfigJson = ts.parseConfigFileTextToJson(tsconfigPath, readFileSync(tsconfigPath).toString())
+  if (tsConfigJson.error) {
+    throw tsConfigJson.error
+  }
+  const compilerOptions = ts.convertCompilerOptionsFromJson(tsConfigJson.config.compilerOptions, projectFolder, tsconfigPath)
+  if (compilerOptions.errors.length) {
+    throw compilerOptions.errors
+  }
+  const compilerHost: ts.CompilerHost = {
+    ...ts.createCompilerHost(compilerOptions.options),
+    getSourceFile: (fileName, languageVersion) => ts.createSourceFile(fileName, readFileSync(fileName).toString(), ts.ScriptTarget.Latest, true)
+  }
+  const program = ts.createProgram(rootFiles, compilerOptions.options, compilerHost);
+  program.getSyntacticDiagnostics().forEach(d => console.log(printDiagnostic(d)))
+  return program
+
+}
+
+
+
+// source file manipulation
+
+/**
+ * @param sourceFile 
+ * @param positionWhereToAdd (spanStart)
+ * @param textToAdd 
+ * @return the sourceFile with the modifications
+ */
+export function addTextToSourceFile(sourceFile: ts.SourceFile, positionWhereToAdd: number, textToAdd: string, charCountToDeleteFromPos: number = 0): ts.SourceFile {
+  const spanLength = charCountToDeleteFromPos // not removing 
+  const oldTextLength = sourceFile.text.length
+  const newText = sourceFile.text.substring(0, positionWhereToAdd) + textToAdd + sourceFile.text.substring(positionWhereToAdd, sourceFile.text.length)
+  // forcing the newLength so ts asserts wont fail:
+  // ts.Debug.assert((oldText.length - textChangeRange.span.length + textChangeRange.newLength) === newText.length)
+  const newLength = spanLength + newText.length - sourceFile.text.length
+  return ts.updateSourceFile(sourceFile, newText, { span: { start: positionWhereToAdd, length: spanLength }, newLength: newLength }, true)
+  // return sourceFile.update(newText, { span: { start: positionWhereToAdd, length: spanLength }, newLength: newLength })
+}
 
 
 
 
-// miscellaneous
+
+// debug& logging
 
 export function dumpAst(ast: ts.Node | undefined): string {
   if (!ast) {
@@ -288,6 +414,13 @@ export function printNode(node: ts.Node, index: number = -1, level: number = 0):
   return `${indent}${indexStr}${name}${getKindName(node.kind)} : "${shortText}"`
 }
 
+export function log(s: string) {
+  const logFile = join(homedir(), 'typescript-ast-util.log')
+  appendFileSync(logFile, s)
+}
+const shellWrite = function (s: string, file: string): void {
+  (shell as any).ShellString(s).to(file)
+}
 
 
 
@@ -298,41 +431,5 @@ export function compileSource(sourceCode: string, tsconfigPath: string = join(__
   return { program: compileFile(fileName, tsconfigPath), fileName, tsconfigPath }
 }
 
-const shellWrite = function (s: string, file: string): void {
-  (shell as any).ShellString(s).to(file)
-}
 
-export function compileFile(fileName: string = '', tsconfigPath: string = join(__dirname, 'assets', 'simpletsconfig.json')): ts.Program {
-  const tsConfigJson = ts.parseConfigFileTextToJson(tsconfigPath, readFileSync(tsconfigPath).toString())
 
-  let { options, errors } = ts.convertCompilerOptionsFromJson(tsConfigJson.config.compilerOptions, dirname(tsconfigPath))
-  if (errors.length) {
-    throw errors
-  }
-  const compilerHost: ts.CompilerHost = {
-    ...ts.createCompilerHost(options),
-    getSourceFile: (fileName, languageVersion) => ts.createSourceFile(fileName, readFileSync(fileName).toString(), ts.ScriptTarget.Latest, true)
-  }
-  return ts.createProgram([fileName], options, compilerHost);
-}
-
-export function compileProject(projectFolder: string, rootFiles: Array<string> = [], tsconfigPath: string = join(__dirname, 'assets', 'simpletsconfig.json')): ts.Program {
-  const tsConfigJson = ts.parseConfigFileTextToJson(tsconfigPath, readFileSync(tsconfigPath).toString())
-  if (tsConfigJson.error) {
-    throw tsConfigJson.error
-  }
-  const compilerOptions = ts.convertCompilerOptionsFromJson(tsConfigJson.config.compilerOptions, projectFolder, tsconfigPath)
-  if (compilerOptions.errors.length) {
-    throw compilerOptions.errors
-  }
-  const compilerHost: ts.CompilerHost = {
-    ...ts.createCompilerHost(compilerOptions.options),
-    getSourceFile: (fileName, languageVersion) => ts.createSourceFile(fileName, readFileSync(fileName).toString(), ts.ScriptTarget.Latest, true)
-  }
-  return ts.createProgram(rootFiles, compilerOptions.options, compilerHost);
-}
-
-export function log(s: string) {
-  const logFile = join(homedir(), 'typescript-ast-util.log')
-  appendFileSync(logFile, s)
-}

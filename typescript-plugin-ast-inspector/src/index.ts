@@ -36,9 +36,8 @@ function init(modules: { typescript: typeof ts_module }) {
 
 export = init
 
-
-let selectedDef: ts.ReferencedSymbol | undefined
 let nodeAtCursor: ts.Node | undefined
+
 function getApplicableRefactors(fileName: string, positionOrRange: number | ts.TextRange): ts_module.ApplicableRefactorInfo[] {
   const refactors = info.languageService.getApplicableRefactors(fileName, positionOrRange) || []
   const sourceFile = info.languageService.getProgram().getSourceFile(fileName)

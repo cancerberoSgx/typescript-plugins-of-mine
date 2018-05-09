@@ -1,10 +1,16 @@
-import { compileSource, findChild, findIdentifierString, dumpAst, getKindName, getTypeStringFor } from "../src";
+import { compileSource, findChild, findIdentifierString, dumpAst, getKindName, getTypeStringFor, hasDeclaredType, findIdentifier, getTypeFor, syntaxKindToMap, typeFormatFlagsToMap } from "../src";
 import * as ts from 'typescript'
 describe('compileSource, findChildren and getJsDoc', () => {
   it('1', () => {
+
+
     const code1 = `
 const a=1
-function f(): {a: number: b: string[]}{return {a:1, b: []}}
+function f(): {a: number, b: string[]} {
+  return {a:1, b: []}
+}
+function k(){return []}
+var h :Array<String> = ['asd']
 const b = a+2
 const c = 1+4
 const d = f()
@@ -23,7 +29,9 @@ const typedConst: Array<Date> = []
     }
     const at = program.getTypeChecker().getTypeAtLocation(a)
     expect(at.symbol).toBeUndefined()
+    expect(hasDeclaredType(a,  program)).toBe(false)
 
+    getKindName(a.kind)
     let typedConst = findChild(sourceFile, c => c.kind == ts.SyntaxKind.VariableDeclaration && ((c as ts.VariableDeclaration).name as ts.Identifier).escapedText == 'typedConst')
     if (!typedConst) {
       return fail()
@@ -54,6 +62,70 @@ const typedConst: Array<Date> = []
       return fail()
     }
     expect(getTypeStringFor(f, program).replace(/\s+/g, '')).toBe('()=>{a:number;b:string[];}')
+    
+    let h = findChild(sourceFile, c => c.kind == ts.SyntaxKind.VariableDeclaration && ((c as ts.VariableDeclaration).name as ts.Identifier).escapedText == 'h')
+    if (!h) {
+      return fail()
+    }
+    expect(hasDeclaredType(h, program)).toBe(true)
+
+    let k= findChild(sourceFile, c => c.kind == ts.SyntaxKind.FunctionDeclaration && ((c as ts.FunctionDeclaration).name as ts.Identifier).escapedText == 'k') as ts.FunctionDeclaration
+    if (!k) {
+      return fail()
+    }
+
+//     const changes = getFileTextChanges(k, program)
+
+// var aaaa = 1
 
   })
 })  
+
+
+
+
+
+// const TypeFormatFlags = ts.TypeFormatFlags
+// const NodeBuilderFlags= ts.NodeBuilderFlags
+
+
+// let  flags =  0|TypeFormatFlags.UseAliasDefinedOutsideCurrentScope | TypeFormatFlags.MultilineObjectLiterals | TypeFormatFlags.WriteTypeArgumentsOfSignature | TypeFormatFlags.OmitParameterModifiers;
+// const type = getTypeFor(f, program)
+
+//     console.log(program.getTypeChecker().typeToString(type, f, flags))
+
+//     // console.log(program.getTypeChecker().typeToString(type, f, 0|TypeFormatFlags.WriteTypeArgumentsOfSignature))
+
+//     // console.log(program.getTypeChecker().typeToString(type, f, 0|ts.TypeFormatFlags.NoTruncation | ts.TypeFormatFlags.AllowUniqueESSymbolType))
+
+//     // console.log(program.getTypeChecker().typeToString(type, f, NodeBuilderFlags.MultilineObjectLiterals | TypeFormatFlags.WriteClassExpressionAsTypeLiteral | NodeBuilderFlags.UseTypeOfFunction | NodeBuilderFlags.UseStructuralFallback | NodeBuilderFlags.AllowEmptyTuple))
+
+
+
+// console.log(program.getTypeChecker().typeToString(type,undefined,  TypeFormatFlags.NoTruncation | TypeFormatFlags.WriteArrayAsGenericType | TypeFormatFlags.UseStructuralFallback | TypeFormatFlags.WriteTypeArgumentsOfSignature |
+// TypeFormatFlags.      UseFullyQualifiedType | TypeFormatFlags.SuppressAnyReturnType | TypeFormatFlags.MultilineObjectLiterals | TypeFormatFlags.WriteClassExpressionAsTypeLiteral |
+// TypeFormatFlags.OmitParameterModifiers | TypeFormatFlags.UseAliasDefinedOutsideCurrentScope | TypeFormatFlags.AllowUniqueESSymbolType | TypeFormatFlags.InTypeAlias,))
+// console.log(program.getTypeChecker().typeToString(type, f, 0))
+//     console.log(program.getTypeChecker().typeToString(type, f,  -1|TypeFormatFlags.WriteArrowStyleSignature))
+//     console.log(program.getTypeChecker().typeToString(type, f,  -1&TypeFormatFlags.WriteArrowStyleSignature))
+//     // console.log(program.getTypeChecker().typeToString(type, f,  TypeFormatFlags.OmitParameterModifiers&TypeFormatFlags.WriteArrowStyleSignature))
+//     // console.log(program.getTypeChecker().typeToString(type, f, 0|ts.TypeFormatFlags.NoTruncation | ts.TypeFormatFlags.AllowUniqueESSymbolType))  console.log(program.getTypeChecker().typeToString(type, f, 0|ts.TypeFormatFlags.NoTruncation | ts.TypeFormatFlags.AllowUniqueESSymbolType))  console.log(program.getTypeChecker().typeToString(type, f, 0|ts.TypeFormatFlags.NoTruncation | ts.TypeFormatFlags.AllowUniqueESSymbolType))
+
+
+
+//     Object.keys(typeFormatFlagsToMap()).forEach(k=>{
+//       console.log(program.getTypeChecker().typeToString(type, f,  typeFormatFlagsToMap()[k]))
+//     //   const v = syntaxKindToMap()[k]
+//     //   const type = getTypeFor(f, program)
+//     //   console.log(k, '\t\t\t\t\t' , program.getTypeChecker().typeToString(type, f, v))
+//     })
+// // debugger;
+//     // program.getTypeChecker().typet
+// // const s = ts.createMethodSignature(k.typeParameters, k.parameters, k.type, k.name, k.questionToken)
+// // const ss = program.getTypeChecker().signatureToSignatureDeclaration(getTypeFor(k, program).getConstructSignatures()[0], ts.SyntaxKind.FunctionDeclaration)
+
+
+//     // expect(getTypeStringFor(k, program).replace(/\s+/g, '')).toBe('()=>string[]')
+
+//     // const changes = getFileTextChanges(k)
+

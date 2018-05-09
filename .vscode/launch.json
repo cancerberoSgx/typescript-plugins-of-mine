@@ -10,7 +10,7 @@
             "protocol": "inspector",
             "name": "ast-util spec",
             "args": [
-                "updateSourceFileSpec",
+                "inferTypeSpec"
             ],
             "runtimeArgs": [
                 "--inspect",
