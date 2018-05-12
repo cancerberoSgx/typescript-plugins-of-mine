@@ -145,20 +145,7 @@ export function getTypeStringFor(node: ts.Node, program: ts.Program): string | u
     return
   }
   return program.getTypeChecker().typeToString(type, node, ts.TypeFormatFlags.None) || undefined
-}
-export function getTypeFor(node: ts.Node, program: ts.Program): ts.Type {
-  return program.getTypeChecker().getTypeAtLocation(node)
-}
-export function hasDeclaredType(node: ts.Node, program: ts.Program): boolean {
-  if (!(node as any).type) {
-    return false;
-  }
-  const type = program.getTypeChecker().getTypeAtLocation(node)
-  if (!type || !type.symbol) {
-    return false
-  } else {
-    return true
-  }
+  // ts_module.server.get
 }
 /**
  * because getTypeStringFor returns type strings not suitable for declarations, for example, for function like, returns "(args)=>Foo" where for declarations it should be (args):Foo
@@ -177,6 +164,20 @@ export function getTypeStringForDeclarations(node: ts.Node, program: ts.Program)
   return newText
 }
 
+export function getTypeFor(node: ts.Node, program: ts.Program): ts.Type {
+  return program.getTypeChecker().getTypeAtLocation(node)
+}
+export function hasDeclaredType(node: ts.Node, program: ts.Program): boolean {
+  if (!(node as any).type) {
+    return false;
+  }
+  const type = program.getTypeChecker().getTypeAtLocation(node)
+  if (!type || !type.symbol) {
+    return false
+  } else {
+    return true
+  }
+}
 
 
 // children helpers
@@ -309,12 +310,13 @@ export function findChild2(
   }
   return found
 }
-function printDiagnostic(d: ts.Diagnostic) {
-  const character = ts.getLineAndCharacterOfPosition(d.file, d.start).character
-  const line = ts.getLineAndCharacterOfPosition(d.file, d.start).line
-  const lineStr = d.file.getText().split('\n')[line - 1]
-  return 'Diagnostic: ' + d.code + ' ' + d.messageText + '  line: ' + line + ' - ' + d.file.fileName + ' line is: \n' + lineStr + '\n' + new Array(Math.min(0, character - 3)).map(i => '').join(' ') + '|here|'
-}
+// function printDiagnostic(d: ts.Diagnostic) {
+//   return ts.formatDiagnosticsWithColorAndContext()
+//   const character = ts.getLineAndCharacterOfPosition(d.file, d.start).character
+//   const line = ts.getLineAndCharacterOfPosition(d.file, d.start).line
+//   const lineStr = d.file.getText().split('\n')[line - 1]
+//   return return ts.formatDiagnosticsWithColorAndContext() 'Diagnostic: ' + d.code + ' ' + d.messageText + '  line: ' + line + ' - ' + d.file.fileName + ' line is: \n' + lineStr + '\n' + new Array(Math.min(0, character - 3)).map(i => '').join(' ') + '|here|'
+// }
 
 //identifiers helpers
 
@@ -341,9 +343,16 @@ export function compileFile(fileName: string = '', tsconfigPath: string = join(_
     getSourceFile: (fileName, languageVersion) => ts.createSourceFile(fileName, readFileSync(fileName).toString(), ts.ScriptTarget.Latest, true)
   }
   const program = ts.createProgram([fileName], options, compilerHost);
-  program.getSyntacticDiagnostics().forEach(d => {
-    program.getSyntacticDiagnostics().forEach(d => console.log(printDiagnostic(d)))
-  })
+  // const diagnotics =   program.getSyntacticDiagnostics()
+  ts.formatDiagnosticsWithColorAndContext(program.getSyntacticDiagnostics(), compilerHost)
+  ts.formatDiagnosticsWithColorAndContext(program.getDeclarationDiagnostics(), compilerHost)
+  ts.formatDiagnosticsWithColorAndContext(program.getGlobalDiagnostics(), compilerHost)
+  ts.formatDiagnosticsWithColorAndContext(program.getSemanticDiagnostics(), compilerHost)
+  //
+  // .forEach(d => {
+    
+  //   program.getSyntacticDiagnostics().forEach(d => console.log(printDiagnostic(d)))
+  // })
   return program
 }
 
@@ -361,7 +370,12 @@ export function compileProject(projectFolder: string, rootFiles: Array<string> =
     getSourceFile: (fileName, languageVersion) => ts.createSourceFile(fileName, readFileSync(fileName).toString(), ts.ScriptTarget.Latest, true)
   }
   const program = ts.createProgram(rootFiles, compilerOptions.options, compilerHost);
-  program.getSyntacticDiagnostics().forEach(d => console.log(printDiagnostic(d)))
+
+  ts.formatDiagnosticsWithColorAndContext(program.getSyntacticDiagnostics(), compilerHost)
+  ts.formatDiagnosticsWithColorAndContext(program.getDeclarationDiagnostics(), compilerHost)
+  ts.formatDiagnosticsWithColorAndContext(program.getGlobalDiagnostics(), compilerHost)
+  ts.formatDiagnosticsWithColorAndContext(program.getSemanticDiagnostics(), compilerHost)
+  // program.getSyntacticDiagnostics().forEach(d => console.log(printDiagnostic(d)))
   return program
 
 }

@@ -8,7 +8,7 @@
     "plugin"
   ],
   "author": "Sebastian Gurin",
-  "license": "Mit",
+  "license": "IMT",
   "scripts": {
     "build": "rush rebuild",
     "test": "rush test",

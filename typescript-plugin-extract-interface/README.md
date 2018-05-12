@@ -41,6 +41,7 @@ Make sure you have installed typescript in your project (`npm i --save-dev types
 
 # ISSUES / TODOS
 
+ * can use this to format : https://www.npmjs.com/package/code-block-writer
  * make the class implement the interface at the end
  * if the class already implements an interface, we shouldn't extract those methods. 
  * what about methods of super classes ? this behavior could be configurable

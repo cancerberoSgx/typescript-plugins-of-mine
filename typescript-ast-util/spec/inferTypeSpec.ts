@@ -78,7 +78,10 @@ const typedConst: Array<Date> = []
 
 // var aaaa = 1
 
-  })
+// ts.createClassifier()
+// ts.format
+// ts. 
+})
 })  
 
 

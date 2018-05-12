@@ -49,7 +49,11 @@
       "packageName": "typescript-plugin-extract-interface-client-project1",
       "projectFolder": "typescript-plugin-extract-interface-client-project1",
       "shouldPublish": false
-    }   
-    
+    },
+    // {
+    //   "packageName": "typescript-api-tests",
+    //   "projectFolder": "typescript-api-tests",
+    //   "shouldPublish": false
+    // }   
   ]
 }

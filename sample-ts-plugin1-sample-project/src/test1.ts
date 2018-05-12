@@ -1,3 +1,5 @@
+import { EventEmitter } from "events";
+
 class Banana {
   callee = 1
   caller = 2
@@ -15,3 +17,12 @@ Second, we show that when we select the class identifier
 when we select other identifiers the suggestion is not 
 shown
 */
+
+
+function target(emitter: EventEmitter){
+  emitter.on('foo', ()=>{})
+}
+let f = function f(){}
+const casted = Object.assign(f.prototype, EventEmitter.prototype) as EventEmitter
+//now we now is an EventEmitter - we cast
+target(casted);

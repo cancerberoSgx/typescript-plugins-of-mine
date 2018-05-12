@@ -123,5 +123,6 @@ function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSetti
   }
 
   return { newText, span: { start, length } }
+  
 }
 
