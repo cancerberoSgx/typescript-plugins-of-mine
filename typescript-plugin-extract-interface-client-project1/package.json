@@ -19,6 +19,7 @@
     "typescript-plugin-subclasses-of": "1.0.1",
     "typescript-plugin-ast-inspector": "1.0.0",
     "typescript-plugin-add-type": "1.0.0",
+    "typescript-api-tests": "1.0.0",
     "typescript": "^2.8.3"
   }
 }

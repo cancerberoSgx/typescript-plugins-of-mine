@@ -28,11 +28,19 @@ so he need to interact with the user. this is more than normal refactor / sugges
 what about using a PTY TTY like cli-driver and really use inquirer ? is that possible from the plugin ? dont see see not WHy ? becuse there we can easily implement a file chooser with autocomplete !!! TODO: test if the PTY pops up on top of the editor! 
 
 
-## alternative : user launch the terminal
+## alternative : user launch the terminal (new window ad focus)
+
+https://stackoverflow.com/questions/4688123/how-to-open-the-command-prompt-and-insert-commands-using-java
+https://stackoverflow.com/questions/5738259/open-a-new-prompt-terminal-window-from-java}or use iterm or upterm o somthing
+
 
 1) user open in scode terminal before start: ts-inquirer 
 2) the program greet and await
 the in step 4 - instea of using the sourceFile, the plugin uses the terminal (it comunicates with ts-inquierer program somehow (socket?)) and the inquierer is performed on that terminal
+
+https://github.com/akameco/electron-terminal-open
+
+# alternative - use inquierer editor... mmm
 
 
 ## alternative use case for the UI: web server and browser!  

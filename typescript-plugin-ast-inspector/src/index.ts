@@ -1,8 +1,3 @@
-// Extract interface from a class declaration. Write it just before the class declaration and make the class implement it. Only members with "public" modifier will be extracted
-//
-// **Screencast**: 
-// 
-// ![See it in action](../plugin-screencast.gif)
 
 import { findParentFromPosition, positionOrRangeToNumber, findChildContainingPosition, getKindName, dumpAst, positionOrRangeToRange, findChildContainingRange, printNode } from 'typescript-ast-util';
 import * as ts_module from 'typescript/lib/tsserverlibrary';
@@ -10,7 +5,6 @@ import * as ts_module from 'typescript/lib/tsserverlibrary';
 const PLUGIN_NAME = 'typescript-plugin-print-ast'
 const PRINT_AST_REFACTOR_ACTION_NAME = `${PLUGIN_NAME}-print-ast-refactor-action`
 const PRINT_PARENT_NODES_REFACTOR_ACTION_NAME = `${PLUGIN_NAME}-print-inheritance-refactor-action`
-// IDEA oterh action that prints nodeAtCursor.arent.parent.arent to the top so I know where I'm standings
 
 let ts: typeof ts_module
 let info: ts_module.server.PluginCreateInfo

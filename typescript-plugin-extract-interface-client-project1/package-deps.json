@@ -1,14 +1,14 @@
 {
   "files": {
     "typescript-plugin-extract-interface-client-project1/.vscode/settings.json": "17e468c7b4ed78a00aed4fb463809067b4215cf5",
-    "typescript-plugin-extract-interface-client-project1/package-deps.json": "41a799d5b57f1269fa290a174be547b78e9172b3",
-    "typescript-plugin-extract-interface-client-project1/package.json": "f08282ef60a1ddb53d671479a1dd58dadabf3772",
+    "typescript-plugin-extract-interface-client-project1/package-deps.json": "bc9960629992bd444ef851fca13067b289985e86",
+    "typescript-plugin-extract-interface-client-project1/package.json": "61dc60cd0837371a8afa07473e9b65c5eff3c930",
     "typescript-plugin-extract-interface-client-project1/src/test1.ts": "18e8946f7dfba39889efed9fd7393c30a0b5b4c0",
     "typescript-plugin-extract-interface-client-project1/src/test2.ts": "e6c9ffe531fab26bd7942427bd81f5cac23b6a9e",
     "typescript-plugin-extract-interface-client-project1/src/test3.ts": "fd45412af4ee61d85e8b66b78fe0a48d35910ee8",
     "typescript-plugin-extract-interface-client-project1/src/test4.ts": "465982b212bacf169076c5412a46e849d882152d",
-    "typescript-plugin-extract-interface-client-project1/tsconfig.json": "f276e8790388c0eb110ad444c803740993d48eb6",
-    "common/config/rush/npm-shrinkwrap.json": "8c13f04cb7c70334e413960e0a37e075a6f5855a"
+    "typescript-plugin-extract-interface-client-project1/tsconfig.json": "a9501cfc1ce37b09fa98eec3e4c826eecbde9b28",
+    "common/config/rush/npm-shrinkwrap.json": "1e84c06b12081048b026573095259415996dd97c"
   },
   "arguments": "echo nothing && exit 0 "
 }

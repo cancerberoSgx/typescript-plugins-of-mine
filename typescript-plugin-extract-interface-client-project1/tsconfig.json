@@ -23,6 +23,9 @@
       {
         "name": "typescript-plugin-add-type"
       },
+      {
+        "name": "typescript-api-tests"
+      }
       
       ]
     }

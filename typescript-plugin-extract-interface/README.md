@@ -48,3 +48,4 @@ Make sure you have installed typescript in your project (`npm i --save-dev types
  * put the interface in a separate file and add an import?
  * fix format
  * feature, if user selects only some methods, we should only extract those. 
+ * good enhancement: i just finish writting a class . at last I add "implements SomeName" . Because the interface doesn't exist, would be super if the plugin suggest me there a refactor for creating / extracting it
