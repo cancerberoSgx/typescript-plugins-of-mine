@@ -8,7 +8,9 @@
     "build": "tsc",
     "doc": "docco -o ../docs/sample-ts-plugin1 src/index.ts && cp doc-assets/plugin-screencast.gif ../docs/sample-ts-plugin1"
   },
-  "keywords": ["Sebastián Gurin"],
+  "keywords": [
+    "Sebastián Gurin"
+  ],
   "author": "",
   "license": "MIT",
   "dependencies": {

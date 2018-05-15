@@ -15,11 +15,11 @@
     "@types/node": "^10.0.4"
   },
   "devDependencies": {
-    "typescript-plugin-extract-interface": "1.0.2",
-    "typescript-plugin-subclasses-of": "1.0.1",
-    "typescript-plugin-ast-inspector": "1.0.0",
-    "typescript-plugin-add-type": "1.0.0",
-    "typescript-api-tests": "1.0.0",
+    "typescript-plugin-extract-interface": "file:../typescript-plugin-extract-interface",
+    "typescript-plugin-subclasses-of": "file:../typescript-plugin-subclasses-of",
+    "typescript-plugin-ast-inspector": "file:../typescript-plugin-ast-inspector",
+    "typescript-plugin-add-type": "file:../typescript-plugin-add-type",
+    "typescript-api-tests": "file:../typescript-api-tests",
     "typescript": "^2.8.3"
   }
 }

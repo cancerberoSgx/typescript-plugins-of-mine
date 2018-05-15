@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 0",
     "build": "tsc",
-    "doc": ""
+    "doc": "exit 0"
   },
   "keywords": [
     "TypeScript",
@@ -21,7 +21,7 @@
     "node-pty": "^0.7.4",
     "shelljs": "^0.8.2",
     "typescript": "^2.8.3",
-    "typescript-ast-util": "1.0.5"
+    "typescript-ast-util": "file:../typescript-ast-util"
   },
   "devDependencies": {},
   "repository": "https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-ast-util",

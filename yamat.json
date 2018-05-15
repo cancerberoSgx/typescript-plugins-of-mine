@@ -1,0 +1,42 @@
+[
+  {
+    "name": "typescript-ast-util",
+    "path": "typescript-ast-util"
+  },
+  {
+    "name": "typescript-plugin-util",
+    "path": "typescript-plugin-util"
+  },
+  {
+    "name": "sample-ts-plugin1",
+    "path": "sample-ts-plugin1"
+  },
+  {
+    "name": "sample-ts-plugin1-sample-project",
+    "path": "sample-ts-plugin1-sample-project"
+  },
+  {
+    "name": "typescript-plugin-extract-interface",
+    "path": "typescript-plugin-extract-interface"
+  },
+  {
+    "name": "typescript-plugin-ast-inspector",
+    "path": "typescript-plugin-ast-inspector"
+  },
+  {
+    "name": "typescript-plugin-subclasses-of",
+    "path": "typescript-plugin-subclasses-of"
+  },
+  {
+    "name": "typescript-plugin-add-type",
+    "path": "typescript-plugin-add-type"
+  },
+  {
+    "name": "typescript-plugin-extract-interface-client-project1",
+    "path": "typescript-plugin-extract-interface-client-project1"
+  },
+  {
+    "name": "typescript-api-tests",
+    "path": "typescript-api-tests"
+  }
+]

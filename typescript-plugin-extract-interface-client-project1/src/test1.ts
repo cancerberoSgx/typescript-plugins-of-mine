@@ -54,4 +54,4 @@ export class Vehicle<T> {
       console.error();
     }
   }
-}
+}kjasjhksadjkdsakj: ClassDeclaration- Vehicle+Vehicle
