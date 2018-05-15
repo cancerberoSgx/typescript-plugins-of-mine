@@ -15,7 +15,7 @@
  * 
 
 
-### other related tools 
+### Related tools 
 
  * https://dsherret.github.io/ts-simple-ast/  <<--- this looks good for refactoring
  * https://github.com/wessberg/TypescriptASTUtil
