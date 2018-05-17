@@ -23,8 +23,7 @@ describe('move declaration', () => {
   })
 
   it('target file should not contain old import to declaration', () => {
-    expect(cat('assets/sampleProject1_copy/src/model/level2/usingApples.ts').toString()).not.toContain('import { Apple } from "./index/usingApples"')
-
+    expect(cat('assets/sampleProject1_copy/src/model/level2/usingApples.ts').toString()).not.toContain('import { Apple }')
   })
   it('original file should not have the class nor imports relate to it any more', () => {
 
