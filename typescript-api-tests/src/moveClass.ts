@@ -1,13 +1,15 @@
-import Project, { ImportDeclaration, SourceFile, ClassDeclarationStructure, StatementedNode, PropertyDeclaration, 
-  ParameterDeclaration, ParameterDeclarationStructure, printNode } from "ts-simple-ast";
-import { ClassDeclaration } from "ts-simple-ast";
-import { preProcessFile } from "../../typescript-ast-util/node_modules/typescript/lib/tsserverlibrary";
-import { cp, rm } from "shelljs";
-import * as ts from 'typescript'
-import { dirname, relative, basename, sep } from "path";
+import Project, { ClassDeclaration, ImportDeclaration, SourceFile } from "ts-simple-ast";
+import * as ts from 'typescript';
 
 /**
- * Implement the move refactor, this is not just moving the class to given file but also updating, in given project, all references of import declarations that point to the class so they point to the new file and creating and removing import declarations pointing to all involved types inside class declaration. After the refactor project should not have compile errors and it shouldn't affect the execution in any way. The objective is refactor operation equivalent to those existent in Java/C# IDEs. 
+ * TODO: MOST: IMPORTANT dont reduce this only to classes - can we move other decls like functions / interfaces, etc? - I think so! change name to moveDeclaration !
+ *
+ * Implement the move refactor, this is not just moving the class to given file. The resulting project state should not have errors. Among other things, beside just moving the class to another file, all all project's import
+ * declarations are updated to point the new class location and also imports to referenced types in class will be added / removed to files that require it. The objective is refactor operation equivalent to those existent in
+ * Java/C# IDEs. 
+ *
+ * See all todo comments along the code to  get idea of current state / issue
+ *
  * @param c the class declaration node to move
  * @param project project in which to do the refactor
  * @param targetFile the target file, inside the project where to move the class
@@ -17,7 +19,7 @@ export function moveClass(c: ClassDeclaration, project: Project, targetFile: Sou
   moveClass_FixProjectImports(c, project, targetFile);
   moveClass_addImportsForEachReferenceInClassDecl(c, project, targetFile);
 
-  // TODO: what with "export Apple from 'foo'"
+  // TODO: what with "export Apple from 'foo'" TODO: what if original file was exporting with other name: export class Apple{...} as OtherName ??
 
   // add class to targetFile, at the beggining nd then exec organizeImports so imports go to the top automatically. Heads up - we cannot add the classs to the end because "class used before its declaration error"
   targetFile.getImportDeclarations()[targetFile.getImportDeclarations.length - 1]
@@ -27,8 +29,10 @@ export function moveClass(c: ClassDeclaration, project: Project, targetFile: Sou
   // removes class from original file and organize import to remove unused ones
   c.remove()
 
-  // removes imports to referenced types by class decl in old file.
-  c.getSourceFile().organizeImports()  //TODO: add an import to c before organizeImport since other parts of the file could be reference c.
+  // removes imports to referenced types by class decl in old file. 
+  c.getSourceFile().organizeImports()  
+
+  //TODO: add an import to c before organizeImport since other parts of the file could be reference c.
   project.saveSync()
 }
 
@@ -45,22 +49,22 @@ function moveClass_addImportsForEachReferenceInClassDecl(c: ClassDeclaration, pr
  * @param targetFile 
  */
 function moveClass_FixProjectImports(c: ClassDeclaration, project: Project, targetFile: SourceFile) {
-
-  // 
-
   const importsReferencing = c.getReferencingNodes().filter(n =>
     n.getParent().getKind() === ts.SyntaxKind.ImportSpecifier)
     .map(n => n.getAncestors().find(p => p.getKind() == ts.SyntaxKind.ImportDeclaration)) as ImportDeclaration[]
 
-  // TODO:  ts.SyntaxKind.ImportEqualsDeclaration - contemplate that kind of node - i think it's import a = require('b')
+  // TODO:  ts.SyntaxKind.ImportEqualsDeclaration - contemplate that kind of node - i think it's import a = require('b') 
 
-  // TODO: contemplate import {x as y} from Y
+  // TODO: contemplate import {x as y} from Y 
+
   // TODO: contempoate import * as pp from Y
+
+  // TODO: contemplate internal classes (not classes declared inside functions for ex)
 
   importsReferencing.forEach(importDecl => {
 
     if (targetFile.getFilePath().toString() === importDecl.getSourceFile().getFilePath().toString()) {
-      // the target file imports c - we need to remove that import cause class since it will be on it now
+      // targetFile imports c - we need to remove that import cause class since it will be on it now
       targetFile.getImportDeclarations().forEach(i => {
         const importSpecifierToC = i.getNamedImports().find(ni => ni.getText() === c.getName())
         if (importSpecifierToC) {
@@ -72,8 +76,9 @@ function moveClass_FixProjectImports(c: ClassDeclaration, project: Project, targ
       })
     }
     else {
-      importDecl.setModuleSpecifier(targetFile.getRelativePathAsModuleSpecifierTo(importDecl.getSourceFile().getDirectory()))
+      importDecl.setModuleSpecifier(importDecl.getSourceFile().getRelativePathAsModuleSpecifierTo(targetFile.getDirectory()) + '/' + targetFile.getBaseNameWithoutExtension())
     }
+    importDecl.getSourceFile().organizeImports()
   })
 }
 
