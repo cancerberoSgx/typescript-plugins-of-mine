@@ -48,70 +48,36 @@ function addImportsForEachReferenceInClassDecl(c: ClassDeclaration, project: Pro
   // TODO: for each type referenced in class decl: import these in the targetFile too if they are not already (can't
   // repeat import). MUST!
 
-  const toImportInTarget: {symbolName: string, declarationName: string, file: SourceFile}[] = []
+  const toImportInTarget: {
+    symbolName: string, 
+    declarationName: string, 
+    originalImport: ImportDeclaration
+  }[] = []
 
   c.forEachDescendant((node: Node, stop: () => void)=>{
     if(node.getSymbol() && node.getSymbol().getName() && node.getType()  && node.getSymbol().getName()!=c.getName()) {
 
-      // const cc =      project.getTypeChecker().getTypeAtLocation(node)//.getBaseTypes()
-      // const valueDeclMaybe = cc.getSymbol() && cc.getSymbol().getValueDeclaration() &&  cc.getSymbol().getValueDeclaration() 
-      // if(valueDeclMaybe && (valueDeclMaybe as any).getName){
-      //   debugger
-      //   console.log((valueDeclMaybe as any).getName() + '#' + valueDeclMaybe.getSourceFile().getFilePath())
-      // }
-
-
-      // const valueDecl
-      // as ts.NamedDeclaration.getKindName().endsWith('Declaration').getName as declar
-      // if(valueDecl){
-      //   console.log(valueDecl.)
-//       }.getSourceFile().getFilePath()
-// "/home/sg/git/typescript-plugins-of-mine/typescript-api-tests/assets/sampleProject1_copy/src/model/fruit.ts"
-// cc.getSymbol().getValueDeclaration().getName()
-
-
-     //.compilerType.symbol.getDeclarations() 
-      
-      // let typename = node.getSymbol().getDeclaredType() && node.getSymbol().getDeclaredType().compilerType && node.getSymbol().getDeclaredType()&& node.getSymbol().getDeclaredType().getSymbol()&& node.getSymbol().getDeclaredType().getSymbol().getName()//.getTargetType() && node.getSymbol().getDeclaredType().getTargetType().getText()//.getName()//getText()
-      // debugger
-      // && node.getSymbol().getDeclaredType().compilerType.symbol.getDeclarations()[0] && node.getSymbol().getDeclaredType().compilerType.symbol.getDeclarations()
-
- 
-//  cc.getSymbol().getValueDeclaration().getName()
-
-//  cc.getSymbol().getValueDeclaration().getSourceFile().getFilePath()
-//  debugger;
-
       let declaredTypeDecls = node.getSymbol() && node.getSymbol().getDeclaredType() && node.getSymbol().getDeclaredType().compilerType && node.getSymbol().getDeclaredType() && node.getSymbol().getDeclaredType().getSymbol() && node.getSymbol().getDeclaredType().getSymbol().getDeclarations()
-
-      
 
       if(declaredTypeDecls && declaredTypeDecls.length){
         declaredTypeDecls
         .filter(d=>!d.getSourceFile().compilerNode.hasNoDefaultLib) // filter natives like Array from node_modules/typescript/lib/lib.es5.d.ts - 
         .forEach(d=>{
-          toImportInTarget.push({file: d.getSourceFile(), symbolName: node.getSymbol().getName(), declarationName: d.getSymbol().getName()})
+          toImportInTarget.push({
+            symbolName: node.getSymbol().getName(), 
+            declarationName: d.getSymbol().getName(),
+            originalImport: node.getSourceFile().getImportDeclaration(i=>!!i.getNamedImports().find(ni=>ni.getName()==node.getSymbol().getName()))
+          })
         })
-        // d.getSourceFile().getFilePath().replace('/home/sg/git/typescript-plugins-of-mine/typescript-api-tests/', '') + ' - '+node.getText() + ' - '+d.getSourceFile().compilerNode.hasNoDefaultLib).join(', ')
-        
-        // debugger
-//         declaredTypeDecls.map(d=>{
-//           debugger;
-//         })
       }
-
-
-      // console.log(
-      //   node.getSymbol() && node.getSymbol().getName()+' - '  +(node.getType() && node.getType().getText() + ' - '+ node.getType().getTargetType() + ' - '+
-      // (declaredTypeDecls && declaredTypeDecls.length && declaredTypeDecls.map(d=>d.getSourceFile().getFilePath().replace('/home/sg/git/typescript-plugins-of-mine/typescript-api-tests/', '') + ' - '+node.getText() + ' - '+d.getSourceFile().compilerNode.hasNoDefaultLib).join(', '))
-      // )
-  // )
-      
     }
    
   })
 
-  console.log(toImportInTarget.map(n=>n.symbolName+'-'+n.symbolName+'-'+n.file.getFilePath()));
+  console.log(toImportInTarget.map(n=>n.symbolName+'-'+n.symbolName+'-'+(n.originalImport &&n.originalImport.getText())))
+  
+  // in toImportInTarget we have all the imports that we must add in targetFile 
+  //TODO: do it
   
 }
 
