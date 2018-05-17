@@ -26,7 +26,7 @@ class A {
  * the description for a Vehicle
  * @param T type of the passengers
  */
-export class Vehicle<T> {
+export class Vehicle<T> { /* move-class /home/sg */
   constructor(iron: number) {
     this.n = 1
   }
@@ -54,4 +54,4 @@ export class Vehicle<T> {
       console.error();
     }
   }
-}kjasjhksadjkdsakj: ClassDeclaration- Vehicle+Vehicle
+}

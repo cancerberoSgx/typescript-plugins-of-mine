@@ -1,11 +1,11 @@
 {
-  "name": "typescript-api-tests",
+  "name": "typescript-api-tests-sample1",
   "version": "1.0.0",
   "description": "testing ts related techologies",
   "main": "dist/src/index.js",
   "typings": "dist/src/index.d.ts",
   "scripts": {
-    "test": "ts-node node_modules/jasmine/bin/jasmine",
+    "test": "echo 1",
     "doc": "echo 1",
     "test-js": "echo 1",
     "watch": "tsc --watch",
@@ -19,19 +19,10 @@
   "author": "Sebastian Gurin",
   "license": "MIT",
   "dependencies": {
-    "hrtime-now": "^1.0.1",
-    "shelljs": "^0.8.1",
-    "ts-simple-ast": "^11.2.0",
-    "@types/node": "^10.0.4",
-    "typescript": "^2.8.3",
-    "typescript-ast-util": "file:../typescript-ast-util",
-    "typescript-plugin-util": "file:../typescript-plugin-util"
+    "typescript": "^2.8.3"
   },
   "devDependencies": {
-    "@types/jasmine": "^2.8.7",
-    "jasmine": "^3.1.0",
-    "ts-node": "^6.0.3",
-    "typedoc": "^0.11.1"
+    "typescript": "^2.8.3"
   },
   "repository": "https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-ast-util"
 }

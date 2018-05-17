@@ -19,6 +19,23 @@
             "cwd": "${workspaceFolder}/typescript-ast-util/",
             "program": "${workspaceFolder}/typescript-ast-util/dist/spec/index.js",
             "sourceMaps": true
+        },
+
+        {
+            "type": "node",
+            "request": "launch",
+            "protocol": "inspector",
+            "name": "ts-ast-simple",
+            "args": [
+                "simpleAstTest1"
+            ],
+            "runtimeArgs": [
+                "--inspect",
+                "--debug-brk",
+            ],
+            "cwd": "${workspaceFolder}/typescript-api-tests/",
+            "program": "${workspaceFolder}/typescript-api-tests/dist/spec/simpleAstTest1.js",
+            "sourceMaps": true
         }
     ]
 }

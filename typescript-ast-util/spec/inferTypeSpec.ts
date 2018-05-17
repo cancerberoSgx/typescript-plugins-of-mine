@@ -15,6 +15,9 @@ const b = a+2
 const c = 1+4
 const d = f()
 const typedConst: Array<Date> = []
+class CCC{ /* move-class /home/sg */
+
+}
 `
     const { program, fileName, tsconfigPath } = compileSource(code1)
     const sourceFile = program.getSourceFile(fileName)
@@ -73,6 +76,17 @@ const typedConst: Array<Date> = []
     if (!k) {
       return fail()
     }
+
+
+    let ccc = findChild(sourceFile, c => c.kind == ts.SyntaxKind.ClassDeclaration && ((c as ts.ClassDeclaration).name as ts.Identifier).escapedText == 'CCC')
+    if (!ccc) {
+      return fail()
+    }
+    const fc = findChild
+    const slc =  ts.getSyntheticLeadingComments(ccc)
+    // c.getChildren().find(c=>c.c)
+const cmmm=    findChild(ccc, c=>c.kind===ts.SyntaxKind.SingleLineCommentTrivia)
+    debugger;
 
 //     const changes = getFileTextChanges(k, program)
 
