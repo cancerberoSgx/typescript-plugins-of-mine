@@ -1,3 +1,5 @@
+
+
 # typescript-plugin-subclasses-of
 
 A TypeScript Language Server Plugin that, given a class or a interface, prints the classes or interfaces that (directly or indirectly) are extending/implementing it. 
@@ -36,3 +38,7 @@ Make sure you have installed typescript in your project (`npm i --save-dev types
   "typescript.tsdk": "node_modules/typescript/lib"
 }
 ```
+
+# TODO
+
+ * (important) TODO: use getImplementationsOf(of) should be much faster in case of big hierarchies like EventEmitter
