@@ -1,6 +1,6 @@
 import { cat, cp, rm } from "shelljs";
 import Project, { ClassDeclaration } from "ts-simple-ast";
-import { moveClass } from "../src/moveDeclaration";
+import { moveDeclaration } from "../src/moveDeclaration";
 
 describe('playing with ts-simple-ast', () => {
 
@@ -11,7 +11,10 @@ describe('playing with ts-simple-ast', () => {
       tsConfigFilePath: "assets/sampleProject1_copy/tsconfig.json"
     });
     const apple = getTopLevelClassNamed(project, 'Apple')
-    moveClass(apple, project, project.getSourceFiles().find(sf => sf.getFilePath().includes('usingApples.ts')))
+    const targetSourceFile = project.getSourceFiles().find(sf => sf.getFilePath().includes('usingApples.ts'))
+    if(apple&&targetSourceFile){
+      moveDeclaration(apple, project, targetSourceFile)
+    }
   })
 
   it('target file should contain class and new imports related to its decl', () => {
@@ -25,7 +28,8 @@ describe('playing with ts-simple-ast', () => {
     expect(cat('assets/sampleProject1_copy/src/model/apple.ts').toString()).not.toContain('export class Apple extends Fruit implements Eatable, Alive {')
     expect(cat('assets/sampleProject1_copy/src/model/apple.ts').toString()).not.toContain('import { Fruit } from "./fruit";')
     expect(cat('assets/sampleProject1_copy/src/model/apple.ts').toString()).not.toContain('import { Eatable } from "./Eatable";')
-    expect(cat('assets/sampleProject1_copy/src/model/apple.ts').toString()).not.toContain('import { Alive } from "./Alive";')
+    // expect(cat('assets/sampleProject1_copy/src/model/apple.ts').toString()).not.toContain('import { Alive }
+    // from "./Alive";') // alive will be there because tree use it. 
 
 
   })
@@ -43,13 +47,15 @@ describe('playing with ts-simple-ast', () => {
 
 
 
-function getTopLevelClassNamed(project: Project, name: string): ClassDeclaration {
+function getTopLevelClassNamed(project: Project, name: string): ClassDeclaration|undefined {
   let classFound
   project.getSourceFiles().some(p => {
     classFound = p.getClass(name)
-    if (classFound) {
-      return true
-    }
+    return !!classFound
+    // if (classFound) {
+    //   return true
+    // }
+    // r
   })
   return classFound
 }
