@@ -1,15 +1,21 @@
-import Project, { ClassDeclaration, EnumDeclaration, FunctionDeclaration, ImportDeclaration, InterfaceDeclaration, Node, SourceFile, VariableDeclaration, ExportableNodeStructure } from "ts-simple-ast";
+import Project, { ClassDeclaration, EnumDeclaration, FunctionDeclaration, ImportDeclaration, InterfaceDeclaration, Node, SourceFile, VariableDeclaration, ExportableNodeStructure, ImportDeclarationStructure } from "ts-simple-ast";
 import * as ts from 'typescript';
-
-export type Movable = ClassDeclaration | FunctionDeclaration | InterfaceDeclaration | VariableDeclaration | EnumDeclaration
+/**meaning that it moved by this refactor */
+export type MovableDeclaration = ClassDeclaration | FunctionDeclaration | InterfaceDeclaration | VariableDeclaration | EnumDeclaration
 /**
- * TODO: MOST: IMPORTANT dont reduce this only to classes - can we move other decls like functions / interfaces, etc? -
- * I think so! change name to moveDeclaration !
  *
- * Implement the move refactor, this is not just moving the class to given file. The resulting project state should not
- * have errors. Among other things, beside just moving the class to another file, all all project's import declarations
- * are updated to point the new class location. lso imports to referenced types in class will be added / removed to
- * files that require it. The objective is refactor operation equivalent to those existent in Java/C# IDEs. 
+ * Moves a top level declaration to another file.
+ * 
+ * 
+ * **Very WIP dont use it in production yet!**
+ * 
+ * The resulting project state should not have errors. We do two important things: 
+ * 
+ * 1) fix all imports pointing to target declaration in all files of the project so they point now to the new
+ *    location (target file)
+ * 2) all nodes referenced inside the target declaration must be now imported in the target file (so the
+ *    declaration can still see them)
+ * 
  *
  * See all todo comments along the code to  get idea of current state / issue
  *
@@ -17,115 +23,116 @@ export type Movable = ClassDeclaration | FunctionDeclaration | InterfaceDeclarat
  * @param project project in which to do the refactor
  * @param targetFile the target file, inside the project where to move the class
  */
-export function moveDeclaration(c: Movable, project: Project, targetFile: SourceFile) {
+export function moveDeclaration(c: MovableDeclaration, project: Project, targetFile: SourceFile) {
 
+  let modifiedFiles: { [key: string]: SourceFile } = {}
   if ((c as ExportableNodeStructure).isExported) {
     //if c is not exported then we dont need to perform fixProjectImports
-    fixProjectImports(c, project, targetFile);
+    modifiedFiles = fixProjectImports(c, project, targetFile);
   }
-  addImportsForEachReferenceInClassDecl(c, project, targetFile);
+  const originalFile = c.getSourceFile()
 
+  // TODO: support / test exports with custom names like :  "export $DECLARATION as OtherName ""
 
-  // TODO: what with "export Apple from 'foo'" TODO: what if original file was exporting with other name: 
-  // export class Apple{...} as OtherName ??
+  // write declaration at the beggining of taret file making sure it's exported
+  let declarationText = c.getText()
+  declarationText.trim().startsWith('export') ? declarationText : 'export ' + declarationText
+  declarationText = declarationText + '\n'
+  targetFile.addStatements(declarationText)
+  // targetFile.insertText(targetFile.getStart(), declarationText)
+  targetFile.saveSync()
+  project.saveSync()
 
-  // add class to targetFile, at the beggining nd then exec organizeImports so imports go to the top automatically.
-  // Heads up - we cannot add the classs to the end because "class used before its declaration error"
-  targetFile.getImportDeclarations()[targetFile.getImportDeclarations.length - 1]
-  let  declarationText = c.getText()
-  declarationText.trim().startsWith('export') ? declarationText : 'export '+declarationText
-  // we make sure declaration is exported in target file
-  targetFile.insertText(targetFile.getStart(), declarationText + '\n')
+  // removes class from original file
+  c.remove()
+  project.saveSync()
 
-  c.remove()// removes class from original file and 
-  targetFile.getSourceFile().organizeImports() // organize import to remove unused ones
- 
-  c.getSourceFile().organizeImports() // removes imports to referenced types by class decl in old file. 
+  //add necessary imports in target file so declaration has its dependencies: 
+  addDeclarationDependencyImportsToTargetFile(originalFile, project, targetFile)
+
+  project.saveSync()
+  // now we call organizeImports on all required files, target, original and all the ones where we added imports
+  //organize imports in target file (clean unused/duplicated)
+  targetFile.organizeImports()
+
+  project.saveSync()
+  originalFile.organizeImports()  //remove unused imports
+
+  project.saveSync()
+  Object.values(modifiedFiles).forEach(file => {
+    //   file.saveSync()
+    file.organizeImports()
+  });
 
   project.saveSync()
 }
 
 
-  //TODO: maybe there is a very easy way of accomplih this and it's just copy&paste all imports from source
-  //file to dest file and then just organize imports.!!!
-function addImportsForEachReferenceInClassDecl(c: Movable, project: Project, targetFile: SourceFile) {
+/** 
+ * For each reference inside target declaration we will need to import it in targetFile. 
+ * 
+ * TODO: we only consider imported declaration dependencies. but not dependencies in original file. 
+ * Two alternatives:
+ * we can move them too or we can export them and import them in the targe file. (configurable?)
+  */
+function addDeclarationDependencyImportsToTargetFile(originalFile: SourceFile, project: Project, targetFile: SourceFile) {
+  const imports: ImportDeclaration[] = []
+  const importStructures: ImportDeclarationStructure[] = []
+  originalFile.forEachDescendant(d => {
+    if (d.getKind() === ts.SyntaxKind.ImportDeclaration) {
 
-  // TODO: support Apple{prop1: Array<Array<ReferencedType>>}
-  // TODO: for each type referenced in class decl: import these in the targetFile too if they are not already (can't
-  // repeat import). MUST!
+      const importDecl = d as ImportDeclaration
 
-  const imports = c.getSourceFile().getChildrenOfKind(ts.SyntaxKind.ImportDeclaration)
- targetFile.insertText(targetFile.getStart(), c.getSourceFile().getChildrenOfKind(ts.SyntaxKind.ImportDeclaration).map(i=>i.getText()).join('\n'))
- targetFile.organizeImports()
+      let moduleSpecifierSourceFile
 
-  // const toImportInTarget: {
-  //   symbolName: string,
-  //   declarationName: string | undefined,
-  //   originalImport: ImportDeclaration | undefined,
-  //   originalFile: SourceFile,
-  //   node: Node,
-  //   typeDeclaration: Node
-  // }[] = []
+      // importDecl.setModuleSpecifier(
+      //   targetFile.getRelativePathAsModuleSpecifierTo(importDecl.getSourceFile().getDirectory()) + '/' + ((moduleSpecifierSourceFile = importDecl.getModuleSpecifierSourceFile()) && moduleSpecifierSourceFile.getBaseNameWithoutExtension()))
 
-  // c.forEachDescendant((node: Node, stop: () => void) => {
-  //   const nodeSymbol = node.getSymbol()
-  //   let typeSymbol
-  //   if (nodeSymbol && nodeSymbol.getName() && nodeSymbol.getName() !== c.getName()) {
+      // importDecl.getSourceFile().saveSync()
 
-  //     let declaredTypeDecls = nodeSymbol && nodeSymbol.getDeclaredType() &&
-  //       (typeSymbol = nodeSymbol.getDeclaredType().getSymbol()) && typeSymbol.getDeclarations()
+      // imports.push(importDecl)
+      // let moduleSpecifierSourceFile
+      // const moduleSpecifier = targetFile.getRelativePathAsModuleSpecifierTo(importDecl.getSourceFile().getDirectory()) + '/' + ((moduleSpecifierSourceFile = importDecl.getModuleSpecifierSourceFile()) && moduleSpecifierSourceFile.getBaseNameWithoutExtension())
 
-  //     if (declaredTypeDecls && declaredTypeDecls.length) {
-  //       declaredTypeDecls
-  //         .filter(d => !d.getSourceFile().compilerNode.hasNoDefaultLib) // filter natives like Array from node_modules/typescript/lib/lib.es5.d.ts - 
-  //         .forEach(d => {
-  //           //TODO: what happen if there are more than one namedimports ? is that possible ? currently we take first one
-  //           const originalImport = node.getSourceFile()
-  //             .getImportDeclaration(i => !!i.getNamedImports().find(ni => ni.getName() == nodeSymbol.getName()))
 
-  //           let declSyntaxList
-  //           let declSymbol
+      // console.log(importDecl.getText(), moduleSpecifier)
+      const importDeclStructure = node2Structure(importDecl)
+      importDeclStructure.moduleSpecifier = targetFile.getRelativePathAsModuleSpecifierTo(importDecl.getSourceFile().getDirectory()) + '/' + ((moduleSpecifierSourceFile = importDecl.getModuleSpecifierSourceFile()) && moduleSpecifierSourceFile.getBaseNameWithoutExtension())
+      importStructures.push(importDeclStructure)
 
-  //           // we shoulnd' worry about non exported declarations : if not exported then nobody imports them: 
-  //           // // if the type is not imported and and is not exported then we need to export it automatically. We cannot test
-  //           // // this with apple example - test moving a non exported declaration. 
-  //           //     if(!originalImport && !(d as ExportableNodeStructure).isExported){
-  //           //       (d as any).setIsExported && (d as any).setIsExported(true) // TODO: got tired of types so ugly casting here temporarily
-  //           //     }
-  //           toImportInTarget.push({
-  //             symbolName: nodeSymbol.getName(),
-  //             declarationName: (declSymbol = d.getSymbol()) && declSymbol.getName(),
-  //             originalImport,
-  //             node, typeDeclaration: d,
-  //             originalFile: c.getSourceFile()
-  //           })
-  //         })
-  //     }
-  //   }
+      // console.log( '*****', targetFile.getRelativePathAsModuleSpecifierTo(importDecl.getSourceFile().getDirectory()) + '/' + ((  moduleSpecifierSourceFile    =importDecl.getModuleSpecifierSourceFile()) && moduleSpecifierSourceFile.getBaseNameWithoutExtension()), '*****')
+      // console.log( '*****', importDecl.getSourceFile().getRelativePathAsModuleSpecifierTo(targetFile.getDirectory()) + '/' + importDecl.getSourceFile().getBaseNameWithoutExtension(), '*****')
+      // targetFile.getRelativePathAsModuleSpecifierTo(importDecl.getSourceFile().getDirectory()) + '/' + targetFile.getBaseNameWithoutExtension())
+
+    }
+  })
+  // project.saveSync()
+  // targetFile.saveSync()
+  // targetFile.insertText(targetFile.getStart(), imports.map(i => i.print()).join(';'))
+
+  // imports.forEach(i => {
+  //   targetFile.addStatements(i.print())
+  //   targetFile.saveSync()
   // })
-
-  // // console.log(toImportInTarget.map(n=>n.typeDeclaration.getKindName()+'-'+n.symbolName+'-'+n.declarationName+'-'+(n.originalImport &&n.originalImport.getText())))
-
-  // // At this point, we are ready to add the imports in target file in toImportInTarget we have all the imports that we must add in targetFile. ready to add 
-
-  // toImportInTarget.forEach(toImport => {
-
-
-  // })
-
-
-  //TODO: do it
-
+  // project.saveSync()
+  //i.getText()).join('\n'))
+  importStructures.forEach(is => {
+    targetFile.addImportDeclarations(importStructures)
+  })
 }
 
+function node2Structure(importDecl: ImportDeclaration): ImportDeclarationStructure {
+  let defImport, namedImport, namespaceImport, moduleSpecifier
+  return { namedImports: (namedImport = importDecl.getNamedImports()) && namedImport.map(ni => ni.getText()), defaultImport: (defImport = importDecl.getDefaultImport()) && defImport.getText(), namespaceImport: (namespaceImport = importDecl.getNamespaceImport()) && namespaceImport.getText(), moduleSpecifier: importDecl.getModuleSpecifier().getText() }//.toString()}//(moduleSpecifier=importDecl.getModuleSpecifier())&&moduleSpecifier}
+}
 /**
- * Move class refactor helper that, for each import decl in the entire project that import C, corrects the module
- * specifier (file path)
+ * Search where target declaration is being imported, in the entire project, and update the imports
+ * so it points to the new location (targetFile)
  * @param c
  * @param project 
  * @param targetFile 
  */
-function fixProjectImports(c: Movable, project: Project, targetFile: SourceFile) {
+function fixProjectImports(c: MovableDeclaration, project: Project, targetFile: SourceFile): { [key: string]: SourceFile } {
   let parent
   const importsReferencing = c.getReferencingNodes().filter(n =>
     (parent = n.getParent()) && parent.getKind() === ts.SyntaxKind.ImportSpecifier)
@@ -140,6 +147,7 @@ function fixProjectImports(c: Movable, project: Project, targetFile: SourceFile)
 
   // TODO: contemplate internal classes (not classes declared inside functions for ex)
 
+  const importsFiles: { [key: string]: SourceFile } = {}
   importsReferencing.forEach(importDecl => {
 
     if (targetFile.getFilePath().toString() === importDecl.getSourceFile().getFilePath().toString()) {
@@ -148,18 +156,110 @@ function fixProjectImports(c: Movable, project: Project, targetFile: SourceFile)
         const importSpecifierToC = i.getNamedImports().find(ni => ni.getText() === c.getName())
         if (importSpecifierToC) {
           importSpecifierToC.remove()
+          // importSpecifierToC.getSourceFile().saveSync()
         }
         if (i.getNamedImports().length === 0) {
           i.remove()
+          // i.getSourceFile().saveSync()
         }
       })
     }
     else {
       importDecl.setModuleSpecifier(importDecl.getSourceFile().getRelativePathAsModuleSpecifierTo(targetFile.getDirectory()) + '/' + targetFile.getBaseNameWithoutExtension())
+      // importDecl.getSourceFile().saveSync()
     }
-    importDecl.getSourceFile().organizeImports()
-  })
+    importsFiles[importDecl.getSourceFile().getFilePath()] = importDecl.getSourceFile()
+  });
+  return importsFiles
 }
 
 
 
+
+
+
+
+
+
+
+// //TODO: maybe there is a very easy way of accomplih this and it's just copy&paste all imports from source
+// //file to dest file and then just organize imports.!!!
+// function addImportsForEachReferenceInClassDecl(c: MovableDeclaration, project: Project, targetFile: SourceFile) {
+
+//   // TODO: support Apple{prop1: Array<Array<ReferencedType>>}
+//   // TODO: for each type referenced in class decl: import these in the targetFile too if they are not already (can't
+//   // repeat import). MUST!
+
+//   // debugger;
+//   const imports: ImportDeclaration[] = []
+//   c.getSourceFile().forEachDescendant(d=>{
+//     if(d.getKind()===ts.SyntaxKind.ImportDeclaration){
+//       imports.push(d as ImportDeclaration)
+//     }
+//   })
+
+
+//   // const imports = c.getSourceFile().getChildrenOfKind(ts.SyntaxKind.ImportDeclaration)
+//   // const originalFileImports = c.getSourceFile().getChildrenOfKind(ts.SyntaxKind.ImportDeclaration)
+//   targetFile.insertText(targetFile.getStart(), imports.map(i => i.getText()).join('\n'))
+//   // targetFile.organizeImports()
+
+//   // const toImportInTarget: {
+//   //   symbolName: string,
+//   //   declarationName: string | undefined,
+//   //   originalImport: ImportDeclaration | undefined,
+//   //   originalFile: SourceFile,
+//   //   node: Node,
+//   //   typeDeclaration: Node
+//   // }[] = []
+
+//   // c.forEachDescendant((node: Node, stop: () => void) => {
+//   //   const nodeSymbol = node.getSymbol()
+//   //   let typeSymbol
+//   //   if (nodeSymbol && nodeSymbol.getName() && nodeSymbol.getName() !== c.getName()) {
+
+//   //     let declaredTypeDecls = nodeSymbol && nodeSymbol.getDeclaredType() &&
+//   //       (typeSymbol = nodeSymbol.getDeclaredType().getSymbol()) && typeSymbol.getDeclarations()
+
+//   //     if (declaredTypeDecls && declaredTypeDecls.length) {
+//   //       declaredTypeDecls
+//   //         .filter(d => !d.getSourceFile().compilerNode.hasNoDefaultLib) // filter natives like Array from node_modules/typescript/lib/lib.es5.d.ts - 
+//   //         .forEach(d => {
+//   //           //TODO: what happen if there are more than one namedimports ? is that possible ? currently we take first one
+//   //           const originalImport = node.getSourceFile()
+//   //             .getImportDeclaration(i => !!i.getNamedImports().find(ni => ni.getName() == nodeSymbol.getName()))
+
+//   //           let declSyntaxList
+//   //           let declSymbol
+
+//   //           // we shoulnd' worry about non exported declarations : if not exported then nobody imports them: 
+//   //           // // if the type is not imported and and is not exported then we need to export it automatically. We cannot test
+//   //           // // this with apple example - test moving a non exported declaration. 
+//   //           //     if(!originalImport && !(d as ExportableNodeStructure).isExported){
+//   //           //       (d as any).setIsExported && (d as any).setIsExported(true) // TODO: got tired of types so ugly casting here temporarily
+//   //           //     }
+//   //           toImportInTarget.push({
+//   //             symbolName: nodeSymbol.getName(),
+//   //             declarationName: (declSymbol = d.getSymbol()) && declSymbol.getName(),
+//   //             originalImport,
+//   //             node, typeDeclaration: d,
+//   //             originalFile: c.getSourceFile()
+//   //           })
+//   //         })
+//   //     }
+//   //   }
+//   // })
+
+//   // // console.log(toImportInTarget.map(n=>n.typeDeclaration.getKindName()+'-'+n.symbolName+'-'+n.declarationName+'-'+(n.originalImport &&n.originalImport.getText())))
+
+//   // // At this point, we are ready to add the imports in target file in toImportInTarget we have all the imports that we must add in targetFile. ready to add 
+
+//   // toImportInTarget.forEach(toImport => {
+
+
+//   // })
+
+
+//   //TODO: do it
+
+// }
