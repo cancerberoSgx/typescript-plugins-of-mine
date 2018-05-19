@@ -17,7 +17,7 @@ let ts: typeof ts_module
 let info: ts_module.server.PluginCreateInfo
 
 const pluginDefinition: LanguageServiceOptionals = {
-  getApplicableRefactors, getEditsForRefactor
+  getApplicableRefactors, getEditsForRefactor, getCompletionsAtPosition
 }
 
 export = getPluginCreate(pluginDefinition, (modules, anInfo) => {
@@ -89,9 +89,7 @@ function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSetti
 
       dest = dest.endsWith('.ts') ? dest : join(dest, basename(fileName))
 
-      if(selectedAction.action === 'moveThisFolderTo'){
-        dest = join(dest, '..')
-      }
+      dest = selectedAction.action === 'moveThisFolderTo' ? join(dest, '..') : dest
       const sourceFileName = selectedAction.action === 'moveThisFolderTo' ? join(fileName, '..') : fileName
 
       info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor ${selectedAction.action} moving ${fileName} to ${dest}`)
@@ -109,7 +107,7 @@ function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSetti
     //   //not implemented yet
     // }
   } catch (error) {
-    info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor error  ${selectedAction.action} ${error + '' + ' - ' + error.stack}`)
+    info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor error  ${selectedAction.action} ${error + ' - ' + error.stack}`)
     return refactors
   }
   info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor ${selectedAction.action} took  ${(now() - t0) / 1000000}`)
@@ -178,6 +176,30 @@ function createSimpleASTProject(project: ts_module.server.Project): Project {
     tsConfigFilePath: getConfigFilePath(info.project)
   });
 }
-// const project = new Project({
-//   tsConfigFilePath: getConfigFilePath(info.project)
-// });
+
+
+
+
+
+function getCompletionsAtPosition (fileName:string, position: number, options: ts_module.GetCompletionsAtPositionOptions | undefined): ts_module.CompletionInfo {
+  
+  const prior = info.languageService.getCompletionsAtPosition(fileName, position, options);
+
+  // if(position - pluginConfig.prefix.length < 0){
+  //   return prior
+  // } 
+  // const sourceFile = info.project.getSourceFile(fileName as ts.Path)
+
+  // const text = sourceFile.getText()
+  // let lastNewLineIndex = text.lastIndexOf('\n', position )
+  // lastNewLineIndex = lastNewLineIndex===-1 ? 0 : lastNewLineIndex
+
+  prior.entries.push({
+    name: 'refactor.moveThisFileTo', 
+    kind: ts_module.ScriptElementKind.unknown, 
+    kindModifiers: ts_module.ScriptElementKindModifier.none, 
+    sortText: 'refactor.moveThisFileTo',
+    insertText: "// &%&% moveThisFileTo('./newName.ts')"
+  })
+  return prior;
+};
