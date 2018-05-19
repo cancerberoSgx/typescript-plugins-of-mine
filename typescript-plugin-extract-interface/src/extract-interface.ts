@@ -1,5 +1,5 @@
 import * as ts from 'typescript/lib/tsserverlibrary';
-import { ScriptTarget } from 'typescript/lib/tsserverlibrary';
+// import { ScriptTarget } from 'typescript/lib/tsserverlibrary';
 
 function printNode(signature: ts.TypeElement, originalNode: ts.ClassElement): string {
   const printer = ts.createPrinter({
@@ -20,7 +20,7 @@ function printNode(signature: ts.TypeElement, originalNode: ts.ClassElement): st
   if (nodeChildren && nodeChildren.length && nodeChildren[0].kind === ts.SyntaxKind.JSDocComment) {
     jsdocPrefix += nodeChildren[0].getText()
   }
-  const result = printer.printNode(ts.EmitHint.Unspecified, signature, ts.createSourceFile('temp.ts', '', ScriptTarget.Latest));
+  const result = printer.printNode(ts.EmitHint.Unspecified, signature, ts.createSourceFile('temp.ts', '', ts.ScriptTarget.Latest));
 
   return jsdocPrefix + '\n' + result
 }

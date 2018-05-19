@@ -43,7 +43,7 @@ function getApplicableRefactors(fileName: string, positionOrRange: number | ts.T
     target = node
   } else {
     const predicate = function isDeclarationWithNoDeclaredType(node: ts.Node, program: ts.Program): boolean {
-      return isDeclaration(node) && !hasDeclaredType(node, program) // declaration without a type declaration 
+      return node && isDeclaration(node) && !hasDeclaredType(node, program) // declaration without a type declaration 
       /*hasName(node) && */
     }
     // target = predicate(node, program) && node

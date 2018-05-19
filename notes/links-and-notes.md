@@ -8,7 +8,6 @@
 
  
 ## useful links
-
  * https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API
  * https://github.com/Microsoft/TypeScript/wiki/Writing-a-Language-Service-Plugin
  * https://github.com/Microsoft/TypeScript/tree/master/src/services/codefixes
@@ -16,12 +15,17 @@
 
 
 ### Related tools 
-
+ * https://code.visualstudio.com/docs/extensionAPI/extension-points#_contributestypescriptserverplugins
  * https://dsherret.github.io/ts-simple-ast/  <<--- this looks good for refactoring
  * https://github.com/wessberg/TypescriptASTUtil
  * https://github.com/wessberg/CodeAnalyzer
 
- 
+## Language server protocol
+
+
+https://github.com/Microsoft/language-server-protocol/blob/gh-pages/specification.md
+https://github.com/theia-ide/typescript-language-server
+
 ## Some helpful notes
 
  * edit SourceFile and worth with TextChangeRange: spec/updateSourceFileSpec.ts

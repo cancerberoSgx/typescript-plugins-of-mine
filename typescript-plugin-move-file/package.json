@@ -1,0 +1,27 @@
+{
+  "name": "typescript-plugin-move-file",
+  "version": "0.0.1",
+  "description": "typescript plugin that let the user move files and folders fixing all references (refactor)",
+  "main": "dist/src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 0",
+    "build": "tsc",
+    "doc": "exit 0"
+  },
+  "license": "MIT",
+  "keywords": [
+    "Language Server Plugin",
+    "typescript",
+    "refactor",
+    "editor",
+    "IDE"
+  ],
+  "dependencies": {
+    "hrtime-now": "^1.0.1",
+    "ts-simple-ast": "^11.2.0",
+    "typescript": "^2.8.3",
+    "typescript-plugin-util": "../typescript-plugin-util"
+  },
+  "devDependencies": {},
+  "repository": "https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-move-file"
+}

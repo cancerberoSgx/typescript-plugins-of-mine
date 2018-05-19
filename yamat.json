@@ -38,5 +38,9 @@
   {
     "name": "typescript-api-tests",
     "path": "typescript-api-tests"
+  },
+  {
+    "name": "typescript-plugin-move-file",
+    "path": "typescript-plugin-move-file"
   }
 ]

@@ -1,16 +1,18 @@
 // import * as ts from 'typescript'
 import * as ts_module from 'typescript/lib/tsserverlibrary'
+import { LanguageService } from 'typescript';
+import { LanguageServiceOptionals } from './LanguageServiceOptionals';
 
 
 export function initReturnTypeSignature(modules: { typescript: typeof ts_module }): { create: (info: ts.server.PluginCreateInfo) => ts.LanguageService } {
   return undefined as any
 }
 /**
- * SSreates the `create` function - handles only that part
+ * SCreates the `create` function - handles only that part
  * @param languageService Object like LanguageService but with optional keys. Basically your plugin implementation. The type should be LanguageService, but can't because properties are all optional
  * @param onCreate callback when `create` is called
  */
-export function pluginCreateCreate(languageService: any,
+export function pluginCreateCreate(languageService: LanguageServiceOptionals,
   onCreate: (info: ts.server.PluginCreateInfo) => undefined)
   : (info: ts.server.PluginCreateInfo) => ts.LanguageService {
 
@@ -36,7 +38,7 @@ export function pluginCreateCreate(languageService: any,
  * @param onCreate callback when `create` is called
  * @return the {create} object ready to be exported as it is
  */
-export function pluginCreateInit(languageService: any,
+export function pluginCreateInit(languageService: LanguageServiceOptionals,
   onInit: (modules: { typescript: typeof ts_module }) => undefined,
   onCreate: (info: ts.server.PluginCreateInfo) => undefined)
   : (typeof initReturnTypeSignature) {
@@ -67,7 +69,7 @@ export function pluginCreateInit(languageService: any,
  * @param cb called when both init and create are done. your plugin was installed successfully
  * @return the {create} object ready to be exported as it is
  */
-export  function getPluginCreate(languageService:any, cb: (modules: { typescript: typeof ts_module }, info: ts.server.PluginCreateInfo)=>void):(typeof initReturnTypeSignature){
+export  function getPluginCreate(languageService:LanguageServiceOptionals, cb: (modules: { typescript: typeof ts_module }, info: ts.server.PluginCreateInfo)=>void):(typeof initReturnTypeSignature){
   let modules: { typescript: typeof ts_module }
   return  pluginCreateInit(languageService, modules_=>{
       modules = modules_
@@ -78,6 +80,8 @@ export  function getPluginCreate(languageService:any, cb: (modules: { typescript
       return undefined
     })
 }
+
+
 
 
 

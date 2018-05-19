@@ -18,7 +18,6 @@
   "license": "MIT",
   "dependencies": {
     "hrtime-now": "^1.0.1",
-    "node-pty": "^0.7.4",
     "shelljs": "^0.8.2",
     "typescript": "^2.8.3",
     "typescript-ast-util": "file:../typescript-ast-util"
