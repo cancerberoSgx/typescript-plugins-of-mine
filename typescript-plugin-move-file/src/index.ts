@@ -5,6 +5,7 @@ import Project from 'ts-simple-ast';
 import { LanguageServiceOptionals, getPluginCreate } from 'typescript-plugin-util';
 // import { findChildContainingRange, positionOrRangeToRange, isDeclaration, hasDeclaredType, positionOrRangeToNumber, getKindName } from 'typescript-ast-util';
 import * as ts_module from 'typescript/lib/tsserverlibrary';
+import { GUINoMoreAction, GUINoMoreConfig, GUINoMore } from './guiNoMore';
 
 
 
@@ -12,8 +13,8 @@ import * as ts_module from 'typescript/lib/tsserverlibrary';
 
 const PLUGIN_NAME = 'typescript-plugin-move-file'
 const REFACTOR_ACTION_NAME = `${PLUGIN_NAME}-refactor-action`
-
 let ts: typeof ts_module
+
 let info: ts_module.server.PluginCreateInfo
 
 const pluginDefinition: LanguageServiceOptionals = {
@@ -26,7 +27,29 @@ export = getPluginCreate(pluginDefinition, (modules, anInfo) => {
   info.project.projectService.logger.info(`${PLUGIN_NAME} created`)
 })
 
-let selectedAction: Action
+
+
+
+const guiNoMore = new GUINoMore({
+  prefix: '&%&%',
+  actions: [
+    {
+      name: 'moveThisFileTo',
+      args: ['dest'],
+      print: (action)=>`Move this file to ${action.args.dest}`,
+      snippet: 'moveThisFileTo(\'../newName.ts\')'
+    },
+    {
+      name: 'moveThisFolderTo',
+      args: ['dest'],
+      print: (action)=>`Move this folder to ${action.args.dest}`,
+      snippet: 'moveThisFileTo(\'../newName\')'
+    }
+  ]
+})
+
+let selectedAction: GUINoMoreAction
+
 function getApplicableRefactors(fileName: string, positionOrRange: number | ts.TextRange)
   : ts.ApplicableRefactorInfo[] {
 
@@ -39,14 +62,14 @@ function getApplicableRefactors(fileName: string, positionOrRange: number | ts.T
     return refactors
   }
 
-  const actions: Action[] = findActions(sourceFile, pluginConfig)
+  const actions = guiNoMore.findActions(sourceFile.getText())
 
   if (!actions || actions.length === 0) {
     return refactors
   }
   selectedAction = actions[0]
 
-  const refactorActions = [{ name: REFACTOR_ACTION_NAME + '-' + selectedAction.action, description: printAction(selectedAction) }]
+  const refactorActions = [{ name: REFACTOR_ACTION_NAME + '-' + selectedAction.name, description: selectedAction.print(selectedAction) }]
   // if(lastMove){
   //   refactorActions.push({ name: REFACTOR_ACTION_NAME+'-undoLastMove', description: printAction(selectedAction) })
   // }
@@ -81,90 +104,42 @@ function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSetti
   try {
     // TODO: could we maintain a simple-ast Project in a variable and next time just refresh it so is faster ? 
     const simpleProject = createSimpleASTProject(info.project)
-    if ((selectedAction.action === 'moveThisFileTo' || selectedAction.action === 'moveThisFolderTo') && selectedAction.args.dest) {
+    if ((selectedAction.name === 'moveThisFileTo' || selectedAction.name === 'moveThisFolderTo') && selectedAction.args.dest) {
 
       // make it absolute
       let dest: string = isAbsolute(selectedAction.args.dest) ? selectedAction.args.dest :
         join(selectedAction.args.dest.endsWith('.ts') ? dirname(fileName) : fileName, 
-        selectedAction.action === 'moveThisFolderTo' ? '..' : '.', 
+        selectedAction.name === 'moveThisFolderTo' ? '..' : '.', 
         selectedAction.args.dest)
 
       dest = dest.endsWith('.ts') ? dest : join(dest, basename(fileName))
 
-      dest = selectedAction.action === 'moveThisFolderTo' ? join(dest, '..') : dest
-      const sourceFileName = selectedAction.action === 'moveThisFolderTo' ? join(fileName, '..') : fileName
+      dest = selectedAction.name === 'moveThisFolderTo' ? join(dest, '..') : dest
+      const sourceFileName = selectedAction.name === 'moveThisFolderTo' ? join(fileName, '..') : fileName
 
-      info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor ${selectedAction.action} moving ${fileName} to ${dest}`)
+      info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor ${selectedAction.name} moving ${fileName} to ${dest}`)
       
-      if (selectedAction.action === 'moveThisFileTo') {
+      if (selectedAction.name === 'moveThisFileTo') {
         simpleProject.getSourceFileOrThrow(sourceFileName).moveImmediatelySync(dest)
       }
-      else if (selectedAction.action === 'moveThisFolderTo') {
+      else if (selectedAction.name === 'moveThisFolderTo') {
         simpleProject.getDirectoryOrThrow(sourceFileName).moveImmediatelySync(dest)
       }
       simpleProject.saveSync()
       // lastMove = { action: 'undoLastMove', args: { dest, source: fileName } }
     }
-    // else if (selectedAction.action === 'undoLastMove' && lastMove) {
+    // else if (selectedAction.name === 'undoLastMove' && lastMove) {
     //   //not implemented yet
     // }
   } catch (error) {
-    info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor error  ${selectedAction.action} ${error + ' - ' + error.stack}`)
+    info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor error  ${selectedAction.name} ${error + ' - ' + error.stack}`)
     return refactors
   }
-  info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor ${selectedAction.action} took  ${(now() - t0) / 1000000}`)
+  info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor ${selectedAction.name} took  ${(now() - t0) / 1000000}`)
 }
 
 
 
-
-function findActions(sourceFile: ts_module.SourceFile, config: Config): Action[] {
-  const actions: Action[] = []
-  const fileStr = sourceFile.getText()
-  const lines = fileStr.split('\n') //TODO: use new line format in tsconfig
-  lines.forEach(line => {
-    const i = line.indexOf(config.prefix)
-    if (i === -1) {
-      return
-    }
-    const userCall = line.substr(i + config.prefix.length, line.length)
-    try {
-      const result = eval(config.allActionsEvalPrefix + ';' + userCall)
-      if (result && typeof result === 'object') {
-        actions.push(result)
-      }
-    } catch (ex) {
-    }
-  })
-  return actions
-}
-
-function printAction(action: Action): string {
-  if (action.action === 'moveThisFileTo') {
-    return 'Move this file to ' + action.args.dest
-  }
-  else {
-    return 'Move this folder to ' + action.args.dest
-  }
-}
-
-const pluginConfig = {
-  prefix: '&%&%', // TODO: from info.config
-  allActionsEvalPrefix: `
-function moveThisFileTo(path){return {action: 'moveThisFileTo', args: {dest: path} }};
-function moveThisFolderTo(path){return {action: 'moveThisFolderTo', args: {dest: path} }};
-function undoLastMove(){return {action: 'undoLastMove', args: {} }};
-`
-}
-
-interface Config {
-  prefix: string,
-  allActionsEvalPrefix: string
-}
-interface Action {
-  action: string
-  args: { [key: string]: string }
-}
 
 
 /**dirty way of getting path to config file of given program */
@@ -186,13 +161,59 @@ function createSimpleASTProject(project: ts_module.server.Project): Project {
 function getCompletionsAtPosition (fileName:string, position: number, options: ts_module.GetCompletionsAtPositionOptions | undefined): ts_module.CompletionInfo {
   
   const prior = info.languageService.getCompletionsAtPosition(fileName, position, options);
+
+  prior.entries = prior.entries.concat(guiNoMore.getCompletionsAtPosition(fileName,position, options))
   
-  prior.entries.push({
-    name: 'refactor.moveThisFileTo', 
-    kind: ts_module.ScriptElementKind.unknown, 
-    kindModifiers: ts_module.ScriptElementKindModifier.none, 
-    sortText: 'refactor.moveThisFileTo',
-    insertText: "// &%&% moveThisFileTo('./newName.ts')"
-  })
   return prior;
 };
+
+
+
+// function printAction(action: GUINoMoreAction): string {
+//   if (action.name === 'moveThisFileTo') {
+//     return 'Move this file to ' + action.args.dest
+//   }
+//   else {
+//     return 'Move this folder to ' + action.args.dest
+//   }
+// }
+
+
+// function findActions(sourceFile: ts_module.SourceFile, config: Config): Action[] {
+//   const actions: Action[] = []
+//   const fileStr = sourceFile.getText()
+//   const lines = fileStr.split('\n') //TODO: use new line format in tsconfig
+//   lines.forEach(line => {
+//     const i = line.indexOf(config.prefix)
+//     if (i === -1) {
+//       return
+//     }
+//     const userCall = line.substr(i + config.prefix.length, line.length)
+//     try {
+//       const result = eval(config.allActionsEvalPrefix + ';' + userCall)
+//       if (result && typeof result === 'object') {
+//         actions.push(result)
+//       }
+//     } catch (ex) {
+//     }
+//   })
+//   return actions
+// }
+
+// const pluginConfig = {
+//   prefix: '&%&%', // TODO: from info.config
+//   allActionsEvalPrefix: `
+// function moveThisFileTo(path){return {action: 'moveThisFileTo', args: {dest: path} }};
+// function moveThisFolderTo(path){return {action: 'moveThisFolderTo', args: {dest: path} }};
+// function undoLastMove(){return {action: 'undoLastMove', args: {} }};
+// `
+// }
+
+// interface Config {
+//   prefix: string,
+//   allActionsEvalPrefix: string
+// }
+// interface Action {
+//   action: string
+//   args: { [key: string]: string }
+// }
