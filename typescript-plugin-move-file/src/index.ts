@@ -63,7 +63,7 @@ function getApplicableRefactors(fileName: string, positionOrRange: number | ts.T
 
 
 // let lastMove: Action
-let simpleProject:Project
+// let simpleProject: Project
 
 function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSettings,
   positionOrRange: number | ts_module.TextRange, refactorName: string,
@@ -78,36 +78,41 @@ function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSetti
 
   // now we create a ts-simple-ast project from current one and call move operation on corresponding file
   // according to selectedAction
+  try {
+    // TODO: could we maintain a simple-ast Project in a variable and next time just refresh it so is faster ? 
+    const simpleProject = createSimpleASTProject(info.project)
+    if ((selectedAction.action === 'moveThisFileTo' || selectedAction.action === 'moveThisFolderTo') && selectedAction.args.dest) {
 
-  if(!simpleProject){
-    simpleProject = createSimpleASTProject(info.project)
-  }
-  // TODO: could we maintain a simple-ast Project in a variable and next time just refresh it so is faster ? 
-
-  if ((selectedAction.action === 'moveThisFileTo') && selectedAction.args.dest) {
-    try {
-      let dest:string = isAbsolute(selectedAction.args.dest) ? selectedAction.args.dest : 
+      // make it absolute
+      let dest: string = isAbsolute(selectedAction.args.dest) ? selectedAction.args.dest :
         join(selectedAction.args.dest.endsWith('.ts') ? dirname(fileName) : fileName, '..', selectedAction.args.dest)
-      
+
       dest = dest.endsWith('.ts') ? dest : join(dest, basename(fileName))
-      info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor dest ${dest}`)
-      if (dest) {
-        info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor moving file ${fileName} to ${dest}`)
-        // if(selectedAction.action === 'moveThisFileTo'){
-          simpleProject.getSourceFileOrThrow(fileName).moveImmediatelySync(dest)
-        // }
-        simpleProject.saveSync()
-        // lastMove = { action: 'undoLastMove', args: { dest, source: fileName } }
+
+      if(selectedAction.action === 'moveThisFolderTo'){
+        dest = join(dest, '..')
       }
-    } catch (error) {
-      info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor error ${error + '' + ' - ' + error.stack}`)
-      return refactors
+      const sourceFileName = selectedAction.action === 'moveThisFolderTo' ? join(fileName, '..') : fileName
+
+      info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor ${selectedAction.action} moving ${fileName} to ${dest}`)
+      
+      if (selectedAction.action === 'moveThisFileTo') {
+        simpleProject.getSourceFileOrThrow(sourceFileName).moveImmediatelySync(dest)
+      }
+      else if (selectedAction.action === 'moveThisFolderTo') {
+        simpleProject.getDirectoryOrThrow(sourceFileName).moveImmediatelySync(dest)
+      }
+      simpleProject.saveSync()
+      // lastMove = { action: 'undoLastMove', args: { dest, source: fileName } }
     }
+    // else if (selectedAction.action === 'undoLastMove' && lastMove) {
+    //   //not implemented yet
+    // }
+  } catch (error) {
+    info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor error  ${selectedAction.action} ${error + '' + ' - ' + error.stack}`)
+    return refactors
   }
-  // else if (selectedAction.action === 'undoLastMove' && lastMove) {
-  //   //not implemented yet
-  // }
-  info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor took ${(now() - t0) / 1000000}`)
+  info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor ${selectedAction.action} took  ${(now() - t0) / 1000000}`)
 }
 
 
