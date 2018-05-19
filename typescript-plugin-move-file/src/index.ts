@@ -85,7 +85,9 @@ function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSetti
 
       // make it absolute
       let dest: string = isAbsolute(selectedAction.args.dest) ? selectedAction.args.dest :
-        join(selectedAction.args.dest.endsWith('.ts') ? dirname(fileName) : fileName, '..', selectedAction.args.dest)
+        join(selectedAction.args.dest.endsWith('.ts') ? dirname(fileName) : fileName, 
+        selectedAction.action === 'moveThisFolderTo' ? '..' : '.', 
+        selectedAction.args.dest)
 
       dest = dest.endsWith('.ts') ? dest : join(dest, basename(fileName))
 
@@ -184,16 +186,7 @@ function createSimpleASTProject(project: ts_module.server.Project): Project {
 function getCompletionsAtPosition (fileName:string, position: number, options: ts_module.GetCompletionsAtPositionOptions | undefined): ts_module.CompletionInfo {
   
   const prior = info.languageService.getCompletionsAtPosition(fileName, position, options);
-
-  // if(position - pluginConfig.prefix.length < 0){
-  //   return prior
-  // } 
-  // const sourceFile = info.project.getSourceFile(fileName as ts.Path)
-
-  // const text = sourceFile.getText()
-  // let lastNewLineIndex = text.lastIndexOf('\n', position )
-  // lastNewLineIndex = lastNewLineIndex===-1 ? 0 : lastNewLineIndex
-
+  
   prior.entries.push({
     name: 'refactor.moveThisFileTo', 
     kind: ts_module.ScriptElementKind.unknown, 
