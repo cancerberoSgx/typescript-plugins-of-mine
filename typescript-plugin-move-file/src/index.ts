@@ -1,12 +1,12 @@
+import { lstatSync } from 'fs';
+import { now } from 'hrtime-now';
+import { basename, dirname, join, isAbsolute } from 'path';
+import Project from 'ts-simple-ast';
 import { LanguageServiceOptionals, getPluginCreate } from 'typescript-plugin-util';
-import Project from 'ts-simple-ast'
 // import { findChildContainingRange, positionOrRangeToRange, isDeclaration, hasDeclaredType, positionOrRangeToNumber, getKindName } from 'typescript-ast-util';
 import * as ts_module from 'typescript/lib/tsserverlibrary';
 
 
-import { now } from 'hrtime-now'
-import { basename, join, dirname } from 'path';
-import { lstatSync } from 'fs';
 
 
 
@@ -26,7 +26,7 @@ export = getPluginCreate(pluginDefinition, (modules, anInfo) => {
   info.project.projectService.logger.info(`${PLUGIN_NAME} created`)
 })
 
-let selectedAction:Action
+let selectedAction: Action
 function getApplicableRefactors(fileName: string, positionOrRange: number | ts.TextRange)
   : ts.ApplicableRefactorInfo[] {
 
@@ -46,7 +46,7 @@ function getApplicableRefactors(fileName: string, positionOrRange: number | ts.T
   }
   selectedAction = actions[0]
 
-  const refactorActions = [{ name: REFACTOR_ACTION_NAME+'-'+selectedAction.action, description: printAction(selectedAction) }]
+  const refactorActions = [{ name: REFACTOR_ACTION_NAME + '-' + selectedAction.action, description: printAction(selectedAction) }]
   // if(lastMove){
   //   refactorActions.push({ name: REFACTOR_ACTION_NAME+'-undoLastMove', description: printAction(selectedAction) })
   // }
@@ -62,7 +62,7 @@ function getApplicableRefactors(fileName: string, positionOrRange: number | ts.T
 
 
 
-let lastMove:Action
+let lastMove: Action
 
 function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSettings,
   positionOrRange: number | ts_module.TextRange, refactorName: string,
@@ -70,8 +70,8 @@ function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSetti
   const t0 = now()
 
   const refactors = info.languageService.getEditsForRefactor(fileName, formatOptions, positionOrRange, refactorName, actionName)
-  
-  if (!actionName.startsWith(REFACTOR_ACTION_NAME)||!selectedAction) {
+
+  if (!actionName.startsWith(REFACTOR_ACTION_NAME) || !selectedAction) {
     return refactors
   }
 
@@ -81,37 +81,42 @@ function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSetti
   const simpleProject = createSimpleASTProject(info.project)
   // TODO: could we maintain a simple-ast Project in a variable and next time just refresh it so is faster ? 
 
-  if(selectedAction.action==='moveThisFileTo'){
+  if ((selectedAction.action === 'moveThisFileTo' || selectedAction.action === 'moveThisFolderTo') && selectedAction.args.dest) {
     try {
-      const sourceFile = simpleProject.getSourceFileOrThrow(fileName)
       
-      // const dest = simpleProject.getDirectoryOrThrow(selectedAction.args.dest)
+      selectedAction.args.dest = isAbsolute(selectedAction.args.dest) ? selectedAction.args.dest : 
+        join(basename(fileName), selectedAction.args.dest)
+
       let dest:string
-      
-      if(lstatSync(selectedAction.args.dest).isDirectory()){
+
+      if (lstatSync(selectedAction.args.dest).isDirectory()) {
         dest = join(selectedAction.args.dest, basename(fileName))
       }
-      else if(!lstatSync(selectedAction.args.dest).isDirectory()||!lstatSync(dirname(selectedAction.args.dest)).isDirectory()){
+      else if (lstatSync(dirname(selectedAction.args.dest)).isFile()) {
+        throw new Error(`File ${selectedAction.args.dest} already exists - we don't override`)
+      }
+      else if (!lstatSync(selectedAction.args.dest).isDirectory() || !lstatSync(dirname(selectedAction.args.dest)).isDirectory()) {
         //ERROR
-        throw new Error(`${selectedAction.args.dest} parent does not exists`)
-      }else{
-        dest=selectedAction.args.dest
+        throw new Error(`${selectedAction.args.dest} parent folder does not exists - we don't create folders automatically`)
       }
-      if(dest){
-        sourceFile.moveImmediatelySync(selectedAction.args.dest)
+      if (dest) {
+        info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor moving file ${fileName} to ${dest}`)
+        if(selectedAction.action === 'moveThisFileTo'){
+          simpleProject.getSourceFileOrThrow(fileName).moveImmediatelySync(dest)
+        }
+        if(selectedAction.action === 'moveThisFolderTo'){
+          simpleProject.getDirectoryOrThrow(fileName).moveImmediatelySync(dest)
+        }
         simpleProject.saveSync()
+        lastMove = { action: 'undoLastMove', args: { dest, source: fileName } }
       }
-      lastMove = {action: 'undoLastMove', args: {dest, source: fileName}}
     } catch (error) {
-      info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor error ${error+'' + ' - '+error.stack}`)
+      info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor error ${error + '' + ' - ' + error.stack}`)
       return refactors
     }
-  } 
-  else if(selectedAction.action==='moveThisFolderTo'){
-    
   }
-  else if( selectedAction.action==='undoLastMove' && lastMove){
-    
+  else if (selectedAction.action === 'undoLastMove' && lastMove) {
+    //not implemented yet
   }
   info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor took ${(now() - t0) / 1000000}`)
 }
@@ -141,11 +146,11 @@ function findActions(sourceFile: ts_module.SourceFile, config: Config): Action[]
 }
 
 function printAction(action: Action): string {
-  if(action.action==='moveThisFileTo'){
-    return 'Move this file to '+action.args.dest
+  if (action.action === 'moveThisFileTo') {
+    return 'Move this file to ' + action.args.dest
   }
   else {
-    return 'Move this folder to '+action.args.dest
+    return 'Move this folder to ' + action.args.dest
   }
 }
 
@@ -169,12 +174,12 @@ interface Action {
 
 
 /**dirty way of getting path to config file of given program */
-function getConfigFilePath(project: ts_module.server.Project){ 
+function getConfigFilePath(project: ts_module.server.Project) {
   // TODO: better find current project tsconfig file
-  return project.getFileNames().find(p=>basename(p.toString())==='tsconfig.json')
+  return project.getFileNames().find(p => basename(p.toString()) === 'tsconfig.json')
 }
 /** dirty way of creating a ts-simple-ast Project from an exiting ts.server.Project */
-function createSimpleASTProject(project: ts_module.server.Project) : Project{
+function createSimpleASTProject(project: ts_module.server.Project): Project {
   return new Project({
     tsConfigFilePath: getConfigFilePath(info.project)
   });

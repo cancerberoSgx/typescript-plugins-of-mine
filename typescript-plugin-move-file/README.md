@@ -13,5 +13,5 @@ TODO: snippets for the comment moveThisFile and moveThisFolder.
 
 
 TODO: gui-no-more : 
-notify last error
+notify last error - adding a comment just below the &%&% comment that failed
 option to undo-last-action
