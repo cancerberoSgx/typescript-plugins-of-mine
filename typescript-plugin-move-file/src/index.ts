@@ -62,7 +62,8 @@ function getApplicableRefactors(fileName: string, positionOrRange: number | ts.T
 
 
 
-let lastMove: Action
+// let lastMove: Action
+let simpleProject:Project
 
 function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSettings,
   positionOrRange: number | ts_module.TextRange, refactorName: string,
@@ -78,46 +79,34 @@ function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSetti
   // now we create a ts-simple-ast project from current one and call move operation on corresponding file
   // according to selectedAction
 
-  const simpleProject = createSimpleASTProject(info.project)
+  if(!simpleProject){
+    simpleProject = createSimpleASTProject(info.project)
+  }
   // TODO: could we maintain a simple-ast Project in a variable and next time just refresh it so is faster ? 
 
-  if ((selectedAction.action === 'moveThisFileTo' || selectedAction.action === 'moveThisFolderTo') && selectedAction.args.dest) {
+  if ((selectedAction.action === 'moveThisFileTo') && selectedAction.args.dest) {
     try {
+      let dest:string = isAbsolute(selectedAction.args.dest) ? selectedAction.args.dest : 
+        join(selectedAction.args.dest.endsWith('.ts') ? dirname(fileName) : fileName, '..', selectedAction.args.dest)
       
-      selectedAction.args.dest = isAbsolute(selectedAction.args.dest) ? selectedAction.args.dest : 
-        join(basename(fileName), selectedAction.args.dest)
-
-      let dest:string
-
-      if (lstatSync(selectedAction.args.dest).isDirectory()) {
-        dest = join(selectedAction.args.dest, basename(fileName))
-      }
-      else if (lstatSync(dirname(selectedAction.args.dest)).isFile()) {
-        throw new Error(`File ${selectedAction.args.dest} already exists - we don't override`)
-      }
-      else if (!lstatSync(selectedAction.args.dest).isDirectory() || !lstatSync(dirname(selectedAction.args.dest)).isDirectory()) {
-        //ERROR
-        throw new Error(`${selectedAction.args.dest} parent folder does not exists - we don't create folders automatically`)
-      }
+      dest = dest.endsWith('.ts') ? dest : join(dest, basename(fileName))
+      info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor dest ${dest}`)
       if (dest) {
         info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor moving file ${fileName} to ${dest}`)
-        if(selectedAction.action === 'moveThisFileTo'){
+        // if(selectedAction.action === 'moveThisFileTo'){
           simpleProject.getSourceFileOrThrow(fileName).moveImmediatelySync(dest)
-        }
-        if(selectedAction.action === 'moveThisFolderTo'){
-          simpleProject.getDirectoryOrThrow(fileName).moveImmediatelySync(dest)
-        }
+        // }
         simpleProject.saveSync()
-        lastMove = { action: 'undoLastMove', args: { dest, source: fileName } }
+        // lastMove = { action: 'undoLastMove', args: { dest, source: fileName } }
       }
     } catch (error) {
       info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor error ${error + '' + ' - ' + error.stack}`)
       return refactors
     }
   }
-  else if (selectedAction.action === 'undoLastMove' && lastMove) {
-    //not implemented yet
-  }
+  // else if (selectedAction.action === 'undoLastMove' && lastMove) {
+  //   //not implemented yet
+  // }
   info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor took ${(now() - t0) / 1000000}`)
 }
 
