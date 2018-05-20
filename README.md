@@ -27,7 +27,7 @@ The result of my first steps dealing with TypeScript Language Service. I was so 
    for interacting with the user via the source file itself. 
  * See [Project home](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-move-file)
  * See it in Action: 
- * ![See it in Action: ](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-extract-move-file/doc-assets/vs-code-move-file.gif?raw=true?p=.gif)
+ * ![See it in Action: ](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-extract-move-file/typescript-plugin-move-file/doc-assets/vs-code-move-file.gif?raw=true?p=.gif)
  * see more demos in other editors in [Project home](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-move-file)
 
 ### typescript-plugin-subclasses

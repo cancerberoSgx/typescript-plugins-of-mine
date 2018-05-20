@@ -9,12 +9,13 @@
 # Demos
 
 Moving and renaming a file in Visual studio Code Editor: 
- * ![Moving and renaming a file in Visual studio Code Editor](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-extract-move-file/doc-assets/vs-code-move-file.gif?raw=true?p=.gif)
+ * 
+ * ![Moving and renaming a file in Visual studio Code Editor](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-extract-move-file/typescript-plugin-move-file/doc-assets/vs-code-move-file.gif?raw=true?p=.gif)
 
 Editor agnostic!. See the same demo but in Atom editor: 
  
  * ![Moving and renaming a file in Atom 
-   Editor](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-extract-move-file/doc-assets/atom-move-file.gif?raw=true?p=.gif)
+   Editor](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-move-file/doc-assets/atom-move-file.gif?raw=true?p=.gif)
 
 # TODO
  * notify last error - adding a comment just below the &%&% comment that failed
