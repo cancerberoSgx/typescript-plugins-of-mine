@@ -1,6 +1,6 @@
 {
   "name": "typescript-plugin-ast-inspector",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "TypeScript Language Service plugin with tools oriented to TypeScript developers, specially those dealing with AST, like Language Service Plugin developers",
   "main": "dist/index.js",
   "scripts": {

@@ -1,6 +1,6 @@
 {
   "name": "typescript-plugin-extract-interface-client-project1",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "for testing this plugin as client project",
   "main": "index.js",
   "scripts": {
@@ -15,12 +15,11 @@
     "@types/node": "^10.0.4"
   },
   "devDependencies": {
-    "typescript-plugin-extract-interface": "../typescript-plugin-extract-interface",
-    "typescript-plugin-subclasses-of": "../typescript-plugin-subclasses-of",
-    "typescript-plugin-ast-inspector": "../typescript-plugin-ast-inspector",
-    "typescript-plugin-add-type": "../typescript-plugin-add-type",
-    "typescript-api-tests": "../typescript-api-tests",
-    "typescript-plugin-move-file": "../typescript-plugin-move-file",
+    "typescript-plugin-extract-interface": "file:../typescript-plugin-extract-interface",
+    "typescript-plugin-subclasses-of": "file:../typescript-plugin-subclasses-of",
+    "typescript-plugin-ast-inspector": "file:../typescript-plugin-ast-inspector",
+    "typescript-plugin-add-type": "file:../typescript-plugin-add-type",
+    "typescript-plugin-move-file": "file:../typescript-plugin-move-file",
     "typescript": "^2.8.3"
   }
 }

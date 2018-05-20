@@ -18,7 +18,7 @@
     "clean": "find . -name \"node_modules\" -exec rm -rf '{}' + ;  rm -rf common/temp/; find . -name \"package-lock.json\" -exec rm -rf '{}' +; find . -name \"*.log\" -exec rm -rf '{}' +; rm -rf docs; find . -name \"dist\" -exec rm -rf '{}' +"
   },
   "devDependencies": {
-    "yamat": "0.0.2"
+    "yamat": "0.0.5"
   },
   "dependencies": {}
 }

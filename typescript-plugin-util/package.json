@@ -1,6 +1,6 @@
 {
   "name": "typescript-plugin-util",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Utilities for developing TypeScript Language Server Plugins",
   "main": "dist/src/index.js",
   "typings": "dist/src/index.d.ts",

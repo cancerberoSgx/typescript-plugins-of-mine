@@ -1,6 +1,6 @@
 {
   "name": "typescript-plugin-add-type",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "TypeScript Language Service plugin to extract an interface from a class",
   "main": "dist/index.js",
   "scripts": {
