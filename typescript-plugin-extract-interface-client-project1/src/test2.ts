@@ -1,23 +1,51 @@
-import { EventEmitter } from "events";
-interface IThing {}
-interface ITransport extends IThing { }
-class Transport implements ITransport {
-  maxSpeed = 1
-  m():  number{return 1}
-  go(to: { x: number, y: number }) { return Promise.resolve(1) }
-}
-class Vehicle extends Transport { 
-  constructor(iron: number) {
-    super()
-  }
-}
-interface Speedometer extends EventEmitter{
+
+interface Speedometer{
   getCurrentSpeed():number
+  /** la rotacion del chamaco */
+  rotate(force:number):{counterclockwise:boolean, h:number}
+  /**
+   * @return un numero number importante
+   */
+  m():number
+  go(to:{x:number,y:number}):Promise<void>
 }
-interface Car extends Vehicle {
-  speedometer: EventEmitter
-  getWheel():
+
+interface Car  {
+  speedometer: Speedometer
+    getCurrentSpeed(): number;
+    /**
+     * la rotacion del chamaco
+     */
+    rotate(force: number): {counterclockwise:boolean, h:number};
+    /**
+     * @return un numero number importante
+     */
+    m(): number;
+    go(to: {x:number,y:number}): Promise<void>;
 }
-interface Wheel{
-  rotate(force:number): {counterclockwise: boolean, h: number}
+
+class Foo{
+  speedometer: Speedometer
+
+  public getCurrentSpeed(): number {
+      return this.speedometer.getCurrentSpeed(); 
+  }
+
+  /**
+   * la rotacion del chamaco
+   */
+  public rotate(force: number): {counterclockwise:boolean, h:number} {
+      return this.speedometer.rotate(force); 
+  }
+
+  /**
+   * @return un numero number importante
+   */
+  public m(): number {
+      return this.speedometer.m(); 
+  }
+
+  public go(to: {x:number,y:number}): Promise<void> {
+      return this.speedometer.go(to); 
+  }
 }

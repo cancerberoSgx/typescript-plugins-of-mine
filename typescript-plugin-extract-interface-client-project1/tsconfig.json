@@ -7,6 +7,7 @@
     ],
     "outDir": "./dist",
     "strict": true,
+    "strictNullChecks": false, 
     "esModuleInterop": true,
     "removeComments": false,
     "noImplicitAny": true,
@@ -29,9 +30,9 @@
       {
         "name": "typescript-plugin-move-declaration"
       },
-      {
-        "name": "typescript-api-tests"
-      }
+      // {
+      //   "name": "typescript-api-tests"
+      // }
       
       
     ]
