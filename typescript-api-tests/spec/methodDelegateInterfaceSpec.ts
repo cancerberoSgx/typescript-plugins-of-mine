@@ -12,18 +12,15 @@ describe('method delegate interface', () => {
       tsConfigFilePath: `${projectPath}/tsconfig.json`
     });
 
-    // const apple = getTopLevelClassNamed(project, `Apple`)
+    project.saveSync()
+    project.emit()
+    expect(project.getDiagnostics().length).toBe(0)
     const targetSourceFile:SourceFile = project.getSourceFiles().find(sf => sf.getFilePath().includes(`src/index.ts`))
     methodDelegateOnInterface(targetSourceFile.getInterface('Car'), 'speedometer')
 
     methodDelegateOnClass(targetSourceFile.getClass('Foo'), 'speedometer')
     project.saveSync()
     project.emit()
-
-    
-    // if (apple && targetSourceFile) {
-    //   // moveDeclaration(apple, project, targetSourceFile)
-    // }
   })
   doAssert(projectPath)
 })
@@ -33,16 +30,11 @@ function doAssert(projectPath: string) {
 
   it('interface should contain delegate method signatures', ()=> {
     expect(cat(`${projectPath}/src/index.ts`).toString()).toContain('getCurrentSpeed(): number;')
-    expect(cat(`${projectPath}/src/index.ts`).toString()).toContain('rotate(force: number): {counterclockwise: boolean, h: number};')
+    expect(cat(`${projectPath}/src/index.ts`).toString()).toContain('rotate(force: number): {counterclockwise:boolean, h:number};')
     expect(cat(`${projectPath}/src/index.ts`).toString()).toContain('m(): number;')
-    expect(cat(`${projectPath}/src/index.ts`).toString()).toContain('go(to: { x: number, y: number }): Promise<void>;')
-
-    
-
-
-    // expect(cat(`${projectPath}/src/index.ts`).toString().split('getCurrentSpeed():').length).toBe(3)
-    
-
+    expect(cat(`${projectPath}/src/index.ts`).toString()).toContain('go(to: {x:number,y:number}): Promise<void>;')
+    expect(cat(`${projectPath}/src/index.ts`).toString().split('getCurrentSpeed():').length).toBe(4)
+    expect(cat(`${projectPath}/src/index.ts`).toString().split('@return un numero number importante').length).toBe(4) // jsdoc is preserved
   })
   it(`project should compile OK`, () => {
     project.saveSync()
