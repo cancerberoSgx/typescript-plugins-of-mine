@@ -1,11 +1,10 @@
-# Ignore NPM package folders
-node_modules
 
-# Ignore Rush temporary files
-/common/temp/**
+node_modules
 
 dist
 *.log
 tmp
 .yamat
 tyvireto
+
+typescript-api-tests

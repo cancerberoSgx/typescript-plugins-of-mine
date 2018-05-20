@@ -1,9 +1,8 @@
 {
-  "name": "typescript-api-tests",
-  "version": "1.0.0",
-  "description": "testing ts related techologies",
+  "name": "typescript-plugin-move-declaration",
+  "version": "0.0.1",
+  "description": "TypeScript plugin : move declarations. a.k.a : move classes, functions, interfaces top level declarations to another file",
   "main": "dist/src/index.js",
-  "private": true,
   "typings": "dist/src/index.d.ts",
   "scripts": {
     "test": "ts-node node_modules/jasmine/bin/jasmine",
@@ -22,7 +21,8 @@
     "hrtime-now": "^1.0.1",
     "ts-simple-ast": "^11.2.0",
     "typescript": "^2.8.3",
-    "typescript-plugin-util": "file:../typescript-plugin-util"
+    "typescript-plugin-util": "file:../typescript-plugin-util",
+    "typescript-plugins-text-based-user-interaction": "file:../typescript-plugins-text-based-user-interaction"
   },
   "devDependencies": {
     "shelljs": "^0.8.1",
@@ -31,5 +31,5 @@
     "jasmine": "^3.1.0",
     "ts-node": "^6.0.3"
   },
-  "repository": "https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-ast-util"
+  "repository": "https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-move-declaration"
 }

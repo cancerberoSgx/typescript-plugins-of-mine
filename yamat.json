@@ -36,6 +36,10 @@
     "path": "typescript-plugin-move-file"
   },
   {
+    "name": "typescript-plugin-move-declaration",
+    "path": "typescript-plugin-move-declaration"
+  },
+  {
     "name": "sample-ts-plugin1-sample-project",
     "path": "sample-ts-plugin1-sample-project"
   },

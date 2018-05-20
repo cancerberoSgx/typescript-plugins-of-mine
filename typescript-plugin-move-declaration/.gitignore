@@ -1,0 +1,7 @@
+# Ignore NPM package folders
+node_modules
+
+dist
+*.log
+tmp
+*_copy

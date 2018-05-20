@@ -2,26 +2,21 @@ import { now } from 'hrtime-now';
 import { basename, dirname, isAbsolute, join } from 'path';
 import Project from 'ts-simple-ast';
 import { LanguageServiceOptionals, getPluginCreate } from 'typescript-plugin-util';
-import * as ts_module from 'typescript/lib/tsserverlibrary';
 import { Action, create } from 'typescript-plugins-text-based-user-interaction';
+import * as ts_module from 'typescript/lib/tsserverlibrary';
+import { moveDeclarationNamed } from './moveDeclaration';
 
-const PLUGIN_NAME = 'typescript-plugin-move-file'
+const PLUGIN_NAME = 'typescript-plugin-move-declaration'
 const REFACTOR_ACTION_NAME = `${PLUGIN_NAME}-refactor-action`
 
 const interactionTool = create({
   prefix: '&%&%',
   actions: [
     {
-      name: 'moveThisFileTo',
-      args: ['dest'],
-      print: (action)=>`Move this file to ${action.args.dest}`,
-      snippet: 'moveThisFileTo(\'../newName.ts\')'
-    },
-    {
-      name: 'moveThisFolderTo',
-      args: ['dest'],
-      print: (action)=>`Move this folder to ${action.args.dest}`,
-      snippet: 'moveThisFileTo(\'../newName\')'
+      name: 'moveDeclarationNamed',
+      args: ['declarationName', 'dest'],
+      print: (action) => `Move declaration "${action.args.declarationName}" to file ${action.args.dest}`,
+      snippet: 'moveDeclarationNamed(\'SomeClass\', \'../other/file.ts\')'
     }
   ]
 })
@@ -45,7 +40,7 @@ function getApplicableRefactors(fileName: string, positionOrRange: number | ts.T
   const refactorActions = [{ name: REFACTOR_ACTION_NAME + '-' + selectedAction.name, description: selectedAction.print(selectedAction) }]
   refactors.push({
     name: `${PLUGIN_NAME}-refactor-info`,
-    description: 'move-file-action',
+    description: 'move-declaration',
     actions: refactorActions
   })
   info.project.projectService.logger.info(`${PLUGIN_NAME} getApplicableRefactors took ${(now() - t0) / 1000000}`)
@@ -57,30 +52,24 @@ function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSetti
   actionName: string): ts.RefactorEditInfo | undefined {
   const t0 = now()
   const refactors = info.languageService.getEditsForRefactor(fileName, formatOptions, positionOrRange, refactorName, actionName)
-  if (!actionName.startsWith(REFACTOR_ACTION_NAME) || !selectedAction) {
+  if (actionName !== REFACTOR_ACTION_NAME) {
     return refactors
   }
   try {
     // TODO: could we maintain a simple-ast Project in a variable and next time just refresh it so is faster ? 
     const simpleProject = createSimpleASTProject(info.project)
-    if ((selectedAction.name === 'moveThisFileTo' || selectedAction.name === 'moveThisFolderTo') && selectedAction.args.dest) {
-      // make it absolute
-      let dest: string = isAbsolute(selectedAction.args.dest) ? selectedAction.args.dest :
-        join(selectedAction.args.dest.endsWith('.ts') ? dirname(fileName) : fileName, 
-        selectedAction.name === 'moveThisFolderTo' ? '..' : '.', 
-        selectedAction.args.dest)
-      dest = dest.endsWith('.ts') ? dest : join(dest, basename(fileName))
-      dest = selectedAction.name === 'moveThisFolderTo' ? join(dest, '..') : dest
-      const sourceFileName = selectedAction.name === 'moveThisFolderTo' ? join(fileName, '..') : fileName
-      info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor ${selectedAction.name} moving ${fileName} to ${dest}`)
-      if (selectedAction.name === 'moveThisFileTo') {
-        simpleProject.getSourceFileOrThrow(sourceFileName).moveImmediatelySync(dest)
-      }
-      else if (selectedAction.name === 'moveThisFolderTo') {
-        simpleProject.getDirectoryOrThrow(sourceFileName).moveImmediatelySync(dest)
-      }
-      simpleProject.saveSync()
-    }
+    // simpleProject.getSourceFiles().forEach(f=>f.refreshFromFileSystemSync())
+    const sourceFile = simpleProject.getSourceFileOrThrow(fileName)
+
+    let dest: string = isAbsolute(selectedAction.args.dest) ? selectedAction.args.dest :
+      join(dirname(fileName), selectedAction.args.dest)
+
+
+    const destFile = simpleProject.getSourceFile(dest)
+    const targetFile = simpleProject.getSourceFileOrThrow(fileName)
+
+    moveDeclarationNamed(selectedAction.args.declarationName, sourceFile, simpleProject, targetFile)
+
   } catch (error) {
     info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor error  ${selectedAction.name} ${error + ' - ' + error.stack}`)
     return refactors
@@ -88,9 +77,9 @@ function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSetti
   info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor ${selectedAction.name} took  ${(now() - t0) / 1000000}`)
 }
 
-function getCompletionsAtPosition (fileName:string, position: number, options: ts_module.GetCompletionsAtPositionOptions | undefined): ts_module.CompletionInfo {
+function getCompletionsAtPosition(fileName: string, position: number, options: ts_module.GetCompletionsAtPositionOptions | undefined): ts_module.CompletionInfo {
   const prior = info.languageService.getCompletionsAtPosition(fileName, position, options);
-  prior.entries = prior.entries.concat(interactionTool.getCompletionsAtPosition(fileName,position, options))
+  prior.entries = prior.entries.concat(interactionTool.getCompletionsAtPosition(fileName, position, options))
   return prior;
 };
 

@@ -10,6 +10,21 @@ import { basename } from "path";
 export type MovableDeclaration = ClassDeclaration | FunctionDeclaration | InterfaceDeclaration |
   VariableDeclaration | EnumDeclaration
 
+
+export function moveDeclarationNamed(declarationName: string, file: SourceFile, project: Project, targetFile: SourceFile) {
+  let found: MovableDeclaration
+  file.forEachDescendant((child, stop) => { // TODO: check is top-level
+    if (child.getKindName().endsWith('Declaration') && ((child as any).getName && (child as MovableDeclaration).getName()) === declarationName) {
+      found = child as MovableDeclaration;
+      stop()
+    }
+  })
+  if (!found) {
+    throw new Error(`declaration named ${declarationName} not found in file ${file.getFilePath()}`)
+  }
+  return moveDeclaration(found as MovableDeclaration, project, targetFile)
+}
+
 /**
  *
  * Moves a top level declaration to another file.
@@ -31,9 +46,7 @@ export type MovableDeclaration = ClassDeclaration | FunctionDeclaration | Interf
  * @param targetFile the target file, inside the project where to move the class
  */
 export function moveDeclaration(c: MovableDeclaration, project: Project, targetFile: SourceFile) {
-
   const originalFile = c.getSourceFile()
-
 
   // write declaration at the beggining of target file making sure it's exported
   let declarationText = c.getText()
@@ -41,7 +54,7 @@ export function moveDeclaration(c: MovableDeclaration, project: Project, targetF
   declarationText = declarationText + '\n'
   targetFile.insertStatements(0, declarationText)
 
-  
+
   // add necessary imports in target file so declaration has its dependencies: 
   addDeclarationDependencyImportsToTargetFile(originalFile, project, targetFile, c)
 
@@ -55,7 +68,7 @@ export function moveDeclaration(c: MovableDeclaration, project: Project, targetF
 
 
   c.remove()
-  c=null
+  c = null
 
   // now we call organizeImports on all required files, target, original and all the ones where we added imports
   // organize imports in all files which imports decls where modified (clean unused/duplicated)
@@ -93,21 +106,21 @@ function addDeclarationDependencyImportsToTargetFile(originalFile: SourceFile, p
       importStructures.push(importDeclStructure)
     }
   })
-// console.log(  'sehshshs', originalFile.getDescendantStatements().filter(s=>ts.SyntaxKind.TypeAliasDeclaration === s.getKind()) .map(d=>d.getKindName()).join(', '))//  getDescendantsOfKind(ts.Syn)
-//   // The same for all types referenced inside declaration
-//   // c.forEachDescendant(d=>{
-//   //   if(TypeGuards.isTypeReferenceNode(d)){
-//   //     debugger
-//   //     d.getType()
-//   //   }
-//     // if(d.getText().includes('AppleTree')){
-//     //   debugger
-//     // }
-//     // d.getType    
-//   // })
+  // console.log(  'sehshshs', originalFile.getDescendantStatements().filter(s=>ts.SyntaxKind.TypeAliasDeclaration === s.getKind()) .map(d=>d.getKindName()).join(', '))//  getDescendantsOfKind(ts.Syn)
+  //   // The same for all types referenced inside declaration
+  //   // c.forEachDescendant(d=>{
+  //   //   if(TypeGuards.isTypeReferenceNode(d)){
+  //   //     debugger
+  //   //     d.getType()
+  //   //   }
+  //     // if(d.getText().includes('AppleTree')){
+  //     //   debugger
+  //     // }
+  //     // d.getType    
+  //   // })
   importStructures.forEach(is => {
     targetFile.insertImportDeclarations(0, importStructures)
-  }) 
+  })
 }
 
 /**
@@ -159,7 +172,7 @@ function fixProjectImports(c: MovableDeclaration, project: Project, targetFile: 
   // referencing it.). We take advantage of these import decls here and do it here... 
   const importDeclStructure = importDeclaration2Structure(oneImportTargetDeclaration);
 
-  importDeclStructure.moduleSpecifier = originalFile.getRelativePathAsModuleSpecifierTo(targetFile.getDirectory()) + 
+  importDeclStructure.moduleSpecifier = originalFile.getRelativePathAsModuleSpecifierTo(targetFile.getDirectory()) +
     '/' + targetFile.getBaseNameWithoutExtension()
 
   originalFile.addImportDeclaration(importDeclStructure)
