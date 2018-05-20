@@ -13,7 +13,7 @@ Moving and renaming a file in Visual studio Code Editor:
 
 Editor agnostic!. See the same demo but in Atom editor: 
  
- * ![Moving and renaming a file in Visual studio Code
+ * ![Moving and renaming a file in Atom 
    Editor](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-extract-move-file/doc-assets/atom-move-file.gif?raw=true?p=.gif)
 
 # TODO
