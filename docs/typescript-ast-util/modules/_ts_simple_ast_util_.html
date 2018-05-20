@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>&quot;LanguageServiceOptionals&quot; | typescript-plugin-util</title>
+	<title>&quot;ts-simple-ast-util&quot; | typescript-plugin-util</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,10 +56,10 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="_languageserviceoptionals_.html">&quot;LanguageServiceOptionals&quot;</a>
+					<a href="_ts_simple_ast_util_.html">&quot;ts-simple-ast-util&quot;</a>
 				</li>
 			</ul>
-			<h1>External module &quot;LanguageServiceOptionals&quot;</h1>
+			<h1>External module &quot;ts-simple-ast-util&quot;</h1>
 		</div>
 	</div>
 </header>
@@ -71,12 +71,77 @@
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section tsd-is-external">
-							<h3>Interfaces</h3>
+							<h3>Functions</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-interface tsd-parent-kind-external-module tsd-is-external"><a href="../interfaces/_languageserviceoptionals_.languageserviceoptionals.html" class="tsd-kind-icon">Language<wbr>Service<wbr>Optionals</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-external"><a href="_ts_simple_ast_util_.html#createsimpleastproject" class="tsd-kind-icon">create<wbr>SimpleASTProject</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-external tsd-is-not-exported"><a href="_ts_simple_ast_util_.html#getconfigfilepath" class="tsd-kind-icon">get<wbr>Config<wbr>File<wbr>Path</a></li>
 							</ul>
 						</section>
 					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group tsd-is-external">
+				<h2>Functions</h2>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
+					<a name="createsimpleastproject" class="tsd-anchor"></a>
+					<h3>create<wbr>SimpleASTProject</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">create<wbr>SimpleASTProject<span class="tsd-signature-symbol">(</span>nativeProject<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ts_module.server.Project</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Project</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in ts-simple-ast-util.ts:23</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>(dirty way) of creating a ts-simple-ast Project from an exiting ts.server.Project. Given project must be a
+										configured project (created with a tsconfig file. It will recreates the project from scratch so it can take
+									some time. Use it with discretion</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>nativeProject: <span class="tsd-signature-type">ts_module.server.Project</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Project</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module tsd-is-external tsd-is-not-exported">
+					<a name="getconfigfilepath" class="tsd-anchor"></a>
+					<h3>get<wbr>Config<wbr>File<wbr>Path</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module tsd-is-external tsd-is-not-exported">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Config<wbr>File<wbr>Path<span class="tsd-signature-symbol">(</span>project<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ts_module.server.Project</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in ts-simple-ast-util.ts:7</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>gets the config file of given ts project or undefined if given is not a ConfiguredProject</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>project: <span class="tsd-signature-type">ts_module.server.Project</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span>
+								<span class="tsd-signature-symbol"> | </span>
+								<span class="tsd-signature-type">undefined</span>
+							</h4>
+						</li>
+					</ul>
 				</section>
 			</section>
 		</div>
@@ -95,21 +160,24 @@
 					<li class="label tsd-is-external">
 						<span>Externals</span>
 					</li>
-					<li class="current tsd-kind-external-module tsd-is-external">
+					<li class=" tsd-kind-external-module tsd-is-external">
 						<a href="_languageserviceoptionals_.html">"<wbr>Language<wbr>Service<wbr>Optionals"</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
 						<a href="_easy_plugin_install_.html">"easy-<wbr>plugin-<wbr>install"</a>
 					</li>
-					<li class=" tsd-kind-external-module tsd-is-external">
+					<li class="current tsd-kind-external-module tsd-is-external">
 						<a href="_ts_simple_ast_util_.html">"ts-<wbr>simple-<wbr>ast-<wbr>util"</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-is-external">
-						<a href="../interfaces/_languageserviceoptionals_.languageserviceoptionals.html" class="tsd-kind-icon">Language<wbr>Service<wbr>Optionals</a>
+					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
+						<a href="_ts_simple_ast_util_.html#createsimpleastproject" class="tsd-kind-icon">create<wbr>SimpleASTProject</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-external tsd-is-not-exported">
+						<a href="_ts_simple_ast_util_.html#getconfigfilepath" class="tsd-kind-icon">get<wbr>Config<wbr>File<wbr>Path</a>
 					</li>
 				</ul>
 			</nav>

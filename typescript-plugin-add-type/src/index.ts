@@ -17,10 +17,7 @@ export = getPluginCreate(pluginDefinition, (modules, anInfo) => {
   info.project.projectService.logger.info(`${PLUGIN_NAME} created`)
 })
 
-
 let target: ts.Node | undefined
-
-
 
 function getApplicableRefactors(fileName: string, positionOrRange: number | ts.TextRange)
   : ts.ApplicableRefactorInfo[] {
@@ -44,9 +41,7 @@ function getApplicableRefactors(fileName: string, positionOrRange: number | ts.T
   } else {
     const predicate = function isDeclarationWithNoDeclaredType(node: ts.Node, program: ts.Program): boolean {
       return node && isDeclaration(node) && !hasDeclaredType(node, program) // declaration without a type declaration 
-      /*hasName(node) && */
     }
-    // target = predicate(node, program) && node
     let child
     target = predicate(node, program) ? node : 
       predicate(node.parent, program) ? node.parent : 
@@ -92,20 +87,6 @@ function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSetti
   return refactorEditInfo
 }
 
-
-/**
- * besides correcting type strings like getTypeStringForDeclaration, should this be in plugin-util ? 
- * some cases to consider: 
-  // function f ()$TYPE {}
-  // function()$TYPE {} // should not enter because of no name
-  // method()$TYPE {}
-  // class C { property1$TYPE = 2 }
-  // class C {property1$TYPE = 'va'}
-  // var a$TYPE = 2
-  // function(param1$TYPE, param2){}
-  // each((c) $TYPE => true)
-  // each((c$TYPE)  => true)
- */
  function getFileTextChanges(node: ts.Node, program: ts.Program): ts.TextChange {
   let newText = ': '+getTypeStringForDeclarations(node, program)
   let start = (findIdentifier(node) || node).getEnd() // this will work for variable declaration and non-declaration nodes

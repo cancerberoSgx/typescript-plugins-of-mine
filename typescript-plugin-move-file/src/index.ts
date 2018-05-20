@@ -1,7 +1,7 @@
 import { now } from 'hrtime-now';
 import { basename, dirname, isAbsolute, join } from 'path';
 import Project from 'ts-simple-ast';
-import { LanguageServiceOptionals, getPluginCreate } from 'typescript-plugin-util';
+import { LanguageServiceOptionals, getPluginCreate, createSimpleASTProject } from 'typescript-plugin-util';
 import * as ts_module from 'typescript/lib/tsserverlibrary';
 import { Action, create } from 'typescript-plugins-text-based-user-interaction';
 
@@ -93,20 +93,6 @@ function getCompletionsAtPosition (fileName:string, position: number, options: t
   prior.entries = prior.entries.concat(interactionTool.getCompletionsAtPosition(fileName,position, options))
   return prior;
 };
-
-
-/** dirty way of getting path to config file of given program. TODO: better find current project tsconfig file */
-function getConfigFilePath(project: ts_module.server.Project) {
-  return project.getFileNames().find(p => basename(p.toString()) === 'tsconfig.json')
-}
-/** dirty way of creating a ts-simple-ast Project from an exiting ts.server.Project */
-function createSimpleASTProject(project: ts_module.server.Project): Project {
-  return new Project({
-    tsConfigFilePath: getConfigFilePath(info.project)
-  });
-}
-
-
 
 let ts: typeof ts_module
 let info: ts_module.server.PluginCreateInfo

@@ -1,4 +1,4 @@
-import { findChild2, findChildContainingPosition, findParent, positionOrRangeToNumber, findIdentifierString, findChild } from 'typescript-ast-util';
+import { findChild2, findChildContainingPosition, findParent, positionOrRangeToNumber } from 'typescript-ast-util';
 import * as ts_module from 'typescript/lib/tsserverlibrary';
 
 
@@ -43,14 +43,14 @@ function getApplicableRefactors(fileName: string, positionOrRange: number | ts.T
 
   const refs = info.languageService.findReferences(fileName, positionOrRangeToNumber(positionOrRange))
   if (!refs || !refs.length) {
-    // info.project.projectService.logger.info(`${PLUGIN_NAME} not suggesting because refs is empty`)
+    info.project.projectService.logger.info(`${PLUGIN_NAME} not suggesting because refs is empty`)
     return refactors
   }
   const selectedDefs: ts.ReferencedSymbol[] = refs.filter(r => !!(r.definition &&
     (r.definition.kind === ts.ScriptElementKind.classElement || r.definition.kind === ts.ScriptElementKind.interfaceElement)))
 
   if (!selectedDefs || !selectedDefs.length) {
-    // info.project.projectService.logger.info(`${PLUGIN_NAME} not suggesting because selectedDefs is empty`)
+    info.project.projectService.logger.info(`${PLUGIN_NAME} not suggesting because selectedDefs is empty`)
     return refactors
   }
   selectedDef = selectedDefs[0]
@@ -59,8 +59,7 @@ function getApplicableRefactors(fileName: string, positionOrRange: number | ts.T
     description: 'Subclasses of',
     actions: [
       { name: ACTION_NAME_DIRECT_SUBCLASSES, description: 'Show Direct subclasses/implementations of ' + selectedDef.definition.name },
-      { name: ACTION_NAME_INDIRECT_SUBCLASSES, description: 'Show Indirect subclasses/implementations of ' + selectedDef.definition.name },
-      // { name: ACTION_NAME_INHERITANCE, description: 'Show inheritance of' + selectedDef.definition.name }
+      { name: ACTION_NAME_INDIRECT_SUBCLASSES, description: 'Show Indirect subclasses/implementations of ' + selectedDef.definition.name }
     ]
   })
   return refactors
@@ -71,10 +70,8 @@ function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSetti
   positionOrRange: number | ts_module.TextRange, refactorName: string,
   actionName: string)
   : ts.RefactorEditInfo | undefined {
-
   const refactors = info.languageService.getEditsForRefactor(fileName, formatOptions, positionOrRange, refactorName, actionName)
-
-  if (!selectedDef || (actionName != ACTION_NAME_DIRECT_SUBCLASSES && actionName != ACTION_NAME_INDIRECT_SUBCLASSES && actionName!== ACTION_NAME_INHERITANCE)) {
+  if (!selectedDef || (actionName != ACTION_NAME_DIRECT_SUBCLASSES && actionName != ACTION_NAME_INDIRECT_SUBCLASSES && actionName !== ACTION_NAME_INHERITANCE)) {
     return refactors;
   }
   const sourceFile = info.languageService.getProgram().getSourceFile(fileName)
@@ -82,25 +79,14 @@ function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSetti
     return refactors
   }
   let newText
-  // try {
-    // const targetSourceFile = info.languageService.getProgram().getSourceFile(selectedDef.definition.fileName)
-    // if (!targetSourceFile) {
-    //   return refactors
-    // }
-    const isDirect = actionName == ACTION_NAME_DIRECT_SUBCLASSES
-    const subclasses: Array<ts.ClassDeclaration | ts.InterfaceDeclaration> = (isDirect ? getDirectDeclarationReferencesExtending(fileName, positionOrRange) : getIndirectDeclarationReferencesExtending(fileName, positionOrRange));
-
-    newText = '\n/*\n' + (isDirect ? 'Direct' : 'Indirect') + ' subclasses/implementations of ' + selectedDef.definition.name + ':\n' + subclasses.map(c => {
-      const sf = c.getSourceFile()
-      const pos = sf.getLineAndCharacterOfPosition(c.getStart())
-      const type = c.kind === ts.SyntaxKind.ClassDeclaration ? 'class' : 'interface'
-      return type + ' ' + (c.name && c.name.getText()) + ' in file:/' + sf.fileName + '#' + (pos.line + 1) + ',' + (pos.character + 1)
-    }).join('\n') + '\n*/'
-
-  // } catch (error) {
-  //   newText = error + ' - ' + error.stack
-  // }
-
+  const isDirect = actionName == ACTION_NAME_DIRECT_SUBCLASSES
+  const subclasses: Array<ts.ClassDeclaration | ts.InterfaceDeclaration> = (isDirect ? getDirectDeclarationReferencesExtending(fileName, positionOrRange) : getIndirectDeclarationReferencesExtending(fileName, positionOrRange));
+  newText = '\n/*\n' + (isDirect ? 'Direct' : 'Indirect') + ' subclasses/implementations of ' + selectedDef.definition.name + ':\n' + subclasses.map(c => {
+    const sf = c.getSourceFile()
+    const pos = sf.getLineAndCharacterOfPosition(c.getStart())
+    const type = c.kind === ts.SyntaxKind.ClassDeclaration ? 'class' : 'interface'
+    return type + ' ' + (c.name && c.name.getText()) + ' in file:/' + sf.fileName + '#' + (pos.line + 1) + ',' + (pos.character + 1)
+  }).join('\n') + '\n*/'
   return {
     edits: [{
       fileName,
@@ -179,40 +165,3 @@ function getIndirectDeclarationReferencesExtending(fileName: string, positionOrR
   })
   return supers;
 }
-
-
-// function getInheritance()
-//   : Array<ts.ClassDeclaration | ts.InterfaceDeclaration> {
-//     const a: Array<ts.ClassDeclaration | ts.InterfaceDeclaration> = []
-//     if(!selectedDef){
-//       return a
-//     }
-
-//     const sourceFile = info.languageService.getProgram().getSourceFile(fileName)
-//     if (!sourceFile) {
-//       return a
-//     }
-//     const sf = info.project.getSourceFile(selectedDef.definition.fileName.toString())
-//     const node = findChildContainingPosition(sourceFile, selectedDef.definition.textSpan.start)
-//     if (!node) {
-//       return a
-//     }
-//     return a
-// }
-
-// function getInheritanceRec(n:ts.ClassDeclaration | ts.InterfaceDeclaration|undefined): Array<ts.ClassDeclaration | ts.InterfaceDeclaration> {
-//   let a : Array<ts.ClassDeclaration | ts.InterfaceDeclaration> = []
-//   if(!n){
-//     return a
-//   }
-//   a.push(n)
-//   const heritage = findChild(n, c=>c.kind===ts.SyntaxKind.HeritageClause) as ts.HeritageClause
-//   if(!heritage || ! heritage.types || !heritage.types.length){
-//     return a
-//   }
-//   heritage.types[0].
-//   // if(n.parent){
-//   a = a.concat(a, getInheritanceRec(heritage.types[0]))
-//   // }
-//   return a
-// }

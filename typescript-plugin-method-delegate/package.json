@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "typescript plugin that will suggest a refactor to create delegate methods to selected property",
   "main": "dist/src/index.js",
-  "private": true,
   "typings": "dist/src/index.d.ts",
   "scripts": {
     "test": "ts-node node_modules/jasmine/bin/jasmine",

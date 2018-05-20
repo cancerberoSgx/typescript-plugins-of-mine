@@ -1,9 +1,9 @@
 import { now } from 'hrtime-now';
 import {
-  findChild, findChildContainingRange, findIdentifier, getKindName, getTypeStringFor,
+  findChild, findChildContainingRange, findIdentifier, getKindName, getTypeStringFor, 
   hasDeclaredType, positionOrRangeToRange, positionOrRangeToNumber, isDeclaration, getTypeStringForDeclarations
 } from 'typescript-ast-util';
-import { getPluginCreate } from 'typescript-plugin-util';
+import { getPluginCreate,  createSimpleASTProject } from 'typescript-plugin-util';
 import * as ts_module from 'typescript/lib/tsserverlibrary';
 import { basename } from 'path';
 import Project, { PropertySignature, TypeGuards, createWrappedNode, ClassDeclaration } from 'ts-simple-ast'
@@ -62,8 +62,6 @@ function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSetti
   if (actionName != REFACTOR_ACTION_NAME || !target) {
     return refactors
   }
-  // info.languageService.getProgram().getCompilerOptions().project
-
   try {
     const project = createSimpleASTProject(info.project)
     const descAtPo = project.getSourceFileOrThrow(fileName).getDescendantAtPos(positionOrRangeToNumber(positionOrRange))
@@ -87,39 +85,5 @@ function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSetti
     info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor error: ${error.toString()} - stack: ${error.stack}`)
   }
   return refactors
-
-  // const sourceFile = info.languageService.getProgram().getSourceFile(fileName)
-  // const newText = `/* hola carola: ${info.languageService.getProgram().getCompilerOptions().project} - ${(info.project as any).getConfigFilePath()} */`
-  // const refactorEditInfo: ts.RefactorEditInfo = {
-  //   edits: [{
-  //     fileName,
-  //     textChanges: [{
-  //       span: { start: sourceFile.getEnd(), length: newText.length },
-  //       newText: newText
-  //     }],
-  //   }],
-  //   renameFilename: undefined,
-  //   renameLocation: undefined,
-  // }
-  // return refactorEditInfo
 }
-
-
-
-
-/** gets the config file of given ts project or undefined if given is not a ConfiguredProject */
-// TODO: for integrate it in simple-ast try with findConfigFile
-function getConfigFilePath(project: ts_module.server.Project): string | undefined {
-  if ((project as ts_module.server.ConfiguredProject).getConfigFilePath) {
-    return (project as ts_module.server.ConfiguredProject).getConfigFilePath()
-  }
-}
-/** dirty way of creating a ts-simple-ast Project from an exiting ts.server.Project */
-function createSimpleASTProject(project: ts_module.server.Project): Project {
-  return new Project({
-    tsConfigFilePath: getConfigFilePath(info.project)
-  });
-}
-
-
 

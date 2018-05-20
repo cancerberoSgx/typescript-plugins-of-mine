@@ -1,4 +1,3 @@
-// import * as ts from 'typescript'
 import * as ts_module from 'typescript/lib/tsserverlibrary'
 import { LanguageService } from 'typescript';
 import { LanguageServiceOptionals } from './LanguageServiceOptionals';
