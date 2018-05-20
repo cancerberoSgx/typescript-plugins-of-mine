@@ -1,6 +1,7 @@
 {
   "name": "typescript-plugin-extract-interface-client-project1",
   "version": "1.0.1",
+  "private": true,
   "description": "for testing this plugin as client project",
   "main": "index.js",
   "scripts": {

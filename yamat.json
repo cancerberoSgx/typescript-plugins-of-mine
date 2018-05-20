@@ -12,10 +12,6 @@
     "path": "sample-ts-plugin1"
   },
   {
-    "name": "sample-ts-plugin1-sample-project",
-    "path": "sample-ts-plugin1-sample-project"
-  },
-  {
     "name": "typescript-plugin-extract-interface",
     "path": "typescript-plugin-extract-interface"
   },
@@ -32,15 +28,19 @@
     "path": "typescript-plugin-add-type"
   },
   {
-    "name": "typescript-plugin-extract-interface-client-project1",
-    "path": "typescript-plugin-extract-interface-client-project1"
-  },
-  {
     "name": "typescript-plugins-text-based-user-interaction",
     "path": "typescript-plugins-text-based-user-interaction"
   },
   {
     "name": "typescript-plugin-move-file",
     "path": "typescript-plugin-move-file"
+  },
+  {
+    "name": "sample-ts-plugin1-sample-project",
+    "path": "sample-ts-plugin1-sample-project"
+  },
+  {
+    "name": "typescript-plugin-extract-interface-client-project1",
+    "path": "typescript-plugin-extract-interface-client-project1"
   }
 ]

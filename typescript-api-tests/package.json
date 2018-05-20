@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "description": "testing ts related techologies",
   "main": "dist/src/index.js",
+  "private": true,
+  "private": true,
   "typings": "dist/src/index.d.ts",
   "scripts": {
     "test": "ts-node node_modules/jasmine/bin/jasmine",
