@@ -18,6 +18,18 @@ The result of my first steps dealing with TypeScript Language Service. I was so 
  * ![See it in Action: ](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-extract-interface/doc-assets/extract-interface.gif?raw=true?p=.gif)
 
 
+### typescript-plugin-move-file
+
+ * Move a file or folder fixing all imports to point to the new location. 
+ * Based on [ts-simple-ast](https://dsherret.github.io/ts-simple-ast) file and directory move() operation
+ * Uses
+   [typescript-plugins-text-based-user-interaction](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugins-text-based-user-interaction)
+   for interacting with the user via the source file itself. 
+ * See [Project home](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-move-file)
+ * See it in Action: 
+ * ![See it in Action: ](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-extract-move-file/doc-assets/vs-code-move-file.gif?raw=true?p=.gif)
+ * see more demos in other editors in [Project home](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-move-file)
+
 ### typescript-plugin-subclasses
 
 **WIP**
@@ -27,14 +39,14 @@ The result of my first steps dealing with TypeScript Language Service. I was so 
  * See it in action: 
  * ![subclasses-of screencast WIP](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-subclasses-of/doc-assets/screencast.gif?raw=true?p=.gif)
 
-### typescript-plugin-ast-util
-
- * Tools useful for TypeScript Language Service Plugin developers, see demo and description at [Project](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-ast-util), currently printing AST of selection and printing class/ interface hierarchy. 
-
 ### typescript-plugin-add-type
 
  * if current selection is a declaration without an explicit type, this plugin will suggest you to automatically add the type inferred by the compiler. 
  * [Project](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/s)
+
+### typescript-plugin-ast-util
+
+ * Tools useful for TypeScript Language Service Plugin developers, see demo and description at [Project](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-ast-util), currently printing AST of selection and printing class/ interface hierarchy. 
 
 ### utility projects
 

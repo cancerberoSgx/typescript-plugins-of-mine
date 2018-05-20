@@ -1,17 +1,21 @@
 # TypeScript plugin for moving files or folders
 
-TypeScript file and folder move based on ts-simple-ast out-of-the box provided functionality
+ * Move/rename a file or folder fixing all imports to point to the new location in all the TypeScript project
+ * Based on [ts-simple-ast])(https://dsherret.github.io/ts-simple-ast) file and directory move() operation
+ * Editor / IDE agnostic - it shoul dwork on any editor that supports TypeScript Language Plugins. Uses
+   [typescript-plugins-text-based-user-interaction](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugins-text-based-user-interaction)
+   for interacting with the user via the source file itself. 
 
-Because is editor - agnostic we ask the user where to move it using strings in the code itself as comments
-with special format.
+# Demos
 
-TODO: show gif
+Moving and renaming a file in Visual studio Code Editor: 
+ * ![Moving and renaming a file in Visual studio Code Editor](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-extract-move-file/doc-assets/vs-code-move-file.gif?raw=true?p=.gif)
 
-Is recommended that you create the following snippets in your IDE / editor to do the refactor more quickly:
+Editor agnostic!. See the same demo but in Atom editor: 
+ 
+ * ![Moving and renaming a file in Visual studio Code
+   Editor](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-extract-move-file/doc-assets/atom-move-file.gif?raw=true?p=.gif)
 
-TODO: snippets for the comment moveThisFile and moveThisFolder. 
-
-
-TODO: gui-no-more : 
-notify last error - adding a comment just below the &%&% comment that failed
-option to undo-last-action
+# TODO
+ * notify last error - adding a comment just below the &%&% comment that failed
+ * option to undo-last-action
