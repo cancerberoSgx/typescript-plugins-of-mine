@@ -6,6 +6,8 @@ a.k.a : **move classes, functions, interfaces, etc to other files refactor**
 
 ## Demo
 
+ * ![Moving an interface to another file](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-extract-move-file/typescript-plugin-move-declaration/doc-assets/vscode-move-interface.gif?raw=true?p=.gif)
+ 
 ## Features
 
  * Any top-level declaration can be moved from any file to an existing file of the same project
@@ -27,3 +29,4 @@ TODO
  * communicate errors below the comment
  * undo action
  * commons.js require() ? 
+ * in sampleProject2 - move Unit interface to ../base/Thing.ts - it fails !! fix
