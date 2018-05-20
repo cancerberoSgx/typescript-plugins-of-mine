@@ -6,7 +6,7 @@ a.k.a : **move classes, functions, interfaces, etc to other files refactor**
 
 ## Demo
 
- * ![Moving an interface to another file](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-extract-move-file/typescript-plugin-move-declaration/doc-assets/vscode-move-interface.gif?raw=true?p=.gif)
+ * ![Moving an interface to another file](https://raw.githubusercontent.com/cancerberoSgx/typescript-plugins-of-mine/master/typescript-plugin-move-declaration/doc-assets/vscode-move-interface.gif)
  
 ## Features
 
