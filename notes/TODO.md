@@ -13,6 +13,8 @@
   
   
 ## plugin ideas
+
+
 * a plugin like move-declaration but for commons.js
 * a plugin like move-file but for commons.js
 * a plugin that changes expressions like cond1 && cond2 || !cond3 to its equivalent : (!cond1 || !cond2) && cond3 - useless and hard
@@ -30,7 +32,7 @@
 
 // IDEA ast-inspector enhancement : other action that prints nodeAtCursor.arent.parent.arent to the top so I know where I'm standings
   
-  
+* "get absolute location" for ast-inspector - where-am'i - I want to know the absolute value of something, like a method, or member . for example module m{class A{prop: {name:string,val: {foo:number}}}} - for foo it should prnt something l ike m.A.prop.val.foo  or more friendly, module m, class A , property prop, prop val
   
   
 ## MISC 

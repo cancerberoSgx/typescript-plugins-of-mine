@@ -23,6 +23,7 @@
     "typescript-plugin-add-type": "file:../typescript-plugin-add-type",
     "typescript-plugin-move-file": "file:../typescript-plugin-move-file",
     "typescript-plugin-move-declaration": "file:../typescript-plugin-move-declaration",
+    "typescript-api-tests": "file:../typescript-api-tests",
     "typescript": "^2.8.3"
   }
 }

@@ -22,13 +22,16 @@
     "hrtime-now": "^1.0.1",
     "ts-simple-ast": "^11.2.0",
     "typescript": "^2.8.3",
-    "typescript-plugin-util": "file:../typescript-plugin-util"
+    "typescript-ast-util": "file:../typescript-ast-util",
+    "typescript-plugin-util": "file:../typescript-plugin-util",
+    "typescript-plugins-text-based-user-interaction": "file:../typescript-plugins-text-based-user-interaction"
   },
   "devDependencies": {
-    "shelljs": "^0.8.1",
     "@types/jasmine": "^2.8.7",
     "@types/node": "^10.0.4",
+    "@types/shelljs": "^0.7.9",
     "jasmine": "^3.1.0",
+    "shelljs": "^0.8.2",
     "ts-node": "^6.0.3"
   },
   "repository": "https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-ast-util"

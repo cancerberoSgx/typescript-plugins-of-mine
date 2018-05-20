@@ -1,5 +1,5 @@
 {
-  "name": "typescript-api-tests-sample1",
+  "name": "typescript-plugin-methodDelegate-sample1",
   "version": "1.0.0",
   "description": "testing ts related techologies",
   "main": "dist/src/index.js",

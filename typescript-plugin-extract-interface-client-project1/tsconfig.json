@@ -28,7 +28,11 @@
       },
       {
         "name": "typescript-plugin-move-declaration"
+      },
+      {
+        "name": "typescript-api-tests"
       }
+      
       
     ]
   }

@@ -447,3 +447,19 @@ export function compileSource(sourceCode: string, tsconfigPath: string = join(__
 
 
 
+// ts-simple-ast
+
+/** gets the config file of given ts project or undefined if given is not a ConfiguredProject */
+function getConfigFilePath(project: ts_module.server.Project): string|undefined {
+  if((project as ts_module.server.ConfiguredProject).getConfigFilePath){
+    return (project as ts_module.server.ConfiguredProject).getConfigFilePath()
+  }
+}
+/** dirty way of creating a ts-simple-ast Project from an exiting ts.server.Project */
+function createSimpleASTProject(project: ts_module.server.Project): Project {
+  return new Project({
+    tsConfigFilePath: getConfigFilePath(info.project)
+  });
+}
+
+  

@@ -11,5 +11,13 @@ class Vehicle extends Transport {
     super()
   }
 }
-class Car extends Vehicle {
+interface Speedometer extends EventEmitter{
+  getCurrentSpeed():number
+}
+interface Car extends Vehicle {
+  speedometer: EventEmitter
+  getWheel():
+}
+interface Wheel{
+  rotate(force:number): {counterclockwise: boolean, h: number}
 }
