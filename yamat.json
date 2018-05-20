@@ -36,8 +36,8 @@
     "path": "typescript-plugin-extract-interface-client-project1"
   },
   {
-    "name": "typescript-api-tests",
-    "path": "typescript-api-tests"
+    "name": "typescript-plugins-text-based-user-interaction",
+    "path": "typescript-plugins-text-based-user-interaction"
   },
   {
     "name": "typescript-plugin-move-file",

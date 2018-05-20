@@ -1,32 +1,40 @@
 import { GetCompletionsAtPositionOptions, CompletionEntry, ScriptElementKind, ScriptElementKindModifier } from "typescript/lib/tsserverlibrary";
 
-export interface GUINoMoreConfig{
+export interface ToolConfig{
   prefix: string
-  actions: GUINoMoreActionConfig[]
+  actions: ActionConfig[]
 }
-export interface GUINoMoreActionConfig{
+export interface ActionConfig{
   /** must be a valid JavaScript identifier name */
   name: string,
   /** each must be a valid JavaScript identifier name */
   args: string[]
   /** pretty print for refactor suggestion */
-  print: (action: GUINoMoreAction)=>string
+  print: (action: Action)=>string
   /** the example snippet to suggested for this action to the user on "refactor" autocomplete  */
   snippet: string
 }
-export interface GUINoMoreAction {
+export interface Action {
   name: string
   args: { [key: string]: string }
-  print: ( action: GUINoMoreAction)=>string
+  print: ( action: Action)=>string
 } 
-export class GUINoMore {
-  constructor(config: GUINoMoreConfig){
+export function create(config: ToolConfig): Tool{
+  return new ToolImpl(config)
+}
+export interface Tool{
+  findActions(fileStr: string): Action[]
+  getCompletionsAtPosition(fileName:string, position: number, options: GetCompletionsAtPositionOptions | undefined): CompletionEntry[]
+}
+
+class ToolImpl implements Tool{
+  constructor(config: ToolConfig){
     this.config = config
     this.config.prefix = this.config.prefix || '&%&%'
     this.buildEvalExpr()
   }
   private allActionsEvalPrefix: string
-  private config: GUINoMoreConfig
+  private config: ToolConfig
   private buildEvalExpr(): void {
     this.allActionsEvalPrefix = ''
     // want to get to an string like this: function moveThisFileTo(path){return {name: 'moveThisFileTo', args: {dest: path} }};
@@ -38,8 +46,8 @@ export class GUINoMore {
    * find all declared actions in given file string
    * @param fileStr content of file where to find action declarations - in general obtained with `sourceFile.getText()`
    */
-  public findActions(fileStr: string): GUINoMoreAction[]{
-    const found: GUINoMoreAction[] = []
+  public findActions(fileStr: string): Action[]{
+    const found: Action[] = []
     const lines = fileStr.split('\n') //TODO: use new line format in tsconfig
     lines.forEach(line => {
       const i = line.indexOf(this.config.prefix)

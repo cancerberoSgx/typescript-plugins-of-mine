@@ -1,24 +1,3 @@
-// import { GUINoMoreConfig, GUINoMore } from "./guiNoMore";
-
-// const guiNoMoreConfig2: GUINoMoreConfig = {
-//   prefix: '&%&%',
-//   actions: [
-//     {
-//       name: 'moveThisFileTo',
-//       args: ['dest']
-//     }
-//   ]
-// }
-// const tool = new GUINoMore(guiNoMoreConfig2)
-
-
-// const file1 = `
-// import * as x from 'foo'
-// // &%&% moveThisFileTo('/home/sg/git/proj1/src/model/units/Warrior.ts') 
-// export function a (){}
-// `
-// console.log(tool.findActions(file1))
-
 
 // export interface Config {
 //   prefix: string
@@ -27,6 +6,7 @@
 //   action: string
 //   args: { [key: string]: string }
 // }
+
 
 // /**
 //  * given a ts file content string will try to parse and return Actions found on it

@@ -1,0 +1,30 @@
+{
+  "name": "typescript-plugins-text-based-user-interaction",
+  "version": "0.0.1",
+  "description": "Helpers for TypeScript Language Service Plugins that wants to interact with the user via the source file itself",
+  "main": "dist/src/index.js",
+  "typings": "dist/src/index.d.ts",
+  "license": "MIT",
+  "scripts": {
+    "test": "ts-node node_modules/jasmine/bin/jasmine",
+    "build": "tsc",
+    "prepare": "tsc",
+    "doc": "exit 0"
+  },
+  "keywords": [
+    "Language Server Plugin",
+    "TypeScript",
+    "refactor",
+    "editor",
+    "IDE"
+  ],
+  "dependencies": {
+    "typescript": "^2.8.3"
+  },
+  "devDependencies": {
+    "@types/jasmine": "^2.8.7",
+    "jasmine": "^3.1.0",
+    "ts-node": "^6.0.3"
+  },
+  "repository": "https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugins-text-based-user-interaction"
+}
