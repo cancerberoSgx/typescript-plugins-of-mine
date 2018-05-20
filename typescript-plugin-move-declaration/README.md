@@ -19,3 +19,11 @@ Important things not supported, yet:
  * only named import declarations supported: `import {a,b} from './foo'`
     * `import * as foo from 'foo'` not supported
     * `import bar from 'bar'` not supported  
+ * commons.js or other module system
+
+TODO
+ * all kind of import / exports
+ * moveNextDeclaration('../other/file.ts')
+ * communicate errors below the comment
+ * undo action
+ * commons.js require() ? 
