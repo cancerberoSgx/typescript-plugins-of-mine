@@ -46,10 +46,17 @@ Experiments with typescript compiler API, and Language Service plugins.
  * [Project](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-add-type)
  * DEMO: ![Adding types in Visual studio Code Editor](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-add-type/doc-assets/vscode.gif?raw=true?p=.gif)
 
+### typescript-plugin-method-delegate
+
+ * well-tested - **safe to use**
+ * suggest a refactor to create delegate methods to selected property
+ * See it in action: 
+ * ![subclasses-of screencast
+   WIP](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-method-delegate/doc-assets/screencast.gif?raw=true?p=.gif)
+ * See [Project home](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-method-delegate)
 
 ### typescript-plugin-subclasses
 
-**WIP**
  * well-tested - **safe to use**
  * user has to select (part of) the name of class of interface for refactor to be suggested
  * prints the output at the end of current file with links to the exact position (ctrl-click will take you there)
