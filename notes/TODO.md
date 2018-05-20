@@ -13,7 +13,8 @@
   
   
 ## plugin ideas
-
+* a plugin like move-declaration but for commons.js
+* a plugin like move-file but for commons.js
 * a plugin that changes expressions like cond1 && cond2 || !cond3 to its equivalent : (!cond1 || !cond2) && cond3 - useless and hard
 * move method to other class (complicated - move interfaces also or classes hierarchy!)
 * move node (class, interf, function to other file) - complication: exported nodes! must change other's imports
