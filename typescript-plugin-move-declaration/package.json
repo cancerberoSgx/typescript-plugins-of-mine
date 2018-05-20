@@ -1,14 +1,15 @@
 {
   "name": "typescript-plugin-move-declaration",
   "version": "0.0.1",
-  "description": "TypeScript plugin : move declarations. a.k.a : move classes, functions, interfaces top level declarations to another file",
+  "description": "TypeScript plugin : move declarations. a.k.a : move classes, functions, interfaces to another file",
   "main": "dist/src/index.js",
   "typings": "dist/src/index.d.ts",
   "scripts": {
     "test": "ts-node node_modules/jasmine/bin/jasmine",
     "doc": "exit 0",
     "watch": "tsc --watch",
-    "build": "tsc"
+    "build": "tsc",
+    "clean": "rm -rf node_modules/ package-lock.json"
   },
   "keywords": [
     "TypeScript",

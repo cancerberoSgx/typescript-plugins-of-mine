@@ -7,7 +7,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 0",
     "build": "tsc",
-    "doc": "echo nothing && exit 0"
+    "doc": "echo nothing && exit 0",
+    "clean": "rm -rf node_modules/ package-lock.json"
   },
   "keywords": [],
   "author": "",
