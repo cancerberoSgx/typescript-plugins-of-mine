@@ -2,7 +2,7 @@ import { cat, cp, rm } from "shelljs";
 import Project, { ClassDeclaration, SourceFile, Directory } from "ts-simple-ast";
 import { moveDeclaration } from "../src/moveDeclaration";
 
-xdescribe('lets see how ts-simple-ast move file / folder to other location behaves without doing anything else', () => {
+describe('lets see how ts-simple-ast move file / folder to other location behaves without doing anything else', () => {
 
   it('perform refactor on sample project moving src/model/Apple:Apple to file src/model/level2/usingApples', () => {
     rm('-rf', 'assets/sampleProject2_copy')
@@ -12,7 +12,7 @@ xdescribe('lets see how ts-simple-ast move file / folder to other location behav
     });
     project.emit()
     expect(project.getDiagnostics().length).toBe(0)
-    console.log(project.getDiagnostics().forEach(d=>d.getMessageText()))
+    // console.log(project.getDiagnostics().forEach(d=>d.getMessageText()))
     const fileToMove = project.getSourceFiles().find(sf => sf.getFilePath().includes('apple.ts'))
     if(!fileToMove ){
       return fail()

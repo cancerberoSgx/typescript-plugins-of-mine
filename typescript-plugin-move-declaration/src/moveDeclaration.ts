@@ -106,14 +106,15 @@ function addDeclarationDependencyImportsToTargetFile(originalFile: SourceFile, p
   //     // }
   //     // d.getType    
   //   // })
-  // const currentImports = targetFile.getChildrenOfKind(ts.SyntaxKind.ImportDeclaration)
-  // let insertPos = 0
-  // if (currentImports && currentImports.length) {
-  //   insertPos = currentImports[currentImports.length - 1].getEnd()
-  // }
-  // console.log({insertPos})
+  const currentImports = targetFile.getChildrenOfKind(ts.SyntaxKind.SyntaxList)[0].getChildrenOfKind(ts.SyntaxKind.ImportDeclaration)
+  debugger
+  let insertPos = 0
+  if (currentImports && currentImports.length) {
+    insertPos = currentImports[currentImports.length - 1].getChildIndex()
+  }
+  console.log({insertPos})
   importStructures.forEach(is => {
-    targetFile.insertImportDeclarations(targetFile.getStatements().length-1, importStructures)
+    targetFile.insertImportDeclarations(insertPos, importStructures)
   })
 }
 

@@ -25,16 +25,17 @@
             "type": "node",
             "request": "launch",
             "protocol": "inspector",
-            "name": "ts-ast-simple",
+            "name": "typescript-plugin-move-declaration",
             "args": [
-                "simpleAstTest1"
+                "--config=spec/support/jasmine-js.json",
+                "**/moveDeclarationSpec.js"
             ],
             "runtimeArgs": [
                 "--inspect",
                 "--debug-brk",
             ],
-            "cwd": "${workspaceFolder}/typescript-api-tests/",
-            "program": "${workspaceFolder}/typescript-api-tests/dist/spec/simpleAstTest1.js",
+            "cwd": "${workspaceFolder}/typescript-plugin-move-declaration/",
+            "program": "${workspaceFolder}/typescript-plugin-move-declaration/node_modules/jasmine/bin/jasmine.js",
             "sourceMaps": true
         }
     ]
