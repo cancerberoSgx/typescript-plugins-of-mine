@@ -37,17 +37,15 @@ export function moveDeclarationNamed(declarationName: string, file: SourceFile, 
  */
 export function moveDeclaration(c: MovableDeclaration, project: Project, targetFile: SourceFile) {
   const originalFile = c.getSourceFile()
-
+  
   // write declaration at the beggining of target file making sure it's exported
   let declarationText = c.getText()
   declarationText.trim().startsWith('export') ? declarationText : 'export ' + declarationText
   declarationText = declarationText + '\n'
   targetFile.insertStatements(0, declarationText)
 
-
   // add necessary imports in target file so declaration has its dependencies: 
   addDeclarationDependencyImportsToTargetFile(originalFile, project, targetFile, c)
-
 
   let modifiedFiles: { [key: string]: SourceFile } = {}
   if ((c as ExportableNodeStructure).isExported) {
@@ -64,7 +62,7 @@ export function moveDeclaration(c: MovableDeclaration, project: Project, targetF
   originalFile.organizeImports()
   Object.values(modifiedFiles).forEach(file => {
     file.organizeImports()
-  });
+  })
 
   project.saveSync()
 }
@@ -94,25 +92,13 @@ function addDeclarationDependencyImportsToTargetFile(originalFile: SourceFile, p
       importStructures.push(importDeclStructure)
     }
   })
-  // console.log(  'sehshshs', originalFile.getDescendantStatements().filter(s=>ts.SyntaxKind.TypeAliasDeclaration === s.getKind()) .map(d=>d.getKindName()).join(', '))//  getDescendantsOfKind(ts.Syn)
-  //   // The same for all types referenced inside declaration
-  //   // c.forEachDescendant(d=>{
-  //   //   if(TypeGuards.isTypeReferenceNode(d)){
-  //   //     debugger
-  //   //     d.getType()
-  //   //   }
-  //     // if(d.getText().includes('AppleTree')){
-  //     //   debugger
-  //     // }
-  //     // d.getType    
-  //   // })
+  // get the index of the last import so we add imports at the end of the file (so organize imports will
+  // remove them in case of duplicates)
   const currentImports = targetFile.getChildrenOfKind(ts.SyntaxKind.SyntaxList)[0].getChildrenOfKind(ts.SyntaxKind.ImportDeclaration)
-  debugger
   let insertPos = 0
   if (currentImports && currentImports.length) {
-    insertPos = currentImports[currentImports.length - 1].getChildIndex()
+    insertPos = currentImports[currentImports.length - 1].getChildIndex() + 1
   }
-  console.log({insertPos})
   importStructures.forEach(is => {
     targetFile.insertImportDeclarations(insertPos, importStructures)
   })
@@ -206,3 +192,18 @@ function importDeclaration2Structure(importDecl: ImportDeclaration): ImportDecla
     moduleSpecifier: importDecl.getModuleSpecifier().getText()
   }
 }
+
+
+
+  // console.log(  'sehshshs', originalFile.getDescendantStatements().filter(s=>ts.SyntaxKind.TypeAliasDeclaration === s.getKind()) .map(d=>d.getKindName()).join(', '))//  getDescendantsOfKind(ts.Syn)
+  //   // The same for all types referenced inside declaration
+  //   // c.forEachDescendant(d=>{
+  //   //   if(TypeGuards.isTypeReferenceNode(d)){
+  //   //     debugger
+  //   //     d.getType()
+  //   //   }
+  //     // if(d.getText().includes('AppleTree')){
+  //     //   debugger
+  //     // }
+  //     // d.getType    
+  //   // })

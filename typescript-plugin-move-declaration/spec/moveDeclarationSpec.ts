@@ -8,7 +8,7 @@ let project
 describe(`move class declaration`, () => {
 
   describe('moveDeclaration', () => {
-    const projectPath = `assets/sampleProject1_copy`
+    const projectPath = `assets/sampleProject1_1_copy`
     it(`perform refactor on sample project moving src/model/Apple:Apple to file src/model/level2/usingApples`, () => {
       rm(`-rf`, projectPath)
       cp(`-r`, `assets/sampleProject1`, `${projectPath}`)
@@ -22,11 +22,10 @@ describe(`move class declaration`, () => {
       }
     })
     doAssert(projectPath)
-
   })
 
   describe('moveDeclarationNamed class decl', () => {
-    const projectPath = `assets/sampleProject3_copy`
+    const projectPath = `assets/sampleProject1_3_copy`
     it('moveDeclarationNamed', () => {
       rm(`-rf`, projectPath)
       cp(`-r`, `assets/sampleProject1`, `${projectPath}`)
@@ -34,21 +33,19 @@ describe(`move class declaration`, () => {
         tsConfigFilePath: `${projectPath}/tsconfig.json`
       });
       moveDeclarationNamed(`Apple`, project.getSourceFile(resolve(`${projectPath}/src/model/apple.ts`)), project, project.getSourceFile(resolve(`${projectPath}/src/model/level2/usingApples.ts`)))
-      // const targetSourceFile = project.getSourceFiles().find(sf => sf.getFilePath().includes(`usingApples.ts`))
-      // if(apple&&targetSourceFile){
-      //   moveDeclaration(apple, project, targetSourceFile)
-      // }
     })
     doAssert(projectPath)
   })
 })
 
-
 function doAssert(projectPath: string) {
 
-  it(`target file should contain class and new imports related to its decl`, () => {
+  it(`target file should contain moved decl and and new imports referenced by it `, () => {
     expect(cat(`${projectPath}/src/model/level2/usingApples.ts`).toString()).toContain(`export class Apple extends Fruit implements Eatable, Alive {`)
-    // TODO: new imports
+    expect(cat(`${projectPath}/src/model/level2/usingApples.ts`).toString()).toContain(`import { Alive } from "../../model/Alive";`)
+    expect(cat(`${projectPath}/src/model/level2/usingApples.ts`).toString()).toContain(`import { Eatable } from "../../model/Eatable";`)
+    expect(cat(`${projectPath}/src/model/level2/usingApples.ts`).toString()).toContain(`import { Fruit } from "../../model/fruit";`)
+    expect(cat(`${projectPath}/src/model/level2/usingApples.ts`).toString()).toContain(`import { Seed } from "../../model/seeds";`)
   })
 
   it(`target file should not contain old import to declaration`, () => {
@@ -88,4 +85,3 @@ function getTopLevelClassNamed(project: Project, name: string): ClassDeclaration
   })
   return classFound
 }
-
