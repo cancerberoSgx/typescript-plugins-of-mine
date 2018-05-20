@@ -52,8 +52,8 @@ Experiments with typescript compiler API, and Language Service plugins.
  * suggest a refactor to create delegate methods to selected property
  * See it in action: 
  * ![subclasses-of screencast
-   WIP](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-method-delegate/doc-assets/screencast.gif?raw=true?p=.gif)
- * See [Project home](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-method-delegate)
+   WIP](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-method-delegate/doc-assets/vscode.gif?raw=true?p=.gif)
+ * See [Project home](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-method-delegate)
 
 ### typescript-plugin-subclasses
 

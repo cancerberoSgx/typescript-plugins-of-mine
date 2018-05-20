@@ -1,7 +1,4 @@
 const a = 2 + 3
-
-function foo() { return [] }
-
 function bigfish()                            { return 1 }
 // const bigger = f()
 var hoo = ['asd']

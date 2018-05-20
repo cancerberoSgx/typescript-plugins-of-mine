@@ -40,6 +40,10 @@
     "path": "typescript-plugin-move-declaration"
   },
   {
+    "name": "typescript-plugin-method-delegate",
+    "path": "typescript-plugin-method-delegate"
+  },
+  {
     "name": "sample-ts-plugin1-sample-project",
     "path": "sample-ts-plugin1-sample-project"
   },
