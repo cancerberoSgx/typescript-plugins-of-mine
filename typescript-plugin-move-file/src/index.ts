@@ -2,13 +2,11 @@ import { now } from 'hrtime-now';
 import { basename, dirname, isAbsolute, join } from 'path';
 import Project from 'ts-simple-ast';
 import { LanguageServiceOptionals, getPluginCreate } from 'typescript-plugin-util';
-import { Action, create } from 'typescript-plugins-text-based-user-interaction';
 import * as ts_module from 'typescript/lib/tsserverlibrary';
-
+import { Action, create } from 'typescript-plugins-text-based-user-interaction';
 
 const PLUGIN_NAME = 'typescript-plugin-move-file'
 const REFACTOR_ACTION_NAME = `${PLUGIN_NAME}-refactor-action`
-
 
 const guiNoMore = create({
   prefix: '&%&%',
