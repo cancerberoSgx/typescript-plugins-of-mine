@@ -56,21 +56,18 @@ function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSetti
     return refactors
   }
   try {
-    // TODO: could we maintain a simple-ast Project in a variable and next time just refresh it so is faster ? 
+    // TODO: could we maintain a simple-ast Project in a variable and next time just refresh it so is faster ?
+    // perhaps with this: simpleProject.getSourceFiles().forEach(f=>f.refreshFromFileSystemSync())
     const simpleProject = createSimpleASTProject(info.project)
-    // simpleProject.getSourceFiles().forEach(f=>f.refreshFromFileSystemSync())
     const sourceFile = simpleProject.getSourceFileOrThrow(fileName)
-
     let dest: string = isAbsolute(selectedAction.args.dest) ? selectedAction.args.dest :
       join(dirname(fileName), selectedAction.args.dest)
-
     const targetFile = simpleProject.getSourceFile(dest)
-
-
     info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor moveDeclarationNamed ${selectedAction.args.declarationName}, ${sourceFile.getFilePath()}, ${targetFile.getFilePath()}`)
-
     moveDeclarationNamed(selectedAction.args.declarationName, sourceFile, simpleProject, targetFile)
-
+    // sourceFile.compilerNode.
+    info.languageService.getEmitOutput(sourceFile.getFilePath())
+    info.languageService.getEmitOutput(targetFile.getFilePath())
     simpleProject.saveSync()
 
   } catch (error) {

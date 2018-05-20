@@ -1,10 +1,5 @@
-import Project, {
-  ClassDeclaration, EnumDeclaration, FunctionDeclaration, ImportDeclaration, InterfaceDeclaration,
-  Node, SourceFile, VariableDeclaration, ExportableNodeStructure, ImportDeclarationStructure, ClassDeclarationStructure,
-  Identifier, ImportSpecifier, StringLiteral, ReferenceEntry, TypeGuards
-} from "ts-simple-ast";
+import Project, { ClassDeclaration, EnumDeclaration, ExportableNodeStructure, FunctionDeclaration, Identifier, ImportDeclaration, ImportDeclarationStructure, ImportSpecifier, InterfaceDeclaration, ReferenceEntry, SourceFile, StringLiteral, VariableDeclaration } from "ts-simple-ast";
 import * as ts from 'typescript';
-import { basename } from "path";
 
 /**meaning that it moved by this refactor */
 export type MovableDeclaration = ClassDeclaration | FunctionDeclaration | InterfaceDeclaration |
@@ -26,20 +21,15 @@ export function moveDeclarationNamed(declarationName: string, file: SourceFile, 
 }
 
 /**
- *
- * Moves a top level declaration to another file.
- * 
- * 
- * **Very WIP dont use it in production yet!**
- * 
- * The resulting project state should not have errors. We do two important things: 
+ * Moves a top level declaration to another file. See all todo comments along the code to  get idea of current
+ * state / issue. The resulting project state should not have errors. We do two important things: 
  * 
  * 1) fix all imports pointing to target declaration in all files of the project so they point now to the new
  *    location (target file)
  * 2) all nodes referenced inside the target declaration must be now imported in the target file (so the
  *    declaration can still see them) 
- *
- * See all todo comments along the code to  get idea of current state / issue
+ * 
+ * **Very WIP dont use it in production yet!**
  *
  * @param c the declaration node to move
  * @param project project in which to do the refactor
@@ -65,8 +55,6 @@ export function moveDeclaration(c: MovableDeclaration, project: Project, targetF
     modifiedFiles = fixProjectImports(c, project, targetFile, originalFile);
   }
   // TODO: support / test exports with custom names like :  "export $DECLARATION as OtherName ""
-
-
   c.remove()
   c = null
 
@@ -118,8 +106,14 @@ function addDeclarationDependencyImportsToTargetFile(originalFile: SourceFile, p
   //     // }
   //     // d.getType    
   //   // })
+  // const currentImports = targetFile.getChildrenOfKind(ts.SyntaxKind.ImportDeclaration)
+  // let insertPos = 0
+  // if (currentImports && currentImports.length) {
+  //   insertPos = currentImports[currentImports.length - 1].getEnd()
+  // }
+  // console.log({insertPos})
   importStructures.forEach(is => {
-    targetFile.insertImportDeclarations(0, importStructures)
+    targetFile.insertImportDeclarations(targetFile.getStatements().length-1, importStructures)
   })
 }
 
