@@ -15,7 +15,7 @@ const interactionTool = create({
     {
       name: 'moveDeclarationNamed',
       args: ['declarationName', 'dest'],
-      print: (action) => `Move declaration "${action.args.declarationName}" to file ${action.args.dest}`,
+      print: (action) => `Move "${action.args.declarationName}" to file ${action.args.dest}`,
       snippet: 'moveDeclarationNamed(\'SomeClass\', \'../other/file.ts\')'
     }
   ]
@@ -37,7 +37,7 @@ function getApplicableRefactors(fileName: string, positionOrRange: number | ts.T
     return refactors
   }
   selectedAction = actions[0]
-  const refactorActions = [{ name: REFACTOR_ACTION_NAME + '-' + selectedAction.name, description: selectedAction.print(selectedAction) }]
+  const refactorActions = [{ name: REFACTOR_ACTION_NAME, description: selectedAction.print(selectedAction) }]
   refactors.push({
     name: `${PLUGIN_NAME}-refactor-info`,
     description: 'move-declaration',
@@ -64,11 +64,14 @@ function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSetti
     let dest: string = isAbsolute(selectedAction.args.dest) ? selectedAction.args.dest :
       join(dirname(fileName), selectedAction.args.dest)
 
+    const targetFile = simpleProject.getSourceFile(dest)
 
-    const destFile = simpleProject.getSourceFile(dest)
-    const targetFile = simpleProject.getSourceFileOrThrow(fileName)
+
+    info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor moveDeclarationNamed ${selectedAction.args.declarationName}, ${sourceFile.getFilePath()}, ${targetFile.getFilePath()}`)
 
     moveDeclarationNamed(selectedAction.args.declarationName, sourceFile, simpleProject, targetFile)
+
+    simpleProject.saveSync()
 
   } catch (error) {
     info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor error  ${selectedAction.name} ${error + ' - ' + error.stack}`)

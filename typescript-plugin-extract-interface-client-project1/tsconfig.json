@@ -14,18 +14,22 @@
       {
         "name": "typescript-plugin-extract-interface"
       },
-      // {
-      //   "name": "typescript-plugin-subclasses-of"
-      // },
-      // {
-      //   "name": "typescript-plugin-ast-inspector"
-      // },
-      // {
-      //   "name": "typescript-plugin-add-type"
-      // },
+      {
+        "name": "typescript-plugin-subclasses-of"
+      },
+      {
+        "name": "typescript-plugin-ast-inspector"
+      },
+      {
+        "name": "typescript-plugin-add-type"
+      },
       {
         "name": "typescript-plugin-move-file"
+      },
+      {
+        "name": "typescript-plugin-move-declaration"
       }
+      
     ]
   }
 }
