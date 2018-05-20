@@ -38,7 +38,7 @@ function doAssert(projectPath: string) {
     expect(cat(`${projectPath}/src/model/units/Unit.ts`).toString()).not.toContain(`import { Thing } from "../base/Thing";`)
   })
 
-  xit(`project should compile OK`, () => {
+  it(`project should compile OK`, () => {
     project.saveSync()
     project.emit()
     expect(project.getDiagnostics().length).toBe(0)

@@ -45,27 +45,21 @@ function doAssert(projectPath: string) {
     expect(cat(`${projectPath}/src/model/level2/usingApples.ts`).toString()).toContain(`import { Alive } from "../../model/Alive";`)
     expect(cat(`${projectPath}/src/model/level2/usingApples.ts`).toString()).toContain(`import { Eatable } from "../../model/Eatable";`)
     expect(cat(`${projectPath}/src/model/level2/usingApples.ts`).toString()).toContain(`import { Fruit } from "../../model/fruit";`)
-    expect(cat(`${projectPath}/src/model/level2/usingApples.ts`).toString()).toContain(`import { Seed } from "../../model/seeds";`)
+    expect(cat(`${projectPath}/src/model/level2/usingApples.ts`).toString()).toContain(`import { Seed } from "../seeds";`)
   })
 
   it(`target file should not contain old import to declaration`, () => {
     expect(cat(`${projectPath}/src/model/level2/usingApples.ts`).toString()).not.toContain(`import { Apple }`)
   })
+  
   it(`original file should not have the class nor imports related to it any more`, () => {
     // apple.js shouldnt`t have  anymore and any import referencing c internals or imports related to C
     expect(cat(`${projectPath}/src/model/apple.ts`).toString()).not.toContain(`export class Apple extends Fruit implements Eatable, Alive {`)
     expect(cat(`${projectPath}/src/model/apple.ts`).toString()).not.toContain(`import { Fruit } from "./fruit";`)
     expect(cat(`${projectPath}/src/model/apple.ts`).toString()).not.toContain(`import { Eatable } from "./Eatable";`)
-
-
-  })
-  xit(`because original file keeps referencing the declaration, it has a new improt to it`, () => {
-    // apple.js shouldnt`t have  anymore and any import referencing c internals or imports related to C
-    expect(cat(`${projectPath}/src/model/apple.ts`).toString()).not.toContain(`import { Apple } from "./level2/usingApples"`)
-    expect(cat(`${projectPath}/src/model/apple.ts`).toString()).not.toContain(`apples: Apple[]`)
   })
 
-  xit(`project should compile OK`, () => {
+  it(`project should compile OK`, () => {
     project.saveSync()
     project.emit()
     expect(project.getDiagnostics().length).toBe(0)
