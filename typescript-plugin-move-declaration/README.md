@@ -6,7 +6,7 @@ a.k.a : **move classes, functions, interfaces, etc to other files refactor**
 
 ## Demo
 
- * ![Moving an interface to another file](https://raw.githubusercontent.com/cancerberoSgx/typescript-plugins-of-mine/master/typescript-plugin-move-declaration/doc-assets/vscode-move-interface.gif)
+ * Moving an interface to another file: ![Moving an interface to another file](https://raw.githubusercontent.com/cancerberoSgx/typescript-plugins-of-mine/master/typescript-plugin-move-declaration/doc-assets/vscode-move-interface.gif)
  
 ## Features
 
@@ -23,7 +23,40 @@ Important things not supported, yet:
     * `import bar from 'bar'` not supported  
  * commons.js or other module system
 
-TODO
+
+# How to use
+
+```sh
+npm i --save-dev typescript-plugin-move-declaration
+```
+
+in your `tsconfig.json`, add the plugin: 
+
+```json
+{
+  "compilerOptions": {
+    ...
+    "plugins": [{
+        "name": "typescript-plugin-move-declaration"
+    }]
+    ...
+  }
+}
+```
+
+Make sure you have installed typescript in your project (`npm i --save-dev typescript`) the editor you are
+using uses that typescript and not another. For example, Visual Studio Code comes with its own typescript
+version, so I need to "Select TypeScript Version" of the workspace: 
+
+```json
+{
+  // Specifies the folder path containing the tsserver and lib*.d.ts files to use.
+  "typescript.tsdk": "node_modules/typescript/lib"
+}
+```
+
+
+# TODO
  * all kind of import / exports
  * moveNextDeclaration('../other/file.ts')
  * communicate errors below the comment

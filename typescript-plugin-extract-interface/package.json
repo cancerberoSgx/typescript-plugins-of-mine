@@ -23,6 +23,6 @@
     "typescript-ast-util": "file:../typescript-ast-util"
   },
   "devDependencies": {},
-  "repository": "https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-ast-util",
+  "repository": "https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-extract-interface",
   "readme": "README.md"
 }

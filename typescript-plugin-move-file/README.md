@@ -9,13 +9,49 @@
 # Demos
 
 Moving and renaming a file in Visual studio Code Editor: 
- * 
+
  * ![Moving and renaming a file in Visual studio Code Editor](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-move-file/doc-assets/vs-code-move-file.gif?raw=true?p=.gif)
 
 Editor agnostic!. See the same demo but in Atom editor: 
  
  * ![Moving and renaming a file in Atom 
    Editor](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-move-file/doc-assets/atom-move-file.gif?raw=true?p=.gif)
+
+
+
+
+# How to use
+
+```sh
+npm i --save-dev typescript-plugin-move-file
+```
+
+in your `tsconfig.json`, add the plugin: 
+
+```json
+{
+  "compilerOptions": {
+    ...
+    "plugins": [{
+        "name": "typescript-plugin-move-file"
+    }]
+    ...
+  }
+}
+```
+
+Make sure you have installed typescript in your project (`npm i --save-dev typescript`) the editor you are
+using uses that typescript and not another. For example, Visual Studio Code comes with its own typescript
+version, so I need to "Select TypeScript Version" of the workspace: 
+
+```json
+{
+  // Specifies the folder path containing the tsserver and lib*.d.ts files to use.
+  "typescript.tsdk": "node_modules/typescript/lib"
+}
+```
+
+
 
 # TODO
  * notify last error - adding a comment just below the &%&% comment that failed

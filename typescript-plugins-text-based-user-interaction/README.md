@@ -1,20 +1,33 @@
 # typescript-plugins-text-based-user-interaction
 
-**Helpers for TypeScript Language Service Plugins that wants to interact with the user via the source file itself*
+**Helpers for TypeScript Language Service Plugins that wants to interact with the user via the source file itself**
 
 If you are developing TypeScript plugins that require to interact with the user - but want to be 
 editor/IDE agnostic you can use this library to interact with the user via expressions in the source file
 itself. 
+
+# Demo
+
+Moving and renaming a file in Visual studio Code Editor: 
+
+ * ![Moving and renaming a file in Visual studio Code Editor](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-move-file/doc-assets/vs-code-move-file.gif?raw=true?p=.gif)
+
+Editor agnostic!. See the same demo but in Atom editor: 
+ 
+ * ![Moving and renaming a file in Atom editor: 
+
+   Editor](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-move-file/doc-assets/atom-move-file.gif?raw=true?p=.gif)
+
+* Another demo, this time inquiring two arguments:  ![Moving an interface to another file](https://raw.githubusercontent.com/cancerberoSgx/typescript-plugins-of-mine/master/typescript-plugin-move-declaration/doc-assets/vscode-move-interface.gif)
+
 
 # Example
 
 The following is a fragment of typescript-plugin-move-file typescript plugin  which uses this library to ask the user where to
 move current file or current directory: 
 
-Functions `getApplicableRefactors`, `getEditsForRefactor`, `getCompletionsAtPosition` are the ones we need ot insert
-in plugin proxy object. See https://github.com/Microsoft/TypeScript/wiki/Writing-a-Language-Service-Plugin for more info about
+The functions `getApplicableRefactors`, `getEditsForRefactor`, `getCompletionsAtPosition` are the ones to be added in the TypeScript Language Service Plugin proxy object. See https://github.com/Microsoft/TypeScript/wiki/Writing-a-Language-Service-Plugin for more info about
 typescript plugins. 
-
 
 ```typescript
 import { Action, create } from 'typescript-plugins-text-based-user-interaction';
@@ -52,7 +65,11 @@ function getApplicableRefactors(fileName: string, positionOrRange: number | ts.T
     return refactors
   }
   selectedAction = actions[0]
-  // selectedAction is the action defined by the user, for example, selectedAction.args.dest is the destination file specified by the user in a comment like `  // &%&% moveThisFileTo('../units/Warrior.ts') `. More, in the next statement, we use selectedAction.print to print a description of the action (provided by the user in the config): 
+  // selectedAction is the action defined by the user, for example, selectedAction.args.dest is the 
+  // destination file specified by the user in a comment like: 
+  // `// &%&% moveThisFileTo('../units/Warrior.ts') `. 
+  // In the next statement, we use selectedAction.print to print a description of the action 
+  // (provided by the user in the config): 
   refactors.push({
     name: `${PLUGIN_NAME}-refactor-info`,
     description: 'move-file-action',

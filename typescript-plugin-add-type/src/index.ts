@@ -51,7 +51,6 @@ function getApplicableRefactors(fileName: string, positionOrRange: number | ts.T
     target = predicate(node, program) ? node : 
       predicate(node.parent, program) ? node.parent : 
         (child = findChild(node, c => predicate(c, program), false)) ? child : 
-          // (child = findChild(node.parent, c => predicate(c, program), false)) ? child : 
             undefined
    
   }
@@ -113,10 +112,7 @@ function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSetti
   let length = 0
 
   if (ts.isFunctionLike(node)) {
-    // const idEnd = (node as ts.FunctionDeclaration).name ? (node as ts.FunctionDeclaration).name.end :
-    // (node as ts.FunctionDeclaration).name
     start = (node as ts.FunctionDeclaration).parameters.end+1
-    // length=3
   }
   else/*if(!isDeclaration(node) || ts.isVariableDeclaration(node) || ts.isPropertyDeclaration(node))*/{
     //do nothing, default value for newText seems to be doing fine

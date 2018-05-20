@@ -7,7 +7,7 @@ Experiments with typescript compiler API, and Language Service plugins.
 
  * well-tested - **safe to use**
  * While inside a class, when you select something it activates and suggest "Extract interface". It generates the interface right after the class declaration. 
- * [Project](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/sample-ts-plugin1)
+ * [Project](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-extract-interface)
  * See it in Action: 
  * ![See it in Action: ](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-extract-interface/doc-assets/extract-interface.gif?raw=true?p=.gif)
 
@@ -22,7 +22,7 @@ Experiments with typescript compiler API, and Language Service plugins.
    atom - but should work on many more!)
  * See [Project home](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-move-file)
  * See it in Action: 
- * ![See it in Action: ](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-extract-move-file/typescript-plugin-move-file/doc-assets/vs-code-move-file.gif?raw=true?p=.gif)
+ * ![See it in Action: ](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-move-file/doc-assets/vs-code-move-file.gif?raw=true?p=.gif)
  * see more demos in other editors in [Project home](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-move-file)
 
 ### typescript-plugin-move-declaration
@@ -74,8 +74,15 @@ The result of my first steps dealing with TypeScript Language Service. I was so 
 
 While developing these I realized There was too much repeated code so I ended up writing some utilities project: 
 
- * [typescript-ast-util](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-ast-util)
+ * [typescript-plugins-text-based-user-interaction](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugins-text-based-user-interaction) a very small library starting to implement a very big
+   idea: a way of interact with the editor's user through the source file itself so plugins can inquire
+   information interactively independently of the editor/IDE being use. 
+ * Or in other words, plugin authors don't need to learn/implement an editor's specific API/technology in
+   order wo ask the user for input) 
+ * Or in other words, typescript plugins editor/ide agnostic (run on any editor/ide that support TypeScript
+   Language Service)
  * [typescript-plugin-util](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-util)
+ * [typescript-ast-util](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-ast-util)
 
 
 ## About this project

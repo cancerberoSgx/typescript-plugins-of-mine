@@ -12,6 +12,7 @@ Tested:
 ![extract interface screen cast WIP](doc-assets/extract-interface.gif)
 
 #How to use: 
+
 ```sh
 npm i --save-dev typescript-plugin-extract-interface
 ```
@@ -30,7 +31,10 @@ in your `tsconfig.json`, add the plugin:
 }
 ```
 
-Make sure you have installed typescript in your project (`npm i --save-dev typescript`) the editor you are using uses that typescript and not another. For example, Visual Studio Code comes with its own typescript version, so I need to "Select TypeScript Version" of the workspace: 
+Make sure you have installed typescript in your project (`npm i --save-dev typescript`) the editor you are
+using uses that typescript and not another. For example, Visual Studio Code comes with its own typescript
+version, so I need to "Select TypeScript Version" of the workspace: 
+
 ```json
 {
   // Specifies the folder path containing the tsserver and lib*.d.ts files to use.
