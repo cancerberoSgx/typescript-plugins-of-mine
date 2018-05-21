@@ -1,6 +1,6 @@
 {
   "name": "typescript-plugin-ast-inspector",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "TypeScript Language Service plugin with tools oriented to TypeScript developers, specially those dealing with AST, like Language Service Plugin developers",
   "main": "dist/index.js",
   "scripts": {
@@ -17,7 +17,7 @@
   "license": "MIT",
   "dependencies": {
     "typescript": "^2.8.3",
-    "typescript-ast-util": "file:../typescript-ast-util"
+    "typescript-ast-util": "1.0.7"
   },
   "devDependencies": {},
   "repository": "https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-ast-util",

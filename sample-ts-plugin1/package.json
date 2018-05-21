@@ -1,17 +1,22 @@
 {
   "name": "sample-ts-plugin1",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "https://github.com/Microsoft/TypeScript/wiki/Writing-a-Language-Service-Plugin",
   "main": "dist/index.js",
+  "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 0",
     "build": "tsc",
     "doc": "docco -o ../docs/sample-ts-plugin1 src/index.ts && cp doc-assets/plugin-screencast.gif ../docs/sample-ts-plugin1"
   },
   "keywords": [
-    "Sebastián Gurin"
+    "TypeScript",
+    "TypeScript plugin tutorial",
+    "TypeScript Language Service",
+    "tutorial",
+    "example"
   ],
-  "author": "",
+  "author": "Sebastián Gurin",
   "license": "MIT",
   "dependencies": {
     "typescript": "^2.8.3"

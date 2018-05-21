@@ -1,6 +1,6 @@
 {
   "name": "sample-ts-plugin1-sample-project",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "https://github.com/Microsoft/TypeScript/wiki/Writing-a-Language-Service-Plugin",
   "main": "index.js",
   "private": true,
@@ -15,7 +15,7 @@
   "dependencies": {},
   "devDependencies": {
     "@types/node": "^10.0.9",
-    "sample-ts-plugin1": "file:../sample-ts-plugin1",
+    "sample-ts-plugin1": "1.0.2",
     "typescript": "^2.8.3"
   }
 }

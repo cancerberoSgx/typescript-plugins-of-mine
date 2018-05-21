@@ -1,6 +1,6 @@
 {
   "name": "typescript-method-delegate",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "typescript plugin that will suggest a refactor to create delegate methods to selected property",
   "main": "dist/src/index.js",
   "typings": "dist/src/index.d.ts",
@@ -21,8 +21,8 @@
     "hrtime-now": "^1.0.1",
     "ts-simple-ast": "^11.2.0",
     "typescript": "^2.8.3",
-    "typescript-ast-util": "file:../typescript-ast-util",
-    "typescript-plugin-util": "file:../typescript-plugin-util"
+    "typescript-ast-util": "1.0.7",
+    "typescript-plugin-util": "1.0.2"
   },
   "devDependencies": {
     "@types/jasmine": "^2.8.7",

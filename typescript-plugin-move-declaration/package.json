@@ -1,6 +1,6 @@
 {
   "name": "typescript-plugin-move-declaration",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "TypeScript plugin : move declarations. a.k.a : move classes, functions, interfaces to another file",
   "main": "dist/src/index.js",
   "typings": "dist/src/index.d.ts",
@@ -22,8 +22,8 @@
     "hrtime-now": "^1.0.1",
     "ts-simple-ast": "^11.2.0",
     "typescript": "^2.8.3",
-    "typescript-plugin-util": "file:../typescript-plugin-util",
-    "typescript-plugins-text-based-user-interaction": "file:../typescript-plugins-text-based-user-interaction"
+    "typescript-plugin-util": "1.0.2",
+    "typescript-plugins-text-based-user-interaction": "0.0.3"
   },
   "devDependencies": {
     "shelljs": "^0.8.1",

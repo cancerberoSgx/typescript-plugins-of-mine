@@ -1,8 +1,6 @@
-class A{
-    public constructor(aString: String) {
-    }
-}
-function main(){
-  const a=new A('hello')
-}
-const i=9
+// class A{
+// }
+// function main(){
+//   a=new A('hello')
+// }
+// i=9
