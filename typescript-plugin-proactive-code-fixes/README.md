@@ -49,3 +49,22 @@ Ideas
  * https://github.com/Microsoft/TypeScript/issues/23869
  * https://github.com/Microsoft/TypeScript/labels/Domain%3A%20Refactorings 
  * https://github.com/Microsoft/TypeScript/issues/10139
+ * getters and setters: from 
+ ```
+class C{
+  name: string
+  } 
+ ```
+ 
+ transform it to class 
+
+  ```
+class C{
+  _name: string
+  public get name() : string {
+    return this._name
+  }
+  public set name(v : string) {
+    this._name = v;
+  }
+} ```

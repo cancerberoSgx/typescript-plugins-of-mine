@@ -1,14 +1,10 @@
 import { now } from 'hrtime-now';
-import {
-  findChild, findChildContainingRange, findIdentifier, getKindName, getTypeStringFor, 
-  hasDeclaredType, positionOrRangeToRange, positionOrRangeToNumber, isDeclaration, getTypeStringForDeclarations
-} from 'typescript-ast-util';
-import { getPluginCreate,  createSimpleASTProject } from 'typescript-plugin-util';
+import { findChildContainingRange, getKindName, positionOrRangeToNumber, positionOrRangeToRange } from 'typescript-ast-util';
+import { createSimpleASTProject, getPluginCreate } from 'typescript-plugin-util';
 import * as ts_module from 'typescript/lib/tsserverlibrary';
-import { basename } from 'path';
-import Project, { PropertySignature, TypeGuards, createWrappedNode, ClassDeclaration } from 'ts-simple-ast'
 
-const PLUGIN_NAME = 'typescript-plugin-method-delegate'
+
+const PLUGIN_NAME = 'typescript-plugin-proactive-code-fixes'
 const REFACTOR_ACTION_NAME = `${PLUGIN_NAME}-refactor-action`
 let ts: typeof ts_module
 let info: ts_module.server.PluginCreateInfo
@@ -32,15 +28,36 @@ function getApplicableRefactors(fileName: string, positionOrRange: number | ts.T
     return refactors
   }
   target = findChildContainingRange(sourceFile, positionOrRangeToRange(positionOrRange))
-  if (!(target && [ts.SyntaxKind.PropertySignature, ts.SyntaxKind.PropertyDeclaration].includes(target.kind)))
-   {
+  if (!target) {
     info.project.projectService.logger.info(`${PLUGIN_NAME} no getEditsForRefactor because findChildContainedRange undefined, target.kind == ${getKindName(target.kind) + ' - ' + [ts.SyntaxKind.PropertySignature, ts.SyntaxKind.PropertyDeclaration].join(', ')}`)
     return refactors
   }
-  // target = node
-  if(![ts.SyntaxKind.PropertySignature, ts.SyntaxKind.PropertyDeclaration].includes(target.kind)){
-    target = target.parent
-  }
+
+  // const sourceFile = simpleProject.getSourceFiles().find(sf => sf.getFilePath().includes(`src/index.ts`));
+  //   const fn = sourceFile.getFunction('main');
+  //   const cursorPosition = 61
+
+
+
+
+    // const dignostics = getDiagnosticsInCurrentLocation(program, sourceFile.compilerNode, cursorPosition);
+    // if (!dignostics || !dignostics.length) {
+    //   return fail();
+    // }
+    // const diag = dignostics[0];
+    // const child = sourceFile.getDescendantAtPos(cursorPosition);
+    // const fixes = codeFixes.filter(fix => fix.predicate(diag, child.compilerNode));
+    // if (!fixes || !fixes.length) {
+    //   return fail();
+    // }
+    // fixes[0].apply(diag, child);
+    // simpleProject.saveSync();
+    // simpleProject.emit();
+    // expect(shell.cat(`${projectPath}/src/index.ts`).toString()).toContain('const i=f()')
+
+
+
+
   const name = (target as ts.NamedDeclaration).name && (target as ts.NamedDeclaration).name.getText() || ''
   refactors.push({
     name: `${PLUGIN_NAME}-refactor-info`,

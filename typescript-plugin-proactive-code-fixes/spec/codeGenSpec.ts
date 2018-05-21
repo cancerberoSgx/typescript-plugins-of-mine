@@ -2,6 +2,7 @@ import * as shell from 'shelljs'
 import Project, {SourceFile, Node, Diagnostic} from 'ts-simple-ast'
 import * as ts from 'typescript'
 import { codeFixes } from '../src/codeFixes';
+import {getDiagnosticsInCurrentLocation} from 'typescript-ast-util'
 
 describe('method delegate interface', () => {
   let simpleProject: Project, program: ts.Program
@@ -57,18 +58,6 @@ describe('method delegate interface', () => {
     public constructor(aString: String) {`)
   })
 });
-
-
-/** return the first diagnosis */
-function getDiagnosticsInCurrentLocation(program: ts.Program, sourceFile: ts.SourceFile, position: number) : ts.Diagnostic[]{
-  const file = typeof sourceFile === 'string' ? program.getSourceFile(sourceFile) : sourceFile;
-  const diagnostics =   [
-    ...program.getSyntacticDiagnostics(),
-    ...program.getSemanticDiagnostics(),
-    ...program.getDeclarationDiagnostics()
-  ];
-    return diagnostics.filter(d => d.start <= position && position <= d.start + d.length);
-}
 
 
 

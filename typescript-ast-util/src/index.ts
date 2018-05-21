@@ -381,6 +381,20 @@ export function compileProject(projectFolder: string, rootFiles: Array<string> =
 }
 
 
+/** return the first diagnosis */
+export function getDiagnosticsInCurrentLocation(program: ts.Program, sourceFile: ts.SourceFile, position: number) : ts.Diagnostic[]{
+  const file = typeof sourceFile === 'string' ? program.getSourceFile(sourceFile) : sourceFile;
+  const diagnostics =   [
+    ...program.getSyntacticDiagnostics(),
+    ...program.getSemanticDiagnostics(),
+    ...program.getDeclarationDiagnostics()
+  ];
+    return diagnostics.filter(d => d.start <= position && position <= d.start + d.length);
+}
+
+
+
+
 
 // source file manipulation
 
