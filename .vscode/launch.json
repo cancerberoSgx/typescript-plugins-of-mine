@@ -25,17 +25,17 @@
             "type": "node",
             "request": "launch",
             "protocol": "inspector",
-            "name": "typescript-plugin-move-declaration",
+            "name": "typescript-api-tests",
             "args": [
                 "--config=spec/support/jasmine-js.json",
-                "**/moveDeclarationSpec.js"
+                "**/codeGenSpec.js"
             ],
             "runtimeArgs": [
                 "--inspect",
                 "--debug-brk",
             ],
-            "cwd": "${workspaceFolder}/typescript-plugin-move-declaration/",
-            "program": "${workspaceFolder}/typescript-plugin-move-declaration/node_modules/jasmine/bin/jasmine.js",
+            "cwd": "${workspaceFolder}/typescript-api-tests/",
+            "program": "${workspaceFolder}/typescript-api-tests/node_modules/jasmine/bin/jasmine.js",
             "sourceMaps": true
         }
     ]

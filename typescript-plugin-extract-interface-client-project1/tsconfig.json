@@ -30,9 +30,9 @@
       {
         "name": "typescript-plugin-move-declaration"
       },
-      // {
-      //   "name": "typescript-api-tests"
-      // }
+      {
+        "name": "typescript-api-tests"
+      }
       
       
     ]

@@ -92,6 +92,11 @@ While developing these I realized There was too much repeated code so I ended up
  * [typescript-ast-util](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-ast-util)
 
 
+
+
+
+
+
 ## About this project
 
  * I'm learning [TypeScript compiler
@@ -102,3 +107,42 @@ While developing these I realized There was too much repeated code so I ended up
  * The objective is to build well-tested typescript plugins to support these refactors, if possible, editor
    agnostic (others can program the nice GUIs for each editor)
  * This project is a mono-repo using [yamat](https://github.com/cancerberoSgx/yamat)
+
+
+
+  
+## plugin ideas
+
+* https://github.com/Microsoft/TypeScript/labels/Domain%3A%20Refactorings
+* a plugin like move-declaration /  move-file  but for commons.js
+* a plugin that changes expressions like cond1 && cond2 || !cond3 to its equivalent : (!cond1 || !cond2) && cond3 - useless and hard
+* move method to other class (complicated - move interfaces also or classes hierarchy!)
+* move node (class, interf, function to other file) - complication: exported nodes! must change other's imports
+* add explicit type: select an identifier without explicit type - a refactor add its type based on the inferred one. 
+* when adding an extra parameter to a function call a refactor should allow me to add this new parameter to the function/method declaration automatically
+* method delegation to a property member
+* show the ast tree (simplified) of current keyword (DONE!)
+* show all subclasses of current class/interface - show all implementors off current interface. 
+* go to definition / goto implementation hierarchy
+* views that shows the content of large. hierarchynode.d.ts, tsserverlibrary.d.ts, etc a more tree-view like for examine the structure and search
+* yeoman generator for ts plugins ? 
+* return type not compatible with actual hierarchyfix declared return type
+* agile dev - codegen - https://github.com/Microsoft/TypeScript/issues/10139
+// IDEA ast-inspector enhancement : other action that prints nodeAtCursor.arent.parent.arent to the top so I know where I'm standings
+  * string-concat replace with string template
+  * variable chained replace it ith variable singl edecl
+* "get absolute location" for ast-inspector - where-am'i - I want to know the absolute value of something, like a method, or member . for example module m{class A{prop: {name:string,val: {foo:number}}}} - for foo it should prnt something l ike m.A.prop.val.foo  or more friendly, module m, class A , property prop, prop val
+  * facilitate handling foo.getSomeCouldBeUndefined().bar() in strict mode . Create local variaable and (localVar1=foo.getSomeCouldBeUndefined()) && localVar.bar()
+ * autocomplete a function signature choosing randomly variables in current scope (matching by type) -.... crazy
+
+## TODO
+
+Each project has its own TODO but here are some general ones: 
+  
+ * Performance and production:  Because of performance, should I pack usefll plugins these plugins togheter in a single plugin to redistribute  so e request the AST / lang service minimal ?
+  * refactor subclasses-of to use simple-ast helpers for performance. 
+  * remove all gif from this readme only put a couple of simple light images - leave gifs in they own readmes
+ * build "Incremental build support using the language services" from https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API so we can debug the whole experience in debugger instead of debugging using plugin manually in the editor!
+ * test how well simple-ast behaves in langauge service plugins with big projects. see plugin-util/simple-ast-util.ts - build a cache of sourcefiles and a refresh() method
+  
+

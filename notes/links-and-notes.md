@@ -69,3 +69,9 @@ https://github.com/nwolverson/blog-typescript-api/tree/master/src
  * http://blog.scottlogic.com/2015/01/20/typescript-compiler-api.html
 
 https://github.com/Microsoft/vscode/tree/master/extensions/typescript-language-features/src- client side of vscode that talks with tsserver (plugins)
+
+
+## MISC 
+https://stackoverflow.com/users/1704166/ryan-cavanaugh
+https://github.com/Microsoft/TypeScript/tree/master/src/services/codefixes
+
