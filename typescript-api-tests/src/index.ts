@@ -7,7 +7,6 @@ import { getPluginCreate,  createSimpleASTProject } from 'typescript-plugin-util
 import * as ts_module from 'typescript/lib/tsserverlibrary';
 import { basename } from 'path';
 import Project, { PropertySignature, TypeGuards, createWrappedNode, ClassDeclaration } from 'ts-simple-ast'
-import { methodDelegateOnInterface, methodDelegateOnClass } from './methodDelegate';
 
 const PLUGIN_NAME = 'typescript-plugin-method-delegate'
 const REFACTOR_ACTION_NAME = `${PLUGIN_NAME}-refactor-action`
@@ -67,23 +66,25 @@ function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSetti
     const descAtPo = project.getSourceFileOrThrow(fileName).getDescendantAtPos(positionOrRangeToNumber(positionOrRange))
     const typeDeclaration = descAtPo.getParent().getParent()
     const propertyDeclaration = descAtPo.getParent()
-    if (TypeGuards.isInterfaceDeclaration(typeDeclaration) && TypeGuards.isPropertySignature(propertyDeclaration)) {
-      methodDelegateOnInterface(typeDeclaration, propertyDeclaration)
-      project.emit()
-      project.saveSync();
-    }
-    else if (TypeGuards.isClassDeclaration(typeDeclaration) && TypeGuards.isPropertyDeclaration(propertyDeclaration)) {
-      methodDelegateOnClass(typeDeclaration, propertyDeclaration)
-      project.emit()
-      project.saveSync();
-    }
-    else {
-      info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor not executed because typeguards didn't applied for typeDeclaration:${typeDeclaration.getKindName()}, propertyDeclaration:${propertyDeclaration.getKindName()}`)
-    }
+    // if (TypeGuards.isInterfaceDeclaration(typeDeclaration) && TypeGuards.isPropertySignature(propertyDeclaration)) {
+    //   methodDelegateOnInterface(typeDeclaration, propertyDeclaration)
+    //   project.emit()
+    //   project.saveSync();
+    // }
+    // else if (TypeGuards.isClassDeclaration(typeDeclaration) && TypeGuards.isPropertyDeclaration(propertyDeclaration)) {
+    //   methodDelegateOnClass(typeDeclaration, propertyDeclaration)
+    //   project.emit()
+    //   project.saveSync();
+    // }
+    // else {
+    //   info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor not executed because typeguards didn't applied for typeDeclaration:${typeDeclaration.getKindName()}, propertyDeclaration:${propertyDeclaration.getKindName()}`)
+    // }
     info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor took ${now() - t0}`)
   } catch (error) {
     info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor error: ${error.toString()} - stack: ${error.stack}`)
   }
   return refactors
 }
+
+
 
