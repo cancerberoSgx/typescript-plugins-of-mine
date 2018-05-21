@@ -146,6 +146,13 @@ While developing these I realized There was too much repeated code so I ended up
   * facilitate handling foo.getSomeCouldBeUndefined().bar() in strict mode . Create local variaable and (localVar1=foo.getSomeCouldBeUndefined()) && localVar.bar()
  * autocomplete a function signature choosing randomly variables in current scope (matching by type) -.... crazy
 
+ * Inline local refactoring  https://github.com/Microsoft/TypeScript/issues/18459 <<--- this one perhaps amerits its own project
+
+ * Reorder Parameters Refactoring https://msdn.microsoft.com/en-us/library/5ss5z206.aspx
+
+ *  change function/method signature from arguments to single object argument: method("a", 1234, true, {s: '1'}) to method({{param1: 'a', param2: 1234, param3: true, param4: {s: '1'}}})  ... .probably would be nice if user can configure the name of parameters (sing text-based-user-interaction)
+
+
 ## TODO
 
 Each project has its own TODO but here are some general ones: 

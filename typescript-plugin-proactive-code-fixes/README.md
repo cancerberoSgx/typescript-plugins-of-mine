@@ -7,8 +7,6 @@ Right now:
 * create variable
 * create constructor
 
-Some plugin ideas taken from  https://github.com/Microsoft/TypeScript/labels/Domain%3A%20Refactorings and https://github.com/Microsoft/TypeScript/issues/10139
-
 
 # Demo
 
@@ -43,3 +41,11 @@ Make sure you have installed typescript in your project (`npm i --save-dev types
   "typescript.tsdk": "node_modules/typescript/lib"
 }
 ```
+
+
+Ideas
+
+ * https://github.com/Microsoft/TypeScript/issues/22392
+ * https://github.com/Microsoft/TypeScript/issues/23869
+ * https://github.com/Microsoft/TypeScript/labels/Domain%3A%20Refactorings 
+ * https://github.com/Microsoft/TypeScript/issues/10139
