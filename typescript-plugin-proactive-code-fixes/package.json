@@ -22,6 +22,7 @@
     "hrtime-now": "^1.0.1",
     "ts-simple-ast": "^11.2.0",
     "typescript": "^2.8.3",
+    "typescript-ast-util": "file:../typescript-ast-util",
     "typescript-plugin-util": "file:../typescript-plugin-util"
   },
   "devDependencies": {

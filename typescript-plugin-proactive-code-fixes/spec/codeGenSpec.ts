@@ -1,6 +1,5 @@
 import * as shell from 'shelljs'
 import Project, {SourceFile, Node, Diagnostic} from 'ts-simple-ast'
-import   {addTextToSourceFile} from 'typescript-ast-util'
 import * as ts from 'typescript'
 import { codeFixes } from '../src/codeFixes';
 
@@ -33,6 +32,8 @@ describe('method delegate interface', () => {
     fixes[0].apply(diag, child);
     simpleProject.saveSync();
     simpleProject.emit();
+    expect(shell.cat(`${projectPath}/src/index.ts`).toString()).toContain('const i=f()')
+
   })
 
   it('Declare constructor fix ', ()=>{
@@ -52,8 +53,9 @@ describe('method delegate interface', () => {
     fixes[0].apply(diag, child);
     simpleProject.saveSync();
     simpleProject.emit();
+    expect(shell.cat(`${projectPath}/src/index.ts`).toString()).toContain(`class A{
+    public constructor(aString: String) {`)
   })
-  doAssert(projectPath);
 });
 
 
@@ -69,11 +71,6 @@ function getDiagnosticsInCurrentLocation(program: ts.Program, sourceFile: ts.Sou
 }
 
 
-function doAssert(projectPath) {
-  it('interface should contain delegate method signatures', () => {
-    expect(shell.cat(`${projectPath}/src/index.ts`).toString()).toContain('const i=f()')
-  });
-}
 
 
 // export function findChildContainingPosition(sourceFile: SourceFile, position: number): Node | undefined {
