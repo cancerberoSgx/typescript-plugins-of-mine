@@ -17,13 +17,13 @@
     "@types/node": "^10.0.4"
   },
   "devDependencies": {
-    "typescript-plugin-extract-interface": "file:../typescript-plugin-extract-interface",
-    "typescript-plugin-subclasses-of": "file:../typescript-plugin-subclasses-of",
-    "typescript-plugin-ast-inspector": "file:../typescript-plugin-ast-inspector",
-    "typescript-plugin-add-type": "file:../typescript-plugin-add-type",
-    "typescript-plugin-move-file": "file:../typescript-plugin-move-file",
-    "typescript-plugin-move-declaration": "file:../typescript-plugin-move-declaration",
-    "typescript-plugin-proactive-code-fixes": "file:../typescript-plugin-proactive-code-fixes",
+    "typescript-plugin-extract-interface": "1.0.4",
+    "typescript-plugin-subclasses-of": "1.0.3",
+    "typescript-plugin-ast-inspector": "1.0.2",
+    "typescript-plugin-add-type": "1.0.2",
+    "typescript-plugin-move-file": "0.0.4",
+    "typescript-plugin-move-declaration": "0.0.2",
+    "typescript-plugin-proactive-code-fixes": "0.0.2",
     "typescript-api-tests": "file:../typescript-api-tests",
     "typescript": "^2.8.3"
   }

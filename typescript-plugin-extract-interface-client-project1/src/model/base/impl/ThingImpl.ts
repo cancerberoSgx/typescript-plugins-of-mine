@@ -1,4 +1,4 @@
-import { Thing } from "../../newName";
+import { Thing } from "../Thing";
 
 export class ThingImpl implements Thing {
   constructor(){

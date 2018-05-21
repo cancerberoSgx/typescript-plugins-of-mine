@@ -20,8 +20,8 @@
   "dependencies": {
     "hrtime-now": "^1.0.1",
     "typescript": "^2.8.3",
-    "typescript-ast-util": "1.0.7",
-    "typescript-plugin-util": "1.0.2"
+    "typescript-ast-util": "file:../typescript-ast-util",
+    "typescript-plugin-util": "file:../typescript-plugin-util"
   },
   "devDependencies": {},
   "repository": "https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-ast-util",

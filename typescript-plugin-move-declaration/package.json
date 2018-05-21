@@ -22,8 +22,8 @@
     "hrtime-now": "^1.0.1",
     "ts-simple-ast": "^11.2.0",
     "typescript": "^2.8.3",
-    "typescript-plugin-util": "1.0.2",
-    "typescript-plugins-text-based-user-interaction": "0.0.3"
+    "typescript-plugin-util": "file:../typescript-plugin-util",
+    "typescript-plugins-text-based-user-interaction": "file:../typescript-plugins-text-based-user-interaction"
   },
   "devDependencies": {
     "shelljs": "^0.8.1",

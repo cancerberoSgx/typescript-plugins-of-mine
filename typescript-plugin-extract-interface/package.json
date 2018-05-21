@@ -20,7 +20,7 @@
     "hrtime-now": "^1.0.1",
     "shelljs": "^0.8.2",
     "typescript": "^2.8.3",
-    "typescript-ast-util": "1.0.7"
+    "typescript-ast-util": "file:../typescript-ast-util"
   },
   "devDependencies": {},
   "repository": "https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-extract-interface",
