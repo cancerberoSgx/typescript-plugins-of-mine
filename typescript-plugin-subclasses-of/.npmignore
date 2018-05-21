@@ -1,5 +1,10 @@
-node_modules
-package-deps.json
+/node_modules
 *.log
-doc-assets
-tmp
+/doc-assets
+/tmp
+/spec
+/src
+/.gitignore
+/.npmignore
+/dist/spec
+/tsconfig.json
