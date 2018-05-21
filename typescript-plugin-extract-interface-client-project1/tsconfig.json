@@ -12,32 +12,32 @@
     "removeComments": false,
     "noImplicitAny": true,
     "plugins": [
-      // {
-      //   "name": "typescript-plugin-extract-interface"
-      // },
-      // {
-      //   "name": "typescript-plugin-subclasses-of"
-      // },
-      // {
-      //   "name": "typescript-plugin-ast-inspector"
-      // },
-      // {
-      //   "name": "typescript-plugin-add-type"
-      // },
-      // {
-      //   "name": "typescript-plugin-move-file"
-      // },
+      {
+        "name": "typescript-plugin-extract-interface"
+      },
+      {
+        "name": "typescript-plugin-subclasses-of"
+      },
+      {
+        "name": "typescript-plugin-ast-inspector"
+      },
+      {
+        "name": "typescript-plugin-add-type"
+      },
+      {
+        "name": "typescript-plugin-move-file"
+      },
       {
         "name": "typescript-plugin-proactive-code-fixes"
       },
       
 
-      // {
-      //   "name": "typescript-plugin-move-declaration"
-      // },
-      // {
-      //   "name": "typescript-api-tests"
-      // }
+      {
+        "name": "typescript-plugin-move-declaration"
+      },
+      {
+        "name": "typescript-api-tests"
+      }
       
       
     ]

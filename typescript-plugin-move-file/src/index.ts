@@ -1,9 +1,8 @@
 import { now } from 'hrtime-now';
 import { basename, dirname, isAbsolute, join } from 'path';
-import Project from 'ts-simple-ast';
-import { LanguageServiceOptionals, getPluginCreate, createSimpleASTProject } from 'typescript-plugin-util';
-import * as ts_module from 'typescript/lib/tsserverlibrary';
+import { LanguageServiceOptionals, createSimpleASTProject, getPluginCreate } from 'typescript-plugin-util';
 import { Action, create } from 'typescript-plugins-text-based-user-interaction';
+import * as ts_module from 'typescript/lib/tsserverlibrary';
 
 const PLUGIN_NAME = 'typescript-plugin-move-file'
 const REFACTOR_ACTION_NAME = `${PLUGIN_NAME}-refactor-action`
@@ -14,14 +13,14 @@ const interactionTool = create({
     {
       name: 'moveThisFileTo',
       args: ['dest'],
-      print: (action)=>`Move this file to ${action.args.dest}`,
+      print: (action) => `Move this file to ${action.args.dest}`,
       snippet: 'moveThisFileTo(\'../newName.ts\')'
     },
     {
       name: 'moveThisFolderTo',
       args: ['dest'],
-      print: (action)=>`Move this folder to ${action.args.dest}`,
-      snippet: 'moveThisFileTo(\'../newName\')'
+      print: (action) => `Move this folder to ${action.args.dest}`,
+      snippet: 'moveThisFolderTo(\'../newName\')'
     }
   ]
 })
@@ -48,7 +47,7 @@ function getApplicableRefactors(fileName: string, positionOrRange: number | ts.T
     description: 'move-file-action',
     actions: refactorActions
   })
-  info.project.projectService.logger.info(`${PLUGIN_NAME} getApplicableRefactors took ${(now() - t0) / 1000000}`)
+  info.project.projectService.logger.info(`${PLUGIN_NAME} getApplicableRefactors took ${printTime(now() - t0)}`)
   return refactors
 }
 
@@ -62,17 +61,22 @@ function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSetti
   }
   try {
     // TODO: could we maintain a simple-ast Project in a variable and next time just refresh it so is faster ? 
+    const createSimpleASTProjectT0 = now()
     const simpleProject = createSimpleASTProject(info.project)
+    info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor createSimpleASTProject() took  ${printTime(now() - createSimpleASTProjectT0)}`)
+    
     if ((selectedAction.name === 'moveThisFileTo' || selectedAction.name === 'moveThisFolderTo') && selectedAction.args.dest) {
       // make it absolute
       let dest: string = isAbsolute(selectedAction.args.dest) ? selectedAction.args.dest :
-        join(selectedAction.args.dest.endsWith('.ts') ? dirname(fileName) : fileName, 
-        selectedAction.name === 'moveThisFolderTo' ? '..' : '.', 
-        selectedAction.args.dest)
+        join(selectedAction.args.dest.endsWith('.ts') ? dirname(fileName) : fileName,
+          selectedAction.name === 'moveThisFolderTo' ? '..' : '.',
+          selectedAction.args.dest)
       dest = dest.endsWith('.ts') ? dest : join(dest, basename(fileName))
       dest = selectedAction.name === 'moveThisFolderTo' ? join(dest, '..') : dest
       const sourceFileName = selectedAction.name === 'moveThisFolderTo' ? join(fileName, '..') : fileName
       info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor ${selectedAction.name} moving ${fileName} to ${dest}`)
+
+      const moveSaveEmitT0 = now()
       if (selectedAction.name === 'moveThisFileTo') {
         simpleProject.getSourceFileOrThrow(sourceFileName).moveImmediatelySync(dest)
       }
@@ -80,17 +84,20 @@ function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSetti
         simpleProject.getDirectoryOrThrow(sourceFileName).moveImmediatelySync(dest)
       }
       simpleProject.saveSync()
+      simpleProject.emit()
+      info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor moveSaveEmit took  ${printTime(now() - moveSaveEmitT0)}`)
+      
     }
   } catch (error) {
     info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor error  ${selectedAction.name} ${error + ' - ' + error.stack}`)
     return refactors
   }
-  info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor ${selectedAction.name} took  ${(now() - t0) / 1000000}`)
+  info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor ${selectedAction.name} took  ${printTime(now() - t0)}`)
 }
 
-function getCompletionsAtPosition (fileName:string, position: number, options: ts_module.GetCompletionsAtPositionOptions | undefined): ts_module.CompletionInfo {
+function getCompletionsAtPosition(fileName: string, position: number, options: ts_module.GetCompletionsAtPositionOptions | undefined): ts_module.CompletionInfo {
   const prior = info.languageService.getCompletionsAtPosition(fileName, position, options);
-  prior.entries = prior.entries.concat(interactionTool.getCompletionsAtPosition(fileName,position, options))
+  prior.entries = prior.entries.concat(interactionTool.getCompletionsAtPosition(fileName, position, options))
   return prior;
 };
 
@@ -106,3 +113,10 @@ export = getPluginCreate(pluginDefinition, (modules, anInfo) => {
   info = anInfo
   info.project.projectService.logger.info(`${PLUGIN_NAME} created`)
 })
+
+
+
+import prettyMs from 'pretty-ms'
+function printTime(ns:number):string{
+  return prettyMs(ns/1000000)
+}

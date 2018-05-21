@@ -1,4 +1,4 @@
-import { Thing } from "../base/Thing";
+import { Thing } from "../newName";
 
 export interface Unit extends Thing {
   health: number

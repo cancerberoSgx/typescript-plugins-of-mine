@@ -54,5 +54,7 @@ version, so I need to "Select TypeScript Version" of the workspace:
 
 
 # TODO
+ * move folder is broken
+ * show confirmation in the current sourcefile (large projects take several seconds)
  * notify last error - adding a comment just below the &%&% comment that failed
  * option to undo-last-action

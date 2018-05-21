@@ -20,7 +20,7 @@
     "all-no-doc": "npm run clean-no-doc && npm i && yamat run npm i && yamat run npm run build && yamat run npm run test"
   },
   "devDependencies": {
-    "yamat": "0.0.6"
+    "yamat": "0.0.8"
   },
   "dependencies": {}
 }
