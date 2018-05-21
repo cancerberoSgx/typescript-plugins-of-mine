@@ -52,7 +52,6 @@ describe('method delegate interface', () => {
     fixes[0].apply(diag, child);
     simpleProject.saveSync();
     simpleProject.emit();
-    console.log('Project saved');
   })
   doAssert(projectPath);
 });
