@@ -1,10 +1,8 @@
 import { now } from 'hrtime-now';
-import { findChildContainingRange, getKindName, positionOrRangeToNumber, positionOrRangeToRange, getDiagnosticsInCurrentLocation } from 'typescript-ast-util';
+import { findChildContainingRange, getDiagnosticsInCurrentLocation, getKindName, positionOrRangeToNumber, positionOrRangeToRange } from 'typescript-ast-util';
 import { createSimpleASTProject, getPluginCreate } from 'typescript-plugin-util';
 import * as ts_module from 'typescript/lib/tsserverlibrary';
 import { codeFixes } from './codeFixes';
-import { createWrappedNode, TypeGuards } from 'ts-simple-ast';
-import { createLogicalNot } from 'typescript';
 
 
 const PLUGIN_NAME = 'typescript-plugin-proactive-code-fixes'
@@ -33,26 +31,20 @@ function getApplicableRefactors(fileName: string, positionOrRange: number | ts.T
   if (!sourceFile) {
     return refactors
   }
-
   diagnostics = getDiagnosticsInCurrentLocation(program, sourceFile, positionOrRangeToNumber(positionOrRange)) || []
-
   if (!log) {
     log = function (msg) {
       info.project.projectService.logger.info(`${PLUGIN_NAME} ${msg}`)
     }
   }
-  // const diagnostic = dignostics[0]; // TODO: forced the first - what with the others ? why this takes priority ? I guess because is first - but perhaps in the same line there are more priority ones?
-
   target = findChildContainingRange(sourceFile, positionOrRangeToRange(positionOrRange))
   if (!target) {
     info.project.projectService.logger.info(`${PLUGIN_NAME} no getApplicableRefactors because findChildContainedRange  target node is undefined `)
     return refactors
   }
-
-  // const child = sourceFile.getDescendantAtPos(cursorPosition);
   const fixes = codeFixes.filter(fix => fix.predicate(diagnostics, target, log));
   if (!fixes || !fixes.length) {
-    info.project.projectService.logger.info(`${PLUGIN_NAME} no getApplicableRefactors because no codeFixes returned true for node of kind ==${getKindName(target.kind)} and diagnostics: ${diagnostics.map(d=>d.code)}`)
+    info.project.projectService.logger.info(`${PLUGIN_NAME} no getApplicableRefactors because no codeFixes returned true for node of kind ==${getKindName(target.kind)} and diagnostics: ${diagnostics.map(d => d.code)}`)
     return refactors
   }
   const actions = fixes
@@ -84,11 +76,13 @@ function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSetti
   }
   const simpleProject = createSimpleASTProject(info.project)
   let node = simpleProject.getSourceFile(fileName).getDescendantAtPos(positionOrRangeToNumber(positionOrRange))
-  
+  if (!node) {
+    info.project.projectService.logger.info(`${PLUGIN_NAME} no getEditsForRefactor because getDescentantAt pos returned null for fileName=== ${fileName}, r actionName == ${actionName}`)
+    return refactors
+  }
   fix.apply(diagnostics, node, log)
   simpleProject.saveSync();
   simpleProject.emit();
-
   info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor took ${now() - t0}`)
   return refactors
 }

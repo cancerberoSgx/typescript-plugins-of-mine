@@ -47,11 +47,6 @@
     "name": "typescript-plugin-proactive-code-fixes",
     "path": "typescript-plugin-proactive-code-fixes"
   }, 
-
-  {
-    "name": "typescript-api-tests",
-    "path": "typescript-api-tests"
-  },
   {
     "name": "sample-ts-plugin1-sample-project",
     "path": "sample-ts-plugin1-sample-project"

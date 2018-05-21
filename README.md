@@ -150,13 +150,11 @@ While developing these I realized There was too much repeated code so I ended up
 * "get absolute location" for ast-inspector - where-am'i - I want to know the absolute value of something, like a method, or member . for example module m{class A{prop: {name:string,val: {foo:number}}}} - for foo it should prnt something l ike m.A.prop.val.foo  or more friendly, module m, class A , property prop, prop val
   * facilitate handling foo.getSomeCouldBeUndefined().bar() in strict mode . Create local variaable and (localVar1=foo.getSomeCouldBeUndefined()) && localVar.bar()
  * autocomplete a function signature choosing randomly variables in current scope (matching by type) -.... crazy
-
  * Inline local refactoring  https://github.com/Microsoft/TypeScript/issues/18459 <<--- this one perhaps amerits its own project
-
  * Reorder Parameters Refactoring https://msdn.microsoft.com/en-us/library/5ss5z206.aspx
-
- *  change function/method signature from arguments to single object argument: method("a", 1234, true, {s: '1'}) to method({{param1: 'a', param2: 1234, param3: true, param4: {s: '1'}}})  ... .probably would be nice if user can configure the name of parameters (sing text-based-user-interaction)
-
+ *  change function/method signature from arguments to single object argument: method("a", 1234, true, {s: '1'}) to method({{param1: 'a', param2: 1234, param3: true, param4: {s: '1'}}})  ... .probably would be nice if user can configure the name of parameters (sing text-based-user-interaction) - is this one : https://github.com/Microsoft/TypeScript/issues/23552
+ * transform between arrow to funcs related: https://github.com/Microsoft/TypeScript/issues/23299
+ * add braces to arrow funcs -related: https://github.com/Microsoft/TypeScript/issues/23299
 
 ## TODO
 

@@ -5,7 +5,6 @@ import { CodeFix } from './codeFixes';
 
 // TODO: test with jsdoc or a trailing comment
 
-
 export const codeFixCreateVariable: CodeFix = {
 
   name: 'Declare variable',
