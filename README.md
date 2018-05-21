@@ -139,6 +139,7 @@ While developing these I realized There was too much repeated code so I ended up
 
 Each project has its own TODO but here are some general ones: 
   
+ * typescript-simple-ast performance problems
  * Performance and production:  Because of performance, should I pack usefll plugins these plugins togheter in a single plugin to redistribute  so e request the AST / lang service minimal ?
   * refactor subclasses-of to use simple-ast helpers for performance. 
   * remove all gif from this readme only put a couple of simple light images - leave gifs in they own readmes

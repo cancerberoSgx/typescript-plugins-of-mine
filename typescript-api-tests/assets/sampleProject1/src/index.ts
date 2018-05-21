@@ -8,7 +8,11 @@ function f(){
 
 function main(){
 
-  i=  f()
+  i=f()
 
-  new A('hello')
+  // new A('hello') // create constructor : do it later
+
+  // const a = new A("12")
+  const a1 = new A()
+  a1.nonexistenMethod()
 }
