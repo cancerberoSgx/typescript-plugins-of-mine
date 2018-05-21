@@ -6,21 +6,13 @@ import { getKindName } from 'typescript-ast-util';
 export const codeFixCreateConstructor: CodeFix = {
   name: 'Declare constructor',
   config: { variableType: 'const' },
+  
   predicate: (diag: ts.Diagnostic[], child: ts.Node, log: (str: string) => void) => {
     if (!diag.find(d=>d.code === 2554)) {
       return false
     }
     if (child.kind === ts.SyntaxKind.NewExpression) {
       return true
-      // }
-      // if (child.parent.kind === ts.SyntaxKind.VariableDeclarationList) {
-      //   const syntaxList = child.parent.getChildren().find(c => c.kind === ts.SyntaxKind.SyntaxList)
-      //   if (!syntaxList) { return false }
-      //   const variableDecl = syntaxList.getChildren().find(c => c.kind === ts.SyntaxKind.VariableDeclaration)
-      //   if (!variableDecl) { return false }
-      //   const newExpression = variableDecl.getChildren().find(c => c.kind == ts.SyntaxKind.NewExpression)
-      //   if (!newExpression) { return false }
-      //   return true
     } else {
       log(`codeFixCreateConstructor predicate false because  child.kind didn't match : child.kind==${getKindName(child.kind)}, child.parent.kind==${getKindName(child.parent.kind)}`)
       return false
@@ -30,11 +22,6 @@ export const codeFixCreateConstructor: CodeFix = {
   description: (ds: ts.Diagnostic[], child: ts.Node): string => `Declare constructor "${child.getText()}"`,
 
   apply: (diag: ts.Diagnostic[], node: Node, log) => {
-    // let newExpression:Node
-    // if(!TypeGuards.isNewExpression(newExpression)){
-    //   log&&log(`codeFixCreateConstructor apply  fail because newExpression is not newExpression is ${getKindName(newExpression.getKind())}`)
-    //   return 
-    // }
     const originalKind = node.getKind()
     if (!TypeGuards.isNewExpression(node)) {
       node = node.getFirstAncestorByKind(ts.SyntaxKind.NewExpression)
@@ -43,13 +30,6 @@ export const codeFixCreateConstructor: CodeFix = {
       log(`codeFixCreateConstructor apply fail because couldnt find a NewExpression from node returned by sourcefile..getDescendantAtPos(positionOrRangeToNumber(positionOrRange) - returned node kind was ${getKindName(originalKind)}`)
       return
     }
-    // if(child.getKind() === ts.SyntaxKind.NewExpression){
-    //   newExpression = child
-    // }
-    // else {
-    //   newExpression = child.getParent().getChildrenOfKind(ts.SyntaxKind.SyntaxList)[0].getChildrenOfKind(ts.SyntaxKind.VariableDeclaration)[0].getChildrenOfKind(ts.SyntaxKind.NewExpression)[0]
-    // }
-    // if (TypeGuards.isNewExpression(newExpression)) {
     const argTypes = node.getArguments().map(arg => arg.getType().getApparentType().getText())
     const classDeclaration = node.getExpression().getSymbol().getDeclarations()[0]
     if (TypeGuards.isClassDeclaration(classDeclaration)) {
@@ -68,8 +48,5 @@ export const codeFixCreateConstructor: CodeFix = {
     } else {
       log(`codeFixCreateConstructor apply fail because node is not ClassDeclaration is ${getKindName(classDeclaration.getKind())}`)
     }
-    // } else {
-    //   log&&log(`codeFixCreateConstructor apply  fail because newExpression is not newExpression is ${getKindName(newExpression.getKind())}`)
-    // }
   }
 };

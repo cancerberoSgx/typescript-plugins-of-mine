@@ -1,19 +1,19 @@
 # typescript-plugin-proactive-code-fixes
 
-TypeScript Langauge Service Plugin with several small proactive code refactors like creating constructor when a non existent one is invoked, declaring a variable or class when non existent one is defined, etc
-
-Right now: 
+TypeScript Langauge Service Plugin with several small proactive code refactors like creating constructor when a non existent one is invoked, declaring a variable or class when non existent one is defined, etc. Right now: 
 
 * create variable
 * create constructor
 
+but more to come!!
+
 
 # Demo
 
-TODO
-
- <!-- * ![Adding types in Visual studio Code Editor](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-proactive-code-fixes/doc-assets/vscode.gif?raw=true?p=.gif) -->
-
+ * declaring variables an constructors on the fly (Visual Studio Code Editor) : 
+ * ![vscode demo creating variables and constructors declarations vscode ](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-proactive-code-fixes/doc-assets/vscode.gif?raw=true?p=.gif)
+ * Atom Editor:
+ * ![vscode demo creating variables and constructors declarations atom](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-proactive-code-fixes/doc-assets/atom.gif?raw=true?p=.gif) 
 
 # How to use: 
 ```sh
@@ -43,13 +43,16 @@ Make sure you have installed typescript in your project (`npm i --save-dev types
 ```
 
 
-Ideas
+# Ideas
+
+(for future proactive plugins)
+
 
  * https://github.com/Microsoft/TypeScript/issues/22392
  * https://github.com/Microsoft/TypeScript/issues/23869
  * https://github.com/Microsoft/TypeScript/labels/Domain%3A%20Refactorings 
  * https://github.com/Microsoft/TypeScript/issues/10139
- * getters and setters: from 
+ * getters and setters: from  property
  ```
 class C{
   name: string

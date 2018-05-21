@@ -48,14 +48,19 @@ Experiments with typescript compiler API, and Language Service plugins.
  * DEMO: ![Adding types in Visual studio Code Editor](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-add-type/doc-assets/vscode.gif?raw=true?p=.gif)
 
 
+
 # typescript-plugin-proactive-code-fixes
 
 TypeScript Langauge Service Plugin with several small proactive code refactors like creating constructor when a non existent one is invoked, declaring a variable or class when non existent one is defined, etc
 
  * well-tested - **safe to use**
- * If user selects an identifier that has no explicit type declared this plugin will suggest you to automatically add the type inferred by the compiler. 
- * [Project](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-proactive-code-fixes)
- * DEMO: TODO
+ * create-variable create-constructor : user select non declared variable or constructor identifier - a refactor will be suggested
+ * Mode info in [Project](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-proactive-code-fixes)
+ * Demo : ![vscode demo creating variables and constructors declarations](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-proactive-code-fixes/doc-assets/vscode.gif?raw=true?p=.gif)
+
+
+
+
 
 ### typescript-plugin-method-delegate
 
