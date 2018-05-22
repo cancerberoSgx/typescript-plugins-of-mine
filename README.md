@@ -162,7 +162,9 @@ While developing these I realized There was too much repeated code so I ended up
  * wrapp selection with comment for f(a, b/*, c*/)
  * reasign const variable error - transform it to let
  * https://github.com/Microsoft/TypeScript/issues/20331
-
+ quick fix for " Parameter 'config' of constructor from exported class has or is using private name 'ToolConfig'." - add export to the private decl
+ * forgotten this.
+ * missing comma like in fun(a b c) - add the commas
 ## TODO
 
 Each project has its own TODO but here are some general ones: 
