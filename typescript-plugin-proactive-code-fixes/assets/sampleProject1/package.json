@@ -22,7 +22,8 @@
     "typescript": "^2.8.3"
   },
   "devDependencies": {
-    "typescript": "^2.8.3"
+    "typescript": "^2.8.3",
+    "typescript-plugin-proactive-code-fixes": "file:../.."
   },
   "repository": "https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-ast-util"
 }

@@ -56,6 +56,22 @@
             "cwd": "${workspaceFolder}/typescript-plugin-proactive-code-fixes/",
             "program": "${workspaceFolder}/typescript-plugin-proactive-code-fixes/node_modules/jasmine/bin/jasmine.js",
             "sourceMaps": true
-        }
+        },
+
+{
+    "type": "node",
+    "request": "launch",
+    "protocol": "inspector",
+    "name": "typtestss",
+    "args": [
+    ],
+    "runtimeArgs": [
+        "--inspect",
+        "--debug-brk",
+    ],
+    "cwd": "${workspaceFolder}/separate-project-test1/",
+    "program": "${workspaceFolder}/separate-project-test1/dist/simplesast.js",
+    "sourceMaps": true
+}
     ]
 }

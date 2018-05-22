@@ -165,6 +165,9 @@ While developing these I realized There was too much repeated code so I ended up
  quick fix for " Parameter 'config' of constructor from exported class has or is using private name 'ToolConfig'." - add export to the private decl
  * forgotten this.
  * missing comma like in fun(a b c) - add the commas
+ * cool / hard extension: i don't know nothing about an API and I'm trying to call a method or instantiate something like const ps = new tss.server.ProjectService()  then on the call error, infer the types and create the minimal object that will comply w the signature  (no error)
+
+ 
 ## TODO
 
 Each project has its own TODO but here are some general ones: 

@@ -20,8 +20,6 @@ describe('tests', () => {
 
   it('Declare variable fix', ()=>{
     const sourceFile = simpleProject.getSourceFiles().find(sf => sf.getFilePath().includes(`src/index.ts`));
-    
-    const fn = sourceFile.getFunction('main');
     const cursorPosition = 61
     const dignostics = getDiagnosticsInCurrentLocation(program, sourceFile.compilerNode, cursorPosition);
     if (!dignostics || !dignostics.length) {

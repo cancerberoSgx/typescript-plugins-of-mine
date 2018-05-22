@@ -19,16 +19,15 @@
   "license": "MIT",
   "dependencies": {
     "hrtime-now": "^1.0.1",
+    "glob": "^7.1.2",
     "ts-simple-ast": "^11.2.0",
     "typescript": "^2.8.3",
-    "typescript-ast-util": "file:../typescript-ast-util",
-    "typescript-plugin-util": "file:../typescript-plugin-util"
+    "typescript-ast-util": "1.0.7"
   },
   "devDependencies": {
     "@types/jasmine": "^2.8.7",
     "@types/node": "^10.1.2",
     "@types/shelljs": "^0.7.9",
-    "glob": "^7.1.2",
     "jasmine": "^3.1.0",
     "shelljs": "^0.8.2",
     "ts-node": "^6.0.3"
