@@ -142,11 +142,11 @@ While developing these I realized There was too much repeated code so I ended up
 * go to definition / goto implementation hierarchy
 * views that shows the content of large. hierarchynode.d.ts, tsserverlibrary.d.ts, etc a more tree-view like for examine the structure and search
 * yeoman generator for ts plugins ? 
-* return type not compatible with actual hierarchyfix declared return type
+* return type not compatible with actual hierarchy fix declared return type
 * agile dev - codegen - https://github.com/Microsoft/TypeScript/issues/10139
 // IDEA ast-inspector enhancement : other action that prints nodeAtCursor.arent.parent.arent to the top so I know where I'm standings
   * string-concat replace with string template
-  * variable chained replace it ith variable singl edecl
+  * variable chained replace it ith variable singl edecl  var a, b, b - replaced with var a ;var b; var c
 * "get absolute location" for ast-inspector - where-am'i - I want to know the absolute value of something, like a method, or member . for example module m{class A{prop: {name:string,val: {foo:number}}}} - for foo it should prnt something l ike m.A.prop.val.foo  or more friendly, module m, class A , property prop, prop val
   * facilitate handling foo.getSomeCouldBeUndefined().bar() in strict mode . Create local variaable and (localVar1=foo.getSomeCouldBeUndefined()) && localVar.bar()
  * autocomplete a function signature choosing randomly variables in current scope (matching by type) -.... crazy
@@ -158,6 +158,10 @@ While developing these I realized There was too much repeated code so I ended up
  * easy ideas here : https://marketplace.visualstudio.com/items?itemName=krizzdewizz.refactorix
  * good ideas for js : https://github.com/xsburg/vscode-javascript-booster - interesting using babel to parse typescript
  * not refactor but interesting enough https://marketplace.visualstudio.com/items?itemName=ipatalas.vscode-postfix-ts
+ * convert from a&&f() to if(a){f} - we use && when hurry but hard to understand
+ * wrapp selection with comment for f(a, b/*, c*/)
+ * reasign const variable error - transform it to let
+ * https://github.com/Microsoft/TypeScript/issues/20331
 
 ## TODO
 

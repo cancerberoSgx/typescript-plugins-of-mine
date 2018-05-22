@@ -1,5 +1,5 @@
 {
-  "name": "typescript-plugin-proactive-code-fixes",
+  "name": "typescript-plugin-test-helper",
   "version": "0.0.2",
   "description": "testing ts related techologies",
   "main": "dist/src/index.js",
