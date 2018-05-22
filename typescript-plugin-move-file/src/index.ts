@@ -1,4 +1,4 @@
-import { now } from 'hrtime-now';
+import { now, timeFrom } from 'hrtime-now';
 import { basename, dirname, isAbsolute, join } from 'path';
 import { LanguageServiceOptionals, createSimpleASTProject, getPluginCreate } from 'typescript-plugin-util';
 import { Action, create } from 'typescript-plugins-text-based-user-interaction';
@@ -122,9 +122,3 @@ export = getPluginCreate(pluginDefinition, (modules, anInfo) => {
   info.project.projectService.logger.info(`${PLUGIN_NAME} created`)
 })
 
-
-
-import prettyMs from 'pretty-ms'
-function timeFrom(ns: number): string {
-  return prettyMs((now() - ns) / 1000000)
-}

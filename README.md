@@ -167,6 +167,40 @@ While developing these I realized There was too much repeated code so I ended up
  * missing comma like in fun(a b c) - add the commas
  * cool / hard extension: i don't know nothing about an API and I'm trying to call a method or instantiate something like const ps = new tss.server.ProjectService()  then on the call error, infer the types and create the minimal object that will comply w the signature  (no error)
 
+
+Argument of type '{ dignostics: Diagnostic[]; containingTarget: Node; log: (msg: any) => void; }' is not assignable to parameter of type 'PredicateArg'.
+  Object literal may only specify known properties, but 'dignostics' does not exist in type 'PredicateArg'. Did you mean to write 'diagnostics'?
+{
+	"resource": "/home/sg/git/typescript-plugins-of-mine/typescript-plugin-proactive-code-fixes/spec/codeGenSpec.ts",
+	"owner": "typescript",
+	"code": "2345",
+	"severity": 8,
+	"message": "Argument of type '{ dignostics: Diagnostic[]; containingTarget: Node; log: (msg: any) => void; }' is not assignable to parameter of type 'PredicateArg'.\n  Object literal may only specify known properties, but 'dignostics' does not exist in type 'PredicateArg'. Did you mean to write 'diagnostics'?",
+	"source": "ts",
+	"startLineNumber": 30,
+	"startColumn": 58,
+	"endLineNumber": 30,
+	"endColumn": 68
+}
+HACEME EL REFACTOR!!!!!
+
+
+* in case object dont implement interface can we fix it automatically ? for example: 
+{
+	"resource": "/home/sg/git/typescript-plugins-of-mine/typescript-plugin-proactive-code-fixes/src/code-fix/codeFixCreateConstructor.ts",
+	"owner": "typescript",
+	"code": "2322",
+	"severity": 8,
+	"message": "Type '{ name: string; config: { variableType: string; }; predicate: (arg: PredicateArg) => boolean; des...' is not assignable to type 'CodeFix'.\n  Types of property 'apply' are incompatible.\n    Type '(diag: Diagnostic[], node: Node<Node>, log: any) => void' is not assignable to type '(arg: PredicateArg) => any'.",
+	"source": "ts",
+	"startLineNumber": 6,
+	"startColumn": 14,
+	"endLineNumber": 6,
+	"endColumn": 38
+}
+parsing the mssage and detecting this type "(diag: Diagnostic[], node: Node<Node>, log: any) => void" and replacing it by " (arg: PredicateArg) => any " ? 
+
+
  
 ## TODO
 

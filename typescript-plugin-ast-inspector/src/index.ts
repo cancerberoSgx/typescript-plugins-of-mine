@@ -5,6 +5,7 @@ import * as ts_module from 'typescript/lib/tsserverlibrary';
 const PLUGIN_NAME = 'typescript-plugin-print-ast'
 const PRINT_AST_REFACTOR_ACTION_NAME = `${PLUGIN_NAME}-print-ast-refactor-action`
 const PRINT_PARENT_NODES_REFACTOR_ACTION_NAME = `${PLUGIN_NAME}-print-inheritance-refactor-action`
+const PRINT_SELECTED_NODE_REFACTOR_ACTION_NAME = `${PLUGIN_NAME}-print-selected-node`
 
 let ts: typeof ts_module
 let info: ts_module.server.PluginCreateInfo
@@ -38,16 +39,25 @@ function getApplicableRefactors(fileName: string, positionOrRange: number | ts.T
   if (!sourceFile) {
     return refactors
   }
+  
+
   nodeAtCursor = findChildContainingRange(sourceFile, positionOrRangeToRange(positionOrRange))
+  if (!nodeAtCursor) {
+    nodeAtCursor = findChildContainingPosition(sourceFile, positionOrRangeToNumber(positionOrRange))
+  }
   if (!nodeAtCursor) {
     return refactors
   }
+
+  
   refactors.push({
     name: `${PLUGIN_NAME}-refactor-info`,
     description: 'Extract interface',
     actions: [
       { name: PRINT_AST_REFACTOR_ACTION_NAME, description: 'Print AST of selected ' + getKindName(nodeAtCursor.kind) },
       { name: PRINT_PARENT_NODES_REFACTOR_ACTION_NAME, description: 'Print parent nodes of selected ' + getKindName(nodeAtCursor.kind) }
+
+      
     ],
   })
   return refactors

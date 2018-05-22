@@ -18,8 +18,7 @@
   "author": "Sebastian Gurin",
   "license": "MIT",
   "dependencies": {
-    "hrtime-now": "^1.0.1",
-    "pretty-ms": "^3.1.0",
+    "hrtime-now": "^1.0.2",
     "ts-simple-ast": "^11.2.0",
     "typescript": "^2.8.3",
     "typescript-ast-util": "file:../typescript-ast-util",

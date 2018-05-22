@@ -30,14 +30,9 @@
       {
         "name": "typescript-plugin-proactive-code-fixes"
       },
-      
-
       {
         "name": "typescript-plugin-move-declaration"
       },
-      {
-        "name": "typescript-api-tests"
-      }
       
       
     ]

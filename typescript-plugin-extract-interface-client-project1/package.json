@@ -26,7 +26,6 @@
     "typescript-plugin-move-file": "file:../typescript-plugin-move-file",
     "typescript-plugin-move-declaration": "file:../typescript-plugin-move-declaration",
     "typescript-plugin-proactive-code-fixes": "file:../typescript-plugin-proactive-code-fixes",
-    "typescript-api-tests": "file:../typescript-api-tests",
     "typescript": "^2.8.3"
   }
 }

@@ -42,6 +42,10 @@ Make sure you have installed typescript in your project (`npm i --save-dev types
 }
 ```
 
+# TODO
+
+ * apply all quick fixes in this file ! define a mechanism of priorities when two or more fixes attach the same position.
+
 
 # Ideas
 
@@ -52,22 +56,4 @@ Make sure you have installed typescript in your project (`npm i --save-dev types
  * https://github.com/Microsoft/TypeScript/issues/23869
  * https://github.com/Microsoft/TypeScript/labels/Domain%3A%20Refactorings 
  * https://github.com/Microsoft/TypeScript/issues/10139
- * getters and setters: from  property
- ```
-class C{
-  name: string
-  } 
- ```
- 
- transform it to class 
-
-  ```
-class C{
-  _name: string
-  public get name() : string {
-    return this._name
-  }
-  public set name(v : string) {
-    this._name = v;
-  }
-} ```
+ * getters and setters: from  property - typescript 3.0.0 implemented this...
