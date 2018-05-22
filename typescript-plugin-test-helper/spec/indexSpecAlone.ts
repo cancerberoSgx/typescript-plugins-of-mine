@@ -2,9 +2,8 @@ import { create } from '../src'
 import { sync as glob } from 'glob'
 import * as ts from 'typescript'
 
-describe('compileSource, findChildren and getJsDoc', () => {
-  it('1', (done) => {
-    const inputFiles = glob('assets/sampleProject1/src/**/*.ts')
+// const inputFiles = glob('src/**/*.ts')
+const inputFiles = glob('assets/sampleProject1/src/**/*.ts')
 console.log(inputFiles);
 
 const tool = create({ 
@@ -13,5 +12,3 @@ const tool = create({
   // currentDirectory: 'assets/sampleProject1/' 
 })
 tool.watch()
-  })
-})

@@ -8,7 +8,7 @@ import { EventEmitter } from 'events';
 
 export class Tool extends EventEmitter {
 
-  private rootFileNames: string[];
+  private inputFiles: string[];
   private files: MapLike<{ version: number }> = {}
   private servicesHost: LanguageServiceHost
   private documentRegistry: DocumentRegistry
@@ -16,15 +16,16 @@ export class Tool extends EventEmitter {
 
   private constructor(private config: ToolConfig) {
     super()
-    this.rootFileNames = this.config.rootFileNames
-    this.config.rootFileNames.forEach(fileName => {
+    this.inputFiles = this.config.inputFiles
+    this.config.inputFiles.forEach(fileName => {
       this.files[fileName] = { version: 0 }
     })
     // Create the language service host to allow the LS to communicate with the host
     this.servicesHost = {
-      getScriptFileNames: () => this.config.rootFileNames,
+      getScriptFileNames: () => this.config.inputFiles,
       getScriptVersion: (fileName) => this.files[fileName] && this.files[fileName].version.toString(),
       getScriptSnapshot: (fileName) => {
+        console.log('getScriptSnapshot', fileName)
         if (!existsSync(fileName)) {
           return undefined;
         }
@@ -42,8 +43,8 @@ export class Tool extends EventEmitter {
     this.services = createLanguageService(this.servicesHost, this.documentRegistry)
   }
 
-  emitAllFiles(options: EmitFileOptions ) {
-    this.config.rootFileNames.forEach(fileName => {
+  emitAllFiles(options: EmitFileOptions  = new EmitFileOptions()) {
+    this.config.inputFiles.forEach(fileName => {
       this.emitFile(fileName, options);
     })
   }
@@ -51,7 +52,7 @@ export class Tool extends EventEmitter {
    * @param fileName 
    * @param updateVersion  Update the version to signal a change in the file
    */
-  emitFile(fileName: string, options: EmitFileOptions): void {
+  emitFile(fileName: string, options: EmitFileOptions = new EmitFileOptions()): void {
     if (options.updateVersion) {
       this.files[fileName].version++;
     }
@@ -75,10 +76,13 @@ export class Tool extends EventEmitter {
     return tool
   }
 
-  public watch(options: WatchOptions) {
-    this.rootFileNames.forEach(fileName => {
-      watchFile(fileName,options,
-        (curr, prev) => {
+  public watch(options: WatchOptions = new WatchOptions()) {
+    // this.emitAllFiles(options.emitOptions)
+    this.inputFiles.forEach(fileName => {
+      this.emitFile(fileName, options.emitOptions)
+      console.log('watchFile(fileName,', fileName, options);
+      
+      watchFile(fileName, { persistent: true, interval: 250 }/*options */, (curr, prev) => {
           // Check timestamp
           if (+curr.mtime <= +prev.mtime) {
             return;
@@ -96,13 +100,13 @@ export class EmitFileOptions{
   updateVersion: boolean = true
 }
 export class WatchOptions{
-  emitOptions?: EmitFileOptions = new EmitFileOptions()
-  persistent?: boolean = true
-  interval?: number = 250
+  emitOptions: EmitFileOptions = new EmitFileOptions()
+  persistent: boolean = true
+  interval: number = 250
 }
 
 export interface ToolConfig {
-  rootFileNames: string[],
+  inputFiles: string[],
   options: CompilerOptions,
   currentDirectory?: string
   tsconfig?: string // not supported yet create({tsconfig: 'path/to/tsconfig.json'})
