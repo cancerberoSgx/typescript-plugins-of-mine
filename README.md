@@ -155,6 +155,9 @@ While developing these I realized There was too much repeated code so I ended up
  *  change function/method signature from arguments to single object argument: method("a", 1234, true, {s: '1'}) to method({{param1: 'a', param2: 1234, param3: true, param4: {s: '1'}}})  ... .probably would be nice if user can configure the name of parameters (sing text-based-user-interaction) - is this one : https://github.com/Microsoft/TypeScript/issues/23552
  * transform between arrow to funcs related: https://github.com/Microsoft/TypeScript/issues/23299
  * add braces to arrow funcs -related: https://github.com/Microsoft/TypeScript/issues/23299
+ * easy ideas here : https://marketplace.visualstudio.com/items?itemName=krizzdewizz.refactorix
+ * good ideas for js : https://github.com/xsburg/vscode-javascript-booster - interesting using babel to parse typescript
+ * not refactor but interesting enough https://marketplace.visualstudio.com/items?itemName=ipatalas.vscode-postfix-ts
 
 ## TODO
 

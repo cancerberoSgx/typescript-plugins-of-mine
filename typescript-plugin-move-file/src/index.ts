@@ -47,7 +47,7 @@ function getApplicableRefactors(fileName: string, positionOrRange: number | ts.T
     description: 'move-file-action',
     actions: refactorActions
   })
-  info.project.projectService.logger.info(`${PLUGIN_NAME} getApplicableRefactors took ${printTime(now() - t0)}`)
+  info.project.projectService.logger.info(`${PLUGIN_NAME} getApplicableRefactors took ${timeFrom(t0)}`)
   return refactors
 }
 
@@ -63,8 +63,8 @@ function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSetti
     // TODO: could we maintain a simple-ast Project in a variable and next time just refresh it so is faster ? 
     const createSimpleASTProjectT0 = now()
     const simpleProject = createSimpleASTProject(info.project)
-    info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor createSimpleASTProject() took  ${printTime(now() - createSimpleASTProjectT0)}`)
-    
+    info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor createSimpleASTProject() took ${timeFrom(createSimpleASTProjectT0)}`)
+
     if ((selectedAction.name === 'moveThisFileTo' || selectedAction.name === 'moveThisFolderTo') && selectedAction.args.dest) {
       // make it absolute
       let dest: string = isAbsolute(selectedAction.args.dest) ? selectedAction.args.dest :
@@ -74,30 +74,38 @@ function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSetti
       dest = dest.endsWith('.ts') ? dest : join(dest, basename(fileName))
       dest = selectedAction.name === 'moveThisFolderTo' ? join(dest, '..') : dest
       const sourceFileName = selectedAction.name === 'moveThisFolderTo' ? join(fileName, '..') : fileName
-      info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor ${selectedAction.name} moving ${fileName} to ${dest}`)
+      info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor ${selectedAction.name} moving ${sourceFileName} to ${dest}`)
 
       const moveSaveEmitT0 = now()
       if (selectedAction.name === 'moveThisFileTo') {
-        simpleProject.getSourceFileOrThrow(sourceFileName).moveImmediatelySync(dest)
+        simpleProject.getSourceFileOrThrow(sourceFileName).move(dest)
       }
       else if (selectedAction.name === 'moveThisFolderTo') {
-        simpleProject.getDirectoryOrThrow(sourceFileName).moveImmediatelySync(dest)
+        simpleProject.getDirectoryOrThrow(sourceFileName).move(dest)
       }
+      info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor move took ${timeFrom(moveSaveEmitT0)}`)
+
+      const saveSyncT0 = now()
       simpleProject.saveSync()
-      simpleProject.emit()
-      info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor moveSaveEmit took  ${printTime(now() - moveSaveEmitT0)}`)
-      
+      info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor saveSync took ${timeFrom(saveSyncT0)}`)
+
+      // const emitT0 = now()
+      // simpleProject.emit() // emit doesnt do anythin and tatke considerable amount of time
+      // info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor emit took ${timeFrom(emitT0)}`)
+
     }
   } catch (error) {
     info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor error  ${selectedAction.name} ${error + ' - ' + error.stack}`)
     return refactors
   }
-  info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor ${selectedAction.name} took  ${printTime(now() - t0)}`)
+  info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor ${selectedAction.name} total time took ${timeFrom(t0)}`)
 }
 
 function getCompletionsAtPosition(fileName: string, position: number, options: ts_module.GetCompletionsAtPositionOptions | undefined): ts_module.CompletionInfo {
   const prior = info.languageService.getCompletionsAtPosition(fileName, position, options);
-  prior.entries = prior.entries.concat(interactionTool.getCompletionsAtPosition(fileName, position, options))
+  if (prior) {
+    prior.entries = prior.entries.concat(interactionTool.getCompletionsAtPosition(fileName, position, options))
+  }
   return prior;
 };
 
@@ -117,6 +125,6 @@ export = getPluginCreate(pluginDefinition, (modules, anInfo) => {
 
 
 import prettyMs from 'pretty-ms'
-function printTime(ns:number):string{
-  return prettyMs(ns/1000000)
+function timeFrom(ns: number): string {
+  return prettyMs((now() - ns) / 1000000)
 }

@@ -4,3 +4,6 @@ package-deps.json
 doc-assets
 tmp
 spec
+assets
+src
+.vscode

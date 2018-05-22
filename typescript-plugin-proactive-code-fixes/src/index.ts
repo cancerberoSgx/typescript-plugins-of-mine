@@ -56,7 +56,7 @@ function getApplicableRefactors(fileName: string, positionOrRange: number | ts.T
       description: fix.description(diagnostics, target)
     }))
   })
-  info.project.projectService.logger.info(`${PLUGIN_NAME} getApplicableRefactors took ${now() - t0}`)
+  info.project.projectService.logger.info(`${PLUGIN_NAME} getApplicableRefactors took ${timeFrom(t0)}`)
   return refactors
 }
 
@@ -74,18 +74,33 @@ function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSetti
     info.project.projectService.logger.info(`${PLUGIN_NAME} no getEditsForRefactor because no fix was found for actionName == ${actionName}`)
     return refactors
   }
+  const createSimpleASTProjectT0 = now()
   const simpleProject = createSimpleASTProject(info.project)
+ 
+  info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor createSimpleASTProject took ${timeFrom(createSimpleASTProjectT0)}`)
+
+  const getSourceFileT0 = now()
   let node = simpleProject.getSourceFile(fileName).getDescendantAtPos(positionOrRangeToNumber(positionOrRange))
+  info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor first getSourceFile() took ${timeFrom(getSourceFileT0)}`)
   if (!node) {
     info.project.projectService.logger.info(`${PLUGIN_NAME} no getEditsForRefactor because getDescentantAt pos returned null for fileName=== ${fileName}, r actionName == ${actionName}`)
     return refactors
   }
+  const fixapplyT0 = now()
   fix.apply(diagnostics, node, log)
+  info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor fix.apply() took ${timeFrom(fixapplyT0)}`)
+
+  const saveSyncT0 = now()
   simpleProject.saveSync();
-  simpleProject.emit();
-  info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor took ${now() - t0}`)
+  info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor saveSync took ${timeFrom(saveSyncT0)}`)
+  info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor total time took ${timeFrom(t0)}`)
   return refactors
 }
 
 
 
+
+import prettyMs from 'pretty-ms'
+function timeFrom(ns: number): string {
+  return prettyMs((now() - ns) / 1000000)
+}

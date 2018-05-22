@@ -78,7 +78,9 @@ function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSetti
 
 function getCompletionsAtPosition(fileName: string, position: number, options: ts_module.GetCompletionsAtPositionOptions | undefined): ts_module.CompletionInfo {
   const prior = info.languageService.getCompletionsAtPosition(fileName, position, options);
-  prior.entries = prior.entries.concat(interactionTool.getCompletionsAtPosition(fileName, position, options))
+  if (prior) {
+    prior.entries = prior.entries.concat(interactionTool.getCompletionsAtPosition(fileName, position, options))
+  }
   return prior;
 };
 

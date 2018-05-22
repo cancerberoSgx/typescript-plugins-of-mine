@@ -1,5 +1,8 @@
 TypeScript plugin : A Refactor TypeScript plugin for moving exported declarations to another file. 
 
+**IMPORTANT** seems they are already on it : https://github.com/Microsoft/TypeScript/blob/master/src/services/refactors/moveToNewFile.ts
+
+
 a.k.a : **move classes, functions, interfaces, etc to other files refactor**
 
 ** WIP - use at your own risk **

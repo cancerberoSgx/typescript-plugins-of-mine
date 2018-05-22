@@ -8,7 +8,9 @@
     "test": "echo \"No tests here\" && exit 0",
     "build": "tsc",
     "doc": "echo nothing && exit 0",
-    "clean": "rm -rf node_modules/ package-lock.json"
+    "clean": "rm -rf node_modules/ package-lock.json",
+    "install-published-plugins-dependencies": "rm -rf node_modules/ package-lock.json; cp package.json package-linked.json; cp package-unlinked.json package.json; npm i",
+    "install-linked-plugins-dependencies": "rm -rf node_modules/ package-lock.json; cp package-linked.json package.json; npm i"
   },
   "keywords": [],
   "author": "",
