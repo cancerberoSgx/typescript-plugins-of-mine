@@ -10,7 +10,7 @@ function f(): {a: number, b: string[]} {
   return {a:1, b: []}
 }
 function k(){return []}
-var h :Array<String> = ['asd']
+var h :Array<String> = ['asd'] 
 const b = a+2
 const c = 1+4
 const d = f()

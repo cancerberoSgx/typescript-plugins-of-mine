@@ -11,7 +11,7 @@
  * https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API
  * https://github.com/Microsoft/TypeScript/wiki/Writing-a-Language-Service-Plugin
  * https://github.com/Microsoft/TypeScript/tree/master/src/services/codefixes
- * 
+ * https://basarat.gitbooks.io/typescript/content/docs/compiler/overview.html
 
 
 ### Related tools 
@@ -19,6 +19,7 @@
  * https://dsherret.github.io/ts-simple-ast/  <<--- this looks good for refactoring
  * https://github.com/wessberg/TypescriptASTUtil
  * https://github.com/wessberg/CodeAnalyzer
+ https://github.com/RyanCavanaugh/dts-dom
 
 ## Language server protocol
 

@@ -1,3 +1,7 @@
-class C extends NonExistent{
-  
+export class C extends NonExistent implements NonExistentInterface, ExistentInterface{
+
+}
+
+class ExistentInterface{
+
 }

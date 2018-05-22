@@ -22,5 +22,6 @@ export interface PredicateArg {
   containedTarget?: ts.Node|undefined
   log: (str: string) => void
   containingTarget: ts.Node | undefined
-  simpleNode?: Node
+  simpleNode?: Node,
+  program: ts.Program
 }

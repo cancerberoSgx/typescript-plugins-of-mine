@@ -53,7 +53,7 @@ function getApplicableRefactors(fileName: string, positionOrRange: number | ts.T
   info.project.projectService.logger.info(`${PLUGIN_NAME} getApplicableRefactors info: containingTarget.kind == ${getKindName(containingTarget.kind)} containedTarget.kind == ${containedTarget ? getKindName(containedTarget.kind) : 'NOCONTAINEDCHILD'} `)
 
   const codeFixesFilterT0 = now()
-  target = { diagnostics, containingTarget, containedTarget, log }
+  target = { diagnostics, containingTarget, containedTarget, log, program }
   const fixes = codeFixes.filter(fix => fix.predicate(target))
   info.project.projectService.logger.info(`${PLUGIN_NAME} codeFixesFilterT0 took ${timeFrom(codeFixesFilterT0)}`)
 

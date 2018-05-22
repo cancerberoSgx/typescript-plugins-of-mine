@@ -2,10 +2,13 @@ import { Node } from 'ts-simple-ast';
 import * as ts from 'typescript';
 import { getKindName } from 'typescript-ast-util';
 import { CodeFix, PredicateArg } from '../codeFixes';
+import { callbackify } from 'util';
 
 // TODO: test with jsdoc or a trailing comment
 
 // ISSUE : declare variable "new A(1)" - if in a new statement dont suggest
+
+// TODO: call(nonexistent) should suggest create it
 
 export const codeFixCreateVariable: CodeFix = {
 
