@@ -1,4 +1,4 @@
-// show demo - first createVariable const then reasign and then const2let
+// show demo - first createVariable const then reassign and then const2let
 
 // Attacks the following error by changing const declaration to let : 
 // 	"code": "2540",
@@ -8,16 +8,22 @@ import * as ts from 'typescript';
 import { getKindName } from 'typescript-ast-util';
 import { CodeFix, CodeFixOptions } from '../codeFixes';
 
-export const codeFixCreateVariable: CodeFix = {
-  name: 'const to let',
+export const const2let: CodeFix = {
+  name: 'const2let',
   config: { changeTo: 'const' }, // to change to let or var
   predicate: (arg: CodeFixOptions): boolean => {
-    if (!arg.diagnostics.find(d => d.code === 2540)) {
+    if (!arg.diagnostics.find(d => d.code === 2540)) {  
       return false
     }
-    if (arg.containingTarget.kind === ts.SyntaxKind.BinaryExpression ||
-      arg.containingTarget.parent && arg.containingTarget.parent.kind === ts.SyntaxKind.BinaryExpression ||
-      arg.containingTarget.parent.parent && arg.containingTarget.parent.parent.kind === ts.SyntaxKind.BinaryExpression) {
+    if (arg.containingTarget.kind === ts.SyntaxKind.Identifier){
+      // in this case user selected a fragment of the id. quick issue fix: 
+      if(arg.containedTarget && arg.containedTarget.kind === ts.SyntaxKind.SourceFile){
+        arg.containedTarget=undefined
+      }
+      return true
+    }
+    else if (arg.containedTarget && arg.containedTarget.kind === ts.SyntaxKind.Identifier){
+      // user selected the exactly the id (double click)
       return true
     }
     else {
@@ -28,8 +34,17 @@ export const codeFixCreateVariable: CodeFix = {
 
   description: (arg: CodeFixOptions): string => `Declare variable "${arg.containingTarget.getText()}"`,
 
-  apply: (arg: CodeFixOptions): void => {
-    arg.simpleNode.getSourceFile().insertText(arg.simpleNode.getStart(), 'const ')
+  apply: (arg: CodeFixOptions): ts.ApplicableRefactorInfo[] | void => {
+
+    const id = arg.simpleNode
+    // in bot predicate cases simpleNode will be the id
+    if(!id||id.getKind()!== ts.SyntaxKind.Identifier){
+      return // TODO: LOG
+    }
+    else if(id.getParent() && id.getParent()!.getParent() && id.getParent()!.getParent()!.getKind()===ts.SyntaxKind.ExpressionStatement) { // we want to be strict
+      arg.simpleNode.getSourceFile().insertText(id.getParent()!.getParent()!.getStart(), '')
+
+    }
   }
 
 }

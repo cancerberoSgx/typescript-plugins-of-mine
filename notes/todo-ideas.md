@@ -25,7 +25,8 @@ Each project has its own TODO but here are some general ones:
 * move method to other class (complicated - move interfaces also or classes hierarchy!)
 * (done) add explicit type: select an identifier without explicit type - a refactor add its type based on the inferred one. (done)
 
-* return type not compatible with actual hierarchy fix declared return type
+* (d:l,u:m) return type not compatible with actual hierarchy fix declared return types	"code": "2355",	"message": "A function whose declared type is neither 'void' nor 'any' must return a value.", in that error add return undefined statement
+
 * agile dev - codegen - https://github.com/Microsoft/TypeScript/issues/10139
 // IDEA ast-inspector enhancement : other action that prints nodeAtCursor.arent.parent.arent to the top so I know where I'm standings
 
@@ -77,7 +78,7 @@ Each project has its own TODO but here are some general ones:
 	"code": "2345",
  parse it and suggest rename !
 
-
+* return types - a functon
 * (Difficulty: medium - Usefulness: high).  in case object dont implement interface correctly  suggest to fix the object to mathch the interface:
 	"code": "2322",
 	"message": "Type '{ name: string; config: { variableType: string; }; predicate: (arg: PredicateArg) => boolean; des...' is not assignable to type 'CodeFix'.\n  Types of property 'apply' are incompatible.\n    Type '(diag: Diagnostic[], node: Node<Node>, log: any) => void' is not assignable to type '(arg: PredicateArg) => any'.",
@@ -92,6 +93,23 @@ d===l only if we add the new property as any or ugly casting. i think is OK if w
  * (difficulty medium, usefulness: high) string-concat replace with string template
 
 
+* independent extension : copy& paste with imports - organize imports, formatting, and in the right order (pste each decl before dependencies - after dependants) etc
+
+
+* idea for gui-no-more (text-based-user-interactoin): example for move member . user select a method, a refactor is suggested "cut method foo()". user goes to other file and select a class identifier. a refactor is suggested "paste method foo()". result. method decl is movesd from first class oththe second one (and all its references are updated across the project.)
+
+* variable redefinition - suggest other name and try to apply rename 
+
+
+* ts dont like annon functions : `function(){}` as statements. as expressions is ok "return function(){}" but as statements is wrong: "var i = 0; function(){}; " fix it "adding identifier" - put dummy name
+	"code": "1003",
+  "message": "Identifier expected.",
+  
+
+  const = 4     throw the error :    "code": "1134",   "message": "Variable declaration expected.",  add a dummy variable identifier. 
+
+
+ * refactor to remove all empty new lines in the selection
 
 ##  other ideas
 
@@ -99,3 +117,14 @@ d===l only if we add the new property as any or ugly casting. i think is OK if w
 * go to definition / goto implementation hierarchy
 * views that shows the content of large. hierarchynode.d.ts, tsserverlibrary.d.ts, etc a more tree-view like for examine the structure and search
 * yeoman generator for ts plugins ? 
+
+
+
+
+
+
+## debugging super idea
+
+we are printing nodes in text. idea is, user writes js in editor and we eval() so you can query ast from the text editor
+
+related to text-based user-interaction ? 

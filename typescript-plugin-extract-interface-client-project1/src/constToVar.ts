@@ -1,5 +1,8 @@
-const a = 1
+const reDeclared123 = 1
 
-a = 2
+function f(){
 
-/* code fixes target nodes debug. simpleNode: Identifier containingTarget: BinaryExpression
+  reDeclared123 =99
+}
+
+

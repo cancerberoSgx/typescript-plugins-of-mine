@@ -1,8 +1,8 @@
 import { now, timeFrom } from 'hrtime-now';
-import { findChildContainingRange, getDiagnosticsInCurrentLocation, getKindName, positionOrRangeToNumber, positionOrRangeToRange, findChildContainedRange } from 'typescript-ast-util';
+import { findChildContainedRange, findChildContainingRange, getKindName, positionOrRangeToNumber, positionOrRangeToRange } from 'typescript-ast-util';
 import { createSimpleASTProject, getPluginCreate } from 'typescript-plugin-util';
 import * as ts_module from 'typescript/lib/tsserverlibrary';
-import { codeFixes, CodeFixOptions } from './codeFixes';
+import { CodeFixOptions, codeFixes } from './codeFixes';
 
 
 const PLUGIN_NAME = 'typescript-plugin-proactive-code-fixes'
@@ -22,11 +22,9 @@ export = getPluginCreate(pluginDefinition, (modules, anInfo) => {
   info.project.projectService.logger.info(`${PLUGIN_NAME} created`)
 })
 
-//TODO use froNow to clear the code from logging
+//TODO use fromNow to clear the code from logging
 
-// let containingTarget: ts.Node | undefined
-// let diagnostics: ts.Diagnostic[]
-const DEBUG=true
+const DEBUG = true
 
 let target: CodeFixOptions
 function getApplicableRefactors(fileName: string, positionOrRange: number | ts.TextRange)
@@ -34,15 +32,15 @@ function getApplicableRefactors(fileName: string, positionOrRange: number | ts.T
 
   const t0 = now()
   const refactors = info.languageService.getApplicableRefactors(fileName, positionOrRange) || []
-  if(DEBUG){ // a debug helper that will dump pointed node 
-  refactors.push({
-    name: `${PLUGIN_NAME}-refactor-info`,
-    description: 'Code Fixes',
-    actions: [{
-      name: REFACTOR_ACTION_NAME + '-' + 'debug-pointed-ast',
-      description: 'debug: inspect pointed node'
-    }]
-  })
+  if (DEBUG) { // a debug helper that will dump pointed node 
+    refactors.push({
+      name: `${PLUGIN_NAME}-refactor-info`,
+      description: 'Code Fixes',
+      actions: [{
+        name: REFACTOR_ACTION_NAME + '-' + 'debug-pointed-ast',
+        description: 'debug: inspect pointed node'
+      }]
+    })
   }
   const program = info.languageService.getProgram()
   const sourceFile = program.getSourceFile(fileName)
@@ -54,8 +52,8 @@ function getApplicableRefactors(fileName: string, positionOrRange: number | ts.T
   info.project.projectService.logger.info(`${PLUGIN_NAME} getPreEmitDiagnostics took ${timeFrom(getDiagnosticT0)}`)
 
   const containingTarget = findChildContainingRange(sourceFile, positionOrRangeToRange(positionOrRange))
-
   const containedTarget = findChildContainedRange(sourceFile, positionOrRangeToRange(positionOrRange)) || sourceFile
+  
   if (!containingTarget) {
     info.project.projectService.logger.info(`${PLUGIN_NAME} no getApplicableRefactors because findChildContainedRange  target node is undefined `)
     return refactors
@@ -75,7 +73,7 @@ function getApplicableRefactors(fileName: string, positionOrRange: number | ts.T
   refactors.push({
     name: `${PLUGIN_NAME}-refactor-info`,
     description: 'Code Fixes',
-    actions:  fixes.map(fix => ({
+    actions: fixes.map(fix => ({
       name: REFACTOR_ACTION_NAME + '-' + fix.name,
       description: fix.description(target)
     }))
@@ -93,15 +91,15 @@ function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSetti
     return refactors
   }
 
-  
+
 
 
   const fixName = actionName.substring(REFACTOR_ACTION_NAME.length + 1, actionName.length)
   const fix = codeFixes.find(fix => fix.name === fixName)
-  
+
   let simpleProject
 
-  if (fix && fix.needSimpleAst !== false || DEBUG && actionName===REFACTOR_ACTION_NAME + '-' + 'debug-pointed-ast') {
+  if (fix && fix.needSimpleAst !== false || DEBUG && actionName === REFACTOR_ACTION_NAME + '-' + 'debug-pointed-ast') {
     const createSimpleASTProjectT0 = now()
     simpleProject = createSimpleASTProject(info.project)
     info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor createSimpleASTProject took ${timeFrom(createSimpleASTProjectT0)}`)
@@ -109,8 +107,8 @@ function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSetti
     const getSourceFileT0 = now()
     target.simpleNode = simpleProject.getSourceFile(fileName).getDescendantAtPos(positionOrRangeToNumber(positionOrRange))
 
-    if(DEBUG && actionName===REFACTOR_ACTION_NAME + '-' + 'debug-pointed-ast'){
-      const newText = `\n/* code fixes target nodes debug. \nsimpleNode: ${target.simpleNode ? target.simpleNode.getKindName(): 'undefined'} \ncontainingTarget: ${getKindName(target.containingTarget.kind)} \ncontainedTarget: ${target.containedTarget ? getKindName(target.containedTarget.kind): 'undefined'}`
+    if (DEBUG && actionName === REFACTOR_ACTION_NAME + '-' + 'debug-pointed-ast') {
+      const newText = `\n/* code fixes target nodes debug. \nsimpleNode: ${target.simpleNode ? target.simpleNode.getKindName() : 'undefined'} \ncontainingTarget: ${getKindName(target.containingTarget.kind)} \ncontainedTarget: ${target.containedTarget ? getKindName(target.containedTarget.kind) : 'undefined'}\n*/`
       return {
         edits: [{
           fileName,
@@ -150,4 +148,3 @@ function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSetti
 
 
 
-import { Node } from 'ts-simple-ast';

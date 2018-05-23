@@ -20,6 +20,16 @@ Editor agnostic!. See the same demo but in Atom editor:
 
 * Another demo, this time inquiring two arguments:  ![Moving an interface to another file](https://raw.githubusercontent.com/cancerberoSgx/typescript-plugins-of-mine/master/typescript-plugin-move-declaration/doc-assets/vscode-move-interface.gif)
 
+## Great idea just came up to my mind: 
+
+example for move member . user select a method, a refactor is suggested "cut method foo()". user goes to other file and select a class identifier. a refactor is suggested "paste method foo()". result. method decl is moves from first class other second one (and all its references are updated across the project.)
+if what the user needs is to "select" 1 or more (more than two even) c¿objects from the AST this works
+Cons: ust do it in order, and kind of visually. Could be as an alternative to main idea - and this package can implement it. 
+
+## Big TODO: 
+
+ * Language server protocol. implement this 100% there and you have plugins that will work on any ed. 
+
 
 # Example
 

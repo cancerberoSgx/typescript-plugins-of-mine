@@ -31,7 +31,7 @@ export const codeFixCreateVariable: CodeFix = {
 
   description: (options: CodeFixOptions): string => `Declare variable "${options.containingTarget.getText()}"`,
 
-  apply: (options: CodeFixOptions): void => {
+  apply: (options: CodeFixOptions): ts.ApplicableRefactorInfo[] | void => {
     options.simpleNode.getSourceFile().insertText(options.simpleNode.getStart(), 'const ')
   }
 

@@ -16,7 +16,7 @@ export interface CodeFix {
   /** the description that will appear in the refactor label UI */
   description(arg: CodeFixOptions): string
   /** when user accept the suggestion this is called and implementation changes source file(s)*/
-  apply(arg: CodeFixOptions)
+  apply(arg: CodeFixOptions): ts.ApplicableRefactorInfo[] | void
 }
 
 export const codeFixes: CodeFix[] = [codeFixCreateConstructor, codeFixCreateVariable, declareClass];
