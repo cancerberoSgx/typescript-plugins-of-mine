@@ -1,13 +1,13 @@
 import { Node, Scope, TypeGuards } from 'ts-simple-ast';
 import * as ts from 'typescript';
-import { CodeFix, PredicateArg } from '../codeFixes';
+import { CodeFix, CodeFixOptions } from '../codeFixes';
 import { getKindName } from 'typescript-ast-util';
 
 export const codeFixCreateConstructor: CodeFix = {
   name: 'Declare constructor',
   config: { variableType: 'const' },
   
-  predicate: (arg: PredicateArg) => {
+  predicate: (arg: CodeFixOptions) => {
 
     if (!arg.diagnostics.find(d=>d.code === 2554)) {
       return false
@@ -20,9 +20,9 @@ export const codeFixCreateConstructor: CodeFix = {
     }
   },
 
-  description: (arg: PredicateArg): string => `Declare constructor "${arg.containingTarget.getText()}"`,
+  description: (arg: CodeFixOptions): string => `Declare constructor "${arg.containingTarget.getText()}"`,
 
-  apply: (arg: PredicateArg) => {
+  apply: (arg: CodeFixOptions) => {
     const originalKind = arg.simpleNode.getKind()
     if (!TypeGuards.isNewExpression(arg.simpleNode)) {
       arg.simpleNode = arg.simpleNode.getFirstAncestorByKind(ts.SyntaxKind.NewExpression)

@@ -1,7 +1,7 @@
 import * as shell from 'shelljs'
 import Project, { SourceFile, Node, Diagnostic, TypeGuards } from 'ts-simple-ast'
 import * as ts from 'typescript'
-import { codeFixes, PredicateArg } from '../src/codeFixes';
+import { codeFixes, CodeFixOptions } from '../src/codeFixes';
 import { getDiagnosticsInCurrentLocation } from 'typescript-ast-util'
 
 describe('tests', () => {
@@ -26,7 +26,7 @@ describe('tests', () => {
       return fail();
     }
     const child = sourceFile.getDescendantAtPos(cursorPosition);
-    const arg: PredicateArg = { diagnostics, containingTarget: child.compilerNode, log, simpleNode: child, program }
+    const arg: CodeFixOptions = { diagnostics, containingTarget: child.compilerNode, log, simpleNode: child, program }
     const fixes = codeFixes.filter(fix => fix.predicate(arg));
     if (!fixes || !fixes.length) {
       return fail();
@@ -54,7 +54,7 @@ describe('tests', () => {
     if (!TypeGuards.isNewExpression(child)) {
       return fail('is not newexpr type guard')
     }
-    const arg: PredicateArg = { diagnostics, containingTarget: child.compilerNode, log, simpleNode: child, program }
+    const arg: CodeFixOptions = { diagnostics, containingTarget: child.compilerNode, log, simpleNode: child, program }
     const fixes = codeFixes.filter(fix => fix.predicate(arg));
     if (!fixes || !fixes.length) {
       return fail('no fixes for knowndiagnostic');
@@ -81,18 +81,18 @@ describe('tests', () => {
     const id = h.getDescendantsOfKind(ts.SyntaxKind.Identifier)[0]
     console.log(id.getText())
 
-    const arg: PredicateArg = { diagnostics, containingTarget: id.compilerNode, log, program }
+    const arg: CodeFixOptions = { diagnostics, containingTarget: id.compilerNode, log, program }
     const fixes = codeFixes.filter(fix => fix.predicate(arg));
     if (!fixes || !fixes.length) {
       return fail('no fixes for knowndiagnostic');
     }
-    console.log(fixes)
+    // console.log(fixes)
     fixes[0].apply(arg);
     simpleProject.saveSync();
     simpleProject.emit();
     expect(shell.cat(`${projectPath}${filePath}`).toString()).toContain(`class NonExistent {`)
 
-    sourceFile.f
+    // sourceFile.fs
     // expect()
     
 

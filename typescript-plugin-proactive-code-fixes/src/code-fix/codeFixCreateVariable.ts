@@ -1,14 +1,12 @@
-import { Node } from 'ts-simple-ast';
 import * as ts from 'typescript';
 import { getKindName } from 'typescript-ast-util';
-import { CodeFix, PredicateArg } from '../codeFixes';
-import { callbackify } from 'util';
+import { CodeFix, CodeFixOptions } from '../codeFixes';
+
+// attacks :
+// "code": "2304", Cannot find name 'b'.",
 
 // TODO: test with jsdoc or a trailing comment
-
-// ISSUE : declare variable "new A(1)" - if in a new statement dont suggest
-
-// TODO: call(nonexistent) should suggest create it
+// ISSUE : not suggesting in this case:  "a=new A(1)" - if in a new statement dont suggest
 
 export const codeFixCreateVariable: CodeFix = {
 
@@ -16,25 +14,25 @@ export const codeFixCreateVariable: CodeFix = {
 
   config: { variableType: 'const' },
 
-  predicate: (arg: PredicateArg): boolean => {
-    if (!arg.diagnostics.find(d => d.code === 2304 || d.code === 2540)) {
+  predicate: (options: CodeFixOptions): boolean => {
+    if (!options.diagnostics.find(d => d.code === 2304)) {
       return false
     }
-    if (arg.containingTarget.kind === ts.SyntaxKind.BinaryExpression ||
-      arg.containingTarget.parent && arg.containingTarget.parent.kind === ts.SyntaxKind.BinaryExpression ||
-      arg.containingTarget.parent.parent && arg.containingTarget.parent.parent.kind === ts.SyntaxKind.BinaryExpression) {
+    if (options.containingTarget.kind === ts.SyntaxKind.BinaryExpression ||
+      options.containingTarget.parent && options.containingTarget.parent.kind === ts.SyntaxKind.BinaryExpression ||
+      options.containingTarget.parent.parent && options.containingTarget.parent.parent.kind === ts.SyntaxKind.BinaryExpression) {
       return true
     }
     else {
-      arg.log('codeFixCreateVariable predicate false because child.kind dont match ' + getKindName(arg.containingTarget.kind))
+      options.log('codeFixCreateVariable predicate false because child.kind dont match ' + getKindName(options.containingTarget.kind))
       return false
     }
   },
 
-  description: (arg: PredicateArg): string => `Declare variable "${arg.containingTarget.getText()}"`,
+  description: (options: CodeFixOptions): string => `Declare variable "${options.containingTarget.getText()}"`,
 
-  apply: (arg: PredicateArg): void => {
-    arg.simpleNode.getSourceFile().insertText(arg.simpleNode.getStart(), 'const ')
+  apply: (options: CodeFixOptions): void => {
+    options.simpleNode.getSourceFile().insertText(options.simpleNode.getStart(), 'const ')
   }
 
 }

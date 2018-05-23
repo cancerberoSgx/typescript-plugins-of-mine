@@ -42,3 +42,5 @@ Make sure you have installed typescript in your project (`npm i --save-dev types
 # TODO
 
  * (important) TODO: use getImplementationsOf(of) should be much faster in case of big hierarchies like EventEmitter
+ * 
+  * refactor subclasses-of to use simple-ast helpers for performance. 
