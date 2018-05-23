@@ -111,6 +111,30 @@ d===l only if we add the new property as any or ugly casting. i think is OK if w
 
  * refactor to remove all empty new lines in the selection
 
+
+ 
+ 
+  crate type from return value : two ideas for agile type definition and refactor:
+=====================
+ * (useful and cheap). Title: declare new type from return value. Imagine you componse this function that returns a rich object: 
+function doEval(string, context: EvalContext) {
+  const result = eval(string)
+  return { result, output: context._printed.join('\n') }
+}
+that alone wont generate an error but you start calling it "eval result" and referencing in a couple of other places:
+ const evalResult = doEval(match[1], context)...
+ function prettyPrintEvalResult(evalResult){...
+ so you want to create this type, you just put it a name  expliciting the doEval return type: 
+ function doEval(string, context: EvalContext): EvalResult {
+  const result = eval(string)
+  return { result, output: context._printed.join('\n') }
+}
+and that will generate an error "code": "2304","message": "Cannot find name 'EvalResult'.", a refactor suggestion appear to create the type automatically from treturn type
+
+* extending the previous refactor, call this one "change type from return type" Suppose in the previous example, you are inside the implementation and realise you need to add a coupe of properties (or remove / rename). Just add the properties to the return type (return { result, output: context._printed.join('\n'), extra: {a: 9} }) and since it was previously created from here - the member names will match and a new suggestion can be used to add the new property to the type. (decide if the refactor should change all code (what should we do in referenced files? ) I would do nothing, just in the method/function and let it break
+
+* and more more general thatn these is be able to declare new type from any expression, evan a variable (sometimes you define type not in the impl (return type, but in the caller side))
+
 ##  other ideas
 
 
