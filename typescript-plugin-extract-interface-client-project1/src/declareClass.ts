@@ -1,5 +1,5 @@
 
-class Hello extends NonExistent implements NonExistentInterface, ExistentInterface{
+class C extends NonExistent implements NonExistentInterface, ExistentInterface{
 
 }
 

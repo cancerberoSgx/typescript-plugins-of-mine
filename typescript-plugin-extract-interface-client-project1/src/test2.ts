@@ -17,3 +17,11 @@ interface Car  {
 class Foo{
   speedometer: Speedometer
 }
+/***@ 
+p.print('something simple from editor')
+return 'good bye'
+
+@***RESULT: "undefined
+Output:
+
+"/
