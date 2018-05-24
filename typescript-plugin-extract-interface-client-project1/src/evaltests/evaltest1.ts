@@ -3,12 +3,9 @@
 // implements the actual plugin change in the AST is painful, even for the most simple plugin
 // (reload tsserver, look at tsserver.log, find and interpret stacktraces)
 
-// here we will develop a plugin that add "const" keyword when users forgot to declare a 
-// variable like the follwing
 
 
-
-var1  = 123
+const var1  = 123
 
 /*** @ 
 

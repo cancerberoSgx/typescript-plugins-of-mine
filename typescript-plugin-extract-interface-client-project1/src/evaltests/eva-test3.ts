@@ -1,4 +1,10 @@
+
+// here we will develop a plugin that add put a name to unamed top level functions to solve the error"identifier expect
+
+
 /***@ 
+
+const diagnostics = c.program.getDiagnostics
 
 let i = 0
 c.print(`
@@ -10,6 +16,4 @@ ${([c.node].concat(c.node.getAncestors())).map(a=>a.getKindName() + ' - text: '+
 `)
 @***/
 
-function f( a: {done: (y: number)=>void}): void {
-  const evalvar2  = 123
-}
+function (){}
