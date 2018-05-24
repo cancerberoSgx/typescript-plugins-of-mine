@@ -1,8 +1,8 @@
-import { positionOrRangeToRange, positionOrRangeToNumber, dumpAst, findChildContainingRange, findChildContainingPosition, getDiagnosticsInCurrentLocation, getKindName } from "typescript-ast-util";
+import { positionOrRangeToRange, positionOrRangeToNumber, dumpAst, findChildContainingRange, findChildContainingPosition, getDiagnosticsInCurrentLocation, getKindName, findAscendant } from "typescript-ast-util";
 import { Node } from "ts-simple-ast";
-
+/** Utilities that easy working with native TypeScript AST Nodes */
 export interface EvalContextUtil {
-  /** will dump a pretty recursive structure of given node's descendants */
+  /** pretty-prints AST structure of given node's descendants */
   printAst(node: Node | ts.Node): string
   positionOrRangeToRange: typeof positionOrRangeToRange
   positionOrRangeToNumber: typeof positionOrRangeToNumber
@@ -11,6 +11,7 @@ export interface EvalContextUtil {
   getDiagnosticsInCurrentLocation: typeof getDiagnosticsInCurrentLocation
   findChildContainingPosition: typeof findChildContainingPosition
   getKindName: typeof getKindName
+  findAscendant: typeof findAscendant
 }
 export class EvalContextUtilImpl implements EvalContextUtil {
   printAst(node: Node | ts.Node): string {
@@ -23,4 +24,5 @@ export class EvalContextUtilImpl implements EvalContextUtil {
   nodeAtCursor = findChildContainingPosition
   getDiagnosticsInCurrentLocation = getDiagnosticsInCurrentLocation
   getKindName = getKindName
+  findAscendant = findAscendant
 }

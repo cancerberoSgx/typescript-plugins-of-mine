@@ -1,9 +1,11 @@
+// TODO: use plugin-util
+// TODO : log  time 
 
 import { now, timeFrom } from 'hrtime-now';
 import { dumpAst, findChildContainingPosition, findChildContainingRange, getKindName, positionOrRangeToNumber, positionOrRangeToRange, printNode } from 'typescript-ast-util';
 import { createSimpleASTProject } from 'typescript-plugin-util';
 import * as ts_module from 'typescript/lib/tsserverlibrary';
-import { EVAL_CODE_IN_COMMENTS_REFACTOR_ACTION_NAME, EVAL_SELECTION_REFACTOR_ACTION_NAME, executeEvalCode } from './evalCode';
+import { EVAL_CODE_IN_COMMENTS_REFACTOR_ACTION_NAME, EVAL_SELECTION_REFACTOR_ACTION_NAME, EVAL_CURRENT_FUNCTION_BODY_REFACTOR_ACTION_NAME, executeEvalCode } from './evalCode';
 import { FormatCodeSettings } from 'typescript';
 
 const PLUGIN_NAME = 'typescript-plugin-ast-inspector'
@@ -11,19 +13,13 @@ const PRINT_AST_REFACTOR_ACTION_NAME = `${PLUGIN_NAME}-print-ast-refactor-action
 const PRINT_PARENT_NODES_REFACTOR_ACTION_NAME = `${PLUGIN_NAME}-print-inheritance-refactor-action`
 const PRINT_SELECTED_NODE_REFACTOR_ACTION_NAME = `${PLUGIN_NAME}-print-selected-node`
 
-
 let ts: typeof ts_module
 let info: ts_module.server.PluginCreateInfo
 let log: (mst: string) => void
 
-
-// TODO: use plugin-util
-// TODO : log  time 
-
-function init(modules: { typescript: typeof ts_module }) {
+export = function init(modules: { typescript: typeof ts_module }) {
   ts = modules.typescript
-
-  function create(anInfo: ts_module.server.PluginCreateInfo) {
+  function create(anInfo: ts_module.server.PluginCreateInfo) { 
     info = anInfo
     log = function (msg) {
       info.project.projectService.logger.info(`${PLUGIN_NAME} ${msg}`)
@@ -41,11 +37,7 @@ function init(modules: { typescript: typeof ts_module }) {
   return { create }
 }
 
-export = init
-
 let nodeAtCursor: ts.Node | undefined
-
-
 
 function getApplicableRefactors(fileName: string, positionOrRange: number | ts.TextRange): ts_module.ApplicableRefactorInfo[] {
   const refactors = info.languageService.getApplicableRefactors(fileName, positionOrRange) || []
@@ -55,7 +47,8 @@ function getApplicableRefactors(fileName: string, positionOrRange: number | ts.T
   }
   let actions = [
     { name: EVAL_CODE_IN_COMMENTS_REFACTOR_ACTION_NAME, description: 'Eval code in comments' },
-    { name: EVAL_SELECTION_REFACTOR_ACTION_NAME, description: 'Eval selection' }
+    { name: EVAL_SELECTION_REFACTOR_ACTION_NAME, description: 'Eval selection' },
+    { name: EVAL_CURRENT_FUNCTION_BODY_REFACTOR_ACTION_NAME, description: 'Eval current function selection' } // TODO: show only if we are inside a function
   ]
   nodeAtCursor = findChildContainingRange(sourceFile, positionOrRangeToRange(positionOrRange))
   if (!nodeAtCursor) {
@@ -85,7 +78,7 @@ function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSetti
   else if (actionName === PRINT_PARENT_NODES_REFACTOR_ACTION_NAME && nodeAtCursor) {
     return printParentNodes(nodeAtCursor, fileName)
   }
-  else if (actionName === EVAL_CODE_IN_COMMENTS_REFACTOR_ACTION_NAME || actionName === EVAL_SELECTION_REFACTOR_ACTION_NAME) {
+  else if (actionName === EVAL_CODE_IN_COMMENTS_REFACTOR_ACTION_NAME || actionName === EVAL_SELECTION_REFACTOR_ACTION_NAME || actionName === EVAL_CURRENT_FUNCTION_BODY_REFACTOR_ACTION_NAME) {
     return evalCode(fileName, positionOrRange, formatOptions, refactorName, actionName)
   }
 }
@@ -104,7 +97,6 @@ function evalCode(fileName: string, positionOrRange: number | ts_module.TextRang
     info.project.projectService.logger.info(`${PLUGIN_NAME} evalCode executeEvalCode error ${error} \n ${error.stack}`)
   }
   info.project.projectService.logger.info(`${PLUGIN_NAME} evalCode executeEvalCode took ${timeFrom(fixapplyT0)}`)
-
   const saveSyncT0 = now()
   simpleProject.saveSync()
   info.project.projectService.logger.info(`${PLUGIN_NAME} evalCode saveSync took ${timeFrom(saveSyncT0)}`)
@@ -142,7 +134,7 @@ function printParentNodes(nodeAtCursor: ts.Node, fileName: string): ts.RefactorE
   } while (node)
   let level = 1
   newText += arr.reverse().map(n => {
-    return printNode(n, -1, level++)
+    return printNode(n, -1, level++) + ', starts: '+n.getStart()
   }).join('\n')
   newText = '\n`\n' + newText + '\n`\n'
 

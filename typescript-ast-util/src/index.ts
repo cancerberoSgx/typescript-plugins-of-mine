@@ -1,11 +1,11 @@
-import { appendFileSync, readFileSync } from 'fs'
-import { homedir } from 'os'
-import { dirname, join } from 'path'
-
+import { appendFileSync, readFileSync } from 'fs';
+import { homedir } from 'os';
+import { dirname, join } from 'path';
 /// testing 
-import * as shell from 'shelljs'
-import * as ts from 'typescript'
-import * as ts_module from 'typescript/lib/tsserverlibrary'
+import * as shell from 'shelljs';
+import * as ts from 'typescript';
+import * as ts_module from 'typescript/lib/tsserverlibrary';
+
 
 
 
@@ -45,28 +45,39 @@ export function hasName(node: ts.Node): boolean {
   return !!(node as ts.NamedDeclaration).name
 }
 
+// get node by position or range helpers
 
 
-
-
-// parent helpers
-/**
- * Find the parent for given node that comply with given predicate
- * @param node 
- * @param predicate 
- * @param orItSelf if true will first, check if node itself comply and if so returns it
- */
-export function findParent(node: ts.Node | undefined, predicate: (node: ts.Node) => boolean, orItSelf: boolean = false): ts.Node | undefined {
-  if (!node) {
-    return
+export function findChildContainingPosition(sourceFile: ts.SourceFile, position: number): ts.Node | undefined {
+  function find(node: ts.Node): ts.Node | undefined {
+    if (position >= node.getStart() && position < node.getEnd()) {
+      return ts.forEachChild(node, find) || node
+    }
   }
-  if (orItSelf && predicate(node)) {
-    return node
+  return find(sourceFile)
+}
+
+//TODO rename to findLowestChildContainingRange
+export function findChildContainingRange(sourceFile: ts.SourceFile, r: ts.TextRange): ts.Node | undefined {
+  function find(node: ts.Node): ts.Node | undefined {
+    if (r.pos >= node.getStart() && r.end < node.getEnd()) {
+      return ts.forEachChild(node, find) || node
+    }
   }
-  if (node && node.parent && predicate(node.parent)) {
-    return node.parent
+  return find(sourceFile)
+}
+//TODO. rename to findFirstChildContainedRange
+export function findChildContainedRange(sourceFile: ts.SourceFile, r: ts.TextRange): ts.Node | undefined {
+  function find(node: ts.Node): ts.Node | undefined {
+    if (r.pos <= node.getStart() && r.end >= node.getEnd()) {
+      return node
+    }
+    else {
+      return ts.forEachChild(node, find)
+    }
+
   }
-  return findParent(node.parent as ts.Node, predicate)
+  return find(sourceFile)
 }
 /**
  * Given a positionOrRange and a info context there is a node that is minimal and contains it (ChildContainingPosition). This method return the parent of that node that comply with given predicate
@@ -89,15 +100,51 @@ export function findParentFromPosition(
   if (!nodeAtCursor) {
     return
   }
-  const targetNode = findParent(nodeAtCursor, predicate, true)
+  const targetNode = findAscendant(nodeAtCursor, predicate, true)
   return targetNode || undefined
 }
 
 
-// kind & type helpers
 
-export function getKindName(kind: number): string {
-  return getEnumKey(ts.SyntaxKind, kind)
+
+
+
+// parent helpers
+/**
+ * Find the parent for given node that comply with given predicate
+ * @param orItSelf if true will first, check if node itself comply and if so returns it
+ */
+export function findAscendant(node: ts.Node | undefined, predicate: (node: ts.Node) => boolean, orItSelf: boolean = false): ts.Node | undefined {
+  if (!node) {
+    return
+  }
+  else if (orItSelf && predicate(node)) {
+    return node
+  }
+  else if (node.parent && predicate(node.parent)) {
+    return node.parent
+  }
+  else {
+    return findAscendant(node.parent as ts.Node, predicate)
+  }
+}
+
+/** get given node's ascendants in order from node.parent to topest one */
+export function getAscendants(node: ts.Node | undefined): ts.Node[] {
+  let a
+  const result: ts.Node[] = []
+  while ((a = node)) {
+    result.push(a)
+  }
+  return result
+}
+
+
+
+// kind & type helpers
+/** get the kind name as string of given kind value or node */
+export function getKindName(kind: number | ts.Node): string {
+  return getEnumKey(ts.SyntaxKind, (kind as ts.Node).kind || kind)
 }
 export function getEnumKey(anEnum: any, value: any): string {
   for (const key in anEnum) {
@@ -145,7 +192,6 @@ export function getTypeStringFor(node: ts.Node, program: ts.Program): string | u
     return
   }
   return program.getTypeChecker().typeToString(type, node, ts.TypeFormatFlags.None) || undefined
-  // ts_module.server.get
 }
 /**
  * because getTypeStringFor returns type strings not suitable for declarations, for example, for function like, returns "(args)=>Foo" where for declarations it should be (args):Foo
@@ -181,39 +227,6 @@ export function hasDeclaredType(node: ts.Node, program: ts.Program): boolean {
 
 
 // children helpers
-
-export function findChildContainingPosition(sourceFile: ts.SourceFile, position: number): ts.Node | undefined {
-  function find(node: ts.Node): ts.Node | undefined {
-    if (position >= node.getStart() && position < node.getEnd()) {
-      return ts.forEachChild(node, find) || node
-    }
-  }
-  return find(sourceFile)
-}
-
-//TODO rename to findLowestChildContainingRange
-export function findChildContainingRange(sourceFile: ts.SourceFile, r: ts.TextRange): ts.Node | undefined {
-  function find(node: ts.Node): ts.Node | undefined {
-    if (r.pos >= node.getStart() && r.end < node.getEnd()) {
-      return ts.forEachChild(node, find) || node
-    }
-  }
-  return find(sourceFile)
-}
-//TODO. rename to findFirstChildContainedRange
-export function findChildContainedRange(sourceFile: ts.SourceFile, r: ts.TextRange): ts.Node | undefined {
-  function find(node: ts.Node): ts.Node | undefined {
-    if (r.pos <= node.getStart() && r.end >= node.getEnd()) {
-      return node
-    }
-    else {
-      return ts.forEachChild(node, find)
-    }
-
-  }
-  return find(sourceFile)
-}
-
 
 /**
  * Iterates recursively over all children of given node and apply visitor on each of them. If visitor returns non falsy value then it stops visiting and that value is returned to the caller. See https://en.wikipedia.org/wiki/Tree_traversal for the meaning of "DeepFirst". 
@@ -310,18 +323,11 @@ export function findChild2(
   }
   return found
 }
-// function printDiagnostic(d: ts.Diagnostic) {
-//   return ts.formatDiagnosticsWithColorAndContext()
-//   const character = ts.getLineAndCharacterOfPosition(d.file, d.start).character
-//   const line = ts.getLineAndCharacterOfPosition(d.file, d.start).line
-//   const lineStr = d.file.getText().split('\n')[line - 1]
-//   return return ts.formatDiagnosticsWithColorAndContext() 'Diagnostic: ' + d.code + ' ' + d.messageText + '  line: ' + line + ' - ' + d.file.fileName + ' line is: \n' + lineStr + '\n' + new Array(Math.min(0, character - 3)).map(i => '').join(' ') + '|here|'
-// }
 
 //identifiers helpers
 
 export function findIdentifier(node: ts.Node | undefined): ts.Identifier {
-  return node.kind === ts_module.SyntaxKind.Identifier ? node as  ts.Identifier :    findChild(node, child => child.kind === ts_module.SyntaxKind.Identifier, false) as ts.Identifier
+  return node.kind === ts_module.SyntaxKind.Identifier ? node as ts.Identifier : findChild(node, child => child.kind === ts_module.SyntaxKind.Identifier, false) as ts.Identifier
 }
 export function findIdentifierString(node: ts.Node | undefined): string {
   const id = findIdentifier(node)
@@ -350,7 +356,7 @@ export function compileFile(fileName: string = '', tsconfigPath: string = join(_
   ts.formatDiagnosticsWithColorAndContext(program.getSemanticDiagnostics(), compilerHost)
   //
   // .forEach(d => {
-    
+
   //   program.getSyntacticDiagnostics().forEach(d => console.log(printDiagnostic(d)))
   // })
   return program
@@ -382,14 +388,14 @@ export function compileProject(projectFolder: string, rootFiles: Array<string> =
 
 
 /** return the first diagnosis */
-export function getDiagnosticsInCurrentLocation(program: ts.Program, sourceFile: ts.SourceFile, position: number) : ts.Diagnostic[]{
+export function getDiagnosticsInCurrentLocation(program: ts.Program, sourceFile: ts.SourceFile, position: number): ts.Diagnostic[] {
   const file = typeof sourceFile === 'string' ? program.getSourceFile(sourceFile) : sourceFile;
-  const diagnostics =   [
+  const diagnostics = [
     ...program.getSyntacticDiagnostics(),
     ...program.getSemanticDiagnostics(),
     ...program.getDeclarationDiagnostics()
   ];
-    return diagnostics.filter(d => d.start <= position && position <= d.start + d.length);
+  return diagnostics.filter(d => d.start <= position && position <= d.start + d.length);
 }
 
 

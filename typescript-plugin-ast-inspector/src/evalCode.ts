@@ -1,6 +1,6 @@
 
 // TODO: eval code safely using node vm so security people dont complain
-
+// TODO: eval current function code - so user don't have to excatly select everything
 // TODO: for eval selection, user could write typescript and we could transpile it to js before eval
 // TODO: expose info, project etc in context
 
@@ -18,13 +18,13 @@ import { now, timeFrom } from 'hrtime-now';
 import * as sts from 'ts-simple-ast';
 import { Node } from 'ts-simple-ast';
 import * as ts from 'typescript';
-import { dumpAst, positionOrRangeToRange, positionOrRangeToNumber, findChildContainingRange } from 'typescript-ast-util';
 import * as ts_module from 'typescript/lib/tsserverlibrary';
-import { matchGlobalRegexWithGroupIndex } from './regex-groups-index';
 import { EvalContextUtil, EvalContextUtilImpl } from './evalCodeContextUtil';
+import { matchGlobalRegexWithGroupIndex } from './regex-groups-index';
 
 export const EVAL_CODE_IN_COMMENTS_REFACTOR_ACTION_NAME = `plugin-ast-inspector-eval-code-in-comments`
 export const EVAL_SELECTION_REFACTOR_ACTION_NAME = `plugin-ast-inspector-eval-selection`
+export const EVAL_CURRENT_FUNCTION_BODY_REFACTOR_ACTION_NAME = `plugin-ast-inspector-eval-current-function-body`
 
 /** context of evaluated code available in `c` variable */
 export interface EvalContext {
@@ -38,7 +38,7 @@ export interface EvalContext {
   print(s): void
   /** log messages back to tsserver (so host plugin and tsserver can see them). Is like a console.log() */
   log: (msg: string) => void
-  util: EvalContextUtil 
+  util: EvalContextUtil
   /**
    * Entry point for the plugin execution context. from here you have access to the Project, the Program, current sourcefile, language service, plugin configuration and everything else regarding the context on where the host plugin is being executed. Take into account that everything obtained via `info` will be native typescript objects not ts-simple-ast. For example:
    * 
@@ -155,40 +155,30 @@ export function executeEvalCode(config: EvalContextConfig): void {
     sourceFile.insertText(config.node.getEnd(), `/* Please save the file before evaluating code, thanks */`)
     return;
   }
-
-  const context = new EvalContextImpl(config)
-
+  // handle eval function body
+  if (config.actionName === EVAL_CURRENT_FUNCTION_BODY_REFACTOR_ACTION_NAME) {
+    const parentFunction = (config.node.getKind() === ts.SyntaxKind.FunctionDeclaration ? config.node : undefined) || config.node.getFirstAncestorByKind(ts.SyntaxKind.FunctionDeclaration)
+    if (!parentFunction || !sts.TypeGuards.isFunctionDeclaration(parentFunction)) {
+      return
+    }
+    const text = evalCodeAndPrintResult(config, parentFunction.getBody().getText())
+    sourceFile.insertText(parentFunction.getEnd(), text)
+  }
   // handle eval selected code
   if (config.actionName === EVAL_SELECTION_REFACTOR_ACTION_NAME && typeof (config.positionOrRange as ts.TextRange).pos === 'number') {
     const range = config.positionOrRange as ts.TextRange
-    const code = originalSourceFile.getFullText().substring(range.pos, range.end)
-    config.log('executeEvalCode evaluating selected code: ' + code)
-    const result = doEval(code, context) //TODO: not logging time & error
-    const text = prettyPrintEvalResult(result)
-    config.log('executeEvalCode after evaluating selected code result is: ' + JSON.stringify(result, null, 2))
-    
+    const text = evalCodeAndPrintResult(config, originalSourceFile.getFullText().substring(range.pos, range.end))
     sourceFile.insertText(range.end, text)
     return
   }
-
-  // handling eval code in comments
+  // handle eval code in comments
   const regex = /\/\*\*\*@\s*([^@]+)\s*(@\*\*\*\/)/gim
   const result = matchGlobalRegexWithGroupIndex(regex, originalSourceFile.getFullText())
-
   config.log('executeEvalCode apply matchGlobalRegexWithGroupIndex result ' + JSON.stringify(result, null, 2))
-
   const toPrint = result && result.length && result.map(match => {
-
-    config.log('executeEvalCode apply doEval() result \n' + match[0] + ' and context == ' + context)
-    const evalResult = doEval(match[0].value, context)
-
-    config.log('executeEvalCode apply doEval ' + JSON.stringify(evalResult, null, 2) + evalResult.error ? ('\nERROR is: ' + evalResult.error || evalResult.errorOuter + '') : '')
-
-    const text = prettyPrintEvalResult(evalResult)
-    return { text, printPosition: match[1].end }
+    return { text: evalCodeAndPrintResult(config, match[0].value), printPosition: match[1].end }
   })
   config.log('executeEvalCode apply return true and toPrint == ' + toPrint ? JSON.stringify(toPrint, null, 2) : 'undefined')
-
   if (!toPrint) {
     sourceFile.insertText(config.node.getSourceFile().getEnd(), evalHelpText)
   }
@@ -200,6 +190,14 @@ export function executeEvalCode(config: EvalContextConfig): void {
   }
 }
 
+function evalCodeAndPrintResult(config: EvalContextConfig, code: string): string {
+  const context = new EvalContextImpl(config)
+  config.log('executeEvalCode evaluating selected code: ' + code)
+  const result = doEval(code, context) //TODO: not logging time & error
+  const text = prettyPrintEvalResult(result)
+  config.log('executeEvalCode after evaluating selected code result is: ' + JSON.stringify(result, null, 2))
+  return text
+}
 
 const evalHelpText = `
 /***@ 

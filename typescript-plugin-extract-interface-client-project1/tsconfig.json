@@ -6,11 +6,11 @@
       "es2018"
     ],
     "outDir": "./dist",
-    "strict": true,
+    "strict": false,
     "strictNullChecks": false, 
     "esModuleInterop": true,
     "removeComments": false,
-    "noImplicitAny": true,
+    "noImplicitAny": false,
     "plugins": [
       // {
       //   "name": "typescript-plugin-extract-interface"

@@ -18,7 +18,9 @@ The user intends to declare a new variable, Could be for expression "2" or for `
  * declaring variables an constructors on the fly (Visual Studio Code Editor) : 
  * ![vscode demo creating variables and constructors declarations vscode ](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-postfix/doc-assets/vscode.gif?raw=true?p=.gif)
  * Atom Editor:
- * ![vscode demo creating variables and constructors declarations atom](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-postfix/doc-assets/atom.gif?raw=true?p=.gif)  -->
+ * ![vscode demo creating variables and constructors declarations atom](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-postfix/doc-assets/atom.gif?raw=true?p=.gif) 
+ 
+  -->
 
 
 # How to use: 
