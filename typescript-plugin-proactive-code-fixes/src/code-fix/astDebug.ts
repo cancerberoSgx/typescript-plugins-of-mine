@@ -21,6 +21,15 @@ import { readFileSync } from 'fs';
 
 // TODO: let the user write js without comment wrapping and select the text wants to execute...
 
+// TODO: this silently fails (syntax errors not supproted ? ): 
+/***@ 
+c.print(`selected node's is the ${c.node.getKindName()} "${c.node.getText()}"
+its Ascendants nodes are:
+${c.node.getAscendants().map(a=>a.getKindName() +'\t\t\t\t - text: '+a.getText().substring(0, Math.min(a.getText().length, 50) )}
+`)
+@***/
+
+
 
 /** context of evaluated code available in `c` variable */
 interface IEvalContext {
@@ -69,13 +78,13 @@ function doEval(code, __context__: EvalContext): EvalResult {
   // heads up - we are type/catch inside eval. If we let eval code throw exceptions this will impact not only this extension but all other plugins in the tsserver instance 
   const __result__: EvalResult = {};
   const codeToEval = `
+  try {
 (function(c){
-try {
   ${code}
+})(__context__);
 }catch(ex){
   __result__.error = ex;
 }
-})(__context__);
   `
   try {
     eval(codeToEval)
@@ -87,9 +96,19 @@ try {
   return __result__
 }
 function prettyPrintEvalResult(evalResult) {
-  const output = `\nOutput:\n${evalResult.output.join('\n>  ')}\n`
-  const error = evalResult.error ? `\nError: \n` + evalResult.error + '\nstack:\n ' + evalResult.error.stack + ' \nerror object: \n' + JSON.stringify(evalResult.error) : ''; // TODO: errorOuter
-  return '\n/*######################' + (error||'')  + output + '\n##########################*/'
+  let output = ''
+  if(evalResult.output){
+    output += `Output:\n${evalResult.output.join('\n')}\n`
+  }
+  
+  let error = '';
+  if(evalResult.error){
+    error += `Error: \n${evalResult.error}\nStack:\n ${evalResult.error.stack}\n` 
+  }
+  if(evalResult.errorOuter) {
+    error += `Error: \n${evalResult.errorOuter}\nStack:\n ${evalResult.errorOuter.stack}\n` 
+  }
+  return `\nvar __output = \`\n${error + output}\n\``//TODO: escape `
 }
 
 export const astDebug: CodeFix = {
@@ -116,9 +135,6 @@ export const astDebug: CodeFix = {
       arg.log(`astdebug not applying because file is not saved - comparing  arg.containingTarget.getSourceFile().getText().trim()===${ arg.containingTarget.getSourceFile().getFullText().trim()}  with readFileSync(arg.containingTarget.getSourceFile().fileName).toString()===${readFileSync(arg.containingTarget.getSourceFile().fileName).toString()}`)
       return ;
     }
-    // sourceFile.saveSync();
-    // sourceFile.refreshFromFileSystemSync()
-    // sourceFile.emit()
     const regex =  /\/\*\*\*@\s*([^@]+)\s*(@\*\*\*\/)/gim
     const result = matchGlobalRegexWithGroupIndex(regex, arg.containingTarget.getSourceFile().getFullText())
 
@@ -129,7 +145,7 @@ export const astDebug: CodeFix = {
       arg.log('astdebug apply doEval() result \n' + match[0] + ' and context == ' + context)
       const evalResult = doEval(match[0].value, context) // TODO: log client eval() time and print it back
 
-      arg.log('astdebug apply doEval ' + JSON.stringify(evalResult, null, 2) + evalResult.error ? ('\nERROR is: ' + JSON.stringify(evalResult.error, null, 2)) : '')
+      arg.log('astdebug apply doEval ' + JSON.stringify(evalResult, null, 2) + evalResult.error ? ('\nERROR is: ' + evalResult.error || evalResult.errorOuter + ''): '')
 
       const text = prettyPrintEvalResult(evalResult)
       return { text, printPosition: match[1].end }

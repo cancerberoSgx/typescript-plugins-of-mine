@@ -4,19 +4,30 @@
 // (reload tsserver, look at tsserver.log, find and interpret stacktraces)
 
 // here we will develop a plugin that add "const" keyword when users forgot to declare a 
-// variable like the follwing snippet:
+// variable like the follwing
 
-var1 = 123
 
-/***@ 
+
+var1  = 123
+
+/*** @ 
 
 c.print(`
-Hello from editor. Using typescript version: ${c.ts.version}
-
-Selected node by user is a ${c.node.getKindName()} and its parent's text is "${c.node.getParent().getText()}"
+Selected node by user is the ${c.node.getKindName()} "${c.node.getText()}" and its parent's 
+text is the ${c.node.getParent().getKindName()}  "${c.node.getParent().getText()}"
 
 The AST structure of this file:  
 ${c.printAst(c.node.getSourceFile())}
 `)
 
-@***/
+@ ***/
+
+
+
+
+
+
+
+
+
+
