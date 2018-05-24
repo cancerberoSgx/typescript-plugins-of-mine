@@ -1,6 +1,7 @@
 
 // TODO: eval code safely using node vm so security people dont complain
 
+// TODO: for eval selection, user could write typescript and we could transpile it to js before eval
 // TODO: expose info, project etc in context
 
 // TODO: would be interesting to have the possibility of autocomplete from the editor or to describe a symbol type. example:
@@ -17,9 +18,10 @@ import { now, timeFrom } from 'hrtime-now';
 import * as sts from 'ts-simple-ast';
 import { Node } from 'ts-simple-ast';
 import * as ts from 'typescript';
-import { dumpAst } from 'typescript-ast-util';
+import { dumpAst, positionOrRangeToRange, positionOrRangeToNumber, findChildContainingRange } from 'typescript-ast-util';
 import * as ts_module from 'typescript/lib/tsserverlibrary';
 import { matchGlobalRegexWithGroupIndex } from './regex-groups-index';
+import { EvalContextUtil, EvalContextUtilImpl } from './evalCodeContextUtil';
 
 export const EVAL_CODE_IN_COMMENTS_REFACTOR_ACTION_NAME = `plugin-ast-inspector-eval-code-in-comments`
 export const EVAL_SELECTION_REFACTOR_ACTION_NAME = `plugin-ast-inspector-eval-selection`
@@ -36,6 +38,7 @@ export interface EvalContext {
   print(s): void
   /** log messages back to tsserver (so host plugin and tsserver can see them). Is like a console.log() */
   log: (msg: string) => void
+  util: EvalContextUtil 
   /**
    * Entry point for the plugin execution context. from here you have access to the Project, the Program, current sourcefile, language service, plugin configuration and everything else regarding the context on where the host plugin is being executed. Take into account that everything obtained via `info` will be native typescript objects not ts-simple-ast. For example:
    * 
@@ -92,15 +95,6 @@ class EvalContextImpl implements EvalContext {
   }
 }
 
-export interface EvalContextUtil {
-  /** will dump a pretty recursive structure of given node's descendants */
-  printAst(node: Node | ts.Node): string
-}
-class EvalContextUtilImpl implements EvalContextUtil {
-  printAst(node: Node | ts.Node): string {
-    return dumpAst((node as any).compilerNode || node)
-  }
-}
 
 function doEval(code, __context__: EvalContextImpl): EvalResult {
   // heads up - we are type/catch inside eval. If we let eval code throw exceptions this will impact not only this extension but all other plugins in the tsserver instance 

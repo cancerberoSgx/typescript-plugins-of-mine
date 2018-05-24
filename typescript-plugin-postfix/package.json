@@ -1,0 +1,38 @@
+{
+  "name": "typescript-plugin-postfix",
+  "version": "0.0.1",
+  "description": "vscode-postfix-ts as a TypeScript Language Service plugin",
+  "main": "dist/src/index.js",
+  "typings": "dist/src/typings.d.ts",
+  "scripts": {
+    "test": "ts-node node_modules/jasmine/bin/jasmine",
+    "doc": "exit 0",
+    "watch": "tsc --watch",
+    "build": "tsc"
+  },
+  "keywords": [
+    "TypeScript",
+    "TypeScript Language Service",
+    "plugin"
+  ],
+  "author": "Sebastian Gurin",
+  "license": "MIT",
+  "dependencies": {
+    "hrtime-now": "^1.0.2",
+    "ts-simple-ast": "^11.2.0",
+    "typescript": "^2.8.3",
+    "typescript-ast-util": "file:../typescript-ast-util",
+    "typescript-plugin-util": "file:../typescript-plugin-util"
+  },
+  "devDependencies": {
+    "@types/jasmine": "^2.8.7",
+    "@types/node": "^10.0.4",
+    "@types/shelljs": "^0.7.9",
+    "jasmine": "^3.1.0",
+    "shelljs": "^0.8.2",
+    "ts-node": "^6.0.3",
+    "typescript-plugin-test-helper": "file:../typescript-plugin-test-helper",
+    "typescript-plugin-proactive-code-fixes": "file:."
+  },
+  "repository": "https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-postfix"
+}

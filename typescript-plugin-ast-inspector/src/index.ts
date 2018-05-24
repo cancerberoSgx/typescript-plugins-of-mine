@@ -4,6 +4,7 @@ import { dumpAst, findChildContainingPosition, findChildContainingRange, getKind
 import { createSimpleASTProject } from 'typescript-plugin-util';
 import * as ts_module from 'typescript/lib/tsserverlibrary';
 import { EVAL_CODE_IN_COMMENTS_REFACTOR_ACTION_NAME, EVAL_SELECTION_REFACTOR_ACTION_NAME, executeEvalCode } from './evalCode';
+import { FormatCodeSettings } from 'typescript';
 
 const PLUGIN_NAME = 'typescript-plugin-ast-inspector'
 const PRINT_AST_REFACTOR_ACTION_NAME = `${PLUGIN_NAME}-print-ast-refactor-action`
@@ -35,7 +36,6 @@ function init(modules: { typescript: typeof ts_module }) {
     }
     proxy.getApplicableRefactors = getApplicableRefactors
     proxy.getEditsForRefactor = getEditsForRefactor
-
     return proxy
   }
   return { create }
@@ -44,6 +44,8 @@ function init(modules: { typescript: typeof ts_module }) {
 export = init
 
 let nodeAtCursor: ts.Node | undefined
+
+
 
 function getApplicableRefactors(fileName: string, positionOrRange: number | ts.TextRange): ts_module.ApplicableRefactorInfo[] {
   const refactors = info.languageService.getApplicableRefactors(fileName, positionOrRange) || []
@@ -77,7 +79,6 @@ function getApplicableRefactors(fileName: string, positionOrRange: number | ts.T
 function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSettings,
   positionOrRange: number | ts_module.TextRange, refactorName: string,
   actionName: string): ts.RefactorEditInfo | undefined {
-
   if (actionName === PRINT_AST_REFACTOR_ACTION_NAME && nodeAtCursor) {
     return printAst(nodeAtCursor, fileName)
   }
@@ -111,7 +112,6 @@ function evalCode(fileName: string, positionOrRange: number | ts_module.TextRang
   return
 }
 
-
 function printAst(nodeAtCursor: ts.Node, fileName: string): ts.RefactorEditInfo {
   let newText = `\`
 AST of selected ${getKindName(nodeAtCursor.kind)}:  
@@ -129,6 +129,7 @@ ${dumpAst(nodeAtCursor)}
     renameLocation: undefined,
   }
 }
+
 function printParentNodes(nodeAtCursor: ts.Node, fileName: string): ts.RefactorEditInfo {
   let node: ts.Node | undefined = nodeAtCursor
   const arr = []
