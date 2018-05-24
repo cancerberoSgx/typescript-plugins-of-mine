@@ -4,7 +4,7 @@
 
 /***@ 
 
-const diagnostics = c.program.getDiagnostics
+//const diagnostics = c.program.getDiagnostics
 
 let i = 0
 c.print(`
