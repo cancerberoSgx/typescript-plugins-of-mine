@@ -21,34 +21,37 @@ import { dumpAst } from 'typescript-ast-util';
 import * as ts_module from 'typescript/lib/tsserverlibrary';
 import { matchGlobalRegexWithGroupIndex } from './regex-groups-index';
 
-
+export const EVAL_CODE_IN_COMMENTS_REFACTOR_ACTION_NAME = `plugin-ast-inspector-eval-code-in-comments`
+export const EVAL_SELECTION_REFACTOR_ACTION_NAME = `plugin-ast-inspector-eval-selection`
 
 /** context of evaluated code available in `c` variable */
 export interface EvalContext {
   /** this is the whole typescript namespace as imported with `"import * as ts from 'typescript'` */
   ts: typeof ts
-  /** this is the whole ts-simple-ast namespace as imported with `import * as sts from 'ts-simple-ast'` */
+  /** this is the whole ts-simple-ast namespace as imported with `import * as sts from 'ts-simple-ast'`. We are providing it as an utility because is much more high level than native typescript - you choose if you want ot work with it or not. */
   tsa: typeof sts
-  /** The user selected or where his cursor is when he activated this refactor. It will be never undefined - at least it will be the SourceFile. The type is ts-simple-ast Node - you can obtain the ts.Node using target.compilerNode */
+  /** The user selected or where his cursor is when he activated this refactor. It will be never undefined - at least it will be the SourceFile. The type is ts-simple-ast Node.  */
   node: Node
   /** use it like console log to put debug strings that then will be printed back in the document */
   print(s): void
-  /** will dump a pretty recursive structure of given node's descendants */
-  printAst(node: Node | ts.Node): string
   /** log messages back to tsserver (so host plugin and tsserver can see them). Is like a console.log() */
   log: (msg: string) => void
   /**
-   * Entry point for the plugin execution context. from here you have access to the Project, the Program, current sourcefile, language service, plugin configuration and everything else regarding the context on where the host plugin is being executed. For example:
+   * Entry point for the plugin execution context. from here you have access to the Project, the Program, current sourcefile, language service, plugin configuration and everything else regarding the context on where the host plugin is being executed. Take into account that everything obtained via `info` will be native typescript objects not ts-simple-ast. For example:
    * 
    * ```
    * const sourceFile = c.config.info.project.getSourceFile(c.fileName)
+   * const definition = c.info.languageService.getDefinitionAtPosition(toPosition(c.positionOrRange))
    * ```
    */
   info: ts_module.server.PluginCreateInfo
-
+  /** current file name as provided in plugin's `getEditsForRefactor`*/
   fileName: string, formatOptions: ts.FormatCodeSettings
-  positionOrRange: number | ts_module.TextRange,
+  /** cursor position or range from where the refactor suggestion was activated as provided in plugin's `getEditsForRefactor`*/
+  positionOrRange: number | ts.TextRange,
+  /** name of the activated refactor as provided in plugin's `getEditsForRefactor` */
   refactorName: string
+  /** name of the activated refactor's action as provided in plugin's `getEditsForRefactor` */
   actionName: string
 }
 
@@ -60,6 +63,7 @@ interface EvalResult {
 }
 
 
+
 class EvalContextImpl implements EvalContext {
   ts = ts
   tsa = sts
@@ -67,10 +71,11 @@ class EvalContextImpl implements EvalContext {
   info: ts_module.server.PluginCreateInfo
   fileName: string
   formatOptions: ts.FormatCodeSettings
-  positionOrRange: number | ts_module.TextRange
+  positionOrRange: number | ts.TextRange
   refactorName: string
   actionName: string
   node: Node
+  util: EvalContextUtil = new EvalContextUtilImpl()
   log: (msg: string) => void
   constructor(config: EvalContextConfig) {
     this.info = config.info
@@ -85,12 +90,17 @@ class EvalContextImpl implements EvalContext {
   print(s): void {
     this._printed.push(s)
   }
+}
+
+export interface EvalContextUtil {
+  /** will dump a pretty recursive structure of given node's descendants */
+  printAst(node: Node | ts.Node): string
+}
+class EvalContextUtilImpl implements EvalContextUtil {
   printAst(node: Node | ts.Node): string {
     return dumpAst((node as any).compilerNode || node)
   }
 }
-
-
 
 function doEval(code, __context__: EvalContextImpl): EvalResult {
   // heads up - we are type/catch inside eval. If we let eval code throw exceptions this will impact not only this extension but all other plugins in the tsserver instance 
@@ -104,7 +114,7 @@ function doEval(code, __context__: EvalContextImpl): EvalResult {
   __result__.error = ex;
 }
   `
-  try {
+  try {// TODO: get how much time it took and print it back
     eval(codeToEval)
   } catch (ex) {
     __context__.log('executeEvalCode, eval error (outer): ' + ex + ' - ' + JSON.stringify(ex))
@@ -133,32 +143,50 @@ function prettyPrintEvalResult(evalResult) {
 export interface EvalContextConfig {
   log: (str: string) => void
   node: Node
-   info: ts_module.server.PluginCreateInfo
+  info: ts_module.server.PluginCreateInfo
   fileName: string
-  positionOrRange: number | ts_module.TextRange
+  positionOrRange: number | ts.TextRange
   formatOptions: ts.FormatCodeSettings
   refactorName: string
   actionName: string
 }
 
-export function executeEvalCode(config : EvalContextConfig): void {
+export function executeEvalCode(config: EvalContextConfig): void {
+
   const t0 = now()
   const sourceFile = config.node.getSourceFile()
   const originalSourceFile = config.info.project.getSourceFile(sourceFile.getFilePath() as any)
   const saved = originalSourceFile.getFullText().trim() === readFileSync(originalSourceFile.fileName).toString().trim()
-  if (!saved) { 
+  if (!saved) {
     sourceFile.insertText(config.node.getEnd(), `/* Please save the file before evaluating code, thanks */`)
     return;
   }
+
+  const context = new EvalContextImpl(config)
+
+  // handle eval selected code
+  if (config.actionName === EVAL_SELECTION_REFACTOR_ACTION_NAME && typeof (config.positionOrRange as ts.TextRange).pos === 'number') {
+    const range = config.positionOrRange as ts.TextRange
+    const code = originalSourceFile.getFullText().substring(range.pos, range.end)
+    config.log('executeEvalCode evaluating selected code: ' + code)
+    const result = doEval(code, context) //TODO: not logging time & error
+    const text = prettyPrintEvalResult(result)
+    config.log('executeEvalCode after evaluating selected code result is: ' + JSON.stringify(result, null, 2))
+    
+    sourceFile.insertText(range.end, text)
+    return
+  }
+
+  // handling eval code in comments
   const regex = /\/\*\*\*@\s*([^@]+)\s*(@\*\*\*\/)/gim
   const result = matchGlobalRegexWithGroupIndex(regex, originalSourceFile.getFullText())
 
   config.log('executeEvalCode apply matchGlobalRegexWithGroupIndex result ' + JSON.stringify(result, null, 2))
-  const context = new EvalContextImpl(config )
+
   const toPrint = result && result.length && result.map(match => {
 
     config.log('executeEvalCode apply doEval() result \n' + match[0] + ' and context == ' + context)
-    const evalResult = doEval(match[0].value, context) // TODO: config.log client eval() time and print it back
+    const evalResult = doEval(match[0].value, context)
 
     config.log('executeEvalCode apply doEval ' + JSON.stringify(evalResult, null, 2) + evalResult.error ? ('\nERROR is: ' + evalResult.error || evalResult.errorOuter + '') : '')
 
@@ -173,7 +201,6 @@ export function executeEvalCode(config : EvalContextConfig): void {
   else {
     toPrint.forEach(content => {
       sourceFile.insertText(content.printPosition, content.text)
-
     })
     config.log('executeEvalCode took ' + timeFrom(t0))
   }
@@ -206,4 +233,4 @@ The AST structure of this file:
 \`)
 
 @***/
-      `
+`

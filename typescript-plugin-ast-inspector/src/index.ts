@@ -1,16 +1,14 @@
 
-import { findParentFromPosition, positionOrRangeToNumber, findChildContainingPosition, getKindName, dumpAst, positionOrRangeToRange, findChildContainingRange, printNode, findChildContainedRange, getDiagnosticsInCurrentLocation } from 'typescript-ast-util';
-import * as ts_module from 'typescript/lib/tsserverlibrary';
 import { now, timeFrom } from 'hrtime-now';
-import { Project } from 'ts-simple-ast';
-import { createSimpleASTProject, getPluginCreate } from 'typescript-plugin-util';
-import {  executeEvalCode } from './evalCode';
+import { dumpAst, findChildContainingPosition, findChildContainingRange, getKindName, positionOrRangeToNumber, positionOrRangeToRange, printNode } from 'typescript-ast-util';
+import { createSimpleASTProject } from 'typescript-plugin-util';
+import * as ts_module from 'typescript/lib/tsserverlibrary';
+import { EVAL_CODE_IN_COMMENTS_REFACTOR_ACTION_NAME, EVAL_SELECTION_REFACTOR_ACTION_NAME, executeEvalCode } from './evalCode';
 
 const PLUGIN_NAME = 'typescript-plugin-ast-inspector'
 const PRINT_AST_REFACTOR_ACTION_NAME = `${PLUGIN_NAME}-print-ast-refactor-action`
 const PRINT_PARENT_NODES_REFACTOR_ACTION_NAME = `${PLUGIN_NAME}-print-inheritance-refactor-action`
 const PRINT_SELECTED_NODE_REFACTOR_ACTION_NAME = `${PLUGIN_NAME}-print-selected-node`
-const EVAL_CODE_REFACTOR_ACTION_NAME = `${PLUGIN_NAME}-eval-code`
 
 
 let ts: typeof ts_module
@@ -54,7 +52,8 @@ function getApplicableRefactors(fileName: string, positionOrRange: number | ts.T
     return refactors
   }
   let actions = [
-    { name: EVAL_CODE_REFACTOR_ACTION_NAME, description: 'Eval code' }
+    { name: EVAL_CODE_IN_COMMENTS_REFACTOR_ACTION_NAME, description: 'Eval code in comments' },
+    { name: EVAL_SELECTION_REFACTOR_ACTION_NAME, description: 'Eval selection' }
   ]
   nodeAtCursor = findChildContainingRange(sourceFile, positionOrRangeToRange(positionOrRange))
   if (!nodeAtCursor) {
@@ -75,22 +74,20 @@ function getApplicableRefactors(fileName: string, positionOrRange: number | ts.T
   return refactors
 }
 
-
 function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSettings,
   positionOrRange: number | ts_module.TextRange, refactorName: string,
   actionName: string): ts.RefactorEditInfo | undefined {
 
-  if (actionName === PRINT_AST_REFACTOR_ACTION_NAME&& nodeAtCursor) {
+  if (actionName === PRINT_AST_REFACTOR_ACTION_NAME && nodeAtCursor) {
     return printAst(nodeAtCursor, fileName)
   }
   else if (actionName === PRINT_PARENT_NODES_REFACTOR_ACTION_NAME && nodeAtCursor) {
     return printParentNodes(nodeAtCursor, fileName)
   }
-  else if (actionName === EVAL_CODE_REFACTOR_ACTION_NAME) {
+  else if (actionName === EVAL_CODE_IN_COMMENTS_REFACTOR_ACTION_NAME || actionName === EVAL_SELECTION_REFACTOR_ACTION_NAME) {
     return evalCode(fileName, positionOrRange, formatOptions, refactorName, actionName)
   }
 }
-
 
 function evalCode(fileName: string, positionOrRange: number | ts_module.TextRange, formatOptions: ts.FormatCodeSettings, refactorName: string, actionName: string): ts.RefactorEditInfo | undefined {
   const t0 = now()
@@ -101,7 +98,7 @@ function evalCode(fileName: string, positionOrRange: number | ts_module.TextRang
   info.project.projectService.logger.info(`${PLUGIN_NAME} evalCode createSimpleASTProject took ${timeFrom(createSimpleASTProjectT0)}`)
   const fixapplyT0 = now()
   try {
-    executeEvalCode({log,   node:simpleNode, fileName, info, positionOrRange, formatOptions, refactorName, actionName })
+    executeEvalCode({ log, node: simpleNode, fileName, info, positionOrRange, formatOptions, refactorName, actionName })
   } catch (error) {
     info.project.projectService.logger.info(`${PLUGIN_NAME} evalCode executeEvalCode error ${error} \n ${error.stack}`)
   }
@@ -111,11 +108,11 @@ function evalCode(fileName: string, positionOrRange: number | ts_module.TextRang
   simpleProject.saveSync()
   info.project.projectService.logger.info(`${PLUGIN_NAME} evalCode saveSync took ${timeFrom(saveSyncT0)}`)
   info.project.projectService.logger.info(`${PLUGIN_NAME} evalCode total time took ${timeFrom(t0)}`)
-  return 
+  return
 }
 
 
-function printAst(nodeAtCursor: ts.Node, fileName: string): ts.RefactorEditInfo{
+function printAst(nodeAtCursor: ts.Node, fileName: string): ts.RefactorEditInfo {
   let newText = `\`
 AST of selected ${getKindName(nodeAtCursor.kind)}:  
 ${dumpAst(nodeAtCursor)}
@@ -132,7 +129,7 @@ ${dumpAst(nodeAtCursor)}
     renameLocation: undefined,
   }
 }
-function printParentNodes(nodeAtCursor: ts.Node, fileName: string): ts.RefactorEditInfo{
+function printParentNodes(nodeAtCursor: ts.Node, fileName: string): ts.RefactorEditInfo {
   let node: ts.Node | undefined = nodeAtCursor
   const arr = []
   let newText = ''

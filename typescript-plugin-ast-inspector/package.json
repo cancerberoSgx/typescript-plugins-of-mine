@@ -3,7 +3,7 @@
   "version": "1.0.2",
   "description": "TypeScript Language Service plugin with tools oriented to TypeScript developers, most important is one that let evaluate code in the editor itself for faster understanding of AST and plugin prototyping. ",
   "main": "dist/index.js",
-  "typings": "dist/src/typings.d.ts",
+  "typings": "dist/typings.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 0",
     "build": "tsc",

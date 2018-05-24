@@ -1,10 +1,9 @@
 import { now, timeFrom } from 'hrtime-now';
+import { Project } from 'ts-simple-ast';
 import { findChildContainedRange, findChildContainingRange, getKindName, positionOrRangeToNumber, positionOrRangeToRange } from 'typescript-ast-util';
 import { createSimpleASTProject, getPluginCreate } from 'typescript-plugin-util';
 import * as ts_module from 'typescript/lib/tsserverlibrary';
 import { CodeFixOptions, codeFixes } from './codeFixes';
-import { Project, SourceFile } from 'ts-simple-ast';
-
 
 const PLUGIN_NAME = 'typescript-plugin-proactive-code-fixes'
 const REFACTOR_ACTION_NAME = `${PLUGIN_NAME}-refactor-action`
@@ -25,8 +24,6 @@ export = getPluginCreate(pluginDefinition, (modules, anInfo) => {
 
 //TODO use fromNow to clear the code from logging
 
-// const DEBUG = true
-
 let target: CodeFixOptions
 function getApplicableRefactors(fileName: string, positionOrRange: number | ts.TextRange)
   : ts.ApplicableRefactorInfo[] {
@@ -43,7 +40,7 @@ function getApplicableRefactors(fileName: string, positionOrRange: number | ts.T
 
   const containingTarget = findChildContainingRange(sourceFile, positionOrRangeToRange(positionOrRange))
   const containedTarget = findChildContainedRange(sourceFile, positionOrRangeToRange(positionOrRange)) || sourceFile
-  
+
   if (!containingTarget) {
     info.project.projectService.logger.info(`${PLUGIN_NAME} no getApplicableRefactors because findChildContainedRange  target node is undefined `)
     return refactors
@@ -54,9 +51,9 @@ function getApplicableRefactors(fileName: string, positionOrRange: number | ts.T
   const codeFixesFilterT0 = now()
   target = { diagnostics, containingTarget, containedTarget, log, program }
   const fixes = codeFixes.filter(fix => {
-    try{
+    try {
       return fix.predicate(target)
-    } catch(ex){
+    } catch (ex) {
       // TODO LOG
     }
   })
