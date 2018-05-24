@@ -135,6 +135,8 @@ and that will generate an error "code": "2304","message": "Cannot find name 'Eva
 
 * and more more general thatn these is be able to declare new type from any expression, evan a variable (sometimes you define type not in the impl (return type, but in the caller side))
 
+* dirty js typechecking with property existence: 	"code": "2339", "message": "Property 'compilerNode' does not exist on type 'Node<Node> | Node'.\n  Property 'compilerNode' does not exist on type 'Node'.", correct  dumpAst(node.compilerNode || node) to be dumpAst((node as any).compilerNode || node)
+
 ##  other ideas
 
 

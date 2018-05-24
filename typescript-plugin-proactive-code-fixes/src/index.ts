@@ -32,6 +32,8 @@ function getApplicableRefactors(fileName: string, positionOrRange: number | ts.T
 
   const t0 = now()
   const refactors = info.languageService.getApplicableRefactors(fileName, positionOrRange) || []
+
+  // TODO MOVE THIS TO TIS OWN FILE
   if (DEBUG) { // a debug helper that will dump pointed node 
     refactors.push({
       name: `${PLUGIN_NAME}-refactor-info`,
@@ -63,7 +65,13 @@ function getApplicableRefactors(fileName: string, positionOrRange: number | ts.T
 
   const codeFixesFilterT0 = now()
   target = { diagnostics, containingTarget, containedTarget, log, program }
-  const fixes = codeFixes.filter(fix => fix.predicate(target))
+  const fixes = codeFixes.filter(fix => {
+    try{
+      return fix.predicate(target)
+    } catch(ex){
+      // TODO LOG
+    }
+  })
   info.project.projectService.logger.info(`${PLUGIN_NAME} codeFixesFilterT0 took ${timeFrom(codeFixesFilterT0)}`)
 
   if (!fixes || !fixes.length) {
@@ -90,10 +98,7 @@ function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSetti
   if (!actionName.startsWith(REFACTOR_ACTION_NAME) || !target.containingTarget) {
     return refactors
   }
-
-
-
-
+  
   const fixName = actionName.substring(REFACTOR_ACTION_NAME.length + 1, actionName.length)
   const fix = codeFixes.find(fix => fix.name === fixName)
 
@@ -107,6 +112,7 @@ function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSetti
     const getSourceFileT0 = now()
     target.simpleNode = simpleProject.getSourceFile(fileName).getDescendantAtPos(positionOrRangeToNumber(positionOrRange)) || simpleProject.getSourceFile(fileName)
 
+    // TODO MOVE THIS TO TIS OWN FILE
     if (DEBUG && actionName === REFACTOR_ACTION_NAME + '-' + 'debug-pointed-ast') {
       const newText = `\n/* code fixes target nodes debug. \nsimpleNode: ${target.simpleNode ? target.simpleNode.getKindName() : 'undefined'} \ncontainingTarget: ${getKindName(target.containingTarget.kind)} \ncontainedTarget: ${target.containedTarget ? getKindName(target.containedTarget.kind) : 'undefined'}\n*/`
       return {

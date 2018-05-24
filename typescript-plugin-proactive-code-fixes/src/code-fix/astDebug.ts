@@ -1,9 +1,12 @@
 import { now, timeFrom } from 'hrtime-now';
 import { Node } from 'ts-simple-ast';
+import * as sts from 'ts-simple-ast'
 import * as ts from 'typescript';
 import { CodeFix, CodeFixOptions } from '../codeFixes';
 import { matchGlobalRegexWithGroupIndex } from './regex-groups-index';
+import { dumpAst } from 'typescript-ast-util';
 
+// TODO: move this to its own plugin-project !
 // TODO: eval code safely using node vm so security people dont complain
 
 // TODO: would be interesting to have the possibility of autocomplete from the editor or to describe a ymbol type. example:
@@ -13,26 +16,42 @@ import { matchGlobalRegexWithGroupIndex } from './regex-groups-index';
 // notice that ts is available for him
 
 // TODO: let the user write js without comment wrapping and select the text wants to execute...
-// 
 
+
+/** context of evaluated code available in `c` variable */
 interface IEvalContext {
+  /** this is the whole typescript namespace as imported with `"import * as ts from 'typescript'` */
   ts: typeof ts
-  target: Node
-  arg: CodeFixOptions
-  print(s): void
-}
-class EvalContext {
-  ts: typeof ts;
+  /** this is the whole ts-simple-ast namespace as imported with `import * as sts from 'ts-simple-ast'` */
+  tsa: typeof sts
+  /** The user selected or where his cursor is when he activated this refactor. It will be never undefined - at least it will be the SourceFile. The type is ts-simple-ast Node - you can obtain the ts.Node using target.compilerNode */
   node: Node
-  arg: CodeFixOptions
-  _printed = []
-  constructor(arg: CodeFixOptions) {
-    this.arg = arg
-    this.node = this.arg.simpleNode
-    this.ts = ts
-  }
-  print(s): void { this._printed.push(s) }
+  /** use it like console log to put debug strings that then will be printed back in the document */
+  print(s): void
+  /** will dump a pretty recursive structure of given node's descendants */
+  printAst(node:Node|ts.Node): string
+  /** log messages back to tsserver (so host plugin and tsserver can see them) */
+  log: (msg:string)=>void
 }
+
+
+
+
+
+class EvalContext implements IEvalContext {
+  ts = ts
+  tsa = sts
+  _printed = []
+  constructor(public node: Node, public log: (msg: string)=>void) {
+  }
+  print(s): void { 
+    this._printed.push(s) 
+  }
+  printAst(node:Node|ts.Node): string{
+    return dumpAst((node as any).compilerNode || node)
+  }
+}
+
 export interface EvalResult {
   output?: string[]
   error?: Error
@@ -55,82 +74,76 @@ try {
 })(__context__);
   `
   try {
-    __context__.arg.log('astdebug about to eval ' + code)
     eval(codeToEval)
   } catch (ex) {
-    __context__.arg.log('astdebug, eval error (outer): ' + ex + ' - ' + JSON.stringify(ex))
+    __context__.log('astdebug, eval error (outer): ' + ex + ' - ' + JSON.stringify(ex))
     __result__.errorOuter = ex
   }
   __result__.output = __context__._printed
   return __result__
 }
+
 function prettyPrintEvalResult(evalResult) {
   const output = `\nOutput:\n${evalResult.output.join('\n>  ')}\n`
-  const error = evalResult.error ? `\nError: \n` + evalResult.error + '\nstack:\n ' + evalResult.error.stack + ' \nerror object: \n' + JSON.stringify(evalResult.error) : '\nNo errors'; // TODO: errorOuter
-  return '\n######################' + error  + output + '\n##########################'
+  const error = evalResult.error ? `\nError: \n` + evalResult.error + '\nstack:\n ' + evalResult.error.stack + ' \nerror object: \n' + JSON.stringify(evalResult.error) : ''; // TODO: errorOuter
+  return '\n/*######################' + (error||'')  + output + '\n##########################*/'
 }
 
-
-
-// let toPrint: { text: string, printPosition: number }[]
-
-const regex = /\/\*\*\*@\s*([^@]+)\s*(@\*\*\*\/)/gim
-const regexNotGlobal = /\/\*\*\*@\s*([^@]+)\s*(@\*\*\*\/)/im // same as regex but not global - so predicate wont consume regex
-
-
 export const astDebug: CodeFix = {
-  name: 'astdebug',
-  config: { inNewFile: false }, // TODO  - one could be the output wrapping type: line comment, block comment. template string - oher could be the format of /***@ */
-  predicate: (arg: CodeFixOptions): boolean => {
-    const regex = /\/\*\*\*@\s*([^@]+)\s*(@\*\*\*\/)/gim
-    return !!arg.containingTarget.getSourceFile().getText().match(regexNotGlobal)
 
-  },
-  description: (arg: CodeFixOptions): string => {
-    return `debug: eval code` // TODO could be selected in the future 
-  },
+  name: 'eval-code-debug',
+
+  config: {}, 
+
+  predicate: (arg: CodeFixOptions): boolean => true,
+
+  description: (arg: CodeFixOptions): string => `*EVAL* code (debug)`,
+
   apply: (arg: CodeFixOptions) => {
     const t0 = now()
     const sourceFile = arg.simpleNode.getSourceFile()
-
+    const regex =  /\/\*\*\*@\s*([^@]+)\s*(@\*\*\*\/)/img 
     const result = matchGlobalRegexWithGroupIndex(regex, arg.containingTarget.getSourceFile().getText())
 
     arg.log('astdebug apply matchGlobalRegexWithGroupIndex result ' + JSON.stringify(result, null, 2))
-    const context = new EvalContext(arg)
+    const context = new EvalContext(arg.simpleNode||sourceFile, arg.log)
     const toPrint = result && result.length && result.map(match => {
 
       arg.log('astdebug apply doEval() result \n' + match[0] + ' and context == ' + context)
       const evalResult = doEval(match[0].value, context) // TODO: log client eval() time and print it back
 
-      arg.log('astdebug apply doEval ' + JSON.stringify(evalResult, null, 2) + evalResult.error ? ('\nERRRRRRRRR: ' + JSON.stringify(evalResult.error, null, 2)) : '')
+      arg.log('astdebug apply doEval ' + JSON.stringify(evalResult, null, 2) + evalResult.error ? ('\nERROR is: ' + JSON.stringify(evalResult.error, null, 2)) : '')
 
       const text = prettyPrintEvalResult(evalResult)
       return { text, printPosition: match[1].end }
     })
-
     arg.log('astdebug apply return true and toPrint == ' + toPrint ? JSON.stringify(toPrint, null, 2) : 'undefined')
-
 
     if (!toPrint) {
       arg.log('astdebug apply !Print, node info: kind: ' + arg.simpleNode.getKindName())
       sourceFile.insertText(arg.simpleNode.getSourceFile().getEnd(), `
 /***@ 
-
 // For evaluating code you can use a comment with a format like this one, (see how starts with "/*** followed by "at")
 // You could have many of these comments as this one as long they contain VALID JAVASCRIPT 
 // (this is why we use line comments inside for this internal comments)
-// You will have a "c" context object with properties (TODO link to API docs): 
 
-//   ts: typeof ts
-//   node: Node
-//   arg: CodeFixOptions
-//   print(s):void
+// You have a "c" variable with a context object with useful utilities, among others: (TODO: link to IEvalContext apidocs)
 
-// Everything you print with c.print() will be printed back here (similar to console.log())
+// ts: typeof ts                             whole typescript namespace available
+// sts: typeof tsa                           whole ts-simple-ast namespace available
+// node: Node                                node selected by user when activated this refactor
+// print(s): void                            print text back here a analog to console.log 
+// printAst (node:Node|ts.Node): string      pretty prints AST structure of given node to understand it 
 
-c.print('\`Hello from editor: $\{c.ts}  $\{c.node} \`')
+// This is the code will be executed here : 
 
-// print('selected node kind is ' + c.node.getKindName())
+c.print(\`
+Hello from editor. Using typescript version: \${c.ts.version}
+Selected node by user is a \${c.node.getKindName()} and its parent's text is "\${c.node.getParent().getText()}"
+
+The AST structure of this file:  
+\${c.printAst(c.node.getSourceFile())}
+\`)
 
 @***/
       `)
