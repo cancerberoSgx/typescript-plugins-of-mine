@@ -3,6 +3,7 @@ import { findChildContainedRange, findChildContainingRange, getKindName, positio
 import { createSimpleASTProject, getPluginCreate } from 'typescript-plugin-util';
 import * as ts_module from 'typescript/lib/tsserverlibrary';
 import { CodeFixOptions, codeFixes } from './codeFixes';
+import { Project, SourceFile } from 'ts-simple-ast';
 
 
 const PLUGIN_NAME = 'typescript-plugin-proactive-code-fixes'
@@ -24,7 +25,7 @@ export = getPluginCreate(pluginDefinition, (modules, anInfo) => {
 
 //TODO use fromNow to clear the code from logging
 
-const DEBUG = true
+// const DEBUG = true
 
 let target: CodeFixOptions
 function getApplicableRefactors(fileName: string, positionOrRange: number | ts.TextRange)
@@ -33,17 +34,17 @@ function getApplicableRefactors(fileName: string, positionOrRange: number | ts.T
   const t0 = now()
   const refactors = info.languageService.getApplicableRefactors(fileName, positionOrRange) || []
 
-  // TODO MOVE THIS TO TIS OWN FILE
-  if (DEBUG) { // a debug helper that will dump pointed node 
-    refactors.push({
-      name: `${PLUGIN_NAME}-refactor-info`,
-      description: 'Code Fixes',
-      actions: [{
-        name: REFACTOR_ACTION_NAME + '-' + 'debug-pointed-ast',
-        description: 'debug: inspect pointed node'
-      }]
-    })
-  }
+  // // TODO MOVE THIS TO TIS OWN FILE
+  // if (DEBUG) { // a debug helper that will dump pointed node 
+  //   refactors.push({
+  //     name: `${PLUGIN_NAME}-refactor-info`,
+  //     description: 'Code Fixes',
+  //     actions: [{
+  //       name: REFACTOR_ACTION_NAME + '-' + 'debug-pointed-ast',
+  //       description: 'debug: inspect pointed node'
+  //     }]
+  //   })
+  // }
   const program = info.languageService.getProgram()
   const sourceFile = program.getSourceFile(fileName)
   if (!sourceFile) {
@@ -98,54 +99,66 @@ function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSetti
   if (!actionName.startsWith(REFACTOR_ACTION_NAME) || !target.containingTarget) {
     return refactors
   }
-  
   const fixName = actionName.substring(REFACTOR_ACTION_NAME.length + 1, actionName.length)
   const fix = codeFixes.find(fix => fix.name === fixName)
-
-  let simpleProject
-
-  if (fix && fix.needSimpleAst !== false || DEBUG && actionName === REFACTOR_ACTION_NAME + '-' + 'debug-pointed-ast') {
-    const createSimpleASTProjectT0 = now()
-    simpleProject = createSimpleASTProject(info.project)
-    info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor createSimpleASTProject took ${timeFrom(createSimpleASTProjectT0)}`)
-
-    const getSourceFileT0 = now()
-    target.simpleNode = simpleProject.getSourceFile(fileName).getDescendantAtPos(positionOrRangeToNumber(positionOrRange)) || simpleProject.getSourceFile(fileName)
-
-    // TODO MOVE THIS TO TIS OWN FILE
-    if (DEBUG && actionName === REFACTOR_ACTION_NAME + '-' + 'debug-pointed-ast') {
-      const newText = `\n/* code fixes target nodes debug. \nsimpleNode: ${target.simpleNode ? target.simpleNode.getKindName() : 'undefined'} \ncontainingTarget: ${getKindName(target.containingTarget.kind)} \ncontainedTarget: ${target.containedTarget ? getKindName(target.containedTarget.kind) : 'undefined'}\n*/`
-      return {
-        edits: [{
-          fileName,
-          textChanges: [{
-            span: { start: target.containingTarget.getSourceFile().getEnd(), length: newText.length }, // add it right after the class decl
-            newText: newText
-          }],
-        }],
-        renameFilename: undefined,
-        renameLocation: undefined,
-      }
-    }
-
-    if (!target.simpleNode) {
-      info.project.projectService.logger.info(`${PLUGIN_NAME} no getEditsForRefactor because getDescentantAt pos returned null for fileName=== ${fileName}, actionName == ${actionName}`)
-      return refactors
-    }
-    info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor first getSourceFile() took ${timeFrom(getSourceFileT0)} and node.kind is ${target.simpleNode.getKindName()}`)
-  }
   if (!fix) {
     info.project.projectService.logger.info(`${PLUGIN_NAME} no getEditsForRefactor because no fix was found for actionName == ${actionName}`)
     return refactors
   }
+  let simpleProject: Project
+  // let sourceFile : SourceFile
+  if (fix && fix.needSimpleAst !== false/* || DEBUG && actionName === REFACTOR_ACTION_NAME + '-' + 'debug-pointed-ast'*/) {
+    const createSimpleASTProjectT0 = now()
+    simpleProject = createSimpleASTProject(info.project)
+    info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor createSimpleASTProject took ${timeFrom(createSimpleASTProjectT0)}`)
+
+    const simpleNodeT0 = now()
+    const sourceFile = simpleProject.getSourceFile(fileName)
+    target.simpleNode = sourceFile.getDescendantAtPos(positionOrRangeToNumber(positionOrRange)) || sourceFile
+    if (!target.simpleNode) {
+      info.project.projectService.logger.info(`${PLUGIN_NAME} no getEditsForRefactor because sourceFile is null for fileName=== ${fileName}, actionName == ${actionName}`)
+      return refactors
+    }
+    info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor first getSourceFile() and simpleNode took ${timeFrom(simpleNodeT0)} and node.kind is ${target.simpleNode.getKindName()}`)
+
+    // // TODO MOVE THIS TO its OWN FILE
+    // if (DEBUG && actionName === REFACTOR_ACTION_NAME + '-' + 'debug-pointed-ast') {
+    //   const newText = `\n/* code fixes target nodes debug. \nsimpleNode: ${target.simpleNode ? target.simpleNode.getKindName() : 'undefined'} \ncontainingTarget: ${getKindName(target.containingTarget.kind)} \ncontainedTarget: ${target.containedTarget ? getKindName(target.containedTarget.kind) : 'undefined'}\n*/`
+    //   return {
+    //     edits: [{
+    //       fileName,
+    //       textChanges: [{
+    //         span: { start: target.containingTarget.getSourceFile().getEnd(), length: newText.length }, // add it right after the class decl
+    //         newText: newText
+    //       }],
+    //     }],
+    //     renameFilename: undefined,
+    //     renameLocation: undefined,
+    //   }
+    // }
+
+  }
+
   // we are ready, with or without ast-simple to perform the change
   const fixapplyT0 = now()
-  fix.apply(target)
+  try {
+    fix.apply(target)
+  } catch (error) {
+    info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor fix.apply() error ${error} \n ${error.stack}`)
+    
+  }
   info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor fix.apply() took ${timeFrom(fixapplyT0)}`)
+
   if (fix.needSimpleAst !== false) {
     const saveSyncT0 = now()
     simpleProject.saveSync()
+    // info.project.markAsDirty()
+    // info.project.registerFileUpdate(fileName)
+    // info.project.updateGraph()
     info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor saveSync took ${timeFrom(saveSyncT0)}`)
+  }
+  else {
+    // when needSimpleAst===false code fix implementation is responsible of save/emit/update the files / project 
   }
   info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor total time took ${timeFrom(t0)}`)
   return refactors

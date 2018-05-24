@@ -5,11 +5,15 @@ import * as ts from 'typescript';
 import { CodeFix, CodeFixOptions } from '../codeFixes';
 import { matchGlobalRegexWithGroupIndex } from './regex-groups-index';
 import { dumpAst } from 'typescript-ast-util';
+import { readFileSync } from 'fs';
 
-// TODO: move this to its own plugin-project !
+// TODO: move this to ast-inspector !
+
 // TODO: eval code safely using node vm so security people dont complain
 
-// TODO: would be interesting to have the possibility of autocomplete from the editor or to describe a ymbol type. example:
+// TODO: expose info, project etc in context
+
+// TODO: would be interesting to have the possibility of autocomplete from the editor or to describe a symbol type. example:
 // printAst(node.getSourceFile()
 // const printType(node.getDescendantOfKind(ts.SyntaxFoo,ClassDeclaration)) 
 // prints pretty structure of node and also a link to definition file. Will be weird because some def files will be in the host project...
@@ -82,7 +86,6 @@ try {
   __result__.output = __context__._printed
   return __result__
 }
-
 function prettyPrintEvalResult(evalResult) {
   const output = `\nOutput:\n${evalResult.output.join('\n>  ')}\n`
   const error = evalResult.error ? `\nError: \n` + evalResult.error + '\nstack:\n ' + evalResult.error.stack + ' \nerror object: \n' + JSON.stringify(evalResult.error) : ''; // TODO: errorOuter
@@ -93,17 +96,31 @@ export const astDebug: CodeFix = {
 
   name: 'eval-code-debug',
 
+  needSimpleAst: true,
+  
   config: {}, 
 
-  predicate: (arg: CodeFixOptions): boolean => true,
+  predicate: (arg: CodeFixOptions): boolean => {
+    return true//arg.containingTarget.getSourceFile().getText()===readFileSync(arg.containingTarget.getSourceFile().fileName).toString()
+  },
 
-  description: (arg: CodeFixOptions): string => `*EVAL* code (debug)`,
+  description: (arg: CodeFixOptions): string => `*EVAL* code`,
 
   apply: (arg: CodeFixOptions) => {
     const t0 = now()
     const sourceFile = arg.simpleNode.getSourceFile()
-    const regex =  /\/\*\*\*@\s*([^@]+)\s*(@\*\*\*\/)/img 
-    const result = matchGlobalRegexWithGroupIndex(regex, arg.containingTarget.getSourceFile().getText())
+
+    const saved = arg.containingTarget.getSourceFile().getFullText().trim()===readFileSync(arg.containingTarget.getSourceFile().fileName).toString().trim()
+    if(!saved){ // prettier this code and put it in as ast-utils helper 
+      sourceFile.insertText(arg.simpleNode.getEnd(), `/* Please save the file before evaluating code, thanks */`)
+      arg.log(`astdebug not applying because file is not saved - comparing  arg.containingTarget.getSourceFile().getText().trim()===${ arg.containingTarget.getSourceFile().getFullText().trim()}  with readFileSync(arg.containingTarget.getSourceFile().fileName).toString()===${readFileSync(arg.containingTarget.getSourceFile().fileName).toString()}`)
+      return ;
+    }
+    // sourceFile.saveSync();
+    // sourceFile.refreshFromFileSystemSync()
+    // sourceFile.emit()
+    const regex =  /\/\*\*\*@\s*([^@]+)\s*(@\*\*\*\/)/gim
+    const result = matchGlobalRegexWithGroupIndex(regex, arg.containingTarget.getSourceFile().getFullText())
 
     arg.log('astdebug apply matchGlobalRegexWithGroupIndex result ' + JSON.stringify(result, null, 2))
     const context = new EvalContext(arg.simpleNode||sourceFile, arg.log)
@@ -139,6 +156,7 @@ export const astDebug: CodeFix = {
 
 c.print(\`
 Hello from editor. Using typescript version: \${c.ts.version}
+
 Selected node by user is a \${c.node.getKindName()} and its parent's text is "\${c.node.getParent().getText()}"
 
 The AST structure of this file:  
@@ -147,8 +165,8 @@ The AST structure of this file:
 
 @***/
       `)
-      sourceFile.saveSync()
-      sourceFile.emit()
+      // sourceFile.saveSync()
+      // sourceFile.emit()
       arg.log('astdebug apply !Print saveSync and emit ended')
     }
     else {
@@ -156,8 +174,8 @@ The AST structure of this file:
       arg.log('astdebug apply Print comments starts')
       toPrint.forEach(content => {
         sourceFile.insertText(content.printPosition, content.text)
-        sourceFile.saveSync()
-        sourceFile.emit()
+        // sourceFile.saveSync()
+        // sourceFile.emit()
 
         arg.log(`astdebug apply Print ${content.printPosition}, ${content.text} `)
 
