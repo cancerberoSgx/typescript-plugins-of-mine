@@ -99,30 +99,9 @@ function evalCode(fileName: string, positionOrRange: number | ts_module.TextRang
   const sourceFile = simpleProject.getSourceFile(fileName)
   const simpleNode = sourceFile.getDescendantAtPos(positionOrRangeToNumber(positionOrRange)) || sourceFile
   info.project.projectService.logger.info(`${PLUGIN_NAME} evalCode createSimpleASTProject took ${timeFrom(createSimpleASTProjectT0)}`)
-
-  // const getDiagnosticT0 = now()
-  // const program = info.languageService.getProgram()
-  // if (!sourceFile) {
-  //   return 
-  // }
-  // const diagnostics = ts.getPreEmitDiagnostics(program, program.getSourceFile(fileName))
-  // info.project.projectService.logger.info(`${PLUGIN_NAME} getPreEmitDiagnostics took ${timeFrom(getDiagnosticT0)}`)
-
-  // let containingTarget = findChildContainingRange(sourceFile.compilerNode, positionOrRangeToRange(positionOrRange)) || sourceFile.compilerNode
-  // const containedTarget = findChildContainedRange(sourceFile.compilerNode, positionOrRangeToRange(positionOrRange)) || sourceFile.compilerNode
-
-  // const target: GeneralEvalContext = {log,  containingTarget, containedTarget, simpleNode, info }
-
-  // const simpleNodeT0 = now()
-  // if (!target.simpleNode) {
-  //   info.project.projectService.logger.info(`${PLUGIN_NAME} no evalCode because sourceFile is null for fileName=== ${fileName}, actionName == ${actionName}`)
-  //   return
-  // }
-  // info.project.projectService.logger.info(`${PLUGIN_NAME} evalCode first getSourceFile() and simpleNode took ${timeFrom(simpleNodeT0)} and node.kind is ${target.simpleNode.getKindName()}`)
-
   const fixapplyT0 = now()
   try {
-    executeEvalCode(log,   simpleNode, fileName, info )
+    executeEvalCode({log,   node:simpleNode, fileName, info, positionOrRange, formatOptions, refactorName, actionName })
   } catch (error) {
     info.project.projectService.logger.info(`${PLUGIN_NAME} evalCode executeEvalCode error ${error} \n ${error.stack}`)
   }

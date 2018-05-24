@@ -33,6 +33,5 @@
     "typescript-plugin-test-helper": "file:../typescript-plugin-test-helper",
     "typescript-plugin-proactive-code-fixes": "file:."
   },
-  "repository": "https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-ast-inspector",
-  "readme": "README.md"
+  "repository": "https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-ast-inspector"
 }
