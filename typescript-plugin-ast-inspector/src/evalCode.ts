@@ -66,11 +66,10 @@ interface EvalResult {
 }
 
 
-
+let _printed = []
 class EvalContextImpl implements EvalContext {
   ts = ts
   tsa = sts
-  _printed = []
   info: ts_module.server.PluginCreateInfo
   fileName: string
   formatOptions: ts.FormatCodeSettings
@@ -89,9 +88,10 @@ class EvalContextImpl implements EvalContext {
     this.actionName = config.actionName
     this.log = config.log
     this.node = config.node
+    _printed = []
   }
   print(s): void {
-    this._printed.push(s)
+    _printed.push(s) // use an external variable so users can do const print = c.print - in general we dont want to use "this". TODO: probably we dont want to use a "class" just an object
   }
 }
 
@@ -108,13 +108,13 @@ function doEval(code, __context__: EvalContextImpl): EvalResult {
   __result__.error = ex;
 }
   `
-  try {// TODO: get how much time it took and print it back
+  try {// TODO: get how much time it took and print it back in the output
     eval(codeToEval)
   } catch (ex) {
     __context__.log('executeEvalCode, eval error (outer): ' + ex + ' - ' + JSON.stringify(ex))
     __result__.errorOuter = ex
   }
-  __result__.output = __context__._printed
+  __result__.output = _printed
   return __result__
 }
 
@@ -151,10 +151,10 @@ export function executeEvalCode(config: EvalContextConfig): void {
   const sourceFile = config.node.getSourceFile()
   const originalSourceFile = config.info.project.getSourceFile(sourceFile.getFilePath() as any)
   const saved = originalSourceFile.getFullText().trim() === readFileSync(originalSourceFile.fileName).toString().trim()
-  if (!saved) {
-    sourceFile.insertText(config.node.getEnd(), `/* Please save the file before evaluating code, thanks */`)
-    return;
-  }
+  // // handle file not saved - we need the file to be saved in order to use simple-ast properly
+  // if (!saved) {
+  //   sourceFile.insertText(config.node.getEnd(), `/* Please save the file before evaluating code, thanks */`)
+  // }
   // handle eval function body
   if (config.actionName === EVAL_CURRENT_FUNCTION_BODY_REFACTOR_ACTION_NAME) {
     const parentFunction = (config.node.getKind() === ts.SyntaxKind.FunctionDeclaration ? config.node : undefined) || config.node.getFirstAncestorByKind(ts.SyntaxKind.FunctionDeclaration)
@@ -165,28 +165,30 @@ export function executeEvalCode(config: EvalContextConfig): void {
     sourceFile.insertText(parentFunction.getEnd(), text)
   }
   // handle eval selected code
-  if (config.actionName === EVAL_SELECTION_REFACTOR_ACTION_NAME && typeof (config.positionOrRange as ts.TextRange).pos === 'number') {
+  else if (config.actionName === EVAL_SELECTION_REFACTOR_ACTION_NAME && typeof (config.positionOrRange as ts.TextRange).pos === 'number') {
     const range = config.positionOrRange as ts.TextRange
     const text = evalCodeAndPrintResult(config, originalSourceFile.getFullText().substring(range.pos, range.end))
     sourceFile.insertText(range.end, text)
     return
   }
   // handle eval code in comments
-  const regex = /\/\*\*\*@\s*([^@]+)\s*(@\*\*\*\/)/gim
-  const result = matchGlobalRegexWithGroupIndex(regex, originalSourceFile.getFullText())
-  config.log('executeEvalCode apply matchGlobalRegexWithGroupIndex result ' + JSON.stringify(result, null, 2))
-  const toPrint = result && result.length && result.map(match => {
-    return { text: evalCodeAndPrintResult(config, match[0].value), printPosition: match[1].end }
-  })
-  config.log('executeEvalCode apply return true and toPrint == ' + toPrint ? JSON.stringify(toPrint, null, 2) : 'undefined')
-  if (!toPrint) {
-    sourceFile.insertText(config.node.getSourceFile().getEnd(), evalHelpText)
-  }
   else {
-    toPrint.forEach(content => {
-      sourceFile.insertText(content.printPosition, content.text)
+    const regex = /\/\*\*\*@\s*([^@]+)\s*(@\*\*\*\/)/gim
+    const result = matchGlobalRegexWithGroupIndex(regex, originalSourceFile.getFullText())
+    config.log('executeEvalCode apply matchGlobalRegexWithGroupIndex result ' + JSON.stringify(result, null, 2))
+    const toPrint = result && result.length && result.map(match => {
+      return { text: evalCodeAndPrintResult(config, match[0].value), printPosition: match[1].end }
     })
-    config.log('executeEvalCode took ' + timeFrom(t0))
+    config.log('executeEvalCode apply return true and toPrint == ' + toPrint ? JSON.stringify(toPrint, null, 2) : 'undefined')
+    if (!toPrint) {
+      sourceFile.insertText(config.node.getSourceFile().getEnd(), evalHelpText)
+    }
+    else {
+      toPrint.forEach(content => {
+        sourceFile.insertText(content.printPosition, content.text)
+      })
+      config.log('executeEvalCode took ' + timeFrom(t0))
+    }
   }
 }
 
@@ -201,11 +203,13 @@ function evalCodeAndPrintResult(config: EvalContextConfig, code: string): string
 
 const evalHelpText = `
 /***@ 
-// For evaluating code you can use a comment with a format like this one, (see how starts with "/*** followed by "at")
-// You could have many of these comments as this one as long they contain VALID JAVASCRIPT 
-// (this is why we use line comments inside for this internal comments)
-
-// You have a "c" variable with a context object with useful utilities, among others: (TODO: link to IEvalContext apidocs)
+ // For evaluating code you can use a comment with a format like this one, (see how starts with "/*** followed
+ // by "at") You could have many of these comments as this one as long they contain VALID JAVASCRIPT (this is
+ // why we use line comments inside for this internal comments) IMPORTANT: make sure you save the file before
+ // evaluating code - if not the content in editor buffer will be different (older) than filesystem (most
+ // editors handle this OK but be advised) 
+ 
+ //You have a "c" variable with a context object with useful utilities, among others:TODO: IEvalContext apidocs)
 
 // ts: typeof ts                             whole typescript namespace available
 // sts: typeof tsa                           whole ts-simple-ast namespace available

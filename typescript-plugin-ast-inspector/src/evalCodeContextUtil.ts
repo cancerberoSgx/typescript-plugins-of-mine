@@ -1,4 +1,4 @@
-import { positionOrRangeToRange, positionOrRangeToNumber, dumpAst, findChildContainingRange, findChildContainingPosition, getDiagnosticsInCurrentLocation, getKindName, findAscendant } from "typescript-ast-util";
+import { positionOrRangeToRange, positionOrRangeToNumber, dumpAst, findChildContainingRange, findChildContainingPosition, getDiagnosticsInCurrentLocation, getKindName, findAscendant, filterChildren } from "typescript-ast-util";
 import { Node } from "ts-simple-ast";
 /** Utilities that easy working with native TypeScript AST Nodes */
 export interface EvalContextUtil {
@@ -12,6 +12,7 @@ export interface EvalContextUtil {
   findChildContainingPosition: typeof findChildContainingPosition
   getKindName: typeof getKindName
   findAscendant: typeof findAscendant
+  filterChildren: typeof filterChildren
 }
 export class EvalContextUtilImpl implements EvalContextUtil {
   printAst(node: Node | ts.Node): string {
@@ -25,4 +26,5 @@ export class EvalContextUtilImpl implements EvalContextUtil {
   getDiagnosticsInCurrentLocation = getDiagnosticsInCurrentLocation
   getKindName = getKindName
   findAscendant = findAscendant
+  filterChildren = filterChildren
 }

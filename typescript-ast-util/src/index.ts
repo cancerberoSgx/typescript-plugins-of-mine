@@ -261,7 +261,6 @@ export function filterChildren(
       }
     })
   } else {
-
     visitChildrenRecursiveDeepFirst(parent, child => {
       if (predicate(child)) {
         children.push(child)

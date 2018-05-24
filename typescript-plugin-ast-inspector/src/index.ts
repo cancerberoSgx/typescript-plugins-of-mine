@@ -7,6 +7,7 @@ import { createSimpleASTProject } from 'typescript-plugin-util';
 import * as ts_module from 'typescript/lib/tsserverlibrary';
 import { EVAL_CODE_IN_COMMENTS_REFACTOR_ACTION_NAME, EVAL_SELECTION_REFACTOR_ACTION_NAME, EVAL_CURRENT_FUNCTION_BODY_REFACTOR_ACTION_NAME, executeEvalCode } from './evalCode';
 import { FormatCodeSettings } from 'typescript';
+import { Project } from 'ts-simple-ast';
 
 const PLUGIN_NAME = 'typescript-plugin-ast-inspector'
 const PRINT_AST_REFACTOR_ACTION_NAME = `${PLUGIN_NAME}-print-ast-refactor-action`
@@ -98,6 +99,7 @@ function evalCode(fileName: string, positionOrRange: number | ts_module.TextRang
   }
   info.project.projectService.logger.info(`${PLUGIN_NAME} evalCode executeEvalCode took ${timeFrom(fixapplyT0)}`)
   const saveSyncT0 = now()
+  // sourceFile.emit()
   simpleProject.saveSync()
   info.project.projectService.logger.info(`${PLUGIN_NAME} evalCode saveSync took ${timeFrom(saveSyncT0)}`)
   info.project.projectService.logger.info(`${PLUGIN_NAME} evalCode total time took ${timeFrom(t0)}`)

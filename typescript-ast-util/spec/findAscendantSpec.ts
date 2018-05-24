@@ -1,4 +1,4 @@
-import { compileSource, findChild, findAscendant, getKindName } from "../src";
+import { compileSource, findChild, findAscendant, getKindName, filterChildren } from "../src";
 import { SyntaxKind, FunctionDeclaration, Node } from "typescript";
 
 describe('findAscendant', () => {
@@ -8,7 +8,10 @@ describe('findAscendant', () => {
     expect(number313.getText()).toBe('313')
     const fd = findAscendant(number313, (a)=>a.kind===SyntaxKind.FunctionDeclaration) as FunctionDeclaration
 
-    expect(fd.name.getText()).toBe('f')    
-    
+    const isExpression = (node:ts.Node)=>getKindName(node).endsWith('Expression') || node.kind === SyntaxKind.Identifier || getKindName(node).endsWith('Literal')
+    expect(fd.name.getText()).toBe('f')  
+    // console.log(fd.body.getChildren().find(c=>  isExpression(c)||!!c.getChildren().find(c=>isExpression(c))),
+    // filterChildren(fd.body.getChildren().find(isExpression), isExpression).map(n=>n.getText()).join(', ')
+    // )
   })
 })
