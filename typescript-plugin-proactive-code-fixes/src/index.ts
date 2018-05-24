@@ -105,7 +105,7 @@ function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSetti
     info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor createSimpleASTProject took ${timeFrom(createSimpleASTProjectT0)}`)
 
     const getSourceFileT0 = now()
-    target.simpleNode = simpleProject.getSourceFile(fileName).getDescendantAtPos(positionOrRangeToNumber(positionOrRange))
+    target.simpleNode = simpleProject.getSourceFile(fileName).getDescendantAtPos(positionOrRangeToNumber(positionOrRange)) || simpleProject.getSourceFile(fileName)
 
     if (DEBUG && actionName === REFACTOR_ACTION_NAME + '-' + 'debug-pointed-ast') {
       const newText = `\n/* code fixes target nodes debug. \nsimpleNode: ${target.simpleNode ? target.simpleNode.getKindName() : 'undefined'} \ncontainingTarget: ${getKindName(target.containingTarget.kind)} \ncontainedTarget: ${target.containedTarget ? getKindName(target.containedTarget.kind) : 'undefined'}\n*/`
