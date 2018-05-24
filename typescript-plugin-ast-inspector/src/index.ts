@@ -4,7 +4,7 @@ import * as ts_module from 'typescript/lib/tsserverlibrary';
 import { now, timeFrom } from 'hrtime-now';
 import { Project } from 'ts-simple-ast';
 import { createSimpleASTProject, getPluginCreate } from 'typescript-plugin-util';
-import { CodeFix, CodeFixOptions, executeEvalCode } from './evalCode';
+import {  executeEvalCode } from './evalCode';
 
 const PLUGIN_NAME = 'typescript-plugin-ast-inspector'
 const PRINT_AST_REFACTOR_ACTION_NAME = `${PLUGIN_NAME}-print-ast-refactor-action`
@@ -53,7 +53,6 @@ function getApplicableRefactors(fileName: string, positionOrRange: number | ts.T
   if (!sourceFile) {
     return refactors
   }
-
   let actions = [
     { name: EVAL_CODE_REFACTOR_ACTION_NAME, description: 'Eval code' }
   ]
@@ -64,7 +63,6 @@ function getApplicableRefactors(fileName: string, positionOrRange: number | ts.T
   if (!nodeAtCursor) {
     return refactors
   }
-
   actions = actions.concat([
     { name: PRINT_AST_REFACTOR_ACTION_NAME, description: 'Print AST of selected ' + getKindName(nodeAtCursor.kind) },
     { name: PRINT_PARENT_NODES_REFACTOR_ACTION_NAME, description: 'Print parent nodes of selected ' + getKindName(nodeAtCursor.kind) }
@@ -96,37 +94,35 @@ function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSetti
 
 function evalCode(fileName: string, positionOrRange: number | ts_module.TextRange, formatOptions: ts.FormatCodeSettings, refactorName: string, actionName: string): ts.RefactorEditInfo | undefined {
   const t0 = now()
-  // const refactors = info.languageService.getEditsForRefactor(fileName, formatOptions, positionOrRange, refactorName, actionName)
-  let simpleProject: Project
   const createSimpleASTProjectT0 = now()
-  simpleProject = createSimpleASTProject(info.project)
+  const simpleProject = createSimpleASTProject(info.project)
   const sourceFile = simpleProject.getSourceFile(fileName)
+  const simpleNode = sourceFile.getDescendantAtPos(positionOrRangeToNumber(positionOrRange)) || sourceFile
   info.project.projectService.logger.info(`${PLUGIN_NAME} evalCode createSimpleASTProject took ${timeFrom(createSimpleASTProjectT0)}`)
 
-  const getDiagnosticT0 = now()
-  const program = info.languageService.getProgram()
-  if (!sourceFile) {
-    return 
-  }
-  // getDiagnosticsInCurrentLocation(program, )
-  const diagnostics = ts.getPreEmitDiagnostics(program, program.getSourceFile(fileName))
-  info.project.projectService.logger.info(`${PLUGIN_NAME} getPreEmitDiagnostics took ${timeFrom(getDiagnosticT0)}`)
+  // const getDiagnosticT0 = now()
+  // const program = info.languageService.getProgram()
+  // if (!sourceFile) {
+  //   return 
+  // }
+  // const diagnostics = ts.getPreEmitDiagnostics(program, program.getSourceFile(fileName))
+  // info.project.projectService.logger.info(`${PLUGIN_NAME} getPreEmitDiagnostics took ${timeFrom(getDiagnosticT0)}`)
 
-  let containingTarget = findChildContainingRange(sourceFile.compilerNode, positionOrRangeToRange(positionOrRange)) || sourceFile.compilerNode
-  const containedTarget = findChildContainedRange(sourceFile.compilerNode, positionOrRangeToRange(positionOrRange)) || sourceFile.compilerNode
-  const target: CodeFixOptions = { diagnostics, log, program, containingTarget, containedTarget }
+  // let containingTarget = findChildContainingRange(sourceFile.compilerNode, positionOrRangeToRange(positionOrRange)) || sourceFile.compilerNode
+  // const containedTarget = findChildContainedRange(sourceFile.compilerNode, positionOrRangeToRange(positionOrRange)) || sourceFile.compilerNode
 
-  const simpleNodeT0 = now()
-  target.simpleNode = sourceFile.getDescendantAtPos(positionOrRangeToNumber(positionOrRange)) || sourceFile
-  if (!target.simpleNode) {
-    info.project.projectService.logger.info(`${PLUGIN_NAME} no evalCode because sourceFile is null for fileName=== ${fileName}, actionName == ${actionName}`)
-    return
-  }
-  info.project.projectService.logger.info(`${PLUGIN_NAME} evalCode first getSourceFile() and simpleNode took ${timeFrom(simpleNodeT0)} and node.kind is ${target.simpleNode.getKindName()}`)
+  // const target: GeneralEvalContext = {log,  containingTarget, containedTarget, simpleNode, info }
+
+  // const simpleNodeT0 = now()
+  // if (!target.simpleNode) {
+  //   info.project.projectService.logger.info(`${PLUGIN_NAME} no evalCode because sourceFile is null for fileName=== ${fileName}, actionName == ${actionName}`)
+  //   return
+  // }
+  // info.project.projectService.logger.info(`${PLUGIN_NAME} evalCode first getSourceFile() and simpleNode took ${timeFrom(simpleNodeT0)} and node.kind is ${target.simpleNode.getKindName()}`)
 
   const fixapplyT0 = now()
   try {
-    executeEvalCode(target)
+    executeEvalCode(log,   simpleNode, fileName, info )
   } catch (error) {
     info.project.projectService.logger.info(`${PLUGIN_NAME} evalCode executeEvalCode error ${error} \n ${error.stack}`)
   }

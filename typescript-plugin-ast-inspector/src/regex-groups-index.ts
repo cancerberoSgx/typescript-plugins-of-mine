@@ -17,33 +17,3 @@ export function matchGlobalRegexWithGroupIndex(regex: RegExp, text: string): {va
   return matches
 }
 
-
-
-
-// const regex = /\/\*\*\*@\s*([^@]+)\s*(@\*\*\*\/)/gim
-// const text = `
-// /***@
-// debug.print('hello editor, simpleNode kind is ' +
-// arg.simpleNode.getKindName())
-// @***/
- 
-// const a = 1 //user
-
-// /***@
-// debug.print(arg.simpleNode.getParent().getKindName())
-// @***/
-// `
-// const groupsWithIndex = matchGlobalRegexWithGroupIndex(regex, text)
-// // console.log({groupsWithIndex})
-
-// // now test - let's remove everything else but matched groups 
-// let frag = '' 
-// groupsWithIndex.forEach(match=>match.forEach(group=>{
-//   console.log(group.start, group.end);
-
-//   frag += text.substring(group.start, group.end) + '\n#######\n'
-// }))
-// console.log('Only matched groups\n#######\n', frag)
-
-
-

@@ -1,8 +1,9 @@
 {
   "name": "typescript-plugin-ast-inspector",
   "version": "1.0.2",
-  "description": "TypeScript Language Service plugin with tools oriented to TypeScript developers, specially those dealing with AST, like Language Service Plugin developers",
+  "description": "TypeScript Language Service plugin with tools oriented to TypeScript developers, most important is one that let evaluate code in the editor itself for faster understanding of AST and plugin prototyping. ",
   "main": "dist/index.js",
+  "typings": "dist/src/typings.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 0",
     "build": "tsc",
@@ -32,6 +33,6 @@
     "typescript-plugin-test-helper": "file:../typescript-plugin-test-helper",
     "typescript-plugin-proactive-code-fixes": "file:."
   },
-  "repository": "https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-ast-util",
+  "repository": "https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-ast-inspector",
   "readme": "README.md"
 }

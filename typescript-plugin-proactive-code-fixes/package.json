@@ -3,7 +3,7 @@
   "version": "0.0.2",
   "description": "testing ts related techologies",
   "main": "dist/src/index.js",
-  "typings": "dist/src/index.d.ts",
+  "typings": "dist/src/typings.d.ts",
   "scripts": {
     "test": "ts-node node_modules/jasmine/bin/jasmine",
     "doc": "exit 0",

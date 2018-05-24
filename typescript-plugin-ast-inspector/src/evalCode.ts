@@ -1,10 +1,3 @@
-import { readFileSync } from 'fs';
-import { now, timeFrom } from 'hrtime-now';
-import * as sts from 'ts-simple-ast';
-import { Node } from 'ts-simple-ast';
-import * as ts from 'typescript';
-import { dumpAst } from 'typescript-ast-util';
-import { matchGlobalRegexWithGroupIndex } from './regex-groups-index';
 
 // TODO: eval code safely using node vm so security people dont complain
 
@@ -19,29 +12,26 @@ import { matchGlobalRegexWithGroupIndex } from './regex-groups-index';
 // TODO: let the user write js without comment wrapping and select the text wants to execute...
 
 
-export interface CodeFix {
-  /**  */
-  name: string,
-  config: any,
-  /** if needSimpleAst === false simple ast project won't be created (faster) and CodeFixOptions.simpleNode will be null. apply() will be 100 % responsible of impacting the changes using native mechanism like emit() or writeFileSync() sourceFile.update(), printer, etc */
-  needSimpleAst?: boolean
-  /** the predicate for getApplicableRefactors */
-  predicate(arg: CodeFixOptions): boolean
-  /** the description that will appear in the refactor label UI */
-  description(arg: CodeFixOptions): string
-  /** when user accept the suggestion this is called and implementation changes source file(s)*/
-  apply(arg: CodeFixOptions): ts.ApplicableRefactorInfo[] | void
-}
+import { readFileSync } from 'fs';
+import { now, timeFrom } from 'hrtime-now';
+import * as sts from 'ts-simple-ast';
+import { Node } from 'ts-simple-ast';
+import * as ts from 'typescript';
+import { dumpAst } from 'typescript-ast-util';
+import { matchGlobalRegexWithGroupIndex } from './regex-groups-index';
+import * as ts_module from 'typescript/lib/tsserverlibrary';
 
-export interface CodeFixOptions {
-  diagnostics: ts.Diagnostic[]
-  // containedTarget?: ts.Node|undefined
-  log: (str: string) => void
-  containingTarget: ts.Node
-  containedTarget: ts.Node
-  simpleNode?: Node
-  program: ts.Program
-}
+// /** info passed from index.ts to evalCode.ts @internal  */
+// export interface GeneralEvalContext {
+//   // diagnostics: ts.Diagnostic[]
+//   log: (str: string) => void
+//   // containingTarget: ts.Node
+//   // containedTarget: ts.Node
+//   simpleNode: Node
+//   fileName: string
+//   // program: ts.Program
+//   info: ts_module.server.PluginCreateInfo
+// }
 
 
 
@@ -124,36 +114,37 @@ function prettyPrintEvalResult(evalResult) {
 }
 
 
-export function executeEvalCode(arg: CodeFixOptions): void {
+export function executeEvalCode(log: (str: string) => void, simpleNode: Node, fileName: string, info: ts_module.server.PluginCreateInfo): void {
   const t0 = now()
-  const sourceFile = arg.simpleNode.getSourceFile()
-
-  const saved = arg.containingTarget.getSourceFile().getFullText().trim() === readFileSync(arg.containingTarget.getSourceFile().fileName).toString().trim()
+  const sourceFile = simpleNode.getSourceFile()
+  const originalSourceFile = info.project.getSourceFile(sourceFile.getFilePath() as any)
+  
+  const saved = originalSourceFile.getFullText().trim() === readFileSync(originalSourceFile.fileName).toString().trim()
   if (!saved) { // prettier this code and put it in as ast-utils helper 
-    sourceFile.insertText(arg.simpleNode.getEnd(), `/* Please save the file before evaluating code, thanks */`)
-    arg.log(`executeEvalCode not applying because file is not saved - comparing  arg.containingTarget.getSourceFile().getText().trim()===${arg.containingTarget.getSourceFile().getFullText().trim()}  with readFileSync(arg.containingTarget.getSourceFile().fileName).toString()===${readFileSync(arg.containingTarget.getSourceFile().fileName).toString()}`)
+    sourceFile.insertText(simpleNode.getEnd(), `/* Please save the file before evaluating code, thanks */`)
+    log(`executeEvalCode not applying because file is not saved - comparing originalSourceFile.getFullText().trim()===${originalSourceFile.getFullText().trim()}  with readFileSync(readFileSync(originalSourceFile.fileName).toString().trim()===${readFileSync(originalSourceFile.fileName).toString().trim()}`)
     return;
   }
   const regex = /\/\*\*\*@\s*([^@]+)\s*(@\*\*\*\/)/gim
-  const result = matchGlobalRegexWithGroupIndex(regex, arg.containingTarget.getSourceFile().getFullText())
+  const result = matchGlobalRegexWithGroupIndex(regex, originalSourceFile.getFullText())
 
-  arg.log('executeEvalCode apply matchGlobalRegexWithGroupIndex result ' + JSON.stringify(result, null, 2))
-  const context = new EvalContext(arg.simpleNode || sourceFile, arg.log)
+  log('executeEvalCode apply matchGlobalRegexWithGroupIndex result ' + JSON.stringify(result, null, 2))
+  const context = new EvalContext(simpleNode || sourceFile, log)
   const toPrint = result && result.length && result.map(match => {
 
-    arg.log('executeEvalCode apply doEval() result \n' + match[0] + ' and context == ' + context)
+    log('executeEvalCode apply doEval() result \n' + match[0] + ' and context == ' + context)
     const evalResult = doEval(match[0].value, context) // TODO: log client eval() time and print it back
 
-    arg.log('executeEvalCode apply doEval ' + JSON.stringify(evalResult, null, 2) + evalResult.error ? ('\nERROR is: ' + evalResult.error || evalResult.errorOuter + '') : '')
+    log('executeEvalCode apply doEval ' + JSON.stringify(evalResult, null, 2) + evalResult.error ? ('\nERROR is: ' + evalResult.error || evalResult.errorOuter + '') : '')
 
     const text = prettyPrintEvalResult(evalResult)
     return { text, printPosition: match[1].end }
   })
-  arg.log('executeEvalCode apply return true and toPrint == ' + toPrint ? JSON.stringify(toPrint, null, 2) : 'undefined')
+  log('executeEvalCode apply return true and toPrint == ' + toPrint ? JSON.stringify(toPrint, null, 2) : 'undefined')
 
   if (!toPrint) {
-    arg.log('executeEvalCode apply !Print, node info: kind: ' + arg.simpleNode.getKindName())
-    sourceFile.insertText(arg.simpleNode.getSourceFile().getEnd(), `
+    log('executeEvalCode apply !Print, node info: kind: ' + simpleNode.getKindName())
+    sourceFile.insertText(simpleNode.getSourceFile().getEnd(), `
 /***@ 
 // For evaluating code you can use a comment with a format like this one, (see how starts with "/*** followed by "at")
 // You could have many of these comments as this one as long they contain VALID JAVASCRIPT 
@@ -182,20 +173,20 @@ The AST structure of this file:
       `)
     // sourceFile.saveSync()
     // sourceFile.emit()
-    arg.log('executeEvalCode apply !Print saveSync and emit ended')
+    log('executeEvalCode apply !Print saveSync and emit ended')
   }
   else {
 
-    arg.log('executeEvalCode apply Print comments starts')
+    log('executeEvalCode apply Print comments starts')
     toPrint.forEach(content => {
       sourceFile.insertText(content.printPosition, content.text)
       // sourceFile.saveSync()
       // sourceFile.emit()
 
-      arg.log(`executeEvalCode apply Print ${content.printPosition}, ${content.text} `)
+      log(`executeEvalCode apply Print ${content.printPosition}, ${content.text} `)
 
     })
-    arg.log('executeEvalCode took ' + timeFrom(t0))
+    log('executeEvalCode took ' + timeFrom(t0))
   }
 }
 

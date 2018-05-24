@@ -3,7 +3,6 @@ import * as ts from 'typescript';
 import { codeFixCreateConstructor } from './code-fix/codeFixCreateConstructor';
 import { codeFixCreateVariable } from './code-fix/codeFixCreateVariable';
 import { declareClass } from './code-fix/declareClass';
-import { astDebug } from './code-fix/astDebug';
 
 
 export interface CodeFix {
@@ -20,7 +19,7 @@ export interface CodeFix {
   apply(arg: CodeFixOptions): ts.ApplicableRefactorInfo[] | void
 }
 
-export const codeFixes: CodeFix[] = [codeFixCreateConstructor, codeFixCreateVariable, declareClass, astDebug];
+export const codeFixes: CodeFix[] = [codeFixCreateConstructor, codeFixCreateVariable, declareClass];
 
 export interface CodeFixOptions {
   diagnostics: ts.Diagnostic[]
