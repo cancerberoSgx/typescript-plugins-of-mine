@@ -157,12 +157,16 @@ export function executeEvalCode(config: EvalContextConfig): void {
   // }
   // handle eval function body
   if (config.actionName === EVAL_CURRENT_FUNCTION_BODY_REFACTOR_ACTION_NAME) {
-    const parentFunction = (config.node.getKind() === ts.SyntaxKind.FunctionDeclaration ? config.node : undefined) || config.node.getFirstAncestorByKind(ts.SyntaxKind.FunctionDeclaration)
-    if (!parentFunction || !sts.TypeGuards.isFunctionDeclaration(parentFunction)) {
+    let targetFunction = (config.node.getKind() === ts.SyntaxKind.FunctionDeclaration ? config.node : undefined) || config.node.getFirstAncestorByKind(ts.SyntaxKind.FunctionDeclaration)
+    if(!targetFunction){
+      // if we are not inside a function declaration we evaluate the body of the first function declaration in this file
+      targetFunction = sourceFile.getFirstDescendantByKind(ts.SyntaxKind.FunctionDeclaration)
+    }
+    if (!targetFunction || !sts.TypeGuards.isFunctionDeclaration(targetFunction)) {
       return
     }
-    const text = evalCodeAndPrintResult(config, parentFunction.getBody().getText())
-    sourceFile.insertText(parentFunction.getEnd(), text)
+    const text = evalCodeAndPrintResult(config, targetFunction.getBody().getText())
+    sourceFile.insertText(targetFunction.getEnd(), text)
   }
   // handle eval selected code
   else if (config.actionName === EVAL_SELECTION_REFACTOR_ACTION_NAME && typeof (config.positionOrRange as ts.TextRange).pos === 'number') {
