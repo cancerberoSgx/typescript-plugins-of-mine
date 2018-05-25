@@ -84,7 +84,21 @@ function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSetti
   }
 }
 
+// let evalCodeGuestEmitter
 function evalCode(fileName: string, positionOrRange: number | ts_module.TextRange, formatOptions: ts.FormatCodeSettings, refactorName: string, actionName: string): ts.RefactorEditInfo | undefined {
+
+  // if(!evalCodeGuestEmitter){
+  //   evalCodeGuestEmitter =(global as any).guestEmitter
+  //   evalCodeGuestEmitter.on('requestEvalCurrentFunctionSelection', (fileName, position,  name, options, source)=>{
+    // })
+    // c.util.hostEmitter.on('getCompletionEntryDetails', ( fileName, position,  name, options, source) =>{
+    //   c.util.guestEmitter.emit('requestEvalCurrentFunctionSelection', 1684, fileName, position,  name, options, source)
+    // } )
+       // hostEmitter.emit('getCompletionEntryDetails', ileName: string, position: number, name: string,
+      // options: ts
+  // }
+
+  
   const t0 = now()
   const createSimpleASTProjectT0 = now()
   const simpleProject = createSimpleASTProject(info.project)
@@ -99,7 +113,7 @@ function evalCode(fileName: string, positionOrRange: number | ts_module.TextRang
   }
   info.project.projectService.logger.info(`${PLUGIN_NAME} evalCode executeEvalCode took ${timeFrom(fixapplyT0)}`)
   const saveSyncT0 = now()
-  // sourceFile.emit()
+  // sourceFile.emit() 
   simpleProject.saveSync()
   info.project.projectService.logger.info(`${PLUGIN_NAME} evalCode saveSync took ${timeFrom(saveSyncT0)}`)
   info.project.projectService.logger.info(`${PLUGIN_NAME} evalCode total time took ${timeFrom(t0)}`)

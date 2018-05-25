@@ -120,6 +120,7 @@ export class DeclareVariablePostFix implements Postfix {
     const transformedSourceFile = result.transformed[0]
     const output = printer.printFile(transformedSourceFile)
     return output
+    
   }
   
   variableName(): string { 

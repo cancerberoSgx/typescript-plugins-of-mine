@@ -22,6 +22,7 @@ import * as ts from 'typescript';
 import * as ts_module from 'typescript/lib/tsserverlibrary';
 import { EvalContextUtil, EvalContextUtilImpl } from './evalCodeContextUtil';
 import { matchGlobalRegexWithGroupIndex } from './regex-groups-index';
+import { EventEmitter } from 'events';
 
 export const EVAL_CODE_IN_COMMENTS_REFACTOR_ACTION_NAME = `plugin-ast-inspector-eval-code-in-comments`
 export const EVAL_SELECTION_REFACTOR_ACTION_NAME = `plugin-ast-inspector-eval-selection`
@@ -65,7 +66,6 @@ interface EvalResult {
   error?: Error
   errorOuter?: Error
 }
-
 
 let _printed = []
 class EvalContextImpl implements EvalContext {

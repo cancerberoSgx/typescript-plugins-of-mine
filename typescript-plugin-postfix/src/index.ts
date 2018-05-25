@@ -3,11 +3,12 @@ import {
   findChildContainedRange, findChildContainingRange, getKindName, positionOrRangeToNumber, findChild,
   positionOrRangeToRange, findChildContainingPosition, printNode
 } from 'typescript-ast-util';
-import { getPluginCreate } from 'typescript-plugin-util'
+import { getPluginCreate, createSimpleASTProject } from 'typescript-plugin-util'
 import * as ts_module from 'typescript/lib/tsserverlibrary';
 import { getAllPostfix } from './postfixHome';
 import { PostfixPredicateOptions } from './types';
 import { ScriptElementKindModifier } from 'typescript';
+import { EventEmitter } from 'events';
 
 const PLUGIN_NAME = 'typescript-plugin-postfix'
 const REFACTOR_ACTION_NAME = `${PLUGIN_NAME}-refactor-action`
@@ -34,6 +35,13 @@ function getCompletionEntryDetails(fileName: string, position: number, name: str
   options: ts.FormatCodeOptions | ts.FormatCodeSettings | undefined, source: string | undefined)
   : ts.CompletionEntryDetails {
 
+  if(!hostEmitter){ // an experiment to see if we can communicate more directly with evalCode plugin so we pass the real data and he can do simulations
+    hostEmitter = (global as any ).hostEmitter as EventEmitter
+  }
+  if(hostEmitter){
+    hostEmitter.emit('getCompletionEntryDetails', fileName, position,  name, options, source)
+  }
+
   log(`${PLUGIN_NAME} - getCompletionEntryDetails called ${fileName} name: ${name} options: ${JSON.stringify(options || {})} ${source} `)
 
   const minimalCompletionEntryDetails: ts.CompletionEntryDetails = {
@@ -53,11 +61,31 @@ function getCompletionEntryDetails(fileName: string, position: number, name: str
   }
   
   log(`${PLUGIN_NAME} - getCompletionEntryDetails postfix.execute called with filename: ${fileName}, position: ${position}, target:  ${target&&printNode(target)}`)
-  const result = postfix.execute({ program: info.languageService.getProgram(), fileName, position, target })
+  const result = postfix.execute({ program: info.languageService.getProgram(), fileName, position, target }) as string
   log(`${PLUGIN_NAME} - getCompletionEntryDetails postfix.execute returned result ==  ${result}`)
+
+
+  const simpleProject = createSimpleASTProject(info.project)
+  const sourceFile = simpleProject.getSourceFile(fileName)
+  sourceFile.replaceWithText(result)
+  // const simpleNode = sourceFile.getDescendantAtPos(positionOrRangeToNumber(positionOrRange)) || sourceFile
+  // info.project.projectService.logger.info(`${PLUGIN_NAME} evalCode createSimpleASTProject took ${timeFrom(createSimpleASTProjectT0)}`)
+  // const fixapplyT0 = now()
+  // try {
+    // executeEvalCode({ log, node: simpleNode, fileName, info, positionOrRange, formatOptions, refactorName, actionName })
+  // } catch (error) {
+    // info.project.projectService.logger.info(`${PLUGIN_NAME} evalCode executeEvalCode error ${error} \n ${error.stack}`)
+  // }
+  // info.project.projectService.logger.info(`${PLUGIN_NAME} evalCode executeEvalCode took ${timeFrom(fixapplyT0)}`)
+  // const saveSyncT0 = now()
+  // sourceFile.emit()
+  simpleProject.saveSync()
+
 
 }
 
+
+let hostEmitter : EventEmitter 
 
 let target: ts.Node
 
