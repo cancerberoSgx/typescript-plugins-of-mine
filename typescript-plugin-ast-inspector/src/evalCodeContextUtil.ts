@@ -3,6 +3,8 @@ import { Node } from "ts-simple-ast";
 import * as ts from 'typescript';
 import { dumpAst, dumpNode, dumpNodes, filterChildren, findAscendant, findChild, findChildContainingPosition, findChildContainingRange, getAscendants, getDiagnosticsInCurrentLocation, getKindName, positionOrRangeToNumber, positionOrRangeToRange } from "typescript-ast-util";
 
+
+
 /** Utilities that easy working with native TypeScript AST Nodes */
 export interface EvalContextUtil {
   /** pretty-prints AST structure of given node's descendants */
@@ -24,9 +26,11 @@ export interface EvalContextUtil {
   printNodes: typeof dumpNodes
   /** so we are able to cast in JavaScript at least for not showing errors so typechecking for other stuff don't screw up  */
   asAny: (obj: any) => any
-  // cast: typeof caster
 }
+
+
 export class EvalContextUtilImpl implements EvalContextUtil {
+ // _stackTrace = require('stack-trace')
   printAst(node: Node | ts.Node, getChildrenMode: boolean = false): string {
     return dumpAst((node as any).compilerNode || node, getChildrenMode)
   }
@@ -46,9 +50,4 @@ export class EvalContextUtilImpl implements EvalContextUtil {
   printNode = dumpNode
   printNodes = dumpNodes
   asAny(obj: any): any { return obj as any }
-  // cast = caster
 }
-
-// export function caster<T1,T2>(o:T1):T2 {
-//     return o as any
-//   }

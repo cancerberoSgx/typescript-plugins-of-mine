@@ -2,7 +2,7 @@
 // in typescript and the plugin will suggest fixing it by just putting a dummy name. The
 // following snippet shows that :
 
-function(a: number):[number]{ return [Math.PI*a/2]}
+// function(a: number):[number]{ return [Math.PI*a/2]}
 
 
 import { EvalContext } from 'typescript-plugin-ast-inspector'

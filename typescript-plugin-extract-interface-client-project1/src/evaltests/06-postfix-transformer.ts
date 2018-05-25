@@ -1,15 +1,14 @@
 function f(a, b, c, foo) {
   if (a < b)
-    return a > 3 * foo.bar.alf && b < c.let;
+    return a > 3 * foo.bar.alf && b < c
 }
 
-// Heads up ! this version doesn't use ts-simple-ast and performs modifications by manipulating strings 
-// which is not advisable. Check out the next version 06-postfix-transformer.ts for a better impl !!
+// Heads up ! in this version we use typescript transformations and printers to modify the source file
 
 import { EvalContext } from 'typescript-plugin-ast-inspector'
 declare const c: EvalContext
 
-function toEval() {
+function letPostfix() {
 
   const assert = require('assert') // require assert utility inside this function body so is available
   const fs = require('fs')
@@ -34,7 +33,7 @@ function toEval() {
   c.positionOrRange = 81
   const position = c.util.positionOrRangeToNumber(c.positionOrRange)
 
-  // this is the "let" token that appears as part of the expression 
+  // this is the "let" token that appears as part of the expression "expr.let"
   const postfixNode = c.util.findChildContainingPosition(sourceFile, position)
 
   // Then we want to locate the target expression that will be declared as variable. here we  assume 
@@ -48,22 +47,26 @@ function toEval() {
   const declarationNextSibling = findChild(statementContainer, isStatement)
   // assert that this is the ascendant statement contained between curly braces not the return one
   assert.ok(ts.isIfStatement(declarationNextSibling))
+
   // up to this point the code is the same as 05 - but now we wll generate the output using 
   // ts.Printer and ts.Transformation and will try to transform this sam e source file to see 
-  // if it's woks OK in the context of a Language Service plugin
+  // if it's woks OK in the context of a Language Service plugin. There will be three transformations
 
+  // this transformation will remove the postfix ".let" from the expression
   const removePostfix = (context) => {
     return (rootNode) => {
       const visit = node => {
         node = ts.visitEachChild(node, visit, context)
         if ( node.name === postfixNode) {
-          return node.expression
+          return node.expression // instead of the expression `expr.let` we return just `expr`
         }
         return node
       }
       return ts.visitNode(rootNode, visit)
     }
   }
+
+  // this transformation will add the variable declaration as the first child of the black
   const addVariableDeclaration = (context) => {
     return (rootNode) => {
       const visit = node => {
@@ -71,8 +74,8 @@ function toEval() {
         if (node === statementContainer) {
           const targetExpressionType = program.getTypeChecker().getTypeAtLocation(targetExpression)
           const typeNode = program.getTypeChecker().typeToTypeNode(targetExpressionType)
-          // Heads up ! we need to create a copy of target extension using `metMutableClone`. If we dont do
-          // that, replaceExpressionWithVariable transformation will replace also this expression with the
+          // Heads up ! we need to create a copy of target extension using `ts.getMutableClone`. If we dont do
+          // that, `replaceExpressionWithVariable` transformation will replace also this expression with the
           // variable name but we only want to replace the original targetExpression 
           const targetExpressionClone = ts.getMutableClone(targetExpression)
           const variableDeclaration = ts.createVariableDeclaration('nameMePlease', typeNode, c.util.asAny(targetExpressionClone))
@@ -84,6 +87,7 @@ function toEval() {
       return ts.visitNode(rootNode, visit)
     }
   }
+  // this transformation will replace the original expression with the new variable name added by  addVariableDeclaration
   const replaceExpressionWithVariable = (context) => {
     return (rootNode) => {
       const visit = node => {
@@ -97,7 +101,8 @@ function toEval() {
     }
   }
 
-  // HEADS UP! the order is important! transformations will be applied serially. 
+  // HEADS UP! the order is important! transformations will be applied serially and affect each other. 
+  // In general the less destructive / top level first
   const transformations = [addVariableDeclaration, replaceExpressionWithVariable,  removePostfix, ]
   const result = ts.transform(sourceFile,  transformations)
   const printer = ts.createPrinter()
@@ -105,12 +110,13 @@ function toEval() {
   const output = printer.printFile(transformedSourceFile)
   print(output.substring(0, 150))
 }
+
 /***@ 
 
-// use this code to get the user's selection position to hardcode in the code above, just select
-part of "let" nad activate refactor "eval code in comments"
+// use this code to get the user's selection position to hardcode in the code above, just 
+// select part of "let" nad activate refactor "eval code in comments"
 
-const program = c.info.languageService.getProgram() const position =
-c.util.positionOrRangeToNumber(c.positionOrRange) c.print(position)
+const program = c.info.languageService.getProgram() 
+const position = c.util.positionOrRangeToNumber(c.positionOrRange) c.print(position)
 
 @***/

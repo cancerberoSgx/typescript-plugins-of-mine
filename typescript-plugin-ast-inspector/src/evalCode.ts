@@ -2,7 +2,9 @@
 // TODO: eval code safely using node vm so security people dont complain
 // TODO: eval current function code - so user don't have to excatly select everything
 // TODO: for eval selection, user could write typescript and we could transpile it to js before eval
-// TODO: expose info, project etc in context
+
+// TODO IDEA: in info, pass a non temporal variable that contains two eventemitters guestEmitter and hostEmitter - and let each emit events and listen to each other. (context object will change but always will point to the same emitter references tat won't. THen, the plugin in host could send data to the guest regarding received position, fileName, etc so the same call could be simulated 100% in the editor. )
+// the autocomplete idea (following) could eb acommplished with this ?
 
 // TODO: would be interesting to have the possibility of autocomplete from the editor or to describe a symbol type. example:
 // printAst(node.getSourceFile()
@@ -10,7 +12,6 @@
 // prints pretty structure of node and also a link to definition file. Will be weird because some def files will be in the host project...
 // notice that ts is available for him
 
-// TODO: let the user write js without comment wrapping and select the text wants to execute...
 
 
 import { readFileSync } from 'fs';
@@ -105,6 +106,7 @@ function doEval(code, __context__: EvalContextImpl): EvalResult {
   ${code}
 })(__context__);
 }catch(ex){
+  __result__.errorStackTrace = __context__.util._stackTrace.parse(error)
   __result__.error = ex;
 }
   `
@@ -118,7 +120,6 @@ function doEval(code, __context__: EvalContextImpl): EvalResult {
   return __result__
 }
 
-
 function prettyPrintEvalResult(evalResult) {
   let output = ''
   if (evalResult.output) {
@@ -126,13 +127,16 @@ function prettyPrintEvalResult(evalResult) {
   }
   let error = '';
   if (evalResult.error) {
-    error += `Error: \n${evalResult.error}\nStack:\n ${evalResult.error.stack}\n`
+    error += `Error: (in)\n${evalResult.error}\nStack:\n ${evalResult.error.stack}\n`
   }
   if (evalResult.errorOuter) {
-    error += `Error: \n${evalResult.errorOuter}\nStack:\n ${evalResult.errorOuter.stack}\n`
+    error += `Error: (out) \n${evalResult.errorOuter}\nStack:\n ${evalResult.errorOuter.stack}\n`
   }
-  return `\nvar __output = \`\n${error + output}\n\``//TODO: escape `
+  return `\nvar __output = \`\n${error + output}\n\``//TODO: escape ` ? 
 }
+
+
+
 
 export interface EvalContextConfig {
   log: (str: string) => void
@@ -145,16 +149,11 @@ export interface EvalContextConfig {
   actionName: string
 }
 
-export function executeEvalCode(config: EvalContextConfig): void {
 
+export function executeEvalCode(config: EvalContextConfig): void {
   const t0 = now()
   const sourceFile = config.node.getSourceFile()
   const originalSourceFile = config.info.project.getSourceFile(sourceFile.getFilePath() as any)
-  // const saved = originalSourceFile.getFullText().trim() === readFileSync(originalSourceFile.fileName).toString().trim()
-  // // handle file not saved - we need the file to be saved in order to use simple-ast properly
-  // if (!saved) {
-  //   sourceFile.insertText(config.node.getEnd(), `/* Please save the file before evaluating code, thanks */`)
-  // }
   // handle eval function body
   if (config.actionName === EVAL_CURRENT_FUNCTION_BODY_REFACTOR_ACTION_NAME) {
     let targetFunction = (config.node.getKind() === ts.SyntaxKind.FunctionDeclaration ? config.node : undefined) || config.node.getFirstAncestorByKind(ts.SyntaxKind.FunctionDeclaration)
