@@ -1,3 +1,5 @@
+// internal note: install - vscode. 
+
 // we will learn how to use the debug-eval-code plugin to evaluate code in the guest editor
 // to develop TypeScript language service plugins faster which is painful. Even for the most simple plugin it
 // implies reload tsserver, look at tsserver.log, find and interpret stacktraces, come back to host editor,

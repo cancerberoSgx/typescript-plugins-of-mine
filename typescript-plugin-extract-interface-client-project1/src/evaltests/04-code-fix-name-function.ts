@@ -25,7 +25,6 @@ diagnostics.find
 
 const node = c.util.findChildContainingPosition(sourceFile, position)
 c.print(node.getFullStart()+' - '+node.getFullWidth())
-// const containedDiagnostic = 
 
 
 

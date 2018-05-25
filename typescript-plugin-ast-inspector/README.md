@@ -1,7 +1,10 @@
 # typescript-plugin-ast-inspector
 
-Tools to discover the AST of current TypeScript document. Oriented to TypeScript developers, specially those dealing Language Service Plugins
-Currently just two refactor tools: "print ast" and "print parent nodes"
+Tools to discover the AST of current TypeScript document. Oriented to TypeScript developers, specially those dealing Language Service Plugins. The one that stands most is "evalCode" that let the user write code in the guest editor that is evaluated host tsserver. Almost a developer tools experience. Other auxiliary  tools are "print ast" and "print parent nodes"
+
+## Eval code 
+
+This is the most important tool and probably will be maintained in its own project- but for now is here. TODO: youtube video and screencasts. 
 
 ## Print AST
 
