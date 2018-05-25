@@ -39,3 +39,13 @@ export class EvalContextUtilImpl implements EvalContextUtil {
   findDescendants = findChild
   assert = assert
 }
+
+// TODO : Perhaps add these too ?
+
+// const isExpression = node => getKindName(node).endsWith('Expression') || node.kind === ts.SyntaxKind.Identifier || getKindName(node).endsWith('Literal')
+// const isNotExpression = node => !isExpression(node)
+// const isStatement = node => getKindName(node).endsWith('Statement')
+// const isStatementContainer = n => getKindName(n).endsWith('Block') || n.kind === ts.SyntaxKind.SourceFile
+// const printNode = node => node ? (getKindName(node) + ', starts: ' + node.getFullStart() + ', width: ' + node.getFullWidth() + ', ' + node.getText().replace(/\s+/g, ' ').substring(0, Math.min(30, node.getText().length))+'...') : 'undefined'
+// const printNodes = nodes => nodes.map(printNode).join('\n')
+// const dumpNode = node => print(printNode(node))
