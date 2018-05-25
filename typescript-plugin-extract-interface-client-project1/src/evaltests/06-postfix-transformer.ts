@@ -37,12 +37,9 @@ function toEval() {
   // this is the "let" token that appears as part of the expression 
   const postfixNode = c.util.findChildContainingPosition(sourceFile, position)
 
-  // Then we want to locate the target expression that will be declared as variable. we can ask the
-  // user to choose one from allExpressions (see next commented line) but here we  assume that the
-  // user wants to declare the toper one as variable (targetExpression):
+  // Then we want to locate the target expression that will be declared as variable. here we  assume 
+  // that the user wants to declare the toper one as variable (targetExpression):
   const targetExpression = findChild(findAscendant(postfixNode, isNotExpression), isExpression)
-  // const allExpressions = filterChildren(firstNotExprAscendant, isExpression).filter(e => e !==
-  // node) 
 
   // we first find a node that can contain our variable declaration and its children statement right
   // before which we will add our declaration (the container is a Block so we are sure its children
@@ -55,12 +52,11 @@ function toEval() {
   // ts.Printer and ts.Transformation and will try to transform this sam e source file to see 
   // if it's woks OK in the context of a Language Service plugin
 
-  const transformer1 = (context) => {
+  const removePostfix = (context) => {
     return (rootNode) => {
       const visit = node => {
         node = ts.visitEachChild(node, visit, context)
         if (ts.isPropertyAccessExpression(node) && node.name === postfixNode) {
-          print('replacing postfixNode !!!')
           return node.expression
         }
         return node
@@ -68,14 +64,13 @@ function toEval() {
       return ts.visitNode(rootNode, visit)
     }
   }
-  const transformer2 = (context) => {
+  const addVariableDeclaration = (context) => {
     return (rootNode) => {
       const visit = node => {
         node = ts.visitEachChild(node, visit, context)
         if (node === statementContainer) {
-          // const targetExpressionType = program.getTypeChecker().getTypeAtLocation(targetExpression)
-          // const typeNode = program.getTypeChecker().typeToTypeNode(targetExpressionType)
-          const typeNode = undefined
+          const targetExpressionType = program.getTypeChecker().getTypeAtLocation(targetExpression)
+          const typeNode = program.getTypeChecker().typeToTypeNode(targetExpressionType)
           const variableDeclaration = ts.createVariableDeclaration('nameMePlease', typeNode, c.util.asAny(targetExpression))
           const variableDeclarationList = ts.createVariableDeclarationList([variableDeclaration], ts.NodeFlags.Const)
           const newBlock = ts.updateBlock(node, [c.util.asAny(variableDeclarationList)].concat(node.statements))
@@ -86,16 +81,12 @@ function toEval() {
       return ts.visitNode(rootNode, visit)
     }
   }
-  const transformer3 = (context) => {
+  const replaceExpressionWithVariable = (context) => {
     return (rootNode) => {
       const visit = node => {
         node = ts.visitEachChild(node, visit, context)
         if (node === targetExpression) {
-          const typeNode = undefined
-          const variableDeclaration = ts.createVariableDeclaration('nameMePlease', typeNode, c.util.asAny(targetExpression))
-          const variableDeclarationList = ts.createVariableDeclarationList([variableDeclaration], ts.NodeFlags.Const)
-          const newBlock = ts.updateBlock(node, [c.util.asAny(variableDeclarationList)].concat(node.statements))
-          return newBlock
+          return ts.createIdentifier('nameMePlease')
         }
         return node
       }
@@ -108,59 +99,13 @@ function toEval() {
   const printer = ts.createPrinter()
   // print(printer.printFile(sourceFile).substring(0, 133))
   const result = ts.transform(
-    sourceFile, [transformer2, transformer1] // important ! the other order doesn't work - it seems that first must be the transformations that affects the AST leaves and then the transformations that affect nodes more close to the roots (close to the SourceFile at last. )
+    sourceFile, [addVariableDeclaration, replaceExpressionWithVariable,  removePostfix, ] // important ! the other order doesn't work - it seems that first must be the transformations that affects the AST leaves and then the transformations that affect nodes more close to the roots (close to the SourceFile at last. )
   )
   const transformedSourceFile = result.transformed[0]
   const output = printer.printFile(transformedSourceFile)
   print(output.substring(0, 150))
 
 }
-var __output = `
-Output:
-replacing postfixNode !!!
-replacing postfixNode !!!
-function f(a, b, c, foo) {
-    const nameMePlease = a > 3 * foo.bar.alf && b < c
-    if (a < b)
-        return a > 3 * foo.bar.alf && b < c;
-}
-// Head
-
-`
-var __output = `
-Output:
-hehehehehe
-replacing postfixNode !!!
-replacing postfixNode !!!
-function f(a, b, c, foo) {
-    const nameMePlease = a > 3 * foo.bar.alf && b < c
-    if (a < b)
-        return a > 3 * foo.bar.alf && b < c;
-}
-// Head
-
-`
-var __output = `
-Output:
-hehehehehe
-replacing postfixNode !!!
-replacing postfixNode !!!
-function f(a, b, c, foo) {
-    const nameMePlease = a > 3 * foo.bar.alf && b < c
-    if (a < b)
-        return a > 3 * foo.bar.alf &&
-
-`
-var __output = `
-Output:
-replacing postfixNode !!!
-function f(a, b, c, foo) {
-    if (a < b)
-        return a > 3 * foo.bar.alf && b < c;
-}
-// Heads up ! this version doesn't use ts-si
-
-`
 
 /***@ 
 
