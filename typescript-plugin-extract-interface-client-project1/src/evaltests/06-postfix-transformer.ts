@@ -7,7 +7,6 @@ function f(a, b, c, foo) {
 // which is not advisable. Check out the next version 06-postfix-transformer.ts for a better impl !!
 
 import { EvalContext } from 'typescript-plugin-ast-inspector'
-import { TLSSocket } from 'tls';
 declare const c: EvalContext
 
 function toEval() {
@@ -19,7 +18,8 @@ function toEval() {
   const getKindName = c.util.getKindName, ts = c.ts, print = c.print, findAscendant = c.util.findAscendant,
     getProgram = c.info.languageService.getProgram, findChild = c.util.findChild
   // node kind predicates and utilities:
-  const isExpression = node => getKindName(node).endsWith('Expression') || node.kind === ts.SyntaxKind.Identifier || getKindName(node).endsWith('Literal')
+  const isExpression = node => getKindName(node).endsWith('Expression') || node.kind === ts.SyntaxKind.Identifier || 
+    getKindName(node).endsWith('Literal')
   const isNotExpression = node => !isExpression(node)
   const isBlock = node => getKindName(node).endsWith('Block') || node.kind === ts.SyntaxKind.SourceFile
   const isStatement = node => getKindName(node).endsWith('Statement')
@@ -56,7 +56,7 @@ function toEval() {
     return (rootNode) => {
       const visit = node => {
         node = ts.visitEachChild(node, visit, context)
-        if (ts.isPropertyAccessExpression(node) && node.name === postfixNode) {
+        if ( node.name === postfixNode) {
           return node.expression
         }
         return node
@@ -71,10 +71,13 @@ function toEval() {
         if (node === statementContainer) {
           const targetExpressionType = program.getTypeChecker().getTypeAtLocation(targetExpression)
           const typeNode = program.getTypeChecker().typeToTypeNode(targetExpressionType)
-          const variableDeclaration = ts.createVariableDeclaration('nameMePlease', typeNode, c.util.asAny(targetExpression))
+          // Heads up ! we need to create a copy of target extension using `metMutableClone`. If we dont do
+          // that, replaceExpressionWithVariable transformation will replace also this expression with the
+          // variable name but we only want to replace the original targetExpression 
+          const targetExpressionClone = ts.getMutableClone(targetExpression)
+          const variableDeclaration = ts.createVariableDeclaration('nameMePlease', typeNode, c.util.asAny(targetExpressionClone))
           const variableDeclarationList = ts.createVariableDeclarationList([variableDeclaration], ts.NodeFlags.Const)
-          const newBlock = ts.updateBlock(node, [c.util.asAny(variableDeclarationList)].concat(node.statements))
-          return newBlock
+          return ts.updateBlock(node, [c.util.asAny(variableDeclarationList)].concat(node.statements))
         }
         return node
       }
@@ -85,7 +88,7 @@ function toEval() {
     return (rootNode) => {
       const visit = node => {
         node = ts.visitEachChild(node, visit, context)
-        if (node === targetExpression) {
+        if (node === targetExpression) { 
           return ts.createIdentifier('nameMePlease')
         }
         return node
@@ -94,19 +97,14 @@ function toEval() {
     }
   }
 
-
-
+  // HEADS UP! the order is important! transformations will be applied serially. 
+  const transformations = [addVariableDeclaration, replaceExpressionWithVariable,  removePostfix, ]
+  const result = ts.transform(sourceFile,  transformations)
   const printer = ts.createPrinter()
-  // print(printer.printFile(sourceFile).substring(0, 133))
-  const result = ts.transform(
-    sourceFile, [addVariableDeclaration, replaceExpressionWithVariable,  removePostfix, ] // important ! the other order doesn't work - it seems that first must be the transformations that affects the AST leaves and then the transformations that affect nodes more close to the roots (close to the SourceFile at last. )
-  )
   const transformedSourceFile = result.transformed[0]
   const output = printer.printFile(transformedSourceFile)
   print(output.substring(0, 150))
-
 }
-
 /***@ 
 
 // use this code to get the user's selection position to hardcode in the code above, just select
