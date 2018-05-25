@@ -131,9 +131,9 @@ export function findAscendant(node: ts.Node | undefined, predicate: (node: ts.No
 
 /** get given node's ascendants in order from node.parent to topest one */
 export function getAscendants(node: ts.Node | undefined): ts.Node[] {
-  let a
+  let a = node
   const result: ts.Node[] = []
-  while ((a = node)) {
+  while ((a = a.parent)) {
     result.push(a)
   }
   return result
@@ -144,7 +144,7 @@ export function getAscendants(node: ts.Node | undefined): ts.Node[] {
 // kind & type helpers
 /** get the kind name as string of given kind value or node */
 export function getKindName(kind: number | ts.Node): string {
-  return getEnumKey(ts.SyntaxKind, (kind as ts.Node).kind || kind)
+  return (kind || kind === 0) ? getEnumKey(ts.SyntaxKind, (kind as ts.Node).kind || kind) : 'undefined'
 }
 export function getEnumKey(anEnum: any, value: any): string {
   for (const key in anEnum) {
@@ -231,8 +231,15 @@ export function hasDeclaredType(node: ts.Node, program: ts.Program): boolean {
 /**
  * Iterates recursively over all children of given node and apply visitor on each of them. If visitor returns non falsy value then it stops visiting and that value is returned to the caller. See https://en.wikipedia.org/wiki/Tree_traversal for the meaning of "DeepFirst". 
  */
-export function visitChildrenRecursiveDeepFirst(node: ts.Node,
-  visitor: (node: ts.Node, index?: number, level?: number) => ts.Node | undefined | void, index: number = 0, level: number = 0, stopOnTruthy: boolean = false): ts.Node | undefined {
+export function visitChildrenRecursiveDeepFirst(
+  node: ts.Node,
+  visitor: (node: ts.Node, index?: number, level?: number) => ts.Node | undefined | void, 
+  index: number = 0, 
+  level: number = 0, 
+  stopOnTruthy: boolean = false,
+  getChildrenMode:boolean=false
+): ts.Node | undefined 
+  {
   if (!node) {
     return
   }
@@ -241,7 +248,11 @@ export function visitChildrenRecursiveDeepFirst(node: ts.Node,
     return result
   }
   let i = 0
-  return node.forEachChild(child => visitChildrenRecursiveDeepFirst(child, visitor, i++, level + 1))
+  if(!getChildrenMode){
+    return node.forEachChild(child => visitChildrenRecursiveDeepFirst(child, visitor, i++, level + 1, stopOnTruthy, getChildrenMode))
+  } else {
+    node.getChildren().forEach(child => visitChildrenRecursiveDeepFirst(child, visitor, i++, level + 1, stopOnTruthy, getChildrenMode))
+  }
 }
 
 export function filterChildren(
@@ -426,22 +437,22 @@ export function addTextToSourceFile(sourceFile: ts.SourceFile, positionWhereToAd
 
 // debug& logging
 
-export function dumpAst(ast: ts.Node | undefined): string {
+export function dumpAst(ast: ts.Node | undefined, getChildrenMode:boolean=false, printIndex:boolean=false): string {
   if (!ast) {
     return ''
   }
   function print(node: ts.Node, index: number = 0, level: number = 0) {
-    buffer.push(printNode(node, index, level))
+    buffer.push(printNode(node, index, level, printIndex))
   }
-  const buffer: Array<string> = []
-  visitChildrenRecursiveDeepFirst(ast, print)
+  const buffer: string[] = []
+  visitChildrenRecursiveDeepFirst(ast, print, undefined, undefined, false, getChildrenMode)
   return buffer.join('\n')
 }
 
-export function printNode(node: ts.Node, index: number = -1, level: number = 0): string {
+export function printNode(node: ts.Node, index: number = -1, level: number = 0, printIndex:boolean=false): string {
   const indent = new Array(level).map(i => '').join('  ')
   const name = node.kind === ts.SyntaxKind.Identifier ? ((node as ts.Identifier).text + ' ') : '';
-  const indexStr = index != -1 ? ('#' + index + ' ') : ''
+  const indexStr = printIndex ? (index != -1 ? ('#' + index + ' ') : '') : ''
   let shortText = node.getText().replace(/[\s\n]+/g, ' ')//.split(//).join('\\n')
   shortText = shortText.substr(0, Math.min(shortText.length, 60))
   return `${indent}${indexStr}${name}${getKindName(node.kind)} : "${shortText}"`

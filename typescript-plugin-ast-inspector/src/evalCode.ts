@@ -91,7 +91,7 @@ class EvalContextImpl implements EvalContext {
     _printed = []
   }
   print(s): void {
-    _printed.push(s) // use an external variable so users can do const print = c.print - in general we dont want to use "this". TODO: probably we dont want to use a "class" just an object
+    _printed.push(s+'') // use an external variable so users can do const print = c.print - in general we dont want to use "this". TODO: probably we dont want to use a "class" just an object
   }
 }
 
@@ -150,7 +150,7 @@ export function executeEvalCode(config: EvalContextConfig): void {
   const t0 = now()
   const sourceFile = config.node.getSourceFile()
   const originalSourceFile = config.info.project.getSourceFile(sourceFile.getFilePath() as any)
-  const saved = originalSourceFile.getFullText().trim() === readFileSync(originalSourceFile.fileName).toString().trim()
+  // const saved = originalSourceFile.getFullText().trim() === readFileSync(originalSourceFile.fileName).toString().trim()
   // // handle file not saved - we need the file to be saved in order to use simple-ast properly
   // if (!saved) {
   //   sourceFile.insertText(config.node.getEnd(), `/* Please save the file before evaluating code, thanks */`)
