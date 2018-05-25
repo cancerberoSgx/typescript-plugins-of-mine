@@ -28,6 +28,7 @@ const sourceFile: ts.SourceFile = ts.createSourceFile(
   'test.ts', source, ts.ScriptTarget.ES2015, true, ts.ScriptKind.TS
 );
 
+
 const printer: ts.Printer = ts.createPrinter();
 
 console.log(printer.printFile(sourceFile));
@@ -36,10 +37,7 @@ console.log(printer.printFile(sourceFile));
 const result: ts.TransformationResult<ts.SourceFile> = ts.transform<ts.SourceFile>(
   sourceFile, [transformer]
 );
-
 const transformedSourceFile: ts.SourceFile = result.transformed[0];
-
-
 console.log(printer.printFile(transformedSourceFile));
 
 result.dispose();

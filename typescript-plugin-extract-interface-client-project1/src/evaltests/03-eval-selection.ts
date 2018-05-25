@@ -8,6 +8,7 @@ declare const c: EvalContext
 // code in comments" comments as shown in previous "tutorials" 01 and 02
 
 // TIP: use  "noImplicitAny": false, in tsconfig.json because you cannot have types in the code 
+// TIP: "SyntaxError: Unexpected token :" si probably because you copy&paste typescript code with a type (:string)
 
 //  We will evaluate the following code. Make sure is valid JavaScript! Try selecting a range that contains it
 //  - and only it, and apply the refactor suggestion "eval selection".

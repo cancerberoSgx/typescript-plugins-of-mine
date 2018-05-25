@@ -7,6 +7,7 @@ function f(a, b, c, foo) {
 // which is not advisable. Check out the next version 06-postfix-transformer.ts for a better impl !!
 
 import { EvalContext } from 'typescript-plugin-ast-inspector'
+import { TLSSocket } from 'tls';
 declare const c: EvalContext
 
 function toEval() {
@@ -50,15 +51,16 @@ function toEval() {
   const declarationNextSibling = findChild(statementContainer, isStatement)
   // assert that this is the ascendant statement contained between curly braces not the return one
   assert.ok(ts.isIfStatement(declarationNextSibling))
-
   // up to this point the code is the same as 05 - but now we wll generate the output using 
   // ts.Printer and ts.Transformation and will try to transform this sam e source file to see 
   // if it's woks OK in the context of a Language Service plugin
-  const transformer = (context) => {
+
+  const transformer1 = (context) => {
     return (rootNode) => {
       const visit = node => {
         node = ts.visitEachChild(node, visit, context)
-        if(ts.isPropertyAccessExpression(node) && node.name === postfixNode){
+        if (ts.isPropertyAccessExpression(node) && node.name === postfixNode) {
+          print('replacing postfixNode !!!')
           return node.expression
         }
         return node
@@ -66,17 +68,100 @@ function toEval() {
       return ts.visitNode(rootNode, visit)
     }
   }
+  const transformer2 = (context) => {
+    return (rootNode) => {
+      const visit = node => {
+        node = ts.visitEachChild(node, visit, context)
+        if (node === statementContainer) {
+          // const targetExpressionType = program.getTypeChecker().getTypeAtLocation(targetExpression)
+          // const typeNode = program.getTypeChecker().typeToTypeNode(targetExpressionType)
+          const typeNode = undefined
+          const variableDeclaration = ts.createVariableDeclaration('nameMePlease', typeNode, c.util.asAny(targetExpression))
+          const variableDeclarationList = ts.createVariableDeclarationList([variableDeclaration], ts.NodeFlags.Const)
+          const newBlock = ts.updateBlock(node, [c.util.asAny(variableDeclarationList)].concat(node.statements))
+          return newBlock
+        }
+        return node
+      }
+      return ts.visitNode(rootNode, visit)
+    }
+  }
+  const transformer3 = (context) => {
+    return (rootNode) => {
+      const visit = node => {
+        node = ts.visitEachChild(node, visit, context)
+        if (node === targetExpression) {
+          const typeNode = undefined
+          const variableDeclaration = ts.createVariableDeclaration('nameMePlease', typeNode, c.util.asAny(targetExpression))
+          const variableDeclarationList = ts.createVariableDeclarationList([variableDeclaration], ts.NodeFlags.Const)
+          const newBlock = ts.updateBlock(node, [c.util.asAny(variableDeclarationList)].concat(node.statements))
+          return newBlock
+        }
+        return node
+      }
+      return ts.visitNode(rootNode, visit)
+    }
+  }
+
+
+
   const printer = ts.createPrinter()
-  // print(printer.printFile(sourceFile).substring(0, 200))
+  // print(printer.printFile(sourceFile).substring(0, 133))
   const result = ts.transform(
-    sourceFile, [transformer]
+    sourceFile, [transformer2, transformer1] // important ! the other order doesn't work - it seems that first must be the transformations that affects the AST leaves and then the transformations that affect nodes more close to the roots (close to the SourceFile at last. )
   )
   const transformedSourceFile = result.transformed[0]
-  const output = printer.printFile(transformedSourceFile).substring(0, 200)
-  print(output)
-  // assert.
-  
+  const output = printer.printFile(transformedSourceFile)
+  print(output.substring(0, 150))
+
 }
+var __output = `
+Output:
+replacing postfixNode !!!
+replacing postfixNode !!!
+function f(a, b, c, foo) {
+    const nameMePlease = a > 3 * foo.bar.alf && b < c
+    if (a < b)
+        return a > 3 * foo.bar.alf && b < c;
+}
+// Head
+
+`
+var __output = `
+Output:
+hehehehehe
+replacing postfixNode !!!
+replacing postfixNode !!!
+function f(a, b, c, foo) {
+    const nameMePlease = a > 3 * foo.bar.alf && b < c
+    if (a < b)
+        return a > 3 * foo.bar.alf && b < c;
+}
+// Head
+
+`
+var __output = `
+Output:
+hehehehehe
+replacing postfixNode !!!
+replacing postfixNode !!!
+function f(a, b, c, foo) {
+    const nameMePlease = a > 3 * foo.bar.alf && b < c
+    if (a < b)
+        return a > 3 * foo.bar.alf &&
+
+`
+var __output = `
+Output:
+replacing postfixNode !!!
+function f(a, b, c, foo) {
+    if (a < b)
+        return a > 3 * foo.bar.alf && b < c;
+}
+// Heads up ! this version doesn't use ts-si
+
+`
+
 /***@ 
 
 // use this code to get the user's selection position to hardcode in the code above, just select

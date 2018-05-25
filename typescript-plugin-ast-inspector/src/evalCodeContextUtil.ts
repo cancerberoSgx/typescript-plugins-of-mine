@@ -1,12 +1,12 @@
-import { positionOrRangeToRange, positionOrRangeToNumber, dumpAst, findChildContainingRange, findChildContainingPosition, getDiagnosticsInCurrentLocation, getKindName, findAscendant, filterChildren, getAscendants, findChild } from "typescript-ast-util";
-import * as ts from 'typescript';
+import * as assert from 'assert';
 import { Node } from "ts-simple-ast";
-import * as assert from 'assert'
+import * as ts from 'typescript';
+import { dumpAst, dumpNode, dumpNodes, filterChildren, findAscendant, findChild, findChildContainingPosition, findChildContainingRange, getAscendants, getDiagnosticsInCurrentLocation, getKindName, positionOrRangeToNumber, positionOrRangeToRange } from "typescript-ast-util";
 
 /** Utilities that easy working with native TypeScript AST Nodes */
 export interface EvalContextUtil {
   /** pretty-prints AST structure of given node's descendants */
-  printAst(node: Node | ts.Node, getChildrenMode?:boolean): string
+  printAst(node: Node | ts.Node, getChildrenMode?: boolean): string
   positionOrRangeToRange: typeof positionOrRangeToRange
   positionOrRangeToNumber: typeof positionOrRangeToNumber
   findChildContainingRange: typeof findChildContainingRange
@@ -20,9 +20,14 @@ export interface EvalContextUtil {
   findChild: (n: ts.Node, predicate: (n: ts.Node) => boolean) => ts.Node | undefined
   findDescendants: typeof findChild
   assert: typeof assert
+  printNode: typeof dumpNode
+  printNodes: typeof dumpNodes
+  /** so we are able to cast in JavaScript at least for not showing errors so typechecking for other stuff don't screw up  */
+  asAny: (obj: any) => any
+  // cast: typeof caster
 }
 export class EvalContextUtilImpl implements EvalContextUtil {
-  printAst(node: Node | ts.Node, getChildrenMode:boolean=false): string {
+  printAst(node: Node | ts.Node, getChildrenMode: boolean = false): string {
     return dumpAst((node as any).compilerNode || node, getChildrenMode)
   }
   positionOrRangeToRange = positionOrRangeToRange
@@ -38,14 +43,12 @@ export class EvalContextUtilImpl implements EvalContextUtil {
   findChild = (n: ts.Node, predicate: (n: ts.Node) => boolean): ts.Node | undefined => findChild(n, predicate, false)
   findDescendants = findChild
   assert = assert
+  printNode = dumpNode
+  printNodes = dumpNodes
+  asAny(obj: any): any { return obj as any }
+  // cast = caster
 }
 
-// TODO : Perhaps add these too ?
-
-// const isExpression = node => getKindName(node).endsWith('Expression') || node.kind === ts.SyntaxKind.Identifier || getKindName(node).endsWith('Literal')
-// const isNotExpression = node => !isExpression(node)
-// const isStatement = node => getKindName(node).endsWith('Statement')
-// const isStatementContainer = n => getKindName(n).endsWith('Block') || n.kind === ts.SyntaxKind.SourceFile
-// const printNode = node => node ? (getKindName(node) + ', starts: ' + node.getFullStart() + ', width: ' + node.getFullWidth() + ', ' + node.getText().replace(/\s+/g, ' ').substring(0, Math.min(30, node.getText().length))+'...') : 'undefined'
-// const printNodes = nodes => nodes.map(printNode).join('\n')
-// const dumpNode = node => print(printNode(node))
+// export function caster<T1,T2>(o:T1):T2 {
+//     return o as any
+//   }
