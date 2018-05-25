@@ -17,7 +17,6 @@ const sourceFile = program.getSourceFile(c.fileName)
 const position = c.util.positionOrRangeToNumber(c.positionOrRange)
 
 // first a test to obtain the compilation errors and see their structure: 
-// c.print(JSON.stringify(diagnostics))// error because of circular dependency
 const diagnostics = program.getSyntacticDiagnostics()
 c.print(JSON.stringify(diagnostics.map(d=>({code: d.code, start: d.start, length: d.length,messageText: d.messageText})) ))
 // lets find the diagnostic contained by the user's selection
@@ -31,5 +30,11 @@ c.print(node.getFullStart()+' - '+node.getFullWidth())
 
 /***@ 
 
+// use this code to get the user's selection position to hardcode in the code above, just select part 
+// of "let" nad activate refactor "eval code in comments"
+
+const program = c.info.languageService.getProgram()
+const position = c.util.positionOrRangeToNumber(c.positionOrRange)
+c.print(position)
 
 @***/

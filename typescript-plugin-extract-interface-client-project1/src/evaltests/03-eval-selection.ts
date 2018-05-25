@@ -1,14 +1,16 @@
 
 import { EvalContext } from 'typescript-plugin-ast-inspector'
 declare const c: EvalContext
-// You can also evaluate selected code. If you declare the "const c: EvalContext" as above you can have typechecking !
-// Nevertheless, if you want to test something regarding the user's cursor position or selection you won't be able to do
-// it this way ... nevertheless you could still copy&paste and use "eval code in comments" comments as shown in previous
-// "tutorials" 01 and 02
 
+// You can also evaluate selected code. If you declare the "const c: EvalContext" as above you can have
+// typechecking ! Nevertheless, if you want to test something regarding the user's cursor position or
+// selection you won't be able to do it this way ... nevertheless you could still copy&paste and use "eval
+// code in comments" comments as shown in previous "tutorials" 01 and 02
 
-//  We will evaluate the following code. Make sure is valid JavaScript! Try selecting a range that contains it - and
-//  only it, and apply the refactor suggestion "eval selection".
+// TIP: use  "noImplicitAny": false, in tsconfig.json because you cannot have types in the code 
+
+//  We will evaluate the following code. Make sure is valid JavaScript! Try selecting a range that contains it
+//  - and only it, and apply the refactor suggestion "eval selection".
 let i = 0
 const descendants = ([c.node].concat(c.node.getAncestors()))
   .map(a => a.getKindName() + ' - text: ' + a.getText().replace(/\s+/mg, ' ')
@@ -21,9 +23,8 @@ ${descendants}
 `)
 
 
-// there's an easy way and its putting the code inside a function body - then select just a small text inside that
-// cuntion and apply refactor "Eval current function selection". Try it :
-
+// there's an easy way and its putting the code inside a function body - then select just a small text inside
+// that cuntion and apply refactor "Eval current function selection". Try it :
 
 function scannerExample() {
   const ts = c.ts, getKindName = c.util.getKindName, print = c.print
@@ -43,3 +44,5 @@ function scannerExample() {
     token = scanner.scan()
   }
 }
+
+

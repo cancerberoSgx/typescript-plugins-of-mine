@@ -31,15 +31,15 @@ function toEval() {
   // refactor utility. we hardcoded ere so we can test faster but this is provided dynamically
   // according to user current selection/cursor:
   c.positionOrRange = 81
-  const position = c.util.positionOrRangeToNumber(c.positionOrRange) // 
+  const position = c.util.positionOrRangeToNumber(c.positionOrRange)
 
   // this is the "let" token that appears as part of the expression 
-  const node = c.util.findChildContainingPosition(sourceFile, position)
+  const postfixNode = c.util.findChildContainingPosition(sourceFile, position)
 
   // Then we want to locate the target expression that will be declared as variable. we can ask the
   // user to choose one from allExpressions (see next commented line) but here we  assume that the
   // user wants to declare the toper one as variable (targetExpression):
-  const targetExpression = findChild(findAscendant(node, isNotExpression), isExpression)
+  const targetExpression = findChild(findAscendant(postfixNode, isNotExpression), isExpression)
   // const allExpressions = filterChildren(firstNotExprAscendant, isExpression).filter(e => e !==
   // node) 
 
@@ -49,36 +49,34 @@ function toEval() {
   const statementContainer = findAscendant(targetExpression, isBlock)
   const declarationNextSibling = findChild(statementContainer, isStatement)
   // assert that this is the ascendant statement contained between curly braces not the return one
-  assert.ok(ts.isIfStatement(declarationNextSibling)) 
-  // we are ready, we start manipulating the text string. The correct way of doing this is
-  // manipulating and printing the AST but I don't know how to do it with typescript natively. I do
-  // now how to do it with ts-simple-ast but wanted to maintain this example using pure typescript
+  assert.ok(ts.isIfStatement(declarationNextSibling))
 
-  // poor man indentation detector
-  const siblingIndentationMatch = /^(\s*)/m.exec(declarationNextSibling.getFullText())
-  const siblingIndentation = siblingIndentationMatch ? siblingIndentationMatch[1] : ''
-
-  let allText = sourceFile.getFullText()
-
-  // Let's remove ".let" from the target expression:
-  const targetExpressionTextWithoutNode =
-    allText.substring(targetExpression.pos, node.pos - 1) +  // -1 to remove the prefixed dot 
-    allText.substring(node.end, targetExpression.end)
-
-  const allNewText = allText.substring(0, declarationNextSibling.pos) +  
-    // the following lines add our dummy variable declaration instead of the targetlocation
-    siblingIndentation + 'const renameIt = ' + targetExpressionTextWithoutNode + ';' + 
-    allText.substring(declarationNextSibling.pos, targetExpression.pos) +  
-    ' renameIt ' +
-    allText.substring(targetExpression.end, sourceFile.end)  
-
-  // fs.writeFileSync(sourceFile.file Name, newText); // a file writing to itself, never seen before
-  print(allNewText.substring(0, 200))
-
-
+  // up to this point the code is the same as 05 - but now we wll generate the output using 
+  // ts.Printer and ts.Transformation and will try to transform this sam e source file to see 
+  // if it's woks OK in the context of a Language Service plugin
+  const transformer = (context) => {
+    return (rootNode) => {
+      const visit = node => {
+        node = ts.visitEachChild(node, visit, context)
+        if(ts.isPropertyAccessExpression(node) && node.name === postfixNode){
+          return node.expression
+        }
+        return node
+      }
+      return ts.visitNode(rootNode, visit)
+    }
+  }
+  const printer = ts.createPrinter()
+  // print(printer.printFile(sourceFile).substring(0, 200))
+  const result = ts.transform(
+    sourceFile, [transformer]
+  )
+  const transformedSourceFile = result.transformed[0]
+  const output = printer.printFile(transformedSourceFile).substring(0, 200)
+  print(output)
+  // assert.
+  
 }
-
-
 /***@ 
 
 // use this code to get the user's selection position to hardcode in the code above, just select
