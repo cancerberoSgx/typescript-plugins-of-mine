@@ -49,7 +49,7 @@ function getApplicableRefactors(fileName: string, positionOrRange: number | ts.T
   info.project.projectService.logger.info(`${PLUGIN_NAME} getApplicableRefactors info: containingTarget.kind == ${getKindName(containingTarget.kind)} containedTarget.kind == ${containedTarget ? getKindName(containedTarget.kind) : 'NOCONTAINEDCHILD'} `)
 
   const codeFixesFilterT0 = now()
-  target = { diagnostics, containingTarget, containedTarget, log, program }
+  target = { diagnostics, containingTarget, containedTarget, log, program/*, languageService: info.languageService, sourceFile*/ }
   const fixes = codeFixes.filter(fix => {
     try {
       return fix.predicate(target)

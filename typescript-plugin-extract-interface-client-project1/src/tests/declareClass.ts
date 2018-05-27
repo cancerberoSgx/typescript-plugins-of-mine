@@ -10,6 +10,6 @@
 // /**
 //  * this class is awesome and this jsdoc will be broken because an issue. 
 //  */
-// class C extends ShowsJsDocIssue implements NonExistentInterface, ExistentInterface{
+// class C2 extends ShowsJsDocIssue implements NonExistentInterface, ExistentInterface{
 
 // }

@@ -7,6 +7,7 @@
 import * as ts from 'typescript';
 import { getKindName } from 'typescript-ast-util';
 import { CodeFix, CodeFixOptions } from '../codeFixes';
+import { VariableDeclarationKind } from 'ts-simple-ast';
 
 export const const2let: CodeFix = {
   name: 'const2let',
@@ -35,15 +36,17 @@ export const const2let: CodeFix = {
   description: (arg: CodeFixOptions): string => `Declare variable "${arg.containingTarget.getText()}"`,
 
   apply: (arg: CodeFixOptions): ts.ApplicableRefactorInfo[] | void => {
-
     const id = arg.simpleNode
-    // in bot predicate cases simpleNode will be the id
     if(!id||id.getKind()!== ts.SyntaxKind.Identifier){
-      return // TODO: LOG
+      arg.log(`codeFixCreateVariable apply cannot exec because of this !id||id.getKind()!== ts.SyntaxKind.Identifier  `)
+      return  
     }
-    else if(id.getParent() && id.getParent()!.getParent() && id.getParent()!.getParent()!.getKind()===ts.SyntaxKind.ExpressionStatement) { // we want to be strict
-      arg.simpleNode.getSourceFile().insertText(id.getParent()!.getParent()!.getStart(), '')
-
+    else if(id.getParent() && id.getParent()!.getParent() && id.getParent()!.getParent()!.getKind()===ts.SyntaxKind.ExpressionStatement) { 
+      const declStatement = id.getSourceFile().getVariableStatement(v=>v.getDeclarationKind()===VariableDeclarationKind.Const && !!v.getDeclarations().find(vv=>vv.getName()===id.getText()))
+      declStatement.setDeclarationKind(VariableDeclarationKind.Let)
+    }
+    else {
+      arg.log(`codeFixCreateVariable apply cannot exec because this was false: id.getParent() && id.getParent()!.getParent() && id.getParent()!.getParent()!.getKind()===ts.SyntaxKind.ExpressionStatement `)
     }
   }
 
