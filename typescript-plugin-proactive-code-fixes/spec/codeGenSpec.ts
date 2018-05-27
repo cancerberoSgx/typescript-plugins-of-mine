@@ -26,7 +26,7 @@ describe('tests', () => {
       return fail();
     }
     const child = sourceFile.getDescendantAtPos(cursorPosition);
-    const arg: CodeFixOptions = { diagnostics, containingTarget: child.compilerNode, log, simpleNode: child, program }
+    const arg: CodeFixOptions = { diagnostics, containingTarget: child.compilerNode, log, simpleNode: child, program, sourceFile: sourceFile.compilerNode }
     const fixes = codeFixes.filter(fix => fix.predicate(arg));
     if (!fixes || !fixes.length) {
       return fail();
@@ -54,7 +54,7 @@ describe('tests', () => {
     if (!TypeGuards.isNewExpression(child)) {
       return fail('is not newexpr type guard')
     }
-    const arg: CodeFixOptions = { diagnostics, containingTarget: child.compilerNode, log, simpleNode: child, program }
+    const arg: CodeFixOptions = { diagnostics, containingTarget: child.compilerNode, log, simpleNode: child, program , sourceFile: sourceFile.compilerNode}
     const fixes = codeFixes.filter(fix => fix.predicate(arg));
     if (!fixes || !fixes.length) {
       return fail('no fixes for knowndiagnostic');
@@ -81,7 +81,7 @@ describe('tests', () => {
     const id = h.getDescendantsOfKind(ts.SyntaxKind.Identifier)[0]
     console.log(id.getText())
 
-    const arg: CodeFixOptions = { diagnostics, containingTarget: id.compilerNode, log, program }
+    const arg: CodeFixOptions = { diagnostics, containingTarget: id.compilerNode, log, program, sourceFile: sourceFile.compilerNode }
     const fixes = codeFixes.filter(fix => fix.predicate(arg));
     if (!fixes || !fixes.length) {
       return fail('no fixes for knowndiagnostic');

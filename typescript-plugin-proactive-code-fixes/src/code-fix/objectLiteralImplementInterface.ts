@@ -13,7 +13,7 @@ const tree2: Living = {
 */
 
 import * as ts from 'typescript';
-import { getKindName } from 'typescript-ast-util';
+import { getKindName, findAscendant } from 'typescript-ast-util';
 import { CodeFix, CodeFixOptions } from '../codeFixes';
 import { VariableDeclarationKind, TypeGuards, Type, SourceFile, Node } from 'ts-simple-ast';
 import { prototype } from 'stream';
@@ -22,9 +22,21 @@ export const objectLiteralImplementInterface: CodeFix = {
   name: 'objectLiteralImplementInterface',
   config: { recursive: false, addMissingPropertiesToInterface: false }, // recursive tre will generate the whole sub literals.. 
   predicate: (arg: CodeFixOptions): boolean => {
-    if (!arg.diagnostics.find(d => d.code === 2322)) {
+    // if (!arg.diagnostics.find(d => d.code === 2322)) {
+    //   return false
+    // }
+
+    const targetLine = ts.getLineAndCharacterOfPosition(arg.sourceFile, arg.containingTarget.getStart()).line
+    const diagnostics = arg.diagnostics.filter(d => d.code === 2322).filter(diag => {
+      const diagLineStart = ts.getLineAndCharacterOfPosition(arg.sourceFile, diag.start).line
+      const diagLineEnd = ts.getLineAndCharacterOfPosition(arg.sourceFile, diag.start + diag.length).line
+      return diagLineStart <= targetLine && diagLineEnd >= targetLine
+    })
+    if (!diagnostics || !diagnostics.length) {
+      arg.log('codeFixCreateVariable predicate false because no diagnostics found with code 2322 in same line as arg.containingTarget')
       return false
     }
+
     if (arg.containingTarget.kind === ts.SyntaxKind.Identifier) {
       // in this case user selected a fragment of the id. quick issue fix: 
       if (arg.containedTarget && arg.containedTarget.kind === ts.SyntaxKind.SourceFile) {
@@ -34,6 +46,9 @@ export const objectLiteralImplementInterface: CodeFix = {
     }
     else if (arg.containedTarget && arg.containedTarget.kind === ts.SyntaxKind.Identifier) {
       // user selected the exactly the id (double click)
+      return true
+    }
+    else if (arg.containedTarget && (findAscendant(arg.containedTarget, n => n.kind === ts.SyntaxKind.PropertyDeclaration) || findAscendant(arg.containedTarget, n => n.kind === ts.SyntaxKind.VariableDeclaration))) {
       return true
     }
     else {
@@ -55,7 +70,7 @@ export const objectLiteralImplementInterface: CodeFix = {
         const toRemove: Node[] = []
 
         init.getProperties().forEach(prop => {
-          if ((prop as any).getName && !decl.getMembers().find(m => (m as any).getName() === (prop as any).getName())) {// TODO: this doesn't worrk here : TypeGuards.isNameableNode(prop)
+          if ((prop as any).getName && !decl.getMembers().find(m => (m as any).getName() === (prop as any).getName())) {// TypeGuards.isNameableNode(prop) -TODO: this doesn't worrk here : TypeGuards.isNameableNode(prop)
             // if(this.config.addMissingPropertiesToInterface){ // TODO: doesn't work 
             // decl.addProperty({name: prop.getName(), type: prop.getType().getText()})
             // } else {
@@ -70,8 +85,10 @@ export const objectLiteralImplementInterface: CodeFix = {
 
         decl.getMethods().forEach(method => {
           if (!init.getProperty(method.getName())) {
-            init.addMethod({ name: method.getName(), parameters: method.getParameters().map(p=>({name: p.getName(), type: p.getType().getText(), hasQuestionToken: p.hasQuestionToken()})), returnType: method.getReturnType().getText(), 
-              bodyText: 'throw new Error(\'Not Implemented\')' })
+            init.addMethod({
+              name: method.getName(), parameters: method.getParameters().map(p => ({ name: p.getName(), type: p.getType().getText(), hasQuestionToken: p.hasQuestionToken() })), returnType: method.getReturnType().getText(),
+              bodyText: 'throw new Error(\'Not Implemented\')'
+            })
           }
         })
 

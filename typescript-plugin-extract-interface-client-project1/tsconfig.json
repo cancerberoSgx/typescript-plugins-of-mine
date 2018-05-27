@@ -6,11 +6,11 @@
       "es2018"
     ],
     "outDir": "./dist",
-    "strict": false,
+    "strict": true,
     "strictNullChecks": false, 
     "esModuleInterop": true,
     "removeComments": false,
-    "noImplicitAny": false,
+    "noImplicitAny": true,
     "plugins": [
       {
         "name": "typescript-plugin-ast-inspector"

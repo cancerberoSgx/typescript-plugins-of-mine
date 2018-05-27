@@ -31,4 +31,5 @@ export interface CodeFixOptions {
   containingTarget: ts.Node | undefined
   simpleNode?: Node,
   program: ts.Program,
+  sourceFile: ts.SourceFile
 }

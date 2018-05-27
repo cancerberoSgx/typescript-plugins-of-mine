@@ -44,7 +44,6 @@ export const declareClass: CodeFix = {
 
   apply: (arg: CodeFixOptions) => {
     const t0 = now()
-    const sourceFile = arg.containingTarget.getSourceFile()
     const id = arg.simpleNode
     const simpleClassDec = id.getFirstAncestorByKind(ts.SyntaxKind.ClassDeclaration)
     let h: HeritageClause

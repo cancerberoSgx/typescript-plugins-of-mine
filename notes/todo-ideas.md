@@ -79,13 +79,13 @@ Each project has its own TODO but here are some general ones:
  parse it and suggest rename !
 
 * return types - a functon
-* (Difficulty: medium - Usefulness: high).  in case object dont implement interface correctly  suggest to fix the object to mathch the interface:
+* (Difficulty: medium - Usefulness: high). (done) in case object dont implement interface correctly  suggest to fix the object to mathch the interface:
 	"code": "2322",
 	"message": "Type '{ name: string; config: { variableType: string; }; predicate: (arg: PredicateArg) => boolean; des...' is not assignable to type 'CodeFix'.\n  Types of property 'apply' are incompatible.\n    Type '(diag: Diagnostic[], node: Node<Node>, log: any) => void' is not assignable to type '(arg: PredicateArg) => any'.",
  a solutino could be: parsing the mssage and detecting this type "(diag: Diagnostic[], node: Node<Node>, log: any) => void" and replacing it by " (arg: PredicateArg) => any " ? 
 
 
-* (d:l, u: m/h) adding a extra property to an object that implements an interface throw the foloowing error, we should suggest adding that to interface / class...  Q: what about other objects implementing it in the rest of the project
+* (done) (d:l, u: m/h) adding a extra property to an object that implements an interface throw the foloowing error, we should suggest adding that to interface / class...  Q: what about other objects implementing it in the rest of the project
 Type '{ diagnostics: Diagnostic[]; containingTarget: Identifier; log: { (message?: any, ...optionalPara...' is not assignable to type 'PredicateArg'.  Object literal may only specify known properties, and 'program' does not exist in type 'PredicateArg'.
 
 d===l only if we add the new property as any or ugly casting. i think is OK if we give hints, like {..., speed: "aMeasurement FIXME" as any}
@@ -98,15 +98,15 @@ d===l only if we add the new property as any or ugly casting. i think is OK if w
 
 * idea for gui-no-more (text-based-user-interactoin): example for move member . user select a method, a refactor is suggested "cut method foo()". user goes to other file and select a class identifier. a refactor is suggested "paste method foo()". result. method decl is movesd from first class oththe second one (and all its references are updated across the project.)
 
-* variable redefinition - suggest other name and try to apply rename 
+* (d: l, u: m) variable redefinition - suggest other name and try to apply rename 
 
 
-* (d:l, u: l) (done in proactive) ts dont like annon functions : `function(){}` as statements. as expressions is ok "return function(){}" but as statements is wrong: "var i = 0; function(){}; " fix it "adding identifier" - put dummy name
+* (d:l, u: l) (done ) ts dont like annon functions : `function(){}` as statements. as expressions is ok "return function(){}" but as statements is wrong: "var i = 0; function(){}; " fix it "adding identifier" - put dummy name
 	"code": "1003",
   "message": "Identifier expected.",
   
 
-  const = 4     throw the error :    "code": "1134",   "message": "Variable declaration expected.",  add a dummy variable identifier. 
+ * (d: l, u: m) (done) declare undeclared variables: const = 4     throw the error :    "code": "1134",   "message": "Variable declaration expected.",  add a dummy variable identifier. 
 
 
  * refactor to remove all empty new lines in the selection
