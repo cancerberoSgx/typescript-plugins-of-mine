@@ -7,7 +7,8 @@ TypeScript Langauge Service Plugin with several small proactive code refactors t
 * const2let
 * declareClass
 * nameFunction
-* make an object literal implement the interface declared type by adding / removing necessary members
+* make an object literal implement an interface by adding / removing necessary members
+* declare an interface from a return value
 
 and more to come!!
 

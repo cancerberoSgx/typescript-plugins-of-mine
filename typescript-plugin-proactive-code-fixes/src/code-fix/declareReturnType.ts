@@ -11,11 +11,18 @@ function fn<T>(): FNResult<T> {
 */
 
 
+// TODO: members type params (generics) - both in interface and in members and in params.
+// TODO: constructors
+// TODO: getters / setters ? 
+// TODO: test jsdoc
+//TODO: check if diagnostic is in the same position  in predicate
+
 import * as ts from 'typescript';
 import { getKindName } from 'typescript-ast-util';
 import { CodeFix, CodeFixOptions } from '../codeFixes';
 import { VariableDeclarationKind, FunctionDeclaration, TypeGuards, InterfaceDeclarationStructure, MethodSignatureStructure } from 'ts-simple-ast';
 import { now, timeFrom, fromNow } from 'hrtime-now';
+
 
 export const declareReturnType: CodeFix = {
   name: 'declareReturnType',
@@ -23,7 +30,7 @@ export const declareReturnType: CodeFix = {
   predicate: (arg: CodeFixOptions): boolean => {
     if (!arg.diagnostics.find(d => d.code === 2304)) {
       return false
-    }
+    } 
     if (arg.containingTarget.kind === ts.SyntaxKind.Identifier) {
       // in this case user selected a fragment of the id. quick issue fix: 
       if (arg.containedTarget && arg.containedTarget.kind === ts.SyntaxKind.SourceFile) {
@@ -44,7 +51,6 @@ export const declareReturnType: CodeFix = {
   apply: (arg: CodeFixOptions): ts.ApplicableRefactorInfo[] | void => {
     const id = arg.simpleNode
     const decl = arg.simpleNode.getFirstAncestorByKind(ts.SyntaxKind.FunctionDeclaration)
-    // arg.log('declareReturnType apply starts : '+id.getKindName() + ' - '+decl.getKindName())
     const intStruct = fromNow(
       ()=>inferReturnType(decl, arg), 
       t=> arg.log('declareReturnType apply inferReturnType took '+t)
@@ -62,7 +68,7 @@ const inferReturnType = (decl: FunctionDeclaration, arg: CodeFixOptions):Interfa
     (t)=>arg.log('declareReturnType apply inferReturnType createSourceFile took '+t)
   )
   const tmpDecl = tmpSourceFile.getDescendantsOfKind(ts.SyntaxKind.FunctionDeclaration)[0]
-  // const typeargs = tmpDecl.getReturnType().getTypeArguments()
+  const typeargs = tmpDecl.getReturnType().getTypeArguments()
   fromNow(
     ()=>tmpDecl.removeReturnType(), 
     t=>arg.log('declareReturnType apply inferReturnType tmpDecl.removeReturnType() took '+t)
@@ -109,7 +115,7 @@ const inferReturnType = (decl: FunctionDeclaration, arg: CodeFixOptions):Interfa
           }
         })
         .filter(p=>!!p),
-      // typeParameters: typeargs.map(ta => ({ name: ta.getSymbol().getName() })),
+      typeParameters: typeargs.map(ta => ({ name: ta.getSymbol().getName() })),
   }
   arg.log('declareReturnType apply inferReturnType create InterfaceStructure took '+ timeFrom(intStructureT0))
   fromNow(()=>tmpSourceFile.delete(), (t)=>arg.log(`declareReturnType apply inferReturnType tmpSourceFile.delete() took ${t}`))
