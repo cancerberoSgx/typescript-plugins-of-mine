@@ -18,7 +18,8 @@ function fn<T>(): FNResult<T> {
 import * as ts from 'typescript';
 import { getKindName } from 'typescript-ast-util';
 import { CodeFix, CodeFixOptions } from '../codeFixes';
-import { VariableDeclarationKind, FunctionDeclaration, TypeGuards } from 'ts-simple-ast';
+import { VariableDeclarationKind, FunctionDeclaration, TypeGuards, InterfaceDeclarationStructure, MethodSignatureStructure } from 'ts-simple-ast';
+import { now, timeFrom, fromNow } from 'hrtime-now';
 
 export const declareReturnType: CodeFix = {
   name: 'declareReturnType',
@@ -43,22 +44,20 @@ export const declareReturnType: CodeFix = {
       return false
     }
   },
-
   description: (arg: CodeFixOptions): string => `Declare Type "${arg.containingTarget.getText()}" interring from return value`,
-
   apply: (arg: CodeFixOptions): ts.ApplicableRefactorInfo[] | void => {
     const id = arg.simpleNode
     const decl = arg.simpleNode.getFirstAncestorByKind(ts.SyntaxKind.FunctionDeclaration)
     arg.log('declareReturnType apply starts : '+id.getKindName() + ' - '+decl.getKindName())
-    const intStruct = inferReturnType(decl, arg)
-    arg.log('declareReturnType apply interface structure: '+intStruct)
+    const t0 = now()
+    const intStruct = fromNow(()=>inferReturnType(decl, arg), (t)=> arg.log('declareReturnType apply inferReturnType took '+t))
     arg.simpleNode.getSourceFile().addInterface(intStruct)
   }
 
 }
 
 
-const inferReturnType = (decl: FunctionDeclaration, arg: CodeFixOptions) => {
+const inferReturnType = (decl: FunctionDeclaration, arg: CodeFixOptions):InterfaceDeclarationStructure => {
   const project = arg.simpleProject
   const tmpSourceFile = project.createSourceFile('tmp2.ts', decl.getText() + '; const tmp = ' + decl.getName() + '()')
   const tmpDecl = tmpSourceFile.getDescendantsOfKind(ts.SyntaxKind.FunctionDeclaration)[0]
@@ -69,26 +68,40 @@ const inferReturnType = (decl: FunctionDeclaration, arg: CodeFixOptions) => {
   const intStructure = {
     name: decl.getReturnTypeNode().getText(),
     properties: type.getProperties()
-      .filter(p => { const v = p.getValueDeclaration(); return TypeGuards.isPropertyAssignment(v) && !v.getInitializer().getKindName().includes('Function') })
+      .filter(p => { 
+        const v = p.getValueDeclaration(); 
+        return TypeGuards.isPropertyAssignment(v) && !v.getInitializer().getKindName().includes('Function') 
+      })
       .map(p => ({
         name: p.getName(),
         type: project.getTypeChecker().getTypeAtLocation(p.getValueDeclaration()).getText(),
         val: p.getValueDeclaration()
       })),
-    methods: type.getProperties()
-      .filter(p => { const v = p.getValueDeclaration(); return TypeGuards.isPropertyAssignment(v) && v.getInitializer().getKindName().includes('Function') })
-      .map(p => ({
-        name: p.getName(),
-        returnType: project.getTypeChecker().getTypeAtLocation(p.getValueDeclaration()).getText(),
-        parameters: ((p) => {
-          const v = p.getValueDeclaration();
-          if (!TypeGuards.isPropertyAssignment(v)) { return [] };
-          const init = v.getInitializer();
-          if (!TypeGuards.isFunctionLikeDeclaration(init)) { return [] };
-          return init.getParameters().map(pa => ({ name: pa.getName(), type: pa.getType().getText() }))
-        })(p)
-      })),
-    typeParameters: typeargs.map(ta => ({ name: ta.getSymbol().getName() })),
+      methods: type.getProperties()
+        .filter(p => {
+          const v = p.getValueDeclaration(); 
+          return TypeGuards.isPropertyAssignment(v) && v.getInitializer().getKindName().includes('Function') 
+        })
+        .map(p => {
+          const v = p.getValueDeclaration()
+          if (!TypeGuards.isPropertyAssignment(v)) { 
+            return null
+          }
+          const init = v.getInitializer()
+          if (!TypeGuards.isArrowFunction(init) && !TypeGuards.isFunctionExpression(init)) {
+            return null
+          }          
+          return {
+            name: p.getName(),
+            returnType: init.getReturnType() ? init.getReturnType().getText():  'any',
+            parameters: init.getParameters().map(pa => ({
+              name: pa.getName(), 
+              type: pa.getType().getText() 
+            }))
+          }
+        })
+        .filter(p=>!!p),
+      typeParameters: typeargs.map(ta => ({ name: ta.getSymbol().getName() })),
   }
   tmpSourceFile.delete()
   return intStructure

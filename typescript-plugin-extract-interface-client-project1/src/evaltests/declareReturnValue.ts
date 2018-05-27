@@ -8,7 +8,7 @@ const h = () => HResult{
   return { a: 1, b: 's', log: (msg) => boolean, kill: function() { return 1 }}
 }
 function fn<T>(): FNResult<T> {
-  return { a: 1, b: 's', log: (msg) => boolean, kill: function <T>() { return 1 } }
+  return { a: 1, b: 's', log: (msg:string) =>{return Math.random()>0.1?true:'foo'}, kill: function <T>() { return 1 } }
 } 
  
 
@@ -31,7 +31,7 @@ const h = () => HResult{
   return { a: 1, b: 's', log: (msg) => boolean, kill: function() { return 1 }}
 }
 function fn<T>(): FNResult<T> {
-  return { a: 1, b: 's', log: (msg) => boolean, kill: function <T>() { return 1 } }
+  return { a: 1, b: 's', log: (msg:string) {return Math.random()>0.1?true:'foo'}, kill: function <T>() { return 1 } }
 }
 `)
   const currentPosDiag = sourceFile.getPreEmitDiagnostics().find(d => d.getCode() == 2304 && d.getStart() <= position && d.getStart() + d.getLength() >= position)
@@ -43,7 +43,8 @@ function fn<T>(): FNResult<T> {
     const typeargs = tmpDecl.getReturnType().getTypeArguments()
     tmpDecl.removeReturnType()
     const tmp = tmpSourceFile.getFirstDescendantByKind(ts.SyntaxKind.VariableDeclaration)
-    const type = project.getTypeChecker().getTypeAtLocation(tmp)//.getApparentProperties().map(p=>p.getName()).join(',')//.getText()
+    const type = project.getTypeChecker().getTypeAtLocation(tmp)
+    print('tp: '+tmp.getText() + 'ssss+***'+type.getText())
     const intStructure = {
       name: decl.getReturnTypeNode().getText(),
       properties: type.getProperties()
@@ -54,25 +55,32 @@ function fn<T>(): FNResult<T> {
           val: p.getValueDeclaration()
         })),
       methods: type.getProperties()
-        .filter(p => { const v = p.getValueDeclaration(); return TypeGuards.isPropertyAssignment(v) && v.getInitializer().getKindName().includes('Function') })
-        .map(p => ({
-          name: p.getName(),
-          returnType: project.getTypeChecker().getTypeAtLocation(p.getValueDeclaration()).getText(),
-          parameters: ((p) => {
-            const v = p.getValueDeclaration();
-            if (!TypeGuards.isPropertyAssignment(v)) { return [] };
-            const init = v.getInitializer();
-            if (!TypeGuards.isFunctionLikeDeclaration(init)) { return [] };
-            return init.getParameters().map(pa => ({ name: pa.getName(), type: pa.getType().getText() }))
-          })(p)
-        })),
-      typeParameters: typeargs.map(ta => ({ name: ta.getSymbol().getName() })),
+        .filter(p => { 
+          const v = p.getValueDeclaration(); 
+          return TypeGuards.isPropertyAssignment(v) && v.getInitializer().getKindName().includes('Function') 
+        })
+        .map(p => {
+          const v = p.getValueDeclaration()
+          if (!TypeGuards.isPropertyAssignment(v)) { 
+            return [] 
+          }
+          const init = v.getInitializer()
+          if (!TypeGuards.isArrowFunction(init) && !TypeGuards.isFunctionExpression(init)) { 
+            return [] 
+          }          
+          return {
+            name: p.getName(),
+            returnType: init.getReturnType() ? init.getReturnType().getText():  'any',
+            parameters: init.getParameters().map(pa => ({
+              name: pa.getName(), 
+              type: pa.getType().getText() 
+            }))
+          }
+        }),
+      typeParameters: typeargs.map(ta => ({ 
+        name: ta.getSymbol().getName() 
+      })),
     }
-    // tmpSourceFile.addInterface({
-    //   name: 'sjs',
-    //   methods: [{ name: 'sjs', returnType: ' ', typeParameters: [{ name: 'T' }], parameters: [{ name: 's', type: 'string', hasQuestionToken: true }] }],
-    //   typeParameters: typeargs.map(ta => ({ name: ta.getSymbol().getName() })),
-    // })
     tmpSourceFile.delete()
     return intStructure
   }
@@ -83,56 +91,3 @@ function fn<T>(): FNResult<T> {
   print(sourceFile.getText())
 
 }
-
-/***@
-
-
-  const program = c.info.languageService.getProgram()
-  const position = c.util.positionOrRangeToNumber(c.positionOrRange)
-  const sourceFile = c.node.getSourceFile()
-  const containingTarget = c.util.findChildContainingRange(sourceFile,c.util.positionOrRangeToRange(position))
-  const containedTarget = c.util.findChildContainedRange(sourceFile,c.util.positionOrRangeToRange(position))
-  c.print(position+ ' - '+c.util.getKindName(containingTarget) + ' - '+c.util.getKindName(containedTarget))
-
-@***/
-
-
-
-
-  // if(!TypeGuards.isFunctionDeclaration(decl)){
-  //   print(`exiting: ${TypeGuards.isFunctionDeclaration(decl)}`)
-  //   return
-  // }
-
-  // project.getTypeChecker().getApparentType(decl.getReturnType())
-  // decl.getReturnType()
-  // if(!TypeGuards.isIdentifier(node)){
-  //   return print('exiting not identifier')
-  // }
-  // node.getDefinitionNodes().map(d=>d.getText())
-
-  // print(`${node.getKindName()} - ${node.getText()} - ${project.getTypeChecker().getApparentType(decl.getReturnType()).getText()}`)
-  // const tmpSourceFile = project.createSourceFile('tmp2.ts',  decl.getText()+'; const tmp = '+decl.getName()+'()')
-  // const tmpDecl = tmpSourceFile.getDescendantsOfKind(ts.SyntaxKind.FunctionDeclaration)[0]
-  // tmpDecl.removeReturnType()
-  // const tmp = tmpSourceFile.getFirstDescendantByKind(ts.SyntaxKind.VariableDeclaration)
-  // print(tmp.getKindName() +' - '+project.getTypeChecker().getTypeAtLocation(tmp).getText() + '**** - '+tmpSourceFile.getText())
-  // tmpSourceFile.delete()
-
-
-
-
-  // const program2 = c.info.languageService.getProgram()
-  // const sourceFile2 =program2.getSourceFile(c.fileName)
-  // program2.getDeclarationDiagnostics().map(d=>d.messageText).join(', ')
-  // print( 'mss: '+program2.getSemanticDiagnostics().filter(d=>d.file===sourceFile2).map(d=>d.messageText).join(', '))
-  // const containingTarget = c.util.findChildContainingRange(sourceFile2,c.util.positionOrRangeToRange(position))
-
-  // const predicate2355 = (program2, sourceFile2,containingTarget)=>{
-  //   const diagCorrect = program2.getSemanticDiagnostics().filter(d=>d.file===sourceFile2 && d.code===2304 && d.start<= containingTarget.getStart()&& d.start+d.length>=containingTarget.getEnd())
-  //   // const nodeCorrect = containingTarget.kind==ts.SyntaxKind.TypeReference|| containingTarget.kind==ts.SyntaxKind.FunctionDeclaration || findAscendant(containingTarget, t=> t.kind==ts.SyntaxKind.TypeReference|| t.kind==ts.SyntaxKind.FunctionDeclaration)
-  //   return !!diagCorrect//&& !!nodeCorrect
-  // }
-  // print('predicate2355: '+predicate2355(program2, sourceFile2, containingTarget))
-  // const containedTarget = c.util.findChildContainedRange(sourceFile2,c.util.positionOrRangeToRange(position))
-  // print(`${getKindName(containingTarget)} - ${containingTarget.getText()} -${getKindName(containingTarget.parent)} ${getKindName(containingTarget.parent.parent)}`)etKindName(containingTarget.parent)} ${getKindName(containingTarget.parent.parent)}`)
