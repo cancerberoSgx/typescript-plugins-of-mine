@@ -101,7 +101,7 @@ d===l only if we add the new property as any or ugly casting. i think is OK if w
 * variable redefinition - suggest other name and try to apply rename 
 
 
-* ts dont like annon functions : `function(){}` as statements. as expressions is ok "return function(){}" but as statements is wrong: "var i = 0; function(){}; " fix it "adding identifier" - put dummy name
+* (d:l, u: l) (done in proactive) ts dont like annon functions : `function(){}` as statements. as expressions is ok "return function(){}" but as statements is wrong: "var i = 0; function(){}; " fix it "adding identifier" - put dummy name
 	"code": "1003",
   "message": "Identifier expected.",
   

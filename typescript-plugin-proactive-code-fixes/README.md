@@ -1,11 +1,15 @@
 # typescript-plugin-proactive-code-fixes
 
-TypeScript Langauge Service Plugin with several small proactive code refactors like creating constructor when a non existent one is invoked, declaring a variable or class when non existent one is defined, etc. Right now: 
+TypeScript Langauge Service Plugin with several small proactive code refactors to solve errors (diagnostics) like creating constructor when a non existent one is invoked, declaring a variable or class when non existent one is defined, reassigning a const, etc. The tool is based both on the context of the user and on the current diagnostic error in that line. Right now: 
 
-* create variable
-* create constructor
+* create variable (when assigning non declared variable)
+* create constructor (when calling new A(a,b) on a class that doesn't have that constructor )
+* const2let
+* declareClass
+* nameFunction
+* make an object literal implement the interface declared type by adding / removing necessary members
 
-but more to come!!
+and more to come!!
 
 
 # Demo

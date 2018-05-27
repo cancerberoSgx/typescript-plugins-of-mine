@@ -84,7 +84,10 @@ function toEval() {
 // use this code to get the user's selection position to hardcode in the code above, just select
 part of "let" nad activate refactor "eval code in comments"
 
-const program = c.info.languageService.getProgram() const position =
-c.util.positionOrRangeToNumber(c.positionOrRange) c.print(position)
+const program = c.info.languageService.getProgram() 
+
+const position = c.util.positionOrRangeToNumber(c.positionOrRange) 
+
+c.print(position)
 
 @***/

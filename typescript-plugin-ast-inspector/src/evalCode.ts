@@ -17,12 +17,14 @@
 import { readFileSync } from 'fs';
 import { now, timeFrom } from 'hrtime-now';
 import * as sts from 'ts-simple-ast';
-import { Node } from 'ts-simple-ast';
+import SimpleProjectConstructor from 'ts-simple-ast'
+import { Node } from 'ts-simple-ast' ;
 import * as ts from 'typescript';
 import * as ts_module from 'typescript/lib/tsserverlibrary';
 import { EvalContextUtil, EvalContextUtilImpl } from './evalCodeContextUtil';
 import { matchGlobalRegexWithGroupIndex } from './regex-groups-index';
 import { EventEmitter } from 'events';
+import { TypeOfExpression } from 'typescript/lib/tsserverlibrary';
 
 export const EVAL_CODE_IN_COMMENTS_REFACTOR_ACTION_NAME = `plugin-ast-inspector-eval-code-in-comments`
 export const EVAL_SELECTION_REFACTOR_ACTION_NAME = `plugin-ast-inspector-eval-selection`
@@ -34,6 +36,7 @@ export interface EvalContext {
   ts: typeof ts
   /** this is the whole ts-simple-ast namespace as imported with `import * as sts from 'ts-simple-ast'`. We are providing it as an utility because is much more high level than native typescript - you choose if you want ot work with it or not. */
   tsa: typeof sts
+  SimpleProjectConstructor: typeof SimpleProjectConstructor
   /** The user selected or where his cursor is when he activated this refactor. It will be never undefined - at least it will be the SourceFile. The type is ts-simple-ast Node.  */
   node: Node
   /** use it like console log to put debug strings that then will be printed back in the document */
@@ -71,6 +74,7 @@ let _printed = []
 class EvalContextImpl implements EvalContext {
   ts = ts
   tsa = sts
+  SimpleProjectConstructor= SimpleProjectConstructor
   info: ts_module.server.PluginCreateInfo
   fileName: string
   formatOptions: ts.FormatCodeSettings

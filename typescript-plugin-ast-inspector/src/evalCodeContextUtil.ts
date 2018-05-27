@@ -1,7 +1,7 @@
 import * as assert from 'assert';
 import { Node } from "ts-simple-ast";
 import * as ts from 'typescript';
-import { dumpAst, dumpNode, dumpNodes, filterChildren, findAscendant, findChild, findChildContainingPosition, findChildContainingRange, getAscendants, getDiagnosticsInCurrentLocation, getKindName, positionOrRangeToNumber, positionOrRangeToRange } from "typescript-ast-util";
+import { dumpAst, dumpNode, dumpNodes, filterChildren, findAscendant, findChild, findChildContainingPosition, findChildContainingRange, getAscendants, getDiagnosticsInCurrentLocation, getKindName, positionOrRangeToNumber, positionOrRangeToRange, findChildContainedRange } from "typescript-ast-util";
 import { EventEmitter } from 'events';
 
 
@@ -16,6 +16,7 @@ export interface EvalContextUtil {
   nodeAtCursor: typeof findChildContainingPosition
   getDiagnosticsInCurrentLocation: typeof getDiagnosticsInCurrentLocation
   findChildContainingPosition: typeof findChildContainingPosition
+  findChildContainedRange: typeof findChildContainedRange
   getKindName: typeof getKindName
   findAscendant: typeof findAscendant
   filterChildren: typeof filterChildren
@@ -27,16 +28,10 @@ export interface EvalContextUtil {
   printNodes: typeof dumpNodes
   /** so we are able to cast in JavaScript at least for not showing errors so typechecking for other stuff don't screw up  */
   asAny: (obj: any) => any
-  // hostEmitter:  EventEmitter
-  // guestEmitter:  EventEmitter
 }
 
 
 export class EvalContextUtilImpl implements EvalContextUtil {
-  constructor(){
-    // this.hostEmitter = (global as any).hostEmitter
-    // this.guestEmitter = (global as any). guestEmitter 
-  }
   printAst(node: Node | ts.Node, getChildrenMode: boolean = false): string {
     return dumpAst((node as any).compilerNode || node, getChildrenMode)
   }
@@ -46,6 +41,7 @@ export class EvalContextUtilImpl implements EvalContextUtil {
   positionOrRangeToNumber = positionOrRangeToNumber
   findChildContainingRange = findChildContainingRange
   findChildContainingPosition = findChildContainingPosition
+  findChildContainedRange = findChildContainedRange
   nodeAtCursor = findChildContainingPosition
   getDiagnosticsInCurrentLocation = getDiagnosticsInCurrentLocation
   getKindName = getKindName
@@ -60,7 +56,3 @@ export class EvalContextUtilImpl implements EvalContextUtil {
   asAny(obj: any): any { return obj as any }
 }
 
-
-// // what's these horrible things :  because I want other plugins to emit events globally so evalCode & cia can get this info and show it / simulate it to the editor's user
-// (global as any).guestEmitter = new EventEmitter();
-// (global as any).hostEmitter = new EventEmitter();
