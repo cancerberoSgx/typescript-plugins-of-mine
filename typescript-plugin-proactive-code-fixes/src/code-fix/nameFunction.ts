@@ -15,11 +15,11 @@ export const nameFunction: CodeFix = {
     if (!arg.diagnostics.find(d => d.code === 1003)) {
       return false
     }
-    if (ts.isFunctionDeclaration(arg.containingTarget) && (!arg.containingTarget.name || !arg.containingTarget.name.getText()) || (arg.containedTarget && ts.isFunctionDeclaration(arg.containedTarget.parent) && (!arg.containedTarget.parent.name || !arg.containedTarget.parent.name.getText()))) {
+    if (arg.containingTarget && ts.isFunctionDeclaration(arg.containingTarget) && (!arg.containingTarget.name || !arg.containingTarget.name.getText()) || (arg.containedTarget && arg.containedTarget.parent &&ts.isFunctionDeclaration(arg.containedTarget.parent) && (!arg.containedTarget.parent.name || !arg.containedTarget.parent.name.getText()))) {
       return true
     }
     else {
-      arg.log(`nameFunction predicate false because ${getKindName(arg.containingTarget)}  ${getKindName(arg.containedTarget)} ${getKindName(arg.containedTarget.parent)} ${getKindName(arg.containedTarget.parent.parent)} is not FunctionDeclaration or has name`)
+      arg.log(`nameFunction predicate false because ${arg.containingTarget && getKindName(arg.containingTarget)}  ${arg.containedTarget && getKindName(arg.containedTarget)} ${arg.containedTarget.parent && getKindName(arg.containedTarget.parent)} ${arg.containedTarget && arg.containedTarget.parent && arg.containedTarget.parent.parent && arg.containedTarget.parent.parent && getKindName(arg.containedTarget.parent.parent)} is not FunctionDeclaration or has name`)
       return false
     }
   },

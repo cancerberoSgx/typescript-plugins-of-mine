@@ -1,13 +1,15 @@
 
-function ghghg(t?: boolean[]):string[]|number{
+function ghghg(t?: boolean[]): string[] | number {
   console.log('forgot to return')
+  return null;
 }
-const other = (a:string):number=>{
-  var c = a+5
+const other = (a: string): number => {
+
+  return null;
 }
 //"code": "2355",	"message": "A function whose declared type is neither 'void' nor 'any' must return a value.",
-
-
+import {forgotttt} from './forgottenExport'
+forgotttt.method1()
 import { EvalContext } from 'typescript-plugin-ast-inspector';
 declare const c: EvalContext;
 
@@ -24,13 +26,15 @@ const other = (a:string):number=>{
   var c = a+5
 }
 `)
+print(c.info.project.getProjectVersion()+' - version')
+// print(' - version'+c.info.project.getScriptSnapshot(c.fileName).getChangeRange())
   const node = sourceFile.getDescendantAtPos(position)
   const funcDecl = node.getFirstAncestorByKind(ts.SyntaxKind.FunctionDeclaration)
-  if(funcDecl){
+  if (funcDecl) {
     funcDecl.addStatements('return null;')
   }
   const arrowDecl = node.getFirstAncestorByKind(ts.SyntaxKind.ArrowFunction)
-  if(arrowDecl){
+  if (arrowDecl) {
     arrowDecl.addStatements('return null;')
   }
   print(`${sourceFile.getText()} `)

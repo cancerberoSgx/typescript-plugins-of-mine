@@ -5,12 +5,12 @@ TypeScript Langauge Service Plugin with several small proactive code refactors t
 * create variable (when assigning non declared variable)
 * create constructor (when calling new A(a,b) on a class that doesn't have that constructor )
 * const2let
-* declareClass
-* nameFunction
+* declare Class or interface 
+* name unnamed function declarations
 * make an object literal implement an interface by adding / removing necessary members
 * declare an interface from a return value
-* declaremember - complements the code fix alreayd existing in typescript to fullfill all cases. declaring missing properties / methods 
-* add return statement
+* declare member - complements the code fix already existing in typescript to fullfill all cases. declaring missing properties / methods 
+* add missing return statement
 
 and more to come!!
 
@@ -51,6 +51,7 @@ Make sure you have installed typescript in your project (`npm i --save-dev types
 
 # TODO
 
+ * Performance - getAppRefactors is taking almost  sec. Make a generic predicate with cache (get which diags are in current position and cache it - make a generic predicate since almost all use the same thign)
  * apply all quick fixes in this file ! define a mechanism of priorities when two or more fixes attach the same position.
  * perhaps we could just recreate the simple-ast sourcefile instead of the whole project 
  * use getcodefixes instead of refactors

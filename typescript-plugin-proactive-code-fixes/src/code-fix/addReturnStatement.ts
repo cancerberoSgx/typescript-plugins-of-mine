@@ -7,6 +7,8 @@ Attacks this problem:
 import * as ts from 'typescript';
 import { getKindName } from 'typescript-ast-util';
 import { CodeFix, CodeFixOptions } from '../codeFixes';
+import { Statement } from '../../../typescript-ast-util/node_modules/typescript/lib/tsserverlibrary';
+import { Block, SourceFile, TypeGuards, StatementedNode, Node } from 'ts-simple-ast';
 
 export const addReturnStatement: CodeFix = {
   name: 'addReturnStatement',
@@ -26,15 +28,24 @@ export const addReturnStatement: CodeFix = {
       return false
     }
   },
+
   description: (arg: CodeFixOptions): string => `Add return statement?`,
+
   apply: (arg: CodeFixOptions): ts.ApplicableRefactorInfo[] | void => {
-    const funcDecl = arg.simpleNode.getFirstAncestorByKind(ts.SyntaxKind.FunctionDeclaration)
-    if (funcDecl) {
-      funcDecl.addStatements('return null;')
+    const firstStatementedNode = arg.simpleNode.getAncestors().find(TypeGuards.isStatementedNode)
+    if(firstStatementedNode){
+      addReturnStatementImpl(arg.simpleNode.getSourceFile(), firstStatementedNode)
     }
-    const arrowDecl = arg.simpleNode.getFirstAncestorByKind(ts.SyntaxKind.ArrowFunction)
-    if (arrowDecl) {
-      arrowDecl.addStatements('return null;')
-    }
+  }
+}
+
+function addReturnStatementImpl(sourceFile: SourceFile, node: StatementedNode&Node){
+  const statements = node.getStatements()
+  // methodDecl.addStatements('return null;')  // this fails (  https://github.com/dsherret/ts-ast-viewer/issues/20)so we hack: 
+  if(statements.length){
+    sourceFile.insertText(statements[statements.length-1].getEnd(), '\nreturn null;')
+  }  
+  else{
+    sourceFile.insertText(node.getEnd()-1, '\nreturn null;\n')
   }
 }

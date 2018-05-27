@@ -27,6 +27,7 @@
     "typescript-plugin-move-declaration": "file:../typescript-plugin-move-declaration",
     "typescript-plugin-proactive-code-fixes": "file:../typescript-plugin-proactive-code-fixes",
     "typescript-plugin-postfix": "file:../typescript-plugin-postfix",
+    "typescript-plugin-method-delegate": "file:../typescript-plugin-method-delegate",
     "typescript": "^2.8.3"
   }
 }

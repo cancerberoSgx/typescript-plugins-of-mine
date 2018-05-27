@@ -25,7 +25,7 @@ Each project has its own TODO but here are some general ones:
 * move method to other class (complicated - move interfaces also or classes hierarchy!)
 * (done) add explicit type: select an identifier without explicit type - a refactor add its type based on the inferred one. (done)
 
-* (d:l,u:m) return type not compatible with actual hierarchy fix declared return types	"code": "2355",	"message": "A function whose declared type is neither 'void' nor 'any' must return a value.", in that error add return undefined statement
+* (d:l,u:m) (done) return type not compatible with actual hierarchy fix declared return types	"code": "2355",	"message": "A function whose declared type is neither 'void' nor 'any' must return a value.", in that error add return undefined statement
 
 * agile dev - codegen - https://github.com/Microsoft/TypeScript/issues/10139
 // IDEA ast-inspector enhancement : other action that prints nodeAtCursor.arent.parent.arent to the top so I know where I'm standings
@@ -47,6 +47,8 @@ Each project has its own TODO but here are some general ones:
 
  * add braces to arrow funcs -related: https://github.com/Microsoft/TypeScript/issues/23299 (others did this)
  
+ * fix signature of implementation methods and members in general: 	"code": "2416",  "message": "Property 'method1' in type 'A' is not assignable to the same property in base type 'IA'.\n  Type '() => void' is not assignable to type '() => string'.\n    Type 'void' is not assignable to type 'string'.",
+ 
  * easy ideas here : https://marketplace.visualstudio.com/items?itemName=krizzdewizz.refactorix
  
  * good ideas for js : https://github.com/xsburg/vscode-javascript-booster - interesting using babel to parse typescript
@@ -57,7 +59,7 @@ Each project has its own TODO but here are some general ones:
 
  * (d:low, u: medium)   wrapp selection with comment for f(a, b/*, c*/)
 
- * (d:low, u: medium) forgotten this. reasign const variable error - transform it to let
+ * (d:low, u: medium) (typescript already do it)forgotten this. reasign const variable error - transform it to let
 
  * https://github.com/Microsoft/TypeScript/issues/20331
  quick fix for " Parameter 'config' of constructor from exported class has or is using private name 'ToolConfig'." - add export to the private decl
