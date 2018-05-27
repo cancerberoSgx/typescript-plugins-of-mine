@@ -2,30 +2,49 @@
 // in typescript and the plugin will suggest fixing it by just putting a dummy name. The
 // following snippet shows that :
 
-// function(a: number):[number]{ return [Math.PI*a/2]}
-
+function(a: number): [number] { return [Math.PI * a / 2] }
 
 import { EvalContext } from 'typescript-plugin-ast-inspector'
 declare const c: EvalContext
 
-// the following is the snippets to be evaluated. Again, make sure is valid JavaScript!
+function fixUnnamedFunction() {
+  const print = c.print, findAscendant = c.util.findAscendant, getKindName = c.util.getKindName, positionOrRangeToNumber = c.util.positionOrRangeToNumber, findChildContainingPosition = c.util.findChildContainingPosition, ts = c.ts
+  const program = c.info.languageService.getProgram()
+  const sourceFile = program.getSourceFile(c.fileName)
+  // first a test to obtain the compilation errors and see their structure: 
+  const diagnostics = program.getSyntacticDiagnostics()
+  // c.print(JSON.stringify(diagnostics.map(d => ({ code: d.code, start: d.start, length: d.length, messageText: d.messageText }))))
+  // lets find the diagnostic contained by the user's selection
+  // diagnostics.find
 
-// First thing in a plugin is decide if a predicate should be suggested to the user for a given cursor
-// position in the source file: 
-const program = c.info.languageService.getProgram()
-const sourceFile = program.getSourceFile(c.fileName)
-const position = c.util.positionOrRangeToNumber(c.positionOrRange)
+  c.positionOrRange = 243
+  const position = positionOrRangeToNumber(c.positionOrRange)
+  const node = findChildContainingPosition(sourceFile, position)
+  const funcDecl = ts.isFunctionDeclaration(node) ? node : findAscendant(node, ts.isFunctionDeclaration)
 
-// first a test to obtain the compilation errors and see their structure: 
-const diagnostics = program.getSyntacticDiagnostics()
-c.print(JSON.stringify(diagnostics.map(d=>({code: d.code, start: d.start, length: d.length,messageText: d.messageText})) ))
-// lets find the diagnostic contained by the user's selection
-diagnostics.find
+  if (!ts.isFunctionDeclaration(funcDecl)) {
+    return print('Function Declaration not found in selected position')
+  }
 
-const node = c.util.findChildContainingPosition(sourceFile, position)
-c.print(node.getFullStart()+' - '+node.getFullWidth())
+  const transformFactory = (context) => rootNode => {
+    const visit = (node) => {
+      node = ts.visitEachChild(node, visit, context)
+      if (ts.isFunctionDeclaration(node) && (!node.name || !node.name.escapedText)) {
+        const clone = ts.getMutableClone(node)
+        clone.name = ts.createIdentifier('unnamedFunc')
+        return clone
+      }
+      return node
+    }
+    return ts.visitNode(rootNode, visit)
+  }
 
-
+  const tranformationResult = ts.transform(sourceFile, [transformFactory], program.getCompilerOptions())
+  const result =  ts.createPrinter().printNode(ts.EmitHint.Unspecified, tranformationResult.transformed[0], sourceFile);
+  const transformedFile =  ts.createSourceFile("transformedFile.ts", result, ts.ScriptTarget.Latest, true, ts.ScriptKind.TS);
+  const func = c.util.findChild(transformedFile, c=>ts.isFunctionDeclaration(c)&&c.name&&c.name.escapedText==='unnamedFunc')
+  print(func.getText())
+}
 
 
 /***@ 

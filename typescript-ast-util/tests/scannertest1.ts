@@ -1,12 +1,10 @@
 import * as ts from 'typescript'
-import {getKindName} from '../src'
-const print = console.log
 
 const scanner = ts.createScanner(ts.ScriptTarget.Latest,  true);
 function initializeState(text: string) {
   scanner.setText(text);
   scanner.setOnError((message: ts.DiagnosticMessage, length: number) => {
-    print('Error: '+message);
+    console.log('Error: '+message);
   });
   scanner.setScriptTarget(ts.ScriptTarget.ES5);
   scanner.setLanguageVariant(ts.LanguageVariant.Standard);
@@ -14,6 +12,10 @@ function initializeState(text: string) {
 initializeState('var foo = 123;'.trim());
 var token = scanner.scan();
 while (token != ts.SyntaxKind.EndOfFileToken) {
-  print( getKindName(token));
+  console.log( getKindName(token));
   token = scanner.scan();
 }
+
+export function getKindName(kind: ts.SyntaxKind) {
+  return (<any>ts).SyntaxKind[kind];
+} 

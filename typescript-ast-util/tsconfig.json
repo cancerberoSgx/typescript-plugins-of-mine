@@ -12,6 +12,6 @@
     "sourceMap": true
   },
   "include": [
-    "src", "spec", "test"
+    "src", "spec", "tests"
   ]
 }

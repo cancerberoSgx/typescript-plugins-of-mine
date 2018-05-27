@@ -8,7 +8,7 @@ function f( a: {done: (y: number)=>void}): void {
 }
 
 
-/***@ 
+/* **@ 
 c.print(`
 Selected node by user is the ${c.node.getKindName()} "${c.node.getText()}" and its parent's 
 text is the ${c.node.getParent().getKindName()}  "${c.node.getParent().getText()}"
@@ -16,7 +16,7 @@ text is the ${c.node.getParent().getKindName()}  "${c.node.getParent().getText()
 The AST structure of this file:  
 ${c.util.printAst(c.node.getSourceFile())}
 `)
-@***/
+@***/ 
 
 
 /***@ 

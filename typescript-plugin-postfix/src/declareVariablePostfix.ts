@@ -1,82 +1,80 @@
-import { Postfix, PostfixConfig, PostfixPredicateOptions, PostfixExecuteOptions } from "./types";
-import * as ts from 'typescript'
-import { findChild, getKindName, findAscendant } from "typescript-ast-util";
-
+import * as ts from 'typescript';
+import { findAscendant, findChild, getKindName } from "typescript-ast-util";
+import { Postfix, PostfixConfig, PostfixExecuteOptions, PostfixPredicateOptions } from "./types";
 
 export class DeclareVariablePostfixConfig implements PostfixConfig {
-  constructor(name: string, type: 'const'|'let'|'var'){
-    this.type=type
+  constructor(name: string, type: 'const' | 'let' | 'var') {
     this.name = name
+    this.type = type
   }
   name: string
   kind: ts.ScriptElementKind = ts.ScriptElementKind.unknown
-  kindModifiers: string;
-  sortText: string;
-  insertText?: string;
-  replacementSpan?: ts.TextSpan;
-  hasAction?: true;
-  source?: string;
-  isRecommended?: true;
-  /** declared variable keyword */
-  type: 'const'|'let'|'var'
-  // /** 
-  //  * if zero won't match any thing, 1 means the closest expression. 
-  //  * Use a big number like 100 to match the most outer / big expression
-  //  */
-  // matchExpressionLevel: number  // TODO: now we only match the outer more bigger one.
-} 
+  kindModifiers: string
+  sortText: string
+  insertText?: string
+  replacementSpan?: ts.TextSpan
+  hasAction?: true
+  source?: string
+  isRecommended?: true
+  type: 'const' | 'let' | 'var'
+}
 
-const isExpression = node => getKindName(node).endsWith('Expression') || 
-  node.kind === ts.SyntaxKind.Identifier || 
-  getKindName(node).endsWith('Literal')
+const isExpression = node => getKindName(node).endsWith('Expression') || node.kind === ts.SyntaxKind.Identifier || getKindName(node).endsWith('Literal')
 const isNotExpression = node => !isExpression(node)
 const isBlock = node => getKindName(node).endsWith('Block') || node.kind === ts.SyntaxKind.SourceFile
 const isStatement = node => getKindName(node).endsWith('Statement')
 
 export class DeclareVariablePostFix implements Postfix {
-  target: ts.Node;
+  target: ts.Node
   name: 'Variable Declaration'
   description: 'Adds a variable declaration when user start typing `.const`, `.let` or `var`'
 
-  constructor(public config: DeclareVariablePostfixConfig){ }
+  constructor(public config: DeclareVariablePostfixConfig) { }
 
-  completion():string{
-    return this.config.type
-  }
-  predicate(opts: PostfixPredicateOptions): boolean{
-    
-    return true // default completion trigger with dot is fine for us dont need any customization here
+  predicate(opts: PostfixPredicateOptions): boolean {
+    return true
   }
 
-  execute(opts: PostfixExecuteOptions) : string{
-    const {program, fileName,  position, target} = opts;
+  execute(opts: PostfixExecuteOptions): string {
+    const { program, fileName, position, target, log } = opts
     const sourceFile = program.getSourceFile(fileName)
-  
-    // Then we want to locate the target expression that will be declared as variable. here we  assume 
-    // that the user wants to declare the toper one as variable (targetExpression):
-    const targetExpression = findChild(findAscendant(target, isNotExpression), isExpression)
-  
-    // we first find a node that can contain our variable declaration and its children statement right
-    // before which we will add our declaration (the container is a Block so we are sure its children
-    // are wrapped has curly braces. Both are the next nodes:
-    const statementContainer = findAscendant(targetExpression, isBlock)
-    const declarationNextSibling = findChild(statementContainer, isStatement)
 
-    
+    // the target expression that will be declared as variable. 
+    const targetExpression = findChild(findAscendant(target, isNotExpression), isExpression, false)
+
+    const statementContainer = findAscendant(targetExpression, isBlock)
+    const declarationNextSibling = findChild(statementContainer, isStatement, false)
+
+    // //Following commented code is also an implementation without transforms and printer that doesn't reformat the code but has some issues though...
+    // // poor man indentation detector
+    // const siblingIndentationMatch = /^(\s*)/m.exec(declarationNextSibling.getFullText())
+    // const siblingIndentation = siblingIndentationMatch ? siblingIndentationMatch[1] : ''
+    // let allText = sourceFile.getFullText()
+    // // Let's remove ".let" from the target expression:
+    // const targetExpressionTextWithoutNode =
+    //   allText.substring(targetExpression.pos, (target as any).expression.end) +  // -1 to remove the prefixed dot 
+    //   allText.substring(target.end, targetExpression.end)
+    // const allNewText = allText.substring(0, declarationNextSibling.pos) +  
+    //   // the following lines add our dummy variable declaration instead of the targetlocation
+    //   siblingIndentation + 'const renameIt = ' + targetExpressionTextWithoutNode + ';' + 
+    //   allText.substring(declarationNextSibling.pos , targetExpression.pos) +  
+    //   ' renameIt ' +
+    //   allText.substring(targetExpression.end, sourceFile.end)  
+    // return allNewText
+
     // this transformation will remove the postfix ".let" from the expression
     const removePostfix = (context) => {
       return (rootNode) => {
         const visit = node => {
           node = ts.visitEachChild(node, visit, context)
-          if ( node.name === target) {
-            return node.expression // instead of the expression `expr.let` we return just `expr`
+          if (node === target) {
+            return ts.getMutableClone(node.expression)
           }
           return node
         }
         return ts.visitNode(rootNode, visit)
       }
     }
-  
     // this transformation will add the variable declaration as the first child of the black
     const addVariableDeclaration = (context) => {
       return (rootNode) => {
@@ -85,12 +83,9 @@ export class DeclareVariablePostFix implements Postfix {
           if (node === statementContainer) {
             const targetExpressionType = program.getTypeChecker().getTypeAtLocation(targetExpression)
             const typeNode = program.getTypeChecker().typeToTypeNode(targetExpressionType)
-            // Heads up ! we need to create a copy of target extension using `ts.getMutableClone`. If we dont do
-            // that, `replaceExpressionWithVariable` transformation will replace also this expression with the
-            // variable name but we only want to replace the original targetExpression 
             const targetExpressionClone = ts.getMutableClone(targetExpression) as ts.Expression
-            const variableDeclaration = ts.createVariableDeclaration(this.variableName(), typeNode, targetExpressionClone) // TODO: name from config
-            const variableDeclarationList = ts.createVariableDeclarationList([variableDeclaration], ts.NodeFlags.Const)
+            const variableDeclaration = ts.createVariableDeclaration(this.variableName(), typeNode, targetExpressionClone)
+            const variableDeclarationList = ts.createVariableDeclarationList([variableDeclaration], this.getVariableFlag())
             return ts.updateBlock(node, [variableDeclarationList as any].concat(node.statements))
           }
           return node
@@ -103,7 +98,7 @@ export class DeclareVariablePostFix implements Postfix {
       return (rootNode) => {
         const visit = node => {
           node = ts.visitEachChild(node, visit, context)
-          if (node === targetExpression) { 
+          if (node === targetExpression) {
             return ts.createIdentifier(this.variableName())
           }
           return node
@@ -111,45 +106,25 @@ export class DeclareVariablePostFix implements Postfix {
         return ts.visitNode(rootNode, visit)
       }
     }
-  
-    // HEADS UP! the order is important! transformations will be applied serially and affect each other. 
-    // In general the less destructive / top level first
-    const transformations = [addVariableDeclaration, replaceExpressionWithVariable,  removePostfix, ]
-    const result = ts.transform(sourceFile,  transformations)
+    const transformations = [addVariableDeclaration, replaceExpressionWithVariable, removePostfix]
+    const result = ts.transform(sourceFile, transformations, opts.program.getCompilerOptions())
     const printer = ts.createPrinter()
     const transformedSourceFile = result.transformed[0]
     const output = printer.printFile(transformedSourceFile)
     return output
-    
   }
-  
-  variableName(): string { 
+
+  variableName(): string {
     return 'nameMePlease'
   }
+
+  getVariableFlag() {
+    if (this.config.type === 'const') {
+      return ts.NodeFlags.Const
+    } if (this.config.type === 'let') {
+      return ts.NodeFlags.Let
+    } else {
+      return ts.NodeFlags.None
+    }
+  }
 }
-
-
-
-// const isExpression = node => getKindName(node).endsWith('Expression') || node.kind === ts.SyntaxKind.Identifier || 
-// getKindName(node).endsWith('Literal')
-// const isNotExpression = node => !isExpression(node)
-// const isBlock = node => getKindName(node).endsWith('Block') || node.kind === ts.SyntaxKind.SourceFile
-// const isStatement = node => getKindName(node).endsWith('Statement')
-
-
-// function execute 
-
-
-// export class IfPostfix extends AbstractPostfix {
-
-// }
-// export abstract class AbstractPostfix implements Postfix {
-//   name: string;
-//   description: string;
-//   completion: string;
-//   config: AbstractPostfixConfig
-//   abstract predicate(arg: PostfixPredicateArg): boolean
-//   abstract subExpressionPredicate(fileName: string, position: number): ts.Node
-//   abstract execute(expression: ts.Node, fileName: string, position: number)
-//   abstract variableName(expr: ts.Node): string
-// }

@@ -106,7 +106,6 @@ function doEval(code, __context__: EvalContextImpl): EvalResult {
   ${code}
 })(__context__);
 }catch(ex){
-  __result__.errorStackTrace = __context__.util._stackTrace.parse(error)
   __result__.error = ex;
 }
   `
