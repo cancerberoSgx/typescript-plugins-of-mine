@@ -1,5 +1,3 @@
-// show demo - first createVariable const then reassign and then const2let
-
 // Attacks the following error by changing const declaration to let : 
 // 	"code": "2540",
 // 	"message": "Cannot assign to 'a' because it is a constant or a read-only property.",

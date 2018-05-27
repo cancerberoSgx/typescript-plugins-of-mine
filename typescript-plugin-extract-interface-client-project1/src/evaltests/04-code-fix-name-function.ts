@@ -43,9 +43,8 @@ function fixUnnamedFunction() {
   const result =  ts.createPrinter().printNode(ts.EmitHint.Unspecified, tranformationResult.transformed[0], sourceFile);
   const transformedFile =  ts.createSourceFile("transformedFile.ts", result, ts.ScriptTarget.Latest, true, ts.ScriptKind.TS);
   const func = c.util.findChild(transformedFile, c=>ts.isFunctionDeclaration(c)&&c.name&&c.name.escapedText==='unnamedFunc')
-  print(func.getText())
+  print(`${getKindName(node)}   ${getKindName(node.parent)}   func.getText()`)
 }
-
 
 /***@ 
 
@@ -53,7 +52,19 @@ function fixUnnamedFunction() {
 // of "let" nad activate refactor "eval code in comments"
 
 const program = c.info.languageService.getProgram()
+  const sourceFile = program.getSourceFile(c.fileName)
 const position = c.util.positionOrRangeToNumber(c.positionOrRange)
-c.print(position)
-
+const node = c.util.findChildContainingPosition(sourceFile, position)
+c.print(`${position} ${c.util.getKindName(node)}   ${c.util.getKindName(node.parent)} `)
 @***/
+var __output = `
+Output:
+239 FunctionDeclaration   SourceFile 
+
+`
+var __output = `
+Output:
+243 FunctionDeclaration   SourceFile 
+
+`
+

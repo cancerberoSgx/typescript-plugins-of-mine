@@ -45,7 +45,8 @@ Make sure you have installed typescript in your project (`npm i --save-dev types
 # TODO
 
  * apply all quick fixes in this file ! define a mechanism of priorities when two or more fixes attach the same position.
-
+ * perhaps we could just recreate the simple-ast sourcefile instead of the whole project 
+ * use getcodefixes instead of refactors
 
 # Ideas
 

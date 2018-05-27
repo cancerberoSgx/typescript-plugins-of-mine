@@ -1,6 +1,6 @@
 const reDeclared123 = 1
 
-function f(){
+ function (){ 
 
   reDeclared123 =99
 }
