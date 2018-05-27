@@ -9,8 +9,8 @@ const h = () => HResult{
 }
 function fn<T>(): FNResult<T> {
   return { a: 1, b: 's', log: (msg) => boolean, kill: function <T>() { return 1 } }
-}
-
+} 
+ 
 
 import { EvalContext } from 'typescript-plugin-ast-inspector';
 declare const c: EvalContext;

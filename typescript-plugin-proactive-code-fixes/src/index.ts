@@ -98,6 +98,7 @@ function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSetti
     const simpleNodeT0 = now()
     const sourceFile = simpleProject.getSourceFile(fileName)
     target.simpleNode = sourceFile.getDescendantAtPos(positionOrRangeToNumber(positionOrRange)) || sourceFile
+    target.simpleProject = simpleProject
     if (!target.simpleNode) {
       info.project.projectService.logger.info(`${PLUGIN_NAME} no getEditsForRefactor because sourceFile is null for fileName=== ${fileName}, actionName == ${actionName}`)
       return refactors
