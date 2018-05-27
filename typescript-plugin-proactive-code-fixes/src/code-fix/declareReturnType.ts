@@ -11,10 +11,6 @@ function fn<T>(): FNResult<T> {
 */
 
 
-// Attacks the following error by changing const declaration to let : 
-// 	"code": "2540",
-// 	"message": "Cannot assign to 'a' because it is a constant or a read-only property.",
-
 import * as ts from 'typescript';
 import { getKindName } from 'typescript-ast-util';
 import { CodeFix, CodeFixOptions } from '../codeFixes';
@@ -48,9 +44,11 @@ export const declareReturnType: CodeFix = {
   apply: (arg: CodeFixOptions): ts.ApplicableRefactorInfo[] | void => {
     const id = arg.simpleNode
     const decl = arg.simpleNode.getFirstAncestorByKind(ts.SyntaxKind.FunctionDeclaration)
-    arg.log('declareReturnType apply starts : '+id.getKindName() + ' - '+decl.getKindName())
-    const t0 = now()
-    const intStruct = fromNow(()=>inferReturnType(decl, arg), (t)=> arg.log('declareReturnType apply inferReturnType took '+t))
+    // arg.log('declareReturnType apply starts : '+id.getKindName() + ' - '+decl.getKindName())
+    const intStruct = fromNow(
+      ()=>inferReturnType(decl, arg), 
+      t=> arg.log('declareReturnType apply inferReturnType took '+t)
+    )
     arg.simpleNode.getSourceFile().addInterface(intStruct)
   }
 
@@ -59,12 +57,22 @@ export const declareReturnType: CodeFix = {
 
 const inferReturnType = (decl: FunctionDeclaration, arg: CodeFixOptions):InterfaceDeclarationStructure => {
   const project = arg.simpleProject
-  const tmpSourceFile = project.createSourceFile('tmp2.ts', decl.getText() + '; const tmp = ' + decl.getName() + '()')
+  const tmpSourceFile = fromNow(
+    ()=>project.createSourceFile('tmp2.ts', decl.getText() + '; const tmp = ' + decl.getName() + '()'), 
+    (t)=>arg.log('declareReturnType apply inferReturnType createSourceFile took '+t)
+  )
   const tmpDecl = tmpSourceFile.getDescendantsOfKind(ts.SyntaxKind.FunctionDeclaration)[0]
-  const typeargs = tmpDecl.getReturnType().getTypeArguments()
-  tmpDecl.removeReturnType()
+  // const typeargs = tmpDecl.getReturnType().getTypeArguments()
+  fromNow(
+    ()=>tmpDecl.removeReturnType(), 
+    t=>arg.log('declareReturnType apply inferReturnType tmpDecl.removeReturnType() took '+t)
+  )
   const tmp = tmpSourceFile.getFirstDescendantByKind(ts.SyntaxKind.VariableDeclaration)
-  const type = project.getTypeChecker().getTypeAtLocation(tmp)//.getApparentProperties().map(p=>p.getName()).join(',')//.getText()
+  const type = fromNow(
+    ()=>project.getTypeChecker().getTypeAtLocation(tmp), 
+    t=>arg.log('declareReturnType apply inferReturnType getTypeChecker().getTypeAtLocation took '+t))
+
+  const intStructureT0= now()
   const intStructure = {
     name: decl.getReturnTypeNode().getText(),
     properties: type.getProperties()
@@ -101,8 +109,9 @@ const inferReturnType = (decl: FunctionDeclaration, arg: CodeFixOptions):Interfa
           }
         })
         .filter(p=>!!p),
-      typeParameters: typeargs.map(ta => ({ name: ta.getSymbol().getName() })),
+      // typeParameters: typeargs.map(ta => ({ name: ta.getSymbol().getName() })),
   }
-  tmpSourceFile.delete()
+  arg.log('declareReturnType apply inferReturnType create InterfaceStructure took '+ timeFrom(intStructureT0))
+  fromNow(()=>tmpSourceFile.delete(), (t)=>arg.log(`declareReturnType apply inferReturnType tmpSourceFile.delete() took ${t}`))
   return intStructure
 }

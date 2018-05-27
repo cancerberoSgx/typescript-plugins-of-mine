@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"No tests here\" && exit 0",
-    "build": "tsc",
+    "build": "echo \"no build here\" && exit 0",
     "doc": "echo nothing && exit 0",
     "clean": "rm -rf node_modules/ package-lock.json",
     "install-published-plugins-dependencies": "rm -rf node_modules/ package-lock.json; cp package.json package-linked.json; cp package-unlinked.json package.json; npm i",
