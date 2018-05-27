@@ -18,7 +18,7 @@ describe('tests', () => {
     program = simpleProject.getProgram().compilerObject
   });
 
-  xit('Declare variable fix', () => {
+  it('Declare variable fix', () => {
     const sourceFile = simpleProject.getSourceFiles().find(sf => sf.getFilePath().includes(`src/index.ts`));
     const cursorPosition = 61
     const diagnostics = getDiagnosticsInCurrentLocation(program, sourceFile.compilerNode, cursorPosition);
@@ -38,7 +38,7 @@ describe('tests', () => {
   })
 
 
-  xit('Declare constructor fix when target kind is child.parent.kind === ts.SyntaxKind.NewExpression', () => {
+  it('Declare constructor fix when target kind is child.parent.kind === ts.SyntaxKind.NewExpression', () => {
     const sourceFile = simpleProject.getSourceFiles().find(sf => sf.getFilePath().includes(`src/index.ts`));
     const fn = sourceFile.getFunction('main');
     const cursorPosition = 137
@@ -71,32 +71,20 @@ describe('tests', () => {
     const filePath = `/src/third.ts`
     const sourceFile = simpleProject.getSourceFiles().find(sf => sf.getFilePath().includes(filePath));
 
-    // const fn = sourceFile.getFunction('main');
-    // const cursorPosition = 137
     const diagnostics = getDiagnosticsInCurrentLocation(program, sourceFile.compilerNode, 19);
     if (!diagnostics || !diagnostics.length) {
       return fail('no diagnostics found');
     }
     const h = sourceFile.getDescendantsOfKind(ts.SyntaxKind.HeritageClause)[0]
     const id = h.getDescendantsOfKind(ts.SyntaxKind.Identifier)[0]
-    console.log(id.getText())
-
-    const arg: CodeFixOptions = { diagnostics, containingTarget: id.compilerNode, log, program, sourceFile: sourceFile.compilerNode }
+    const arg: CodeFixOptions = { diagnostics, containingTarget: id.compilerNode, log, program, simpleNode: id, sourceFile: sourceFile.compilerNode }
     const fixes = codeFixes.filter(fix => fix.predicate(arg));
     if (!fixes || !fixes.length) {
       return fail('no fixes for knowndiagnostic');
     }
-    // console.log(fixes)
     fixes[0].apply(arg);
     simpleProject.saveSync();
     simpleProject.emit();
     expect(shell.cat(`${projectPath}${filePath}`).toString()).toContain(`class NonExistent {`)
-
-    // sourceFile.fs
-    // expect()
-    
-
-    // expect(shell.cat(`${projectPath}/${filePath}`).toString()).toContain(`class A{
-    // public constructor(aString: String) {`)
   })
 });

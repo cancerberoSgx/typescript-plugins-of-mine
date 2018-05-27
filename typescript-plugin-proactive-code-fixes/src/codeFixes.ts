@@ -1,7 +1,7 @@
 import { Node, Project } from 'ts-simple-ast';
 import * as ts from 'typescript';
-import { codeFixCreateConstructor } from './code-fix/codeFixCreateConstructor';
-import { codeFixCreateVariable } from './code-fix/codeFixCreateVariable';
+import { codeFixCreateConstructor } from './code-fix/declareConstructor';
+import { codeFixCreateVariable } from './code-fix/declareVariable';
 import { declareClass } from './code-fix/declareClass';
 import { const2let } from './code-fix/const2let';
 import { nameFunction } from './code-fix/nameFunction';

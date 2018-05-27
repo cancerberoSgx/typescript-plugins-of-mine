@@ -18,7 +18,7 @@
   "author": "Sebastian Gurin",
   "license": "MIT",
   "dependencies": {
-    "hrtime-now": "^1.0.4",
+    "hrtime-now": "^1.0.5",
     "ts-simple-ast": "^11.2.0",
     "typescript": "^2.8.3",
     "typescript-ast-util": "file:../typescript-ast-util",
@@ -27,12 +27,12 @@
   "devDependencies": {
     "@types/jasmine": "^2.8.7",
     "@types/node": "^10.0.4",
-    "@types/shelljs": "^0.7.9",
+    "@types/shelljs": "^0.8.0",
     "jasmine": "^3.1.0",
     "shelljs": "^0.8.2",
     "ts-node": "^6.0.3",
-    "typescript-plugin-test-helper": "file:../typescript-plugin-test-helper",
-    "typescript-plugin-proactive-code-fixes": "file:."
+    "typescript-plugin-proactive-code-fixes": "file:.",
+    "typescript-plugin-test-helper": "file:../typescript-plugin-test-helper"
   },
   "repository": "https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-proactive-code-fixes"
 }
