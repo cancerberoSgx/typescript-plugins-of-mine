@@ -10,6 +10,7 @@ TypeScript Langauge Service Plugin with several small proactive code refactors t
 * make an object literal implement an interface by adding / removing necessary members
 * declare an interface from a return value
 * declaremember - complements the code fix alreayd existing in typescript to fullfill all cases. declaring missing properties / methods 
+* add return statement
 
 and more to come!!
 
