@@ -22,10 +22,6 @@ export const objectLiteralImplementInterface: CodeFix = {
   name: 'objectLiteralImplementInterface',
   config: { recursive: false, addMissingPropertiesToInterface: false }, // recursive tre will generate the whole sub literals.. 
   predicate: (arg: CodeFixOptions): boolean => {
-    // if (!arg.diagnostics.find(d => d.code === 2322)) {
-    //   return false
-    // }
-
     const targetLine = ts.getLineAndCharacterOfPosition(arg.sourceFile, arg.containingTarget.getStart()).line
     const diagnostics = arg.diagnostics.filter(d => d.code === 2322).filter(diag => {
       const diagLineStart = ts.getLineAndCharacterOfPosition(arg.sourceFile, diag.start).line
@@ -69,14 +65,15 @@ export const objectLiteralImplementInterface: CodeFix = {
 
         const toRemove: Node[] = []
 
-        init.getProperties().forEach(prop => {
-          if ((prop as any).getName && !decl.getMembers().find(m => (m as any).getName() === (prop as any).getName())) {// TypeGuards.isNameableNode(prop) -TODO: this doesn't worrk here : TypeGuards.isNameableNode(prop)
-            // if(this.config.addMissingPropertiesToInterface){ // TODO: doesn't work 
-            // decl.addProperty({name: prop.getName(), type: prop.getType().getText()})
-            // } else {
-            toRemove.push(prop)
-          }
-        })
+        // init.getProperties().forEach(prop => {
+        //   //  -TODO: this doesn't work here : TypeGuards.isNameableNode(prop) so we ugly cast 
+        //   if ((prop as any).getName && !decl.getMembers().find(m => (m as any).getName() === (prop as any).getName())) {            
+        //     // if(this.config.addMissingPropertiesToInterface){ // TODO: doesn't work 
+        //     // decl.addProperty({name: prop.getName(), type: prop.getType().getText()})
+        //     // } else {
+        //     toRemove.push(prop)
+        //   }
+        // })
         decl.getProperties().forEach(prop => {
           if (!init.getProperty(prop.getName())) {
             init.addPropertyAssignment({ name: prop.getName(), initializer: getDefaultValueForType(prop.getType()) })
@@ -92,10 +89,14 @@ export const objectLiteralImplementInterface: CodeFix = {
           }
         })
 
-        toRemove.forEach(prop => {
-          prop.getSourceFile().removeText(prop.getFullStart(),
-            prop.getNextSibling() && prop.getNextSibling().getKind() === ts.SyntaxKind.CommaToken ? prop.getNextSibling().getEnd() : prop.getEnd())
-        })
+        // only remove if user explicitly configure
+        // if(this.config.removeStrangeMembersFromLiteral){ // TODO: doesn't work 
+        // toRemove.forEach(prop => {
+        //   prop.getSourceFile().removeText(prop.getFullStart(),
+        //     prop.getNextSibling() && prop.getNextSibling().getKind() === ts.SyntaxKind.CommaToken ? prop.getNextSibling().getEnd() : prop.getEnd())
+        // })
+        // }
+       
 
       }
     })

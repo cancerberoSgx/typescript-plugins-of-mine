@@ -15,7 +15,7 @@ function fn<T>(): FNResult<T> {
 // TODO: constructors
 // TODO: getters / setters ? 
 // TODO: test jsdoc
-//TODO: check if diagnostic is in the same position  in predicate
+//TODO: check if diagnostic is in the same position  in predicate 
 
 import * as ts from 'typescript';
 import { getKindName } from 'typescript-ast-util';
@@ -28,6 +28,7 @@ export const declareReturnType: CodeFix = {
   name: 'declareReturnType',
   config: {  },  
   predicate: (arg: CodeFixOptions): boolean => {
+    //TODO: review this predicate
     if (!arg.diagnostics.find(d => d.code === 2304)) {
       return false
     } 

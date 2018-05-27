@@ -7,6 +7,7 @@ import { const2let } from './code-fix/const2let';
 import { nameFunction } from './code-fix/nameFunction';
 import { objectLiteralImplementInterface } from './code-fix/objectLiteralImplementInterface';
 import { declareReturnType } from './code-fix/declareReturnType';
+import { declareMember } from './code-fix/declareMember';
 
 
 export interface CodeFix {
@@ -23,7 +24,7 @@ export interface CodeFix {
   apply(arg: CodeFixOptions): ts.ApplicableRefactorInfo[] | void
 }
 
-export const codeFixes: CodeFix[] = [codeFixCreateConstructor, codeFixCreateVariable, declareClass,  const2let, nameFunction, objectLiteralImplementInterface, declareReturnType];
+export const codeFixes: CodeFix[] = [codeFixCreateConstructor, codeFixCreateVariable, declareClass,  const2let, nameFunction, objectLiteralImplementInterface, declareReturnType, declareMember];
 
 export interface CodeFixOptions {
   diagnostics: ts.Diagnostic[]
