@@ -1,6 +1,6 @@
 import * as ts from 'typescript';
 import { getKindName } from 'typescript-ast-util';
-import { CodeFix, CodeFixOptions } from '../codeFixes';
+import { CodeFix, CodeFixNodeOptions } from '../codeFixes';
 
 // attacks :
 // "code": "2304", Cannot find name 'b'.",
@@ -14,7 +14,7 @@ export const codeFixCreateVariable: CodeFix = {
 
   config: { variableType: 'const' },
 
-  predicate: (options: CodeFixOptions): boolean => {
+  predicate: (options: CodeFixNodeOptions): boolean => {
     if (!options.diagnostics.find(d => d.code === 2304)) {
       return false
     }
@@ -29,9 +29,9 @@ export const codeFixCreateVariable: CodeFix = {
     }
   },
 
-  description: (options: CodeFixOptions): string => `Declare variable "${options.containingTarget.getText()}"`,
+  description: (options: CodeFixNodeOptions): string => `Declare variable "${options.containingTarget.getText()}"`,
 
-  apply: (options: CodeFixOptions): ts.ApplicableRefactorInfo[] | void => {
+  apply: (options: CodeFixNodeOptions): ts.ApplicableRefactorInfo[] | void => {
     options.simpleNode.getSourceFile().insertText(options.simpleNode.getStart(), 'const ')
   }
 

@@ -6,14 +6,14 @@ Attacks this problem:
 
 import * as ts from 'typescript';
 import { getKindName } from 'typescript-ast-util';
-import { CodeFix, CodeFixOptions } from '../codeFixes';
+import { CodeFix, CodeFixNodeOptions } from '../codeFixes';
 import { Statement } from '../../../typescript-ast-util/node_modules/typescript/lib/tsserverlibrary';
 import { Block, SourceFile, TypeGuards, StatementedNode, Node } from 'ts-simple-ast';
 
 export const addReturnStatement: CodeFix = {
   name: 'addReturnStatement',
   config: {},
-  predicate: (arg: CodeFixOptions): boolean => {
+  predicate: (arg: CodeFixNodeOptions): boolean => {
     //TODO: review this predicate
     if (!arg.diagnostics.find(d => d.code === 2355)) {
       return false
@@ -29,9 +29,9 @@ export const addReturnStatement: CodeFix = {
     }
   },
 
-  description: (arg: CodeFixOptions): string => `Add return statement?`,
+  description: (arg: CodeFixNodeOptions): string => `Add return statement?`,
 
-  apply: (arg: CodeFixOptions): ts.ApplicableRefactorInfo[] | void => {
+  apply: (arg: CodeFixNodeOptions): ts.ApplicableRefactorInfo[] | void => {
     const firstStatementedNode = arg.simpleNode.getAncestors().find(TypeGuards.isStatementedNode)
     if(firstStatementedNode){
       addReturnStatementImpl(arg.simpleNode.getSourceFile(), firstStatementedNode)

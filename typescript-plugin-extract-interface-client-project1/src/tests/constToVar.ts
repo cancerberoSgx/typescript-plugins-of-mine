@@ -1,8 +1,8 @@
-const reDeclared123 = 1
+// const reDeclared123 = 1
 
- function (){ 
+//  function (){ 
 
-  reDeclared123 =99
-}
+//   reDeclared123 =99
+// }
 
-var a = 1
+// var a = 1

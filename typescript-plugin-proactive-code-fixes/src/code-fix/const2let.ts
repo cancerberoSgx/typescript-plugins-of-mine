@@ -4,13 +4,13 @@
 
 import * as ts from 'typescript';
 import { getKindName } from 'typescript-ast-util';
-import { CodeFix, CodeFixOptions } from '../codeFixes';
+import { CodeFix, CodeFixNodeOptions } from '../codeFixes';
 import { VariableDeclarationKind } from 'ts-simple-ast';
 
 export const const2let: CodeFix = {
   name: 'const2let',
   config: { changeTo: 'const' }, // to change to let or var
-  predicate: (arg: CodeFixOptions): boolean => {
+  predicate: (arg: CodeFixNodeOptions): boolean => {
     if (!arg.diagnostics.find(d => d.code === 2540)) {  
       return false
     }
@@ -31,9 +31,9 @@ export const const2let: CodeFix = {
     }
   },
 
-  description: (arg: CodeFixOptions): string => `Declare variable "${arg.containingTarget.getText()}"`,
+  description: (arg: CodeFixNodeOptions): string => `Declare variable "${arg.containingTarget.getText()}"`,
 
-  apply: (arg: CodeFixOptions): ts.ApplicableRefactorInfo[] | void => {
+  apply: (arg: CodeFixNodeOptions): ts.ApplicableRefactorInfo[] | void => {
     const id = arg.simpleNode
     if(!id||id.getKind()!== ts.SyntaxKind.Identifier){
       arg.log(`codeFixCreateVariable apply cannot exec because of this !id||id.getKind()!== ts.SyntaxKind.Identifier  `)

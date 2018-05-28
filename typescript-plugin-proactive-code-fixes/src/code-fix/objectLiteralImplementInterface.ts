@@ -14,14 +14,14 @@ const tree2: Living = {
 
 import * as ts from 'typescript';
 import { getKindName, findAscendant } from 'typescript-ast-util';
-import { CodeFix, CodeFixOptions } from '../codeFixes';
+import { CodeFix, CodeFixNodeOptions } from '../codeFixes';
 import { VariableDeclarationKind, TypeGuards, Type, SourceFile, Node } from 'ts-simple-ast';
 import { prototype } from 'stream';
 
 export const objectLiteralImplementInterface: CodeFix = {
   name: 'objectLiteralImplementInterface',
   config: { recursive: false, addMissingPropertiesToInterface: false }, // recursive tre will generate the whole sub literals.. 
-  predicate: (arg: CodeFixOptions): boolean => {
+  predicate: (arg: CodeFixNodeOptions): boolean => {
     const targetLine = ts.getLineAndCharacterOfPosition(arg.sourceFile, arg.containingTarget.getStart()).line
     const diagnostics = arg.diagnostics.filter(d => d.code === 2322).filter(diag => {
       const diagLineStart = ts.getLineAndCharacterOfPosition(arg.sourceFile, diag.start).line
@@ -53,9 +53,9 @@ export const objectLiteralImplementInterface: CodeFix = {
     }
   },
 
-  description: (arg: CodeFixOptions): string => `Implement Interface`,
+  description: (arg: CodeFixNodeOptions): string => `Implement Interface`,
 
-  apply: (arg: CodeFixOptions): ts.ApplicableRefactorInfo[] | void => {
+  apply: (arg: CodeFixNodeOptions): ts.ApplicableRefactorInfo[] | void => {
     const node = arg.simpleNode
     const varDecl = TypeGuards.isVariableDeclaration(node) ? node : node.getFirstAncestorByKind(ts.SyntaxKind.VariableDeclaration)
     const init = varDecl.getInitializerIfKind(ts.SyntaxKind.ObjectLiteralExpression)

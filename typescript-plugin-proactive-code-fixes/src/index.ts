@@ -1,9 +1,10 @@
-import { now, timeFrom } from 'hrtime-now';
+import { now, timeFrom, fromNow } from 'hrtime-now';
 import { Project, SourceFile, SourceFileAddOptions } from 'ts-simple-ast';
-import { findChildContainedRange, findChildContainingRange, getKindName, positionOrRangeToNumber, positionOrRangeToRange } from 'typescript-ast-util';
+import { findChildContainedRange, findChildContainingRange, getKindName, positionOrRangeToNumber, positionOrRangeToRange, findChildContainingRange2 } from 'typescript-ast-util';
 import { createSimpleASTProject, getPluginCreate } from 'typescript-plugin-util';
 import * as ts_module from 'typescript/lib/tsserverlibrary';
-import { CodeFixOptions, codeFixes } from './codeFixes';
+import { CodeFixNodeOptions, codeFixes } from './codeFixes';
+import { common } from './common';
 
 const PLUGIN_NAME = 'typescript-plugin-proactive-code-fixes'
 const REFACTOR_ACTION_NAME = `${PLUGIN_NAME}-refactor-action`
@@ -24,9 +25,10 @@ export = getPluginCreate(pluginDefinition, (modules, anInfo) => {
 
 //TODO use fromNow to clear the code from logging
 
-let target: CodeFixOptions
+let target: CodeFixNodeOptions
 // let lastFileName
 // let lastSnapshot
+// let target
 function getApplicableRefactors(fileName: string, positionOrRange: number | ts.TextRange)
   : ts.ApplicableRefactorInfo[] {
   const t0 = now()
@@ -39,9 +41,9 @@ function getApplicableRefactors(fileName: string, positionOrRange: number | ts.T
   if (!sourceFile) {
     return refactors
   }
-  const getDiagnosticT0 = now()
-  const diagnostics = ts.getPreEmitDiagnostics(program, sourceFile)
-  info.project.projectService.logger.info(`${PLUGIN_NAME} getPreEmitDiagnostics took ${timeFrom(getDiagnosticT0)}`)
+  // const getDiagnosticT0 = now()
+  // const diagnostics = ts.getPreEmitDiagnostics(program, sourceFile)
+  // info.project.projectService.logger.info(`${PLUGIN_NAME} getPreEmitDiagnostics took ${timeFrom(getDiagnosticT0)}`)
 
   const range = positionOrRangeToRange(positionOrRange)
   const containingTarget = findChildContainingRange(sourceFile, range)
@@ -52,22 +54,36 @@ function getApplicableRefactors(fileName: string, positionOrRange: number | ts.T
     return refactors
   }
 
-  info.project.projectService.logger.info(`${PLUGIN_NAME} getApplicableRefactors info: containingTarget.kind == ${getKindName(containingTarget.kind)} containedTarget.kind == ${containedTarget ? getKindName(containedTarget.kind) : 'NOCONTAINEDCHILD'} `)
+  // info.project.projectService.logger.info(`${PLUGIN_NAME} getApplicableRefactors info: containingTarget.kind == ${getKindName(containingTarget.kind)} containedTarget.kind == ${containedTarget ? getKindName(containedTarget.kind) : 'NOCONTAINEDCHILD'} `)
 
+  // target : CodeFixNodeOptions
+  if (!target) {
+    common.init(info.project, log) // first time could take some but only once.
+    target = { ...common.getOptionsFor(fileName), containingTarget, containedTarget, range }
+  }
+  // target = { ...common.getOptionsFor(fileName), containingTarget, containedTarget, range }
+  Object.assign(target, {...common.getOptionsFor(fileName), containingTarget, containedTarget, range })
+
+  target.range = positionOrRangeToRange(positionOrRange)
+  // target.simpleNode = target.simpleSourceFile.getDescendantAtPos(positionOrRangeToNumber(positionOrRange)) || target.simpleSourceFile
+
+  target.log('targetkey'+Object.keys(target).map(k=>k+':'+!!target[k]).join(', ')+ ' - '+ '')// target.simpleNode.getKindName()+'------'+target.diagnostics)
+
+  // const options = common.getOptionsFor(fileName)
+  
+  // target = { diagnostics, containingTarget, containedTarget, log', prog'ram , sourceFile, range, fileName,project: info.project}
   const codeFixesFilterT0 = now()
-  target = { diagnostics, containingTarget, containedTarget, log, program , sourceFile, range, fileName,project: info.project}
   const fixes = codeFixes.filter(fix => {
     try {
       return fix.predicate(target)
     } catch (ex) {
-      log('getApplicableRefactors exception in plugin predicates '+fix.name + ex+ '\n'+ex.stack)
-      // TODO LOG
+      log('getApplicableRefactors EXCEPTION in plugin predicates ' + fix.name + ex + '\n' + ex.stack)
     }
   })
   info.project.projectService.logger.info(`${PLUGIN_NAME} codeFixesFilterT0 took ${timeFrom(codeFixesFilterT0)}`)
 
   if (!fixes || !fixes.length) {
-    info.project.projectService.logger.info(`${PLUGIN_NAME} no getApplicableRefactors because no codeFixes returned true for node of kind ==${getKindName(containingTarget.kind)} and diagnostics: ${diagnostics.map(d => d.code)}`)
+    info.project.projectService.logger.info(`${PLUGIN_NAME} no getApplicableRefactors because no codeFixes returned true for node of kind ==${getKindName(containingTarget.kind)} and diagnostics didn't meet:`)
     return refactors
   }
   refactors.push({
@@ -78,59 +94,90 @@ function getApplicableRefactors(fileName: string, positionOrRange: number | ts.T
       description: fix.description(target)
     }))
   })
-  info.project.projectService.logger.info(`${PLUGIN_NAME} getApplicableRefactors took ${timeFrom(t0)}`)
+  // info.project.projectService.logger.info(`${PLUGIN_NAME} getApplicableRefactors took ${timeFrom(t0)}`)
   return refactors
 }
 
 function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSettings,
   positionOrRange: number | ts.TextRange, refactorName: string,
   actionName: string): ts.RefactorEditInfo | undefined {
+    target.log('getEditsForRefactor init')
   const t0 = now()
   const refactors = info.languageService.getEditsForRefactor(fileName, formatOptions, positionOrRange, refactorName, actionName)
-  if (!actionName.startsWith(REFACTOR_ACTION_NAME) || !target.containingTarget) {
+  if (!actionName.startsWith(REFACTOR_ACTION_NAME)/* || !target.containingTarget*/) {
     return refactors
   }
+  target.log('getEditsForRefactor init2')
   const fixName = actionName.substring(REFACTOR_ACTION_NAME.length + 1, actionName.length)
   const fix = codeFixes.find(fix => fix.name === fixName)
+
+  target.log('getEditsForRefactor init3')
   if (!fix) {
     info.project.projectService.logger.info(`${PLUGIN_NAME} no getEditsForRefactor because no fix was found for actionName == ${actionName}`)
     return refactors
   }
-  let simpleProject: Project
-  let sourceFile: SourceFile
-  if (fix && fix.needSimpleAst !== false) {
-    const createSimpleASTProjectT0 = now()
-    simpleProject = createSimpleASTProject(info.project)
-    info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor createSimpleASTProject took ${timeFrom(createSimpleASTProjectT0)}`)
+  // const target = common.getOptionsFor(fileName) as CodeFixNodeOptions
+  // let simpleProject: Project = target.simpleProject
+  // let sourceFile: SourceFile = target.simpleSourceFile
 
-    const simpleNodeT0 = now()
-    sourceFile = simpleProject.getSourceFile(fileName)
-    target.simpleNode = sourceFile.getDescendantAtPos(positionOrRangeToNumber(positionOrRange)) || sourceFile
-    target.simpleProject = simpleProject
-    target.formatOptions = formatOptions
-    if (!target.simpleNode) {
-      info.project.projectService.logger.info(`${PLUGIN_NAME} no getEditsForRefactor because sourceFile is null for fileName=== ${fileName}, actionName == ${actionName}`)
-      return refactors
-    }
-    info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor first getSourceFile() and simpleNode took ${timeFrom(simpleNodeT0)} and node.kind is ${target.simpleNode.getKindName()}`)
-  }
+  target.log('getEditsForRefactor init4')
+  target.formatOptions = formatOptions
+  // if (fix && fix.needSimpleAst !== false) {
+  // const createSimpleASTProjectT0 = now()
+  // simpleProject = createSimpleASTProject(info.project)
+  // info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor createSimpleASTProject took ${timeFrom(createSimpleASTProjectT0)}`)
+
+  // const simpleNodeT0 = now()
+  // sourceFile = simpleProject.getSourceFile(fileName)
+  // target.simpleProject = simpleProject
+  // target.formatOptions = formatOptions
+  // if (!target.simpleNode) {
+  //   info.project.projectService.logger.info(`${PLUGIN_NAME} no getEditsForRefactor because sourceFile is null for fileName=== ${fileName}, actionName == ${actionName}`)
+  //   return refactors
+  // }
+  // info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor first getSourceFile() and simpleNode took ${timeFrom(simpleNodeT0)} and node.kind is ${target.simpleNode.getKindName()}`)
+  // }
   // we are ready, with or without ast-simple to perform the change
-  const fixapplyT0 = now()
+  // const fixapplyT0 = now()
+
+  // common.initSimpleAstProject(fileName)
   try {
+
+  target.log('getEditsForRefactor init5')
+      const fixapplyT0 = now()
     fix.apply(target)
+    target.log(`getEditsForRefactor fix.apply() took ${fixapplyT0}`)
+
+    // fromNow(
+    //   () => fix.apply(target),
+    //   t => options.log(`getEditsForRefactor fix.apply() took ${t}`)
+    // )
   } catch (error) {
+
+  target.log('getEditsForRefactor init6')
     info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor fix.apply() error ${error} \n ${error.stack}`)
   }
-  info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor fix.apply() took ${timeFrom(fixapplyT0)}`)
-  if (fix.needSimpleAst !== false) {
-    const saveSyncT0 = now()
-    sourceFile.formatText(formatOptions)
-    simpleProject.saveSync()
-    info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor saveSync took ${timeFrom(saveSyncT0)}`)
-  }
-  else {
-    // when needSimpleAst===false code fix implementation is responsible of save/emit/update the files / project 
-  }
+  // info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor fix.apply() took ${timeFrom(fixapplyT0)}`)
+  // if (fix.needSimpleAst !== false) {
+
+  // fromNow(
+    // () => {
+      // sourceFile.formatText(formatOptions)
+  target.log('getEditsForRefactor init7')
+      target.simpleProject.saveSync()
+      target.log('getEditsForRefactor init8')
+    // },
+    // t => target.log(`getEditsForRefactor formatText and saveSync took ${t}`)
+    target.log(`getEditsForRefactor target.simpleProject.saveSync()`)
+  // )
+  // const saveSyncT0 = now()
+  // sourceFile.formatText(formatOptions)
+  // simpleProject.saveSync()
+  // info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor saveSync took ${timeFrom(saveSyncT0)}`)
+  // }
+  // else {
+  // when needSimpleAst===false code fix implementation is responsible of save/emit/update the files / project 
+  // }
   info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor total time took ${timeFrom(t0)}`)
   return refactors
 }

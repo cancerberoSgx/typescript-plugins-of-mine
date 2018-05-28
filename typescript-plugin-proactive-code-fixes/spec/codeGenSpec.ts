@@ -1,7 +1,7 @@
 import * as shell from 'shelljs'
 import Project, { SourceFile, Node, Diagnostic, TypeGuards } from 'ts-simple-ast'
 import * as ts from 'typescript'
-import { codeFixes, CodeFixOptions } from '../src/codeFixes';
+import { codeFixes, CodeFixNodeOptions } from '../src/codeFixes';
 import { getDiagnosticsInCurrentLocation } from 'typescript-ast-util'
 
 describe('tests', () => {
@@ -26,7 +26,7 @@ describe('tests', () => {
       return fail();
     }
     const child = sourceFile.getDescendantAtPos(cursorPosition);
-    const arg: CodeFixOptions = { diagnostics, containingTarget: child.compilerNode, log, simpleNode: child, program, sourceFile: sourceFile.compilerNode }
+    const arg: CodeFixNodeOptions = { diagnostics, containingTarget: child.compilerNode, log, simpleNode: child, program, sourceFile: sourceFile.compilerNode, simpleSourceFile: sourceFile }
     const fixes = codeFixes.filter(fix => fix.predicate(arg));
     if (!fixes || !fixes.length) {
       return fail();
@@ -54,7 +54,7 @@ describe('tests', () => {
     if (!TypeGuards.isNewExpression(child)) {
       return fail('is not newexpr type guard')
     }
-    const arg: CodeFixOptions = { diagnostics, containingTarget: child.compilerNode, log, simpleNode: child, program , sourceFile: sourceFile.compilerNode}
+    const arg: CodeFixNodeOptions = { diagnostics, containingTarget: child.compilerNode, log, simpleNode: child, program , sourceFile: sourceFile.compilerNode, simpleSourceFile: sourceFile}
     const fixes = codeFixes.filter(fix => fix.predicate(arg));
     if (!fixes || !fixes.length) {
       return fail('no fixes for knowndiagnostic');
@@ -77,7 +77,7 @@ describe('tests', () => {
     }
     const h = sourceFile.getDescendantsOfKind(ts.SyntaxKind.HeritageClause)[0]
     const id = h.getDescendantsOfKind(ts.SyntaxKind.Identifier)[0]
-    const arg: CodeFixOptions = { diagnostics, containingTarget: id.compilerNode, log, program, simpleNode: id, sourceFile: sourceFile.compilerNode }
+    const arg: CodeFixNodeOptions = { diagnostics, containingTarget: id.compilerNode, log, program, simpleNode: id, sourceFile: sourceFile.compilerNode, simpleSourceFile: sourceFile }
     const fixes = codeFixes.filter(fix => fix.predicate(arg));
     if (!fixes || !fixes.length) {
       return fail('no fixes for knowndiagnostic');

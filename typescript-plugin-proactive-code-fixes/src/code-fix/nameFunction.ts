@@ -6,27 +6,31 @@
 import { TypeGuards } from 'ts-simple-ast';
 import * as ts from 'typescript';
 import { getKindName } from 'typescript-ast-util';
-import { CodeFix, CodeFixOptions } from '../codeFixes';
+import { CodeFix, CodeFixNodeOptions } from '../codeFixes';
 
 export const nameFunction: CodeFix = {
   name: 'nameFunction',
   config: { newName: 'unnamedFunction' },
-  predicate: (arg: CodeFixOptions): boolean => {
+  predicate: (arg: CodeFixNodeOptions): boolean => {
     if (!arg.diagnostics.find(d => d.code === 1003)) {
       return false
     }
-    if (arg.containingTarget && ts.isFunctionDeclaration(arg.containingTarget) && (!arg.containingTarget.name || !arg.containingTarget.name.getText()) || (arg.containedTarget && arg.containedTarget.parent &&ts.isFunctionDeclaration(arg.containedTarget.parent) && (!arg.containedTarget.parent.name || !arg.containedTarget.parent.name.getText()))) {
+    if(ts.isFunctionDeclaration(arg.containingTarget) &&  (!arg.containingTarget.name || !arg.containingTarget.name.getText())){
+      (!arg.containingTarget.name || !arg.containingTarget.name.getText())
       return true
     }
-    else {
-      arg.log(`nameFunction predicate false because ${arg.containingTarget && getKindName(arg.containingTarget)}  ${arg.containedTarget && getKindName(arg.containedTarget)} ${arg.containedTarget.parent && getKindName(arg.containedTarget.parent)} ${arg.containedTarget && arg.containedTarget.parent && arg.containedTarget.parent.parent && arg.containedTarget.parent.parent && getKindName(arg.containedTarget.parent.parent)} is not FunctionDeclaration or has name`)
+    // if (arg.containingTarget && ts.isFunctionDeclaration(arg.containingTarget) && (!arg.containingTarget.name || !arg.containingTarget.name.getText()) || (arg.containedTarget && arg.containedTarget.parent &&ts.isFunctionDeclaration(arg.containedTarget.parent) && (!arg.containedTarget.parent.name || !arg.containedTarget.parent.name.getText()))) {
+    //   return true
+    // }
+    // else {
+      // arg.log(`nameFunction predicate false because ${arg.containingTarget && getKindName(arg.containingTarget)}  ${arg.containedTarget && getKindName(arg.containedTarget)} ${arg.containedTarget.parent && getKindName(arg.containedTarget.parent)} ${arg.containedTarget && arg.containedTarget.parent && arg.containedTarget.parent.parent && arg.containedTarget.parent.parent && getKindName(arg.containedTarget.parent.parent)} is not FunctionDeclaration or has name`)
       return false
-    }
+    // }
   },
 
-  description: (arg: CodeFixOptions): string => `Name Function`,
+  description: (arg: CodeFixNodeOptions): string => `Name Function`,
 
-  apply: (arg: CodeFixOptions): ts.ApplicableRefactorInfo[] | void => {
+  apply: (arg: CodeFixNodeOptions): ts.ApplicableRefactorInfo[] | void => {
     const f = TypeGuards.isFunctionDeclaration(arg.simpleNode) ? arg.simpleNode : arg.simpleNode.getFirstAncestorByKind(ts.SyntaxKind.FunctionDeclaration)
     if (!f || f.getName()) {
       arg.log(`nameFunction apply cannot exec because ${f.getKindName()} is not FunctionDeclaration or has name`)

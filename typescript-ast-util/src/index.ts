@@ -66,6 +66,15 @@ export function findChildContainingRange(sourceFile: ts.SourceFile, r: ts.TextRa
   }
   return find(sourceFile)
 }
+/** same as same name but with r.end <= node.getEnd()  (little more tolerance in the "containing" verb for small ranges) */
+export function findChildContainingRange2(sourceFile: ts.SourceFile, r: ts.TextRange): ts.Node | undefined {
+  function find(node: ts.Node): ts.Node | undefined {
+    if (r.pos >= node.getStart() && r.end <= node.getEnd()) {
+      return ts.forEachChild(node, find) || node
+    }
+  }
+  return find(sourceFile)
+}
 //TODO. rename to findFirstChildContainedRange
 export function findChildContainedRange(sourceFile: ts.SourceFile, r: ts.TextRange): ts.Node | undefined {
   function find(node: ts.Node): ts.Node | undefined {

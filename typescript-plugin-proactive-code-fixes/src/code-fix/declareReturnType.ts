@@ -19,7 +19,7 @@ function fn<T>(): FNResult<T> {
 
 import * as ts from 'typescript';
 import { getKindName } from 'typescript-ast-util';
-import { CodeFix, CodeFixOptions } from '../codeFixes';
+import { CodeFix, CodeFixNodeOptions } from '../codeFixes';
 import { VariableDeclarationKind, FunctionDeclaration, TypeGuards, InterfaceDeclarationStructure, MethodSignatureStructure } from 'ts-simple-ast';
 import { now, timeFrom, fromNow } from 'hrtime-now';
 
@@ -27,7 +27,7 @@ import { now, timeFrom, fromNow } from 'hrtime-now';
 export const declareReturnType: CodeFix = {
   name: 'declareReturnType',
   config: {  },  
-  predicate: (arg: CodeFixOptions): boolean => {
+  predicate: (arg: CodeFixNodeOptions): boolean => {
     //TODO: review this predicate
     if (!arg.diagnostics.find(d => d.code === 2304)) {
       return false
@@ -48,8 +48,8 @@ export const declareReturnType: CodeFix = {
       return false
     }
   },
-  description: (arg: CodeFixOptions): string => `Declare Type "${arg.containingTarget.getText()}" interring from return value`,
-  apply: (arg: CodeFixOptions): ts.ApplicableRefactorInfo[] | void => {
+  description: (arg: CodeFixNodeOptions): string => `Declare Type "${arg.containingTarget.getText()}" interring from return value`,
+  apply: (arg: CodeFixNodeOptions): ts.ApplicableRefactorInfo[] | void => {
     const id = arg.simpleNode
     const decl = arg.simpleNode.getFirstAncestorByKind(ts.SyntaxKind.FunctionDeclaration)
     const intStruct = fromNow(
@@ -62,7 +62,7 @@ export const declareReturnType: CodeFix = {
 }
 
 
-const inferReturnType = (decl: FunctionDeclaration, arg: CodeFixOptions):InterfaceDeclarationStructure => {
+const inferReturnType = (decl: FunctionDeclaration, arg: CodeFixNodeOptions):InterfaceDeclarationStructure => {
   const project = arg.simpleProject
   const tmpSourceFile = fromNow(
     ()=>project.createSourceFile('tmp2.ts', decl.getText() + '; const tmp = ' + decl.getName() + '()'), 

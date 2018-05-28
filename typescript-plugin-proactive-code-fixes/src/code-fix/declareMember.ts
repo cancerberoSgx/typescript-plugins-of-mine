@@ -30,7 +30,7 @@ const a = notDefined.foof + 9                              // will add property 
 
 import * as ts from 'typescript';
 import { getKindName } from 'typescript-ast-util';
-import { CodeFix, CodeFixOptions } from '../codeFixes';
+import { CodeFix, CodeFixNodeOptions } from '../codeFixes';
 import { VariableDeclarationKind, FunctionDeclaration, TypeGuards, InterfaceDeclarationStructure, MethodSignatureStructure } from 'ts-simple-ast';
 import { now, timeFrom, fromNow } from 'hrtime-now';
 
@@ -38,7 +38,7 @@ import { now, timeFrom, fromNow } from 'hrtime-now';
 export const declareMember: CodeFix = {
   name: 'declareMember',
   config: {},
-  predicate: (arg: CodeFixOptions): boolean => {
+  predicate: (arg: CodeFixNodeOptions): boolean => {
     //TODO: review this predicate
     if (!arg.diagnostics.find(d => d.code === 2339)) {
       return false
@@ -59,8 +59,8 @@ export const declareMember: CodeFix = {
       return false
     }
   },
-  description: (arg: CodeFixOptions): string => `Declare Missing Member "${arg.containingTarget.getText()}"`,
-  apply: (opts: CodeFixOptions): ts.ApplicableRefactorInfo[] | void => {
+  description: (arg: CodeFixNodeOptions): string => `Declare Missing Member "${arg.containingTarget.getText()}"`,
+  apply: (opts: CodeFixNodeOptions): ts.ApplicableRefactorInfo[] | void => {
     const node = opts.simpleNode
 
     const print = (msg) => { opts.log('declareMember apply ' + msg) }
