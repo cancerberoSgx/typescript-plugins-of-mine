@@ -68,6 +68,7 @@ export const declareMember: CodeFix = {
     const newMemberName_ = node.getText()
     const accessExpr = node.getParent()
     if (!TypeGuards.isPropertyAccessExpression(accessExpr)) {
+      // ypescript-plugin-proactive-code-fixes declareMember apply WARNING !TypeGuards.isPropertyAccessExpression(accessExpr) BinaryExpression
       return print(`WARNING !TypeGuards.isPropertyAccessExpression(accessExpr) ${accessExpr.getKindName()}`)
     }
     const expressionWithTheType = accessExpr.getParent().getKind() === ts.SyntaxKind.CallExpression ?
@@ -103,10 +104,18 @@ const fixTargetDecl = (targetNode, newMemberName, newMemberType, args, print) =>
       const typeDeclInThisFile = (d.getType() && d.getType().getSymbol() && d.getType().getSymbol().getDeclarations() && d.getType().getSymbol().getDeclarations() || [])
         .find(dd => (TypeGuards.isInterfaceDeclaration(dd) || TypeGuards.isClassDeclaration(dd)) && dd.getSourceFile() === d.getSourceFile()
         )
-      if (typeDeclInThisFile && (TypeGuards.isInterfaceDeclaration(typeDeclInThisFile) || TypeGuards.isClassDeclaration(typeDeclInThisFile)) && !(typeDeclInThisFile.getMembers() as { getName: () => string }[]).find(m => m.getName() === newMemberName)) {
+        if(typeDeclInThisFile && (TypeGuards.isInterfaceDeclaration(typeDeclInThisFile) || TypeGuards.isClassDeclaration(typeDeclInThisFile))){
+          // const typeDeclHasNoMemberAlready = typeDeclInThisFile.findReferences().find(r=>{r.getDefinition()})
         return fixTargetDecl(typeDeclInThisFile, newMemberName, newMemberType, args, print)
-      }
-      else if (!TypeGuards.isObjectLiteralExpression(targetInit)) {
+        }
+      
+      // if (){
+
+      // } &&  typeDeclInThisFile.getMembers().find(m=>true)
+    // ) {
+      // }
+      else 
+      if (!TypeGuards.isObjectLiteralExpression(targetInit)) {
         //TODO - unknown situation - we should print in the file for discover new cases.
         return print(`WARNING  !TypeGuards.isObjectLiteralExpression(targetInit) targetInit.getKindName() === ${targetInit && targetInit.getKindName()} targetInit.getText() === ${targetInit && targetInit.getText()}  d.getKindName() === ${d && d.getKindName()} d.getText() === ${d && d.getText()}`)
       }
@@ -140,12 +149,14 @@ const fixTargetDecl = (targetNode, newMemberName, newMemberType, args, print) =>
         d.addProperty({ name: newMemberName, type: newMemberType.getText() })
       } else {
         d.addMethod({
+          // TODO: jsdoc
           name: newMemberName,
           returnType: newMemberType.getText(),
           parameters: args.map(a => ({
             name: a.name,
             type: a.type.getText()
-          }))
+          })),
+          bodyText: `throw new Error('Not Implemented')`
         })
       }
     }
