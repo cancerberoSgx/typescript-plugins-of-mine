@@ -55,7 +55,7 @@ function getApplicableRefactors(fileName: string, positionOrRange: number | ts.T
   info.project.projectService.logger.info(`${PLUGIN_NAME} getApplicableRefactors info: containingTarget.kind == ${getKindName(containingTarget.kind)} containedTarget.kind == ${containedTarget ? getKindName(containedTarget.kind) : 'NOCONTAINEDCHILD'} `)
 
   const codeFixesFilterT0 = now()
-  target = { diagnostics, containingTarget, containedTarget, log, program , sourceFile, range, fileName,project: info.project}
+  target = { diagnostics, containingTarget, containedTarget, log, program , sourceFile, /*range, fileName,project: info.project*/}
   const fixes = codeFixes.filter(fix => {
     try {
       return fix.predicate(target)
@@ -107,7 +107,7 @@ function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSetti
     sourceFile = simpleProject.getSourceFile(fileName)
     target.simpleNode = sourceFile.getDescendantAtPos(positionOrRangeToNumber(positionOrRange)) || sourceFile
     target.simpleProject = simpleProject
-    target.formatOptions = formatOptions
+    // target.formatOptions = formatOptions
     if (!target.simpleNode) {
       info.project.projectService.logger.info(`${PLUGIN_NAME} no getEditsForRefactor because sourceFile is null for fileName=== ${fileName}, actionName == ${actionName}`)
       return refactors

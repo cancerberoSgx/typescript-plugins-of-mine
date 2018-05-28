@@ -1,6 +1,5 @@
 import { Node, Project } from 'ts-simple-ast';
 import * as ts from 'typescript';
-import * as ts_module from 'typescript/lib/tsserverlibrary';
 import { codeFixCreateConstructor } from './code-fix/declareConstructor';
 import { codeFixCreateVariable } from './code-fix/declareVariable';
 import { declareClass } from './code-fix/declareClass';
@@ -10,9 +9,6 @@ import { objectLiteralImplementInterface } from './code-fix/objectLiteralImpleme
 import { declareReturnType } from './code-fix/declareReturnType';
 import { declareMember } from './code-fix/declareMember';
 import { addReturnStatement } from './code-fix/addReturnStatement';
-import { exec } from 'shelljs';
-import { common } from './common';
-import { StringLiteral } from 'typescript';
 
 
 export interface CodeFix {
@@ -29,24 +25,15 @@ export interface CodeFix {
   apply(arg: CodeFixOptions): ts.ApplicableRefactorInfo[] | void
 }
 
-export const codeFixes: CodeFix[] = [common, codeFixCreateConstructor, codeFixCreateVariable, declareClass,  const2let, nameFunction, objectLiteralImplementInterface, declareReturnType, declareMember, addReturnStatement];
+export const codeFixes: CodeFix[] = [codeFixCreateConstructor, codeFixCreateVariable, declareClass,  const2let, nameFunction, objectLiteralImplementInterface, declareReturnType, declareMember, addReturnStatement];
 
-export interface CodeFixOptions extends CodeFixFileOptions {
+export interface CodeFixOptions {
+  diagnostics: ts.Diagnostic[]
   containedTarget?: ts.Node|undefined
-  containingTarget: ts.Node | undefined
-  simpleNode?: Node
-  range?: ts.TextRange
-  formatOptions?: ts.FormatCodeSettings
-}
-export interface CodeFixFileOptions extends CodeFixProjectOptions{
-  sourceFile: ts.SourceFile,
-  fileName?: string
-  diagnostics?: ts.Diagnostic[]
-}
-
-export interface CodeFixProjectOptions {
-  program: ts.Program,
-  simpleProject?: Project,
-  project?: ts_module.server.Project,
   log: (str: string) => void
+  containingTarget: ts.Node | undefined
+  simpleNode?: Node,
+  program: ts.Program,
+  sourceFile: ts.SourceFile,
+  simpleProject?: Project
 }
