@@ -1,5 +1,7 @@
 
 interface SomeInterface extends SuperInterface1, SuperInterface2 {
+  constructor(foo:number[])
+  prop1: {s: string, n: Date}[]
 }
 interface SomeInterface2 {
   method3(p: string): Date
@@ -18,7 +20,11 @@ class SomeImplementation extends OtherImplementation implements SomeInterface, S
   method1(param: number): number[] {
     throw new Error("Method not implemented.");
   }
-  method5(p: string, foo: string, bar: number): Date { return null }
+  method5(p: string, foo: boolean): Date[] { return null }
+}
+class Class2 implements SomeInterface {
+  prop1: boolean[]
+  constructor(foo:Date)
 }
 // "code": "2416","message": "Property 'method1' in type 'SomeImplementation' is not assignable to the same property in base type 'SomeInterface'.\n  Type '(param: number) => number[]' is not assignable to type '(param: string) => number[]'.\n    Types of parameters 'param' and 'param' are incompatible.\n      Type 'string' is not assignable to type 'number'.",
 
@@ -60,7 +66,7 @@ const findInterfacesWithPropertyNamed = (decl: ClassDeclaration, memberName: str
     .map(expr => expr.getType().getSymbolOrThrow().getDeclarations())
     .reduce((a, v) => a.concat(v), [])
     .filter(TypeGuards.isInterfaceDeclaration)
-    .filter(d => !!d.getMethods().find(m => m.getName() === memberName))
+    .filter(d => d.getMembers().find(m => TypeGuards.isPropertyNamedNode(m)&& m.getName() === memberName))
     .filter((value, pos, arr) => arr.indexOf(value) === pos) // union
 
 
@@ -93,9 +99,11 @@ const areTypesEqual = (t1: Type, t2: Type): boolean => t1.getText().replace(/\s+
 
 function evaluateMe() {
   print = c.print
-  const sourceFile = c.node.getSourceFile()
+  // const sourceFile = c.node.getSourceFile()
+  // clone source file so this one is not modified
+  const sourceFile = c.project.createSourceFile('tmp/tmp_sourcefile_'+new Date().getTime()+'.ts', c.node.getSourceFile().getFullText())
   // TODO: support constructors and getter/setter
-  const id = sourceFile.getDescendantAtPos(595)
+  const id = sourceFile.getDescendantAtPos(755)//(655)//(764)
   const member = id.getParent()
   const decl = member.getParent()
   if (!(TypeGuards.isIdentifier(id) &&
@@ -105,8 +113,9 @@ function evaluateMe() {
     return print(`predicate not complied: decl: ${decl.getKindName()} member: ${member.getKindName()} id: ${id.getKindName()}`)
   }
   const interfaceWithMemberName = findInterfacesWithPropertyNamed(decl, id.getText()).pop() // TODO: we choose any member signature - we should choose the most similar one
-  const memberSignature = interfaceWithMemberName.getMembers().filter(TypeGuards.isMethodSignature || TypeGuards.isPropertySignature).pop() // TODO: any arbitrary signature
-  decl.fill
+
+  const memberSignature = interfaceWithMemberName.getMembers().filter(TypeGuards.isPropertyNamedNode).pop() // TODO: any arbitrary signature
+  
   if (TypeGuards.isMethodSignature(memberSignature) && TypeGuards.isMethodDeclaration(member)) {
     member.setReturnType(memberSignature.getReturnType().getText())
 
@@ -142,4 +151,6 @@ function evaluateMe() {
     member.setType(memberSignature.getType().getText())
   }
   print(sourceFile.getText().substring(0, Math.min(sourceFile.getText().length, 800)))
+
+  sourceFile.deleteImmediatelySync()
 }

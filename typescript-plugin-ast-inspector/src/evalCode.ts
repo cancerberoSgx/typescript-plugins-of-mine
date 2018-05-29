@@ -5,6 +5,7 @@ import * as ts from 'typescript';
 import * as ts_module from 'typescript/lib/tsserverlibrary';
 import { EvalContextUtil, EvalContextUtilImpl } from './evalCodeContextUtil';
 import { matchGlobalRegexWithGroupIndex } from './regex-groups-index';
+import { basename } from 'path';
 
 export const EVAL_CODE_IN_COMMENTS_REFACTOR_ACTION_NAME = `plugin-ast-inspector-eval-code-in-comments`
 export const EVAL_SELECTION_REFACTOR_ACTION_NAME = `plugin-ast-inspector-eval-selection`
@@ -105,7 +106,7 @@ function doEval(code, __context__: EvalContextImpl): EvalResult {
   __result__.output = _printed
   return __result__
 }
-
+const stackTrace = require('stack-trace')
 function prettyPrintEvalResult(evalResult) {
   let output = ''
   if (evalResult.output) {
@@ -113,7 +114,10 @@ function prettyPrintEvalResult(evalResult) {
   }
   let error = '';
   if (evalResult.error) {
-    error += `Error: (in)\n${evalResult.error}\nStack:\n ${evalResult.error.stack}\n`
+    var trace = stackTrace.parse(evalResult.error);
+
+// {"fileName":"/home/sg/git/typescript-plugins-of-mine/typescript-plugin-ast-inspector/node_modules/ts-simple-ast/dist/utils/TypeGuards.js","lineNumber":1246,"functionName":"Function.TypeGuards.isMethodSignature","typeName":"Function.TypeGuards","methodName":"isMethodSignature","columnNumber":20,"native":false}
+    error += `Error: (in)\n${evalResult.error}\nTrace: \n${stackTrace.parse(evalResult.error).map(i=>`${basename(i.fileName)}#${i.lineNumber},${i.columnNumber}) function ${i.functionName}`).join('\n')}\nOriginal Stack:\n ${evalResult.error.stack}\n`
   }
   if (evalResult.errorOuter) {
     error += `Error: (out) \n${evalResult.errorOuter}\nStack:\n ${evalResult.errorOuter.stack}\n`
