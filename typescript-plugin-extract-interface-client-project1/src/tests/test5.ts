@@ -7,13 +7,13 @@
 // counter = 9 // declare valuiable
 
 
-// alpha1 = new Alpha('hello') // declare constructor decalre variable alpha
+// const alpha1 = new Alpha('hello') // declare constructor decalre variable alpha
 
 
 // value1 = alpha1.getData() // add missing
 // value1 = null // const to let
 
-// declare type inferring from return value
+// // declare type inferring from return value
 // function fn<T>(): FNResult<T> {
 //   return {
 //     a: 1,
