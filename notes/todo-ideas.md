@@ -113,7 +113,7 @@ d===l only if we add the new property as any or ugly casting. i think is OK if w
 
  * refactor to remove all empty new lines in the selection
 
-
+ * (d:s,u:s)	"code": "2448",	"message": "Block-scoped variable 'findInterfacesWithPropertyNamed' used before its declaration.",
  
  
   crate type from return value : two ideas for agile type definition and refactor:

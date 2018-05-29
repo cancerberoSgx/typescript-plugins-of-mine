@@ -25,7 +25,7 @@ ${descendants}
 
 
 // there's an easy way and its putting the code inside a function body - then select just a small text inside
-// that cuntion and apply refactor "Eval current function selection". Try it :
+// that cuntion and apply refactor "Eval current function selection". And this time YOU CAN USE TypeScript ! Try it :
 
 function scannerExample() {
   const ts = c.ts, getKindName = c.util.getKindName, print = c.print

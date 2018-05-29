@@ -107,7 +107,7 @@ function evalCode(fileName: string, positionOrRange: number | ts_module.TextRang
   info.project.projectService.logger.info(`${PLUGIN_NAME} evalCode createSimpleASTProject took ${timeFrom(createSimpleASTProjectT0)}`)
   const fixapplyT0 = now()
   try {
-    executeEvalCode({ log, node: simpleNode, fileName, info, positionOrRange, formatOptions, refactorName, actionName })
+    executeEvalCode({ log, node: simpleNode, fileName, info, positionOrRange, formatOptions, refactorName, actionName, project: simpleProject })
   } catch (error) {
     info.project.projectService.logger.info(`${PLUGIN_NAME} evalCode executeEvalCode error ${error} \n ${error.stack}`)
   }

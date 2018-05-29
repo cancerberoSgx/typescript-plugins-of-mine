@@ -1,30 +1,10 @@
-
-// TODO: eval code safely using node vm so security people dont complain
-// TODO: eval current function code - so user don't have to excatly select everything
-// TODO: for eval selection, user could write typescript and we could transpile it to js before eval
-
-// TODO IDEA: in info, pass a non temporal variable that contains two eventemitters guestEmitter and hostEmitter - and let each emit events and listen to each other. (context object will change but always will point to the same emitter references tat won't. THen, the plugin in host could send data to the guest regarding received position, fileName, etc so the same call could be simulated 100% in the editor. )
-// the autocomplete idea (following) could eb acommplished with this ?
-
-// TODO: would be interesting to have the possibility of autocomplete from the editor or to describe a symbol type. example:
-// printAst(node.getSourceFile()
-// const printType(node.getDescendantOfKind(ts.SyntaxFoo,ClassDeclaration)) 
-// prints pretty structure of node and also a link to definition file. Will be weird because some def files will be in the host project...
-// notice that ts is available for him
-
-
-
-import { readFileSync } from 'fs';
 import { now, timeFrom } from 'hrtime-now';
 import * as sts from 'ts-simple-ast';
-import SimpleProjectConstructor from 'ts-simple-ast'
-import { Node } from 'ts-simple-ast' ;
+import SimpleProjectConstructor, { Node } from 'ts-simple-ast';
 import * as ts from 'typescript';
 import * as ts_module from 'typescript/lib/tsserverlibrary';
 import { EvalContextUtil, EvalContextUtilImpl } from './evalCodeContextUtil';
 import { matchGlobalRegexWithGroupIndex } from './regex-groups-index';
-import { EventEmitter } from 'events';
-import { TypeOfExpression } from 'typescript/lib/tsserverlibrary';
 
 export const EVAL_CODE_IN_COMMENTS_REFACTOR_ACTION_NAME = `plugin-ast-inspector-eval-code-in-comments`
 export const EVAL_SELECTION_REFACTOR_ACTION_NAME = `plugin-ast-inspector-eval-selection`
@@ -61,6 +41,7 @@ export interface EvalContext {
   refactorName: string
   /** name of the activated refactor's action as provided in plugin's `getEditsForRefactor` */
   actionName: string
+  project: sts.Project
 }
 
 
@@ -74,7 +55,7 @@ let _printed = []
 class EvalContextImpl implements EvalContext {
   ts = ts
   tsa = sts
-  SimpleProjectConstructor= SimpleProjectConstructor
+  SimpleProjectConstructor = SimpleProjectConstructor
   info: ts_module.server.PluginCreateInfo
   fileName: string
   formatOptions: ts.FormatCodeSettings
@@ -83,6 +64,7 @@ class EvalContextImpl implements EvalContext {
   actionName: string
   node: Node
   util: EvalContextUtil = new EvalContextUtilImpl()
+  project: sts.Project
   log: (msg: string) => void
   constructor(config: EvalContextConfig) {
     this.info = config.info
@@ -94,9 +76,10 @@ class EvalContextImpl implements EvalContext {
     this.log = config.log
     this.node = config.node
     _printed = []
+    this.project = config.project
   }
   print(s): void {
-    _printed.push(s+'') // use an external variable so users can do const print = c.print - in general we dont want to use "this". TODO: probably we dont want to use a "class" just an object
+    _printed.push(s + '') // use an external variable so users can do const print = c.print - in general we dont want to use "this". TODO: probably we dont want to use a "class" just an object
   }
 }
 
@@ -114,7 +97,7 @@ function doEval(code, __context__: EvalContextImpl): EvalResult {
 }
   `
   try {// TODO: get how much time it took and print it back in the output
-    eval(codeToEval)
+    eval(codeToEval) // TODO: eval code safely using node vm so security people dont complain
   } catch (ex) {
     __context__.log('executeEvalCode, eval error (outer): ' + ex + ' - ' + JSON.stringify(ex))
     __result__.errorOuter = ex
@@ -150,6 +133,7 @@ export interface EvalContextConfig {
   formatOptions: ts.FormatCodeSettings
   refactorName: string
   actionName: string
+  project: sts.Project
 }
 
 
@@ -160,18 +144,38 @@ export function executeEvalCode(config: EvalContextConfig): void {
   // handle eval function body
   if (config.actionName === EVAL_CURRENT_FUNCTION_BODY_REFACTOR_ACTION_NAME) {
     let targetFunction = (config.node.getKind() === ts.SyntaxKind.FunctionDeclaration ? config.node : undefined) || config.node.getFirstAncestorByKind(ts.SyntaxKind.FunctionDeclaration)
-    if(!targetFunction){
+    if (!targetFunction) {
       // if we are not inside a function declaration we evaluate the body of the first function declaration in this file
       targetFunction = sourceFile.getFirstDescendantByKind(ts.SyntaxKind.FunctionDeclaration)
     }
-    if (!targetFunction || !sts.TypeGuards.isFunctionDeclaration(targetFunction)) {
+    if (!targetFunction || !sts.TypeGuards.isFunctionDeclaration(targetFunction) || !targetFunction.getName()) {
       return
     }
-    const text = evalCodeAndPrintResult(config, targetFunction.getBody().getText())
+    // transpile the source file to js (so user is not restricted to js) and get the body text of the transpiled function */
+    let codeToEval = targetFunction.getBody().getText()
+    let configToEval = config
+    let transpiledSourceFile: sts.SourceFile
+    try {
+      const jsCode = sourceFile.getEmitOutput().getOutputFiles().find(f => f.getFilePath().endsWith('.js')).getText()
+      const fileName = 'evaluated_' + new Date().getTime() + '.ts'
+      transpiledSourceFile = config.project.createSourceFile(fileName, jsCode)
+      const body = transpiledSourceFile.getFunction(targetFunction.getName()).getBody().getText()
+      if (body) {
+        codeToEval = transpiledSourceFile.getText() + ';\n' + targetFunction.getName() + '();'
+        configToEval = Object.assign({}, config, { sourceFile: transpiledSourceFile })
+      }
+    } catch (ex) {
+      //TODO:  log failed to transpile - we continue evaluating original function though
+    }
+    const text = evalCodeAndPrintResult(configToEval, codeToEval)
     sourceFile.insertText(targetFunction.getEnd(), text)
+    if (transpiledSourceFile) {
+      transpiledSourceFile.deleteImmediatelySync()
+    }
   }
   // handle eval selected code
-  else if (config.actionName === EVAL_SELECTION_REFACTOR_ACTION_NAME && typeof (config.positionOrRange as ts.TextRange).pos === 'number') {
+  else if (config.actionName === EVAL_SELECTION_REFACTOR_ACTION_NAME && 
+      typeof (config.positionOrRange as ts.TextRange).pos === 'number') {
     const range = config.positionOrRange as ts.TextRange
     const text = evalCodeAndPrintResult(config, originalSourceFile.getFullText().substring(range.pos, range.end))
     sourceFile.insertText(range.end, text)

@@ -19,15 +19,16 @@
     "@types/node": "^10.0.4"
   },
   "devDependencies": {
-    "typescript-plugin-extract-interface": "file:../typescript-plugin-extract-interface",
-    "typescript-plugin-subclasses-of": "file:../typescript-plugin-subclasses-of",
-    "typescript-plugin-ast-inspector": "file:../typescript-plugin-ast-inspector",
+    "ts-simple-ast": "^11.2.1",
+    "typescript": "^2.8.3",
     "typescript-plugin-add-type": "file:../typescript-plugin-add-type",
-    "typescript-plugin-move-file": "file:../typescript-plugin-move-file",
-    "typescript-plugin-move-declaration": "file:../typescript-plugin-move-declaration",
-    "typescript-plugin-proactive-code-fixes": "file:../typescript-plugin-proactive-code-fixes",
-    "typescript-plugin-postfix": "file:../typescript-plugin-postfix",
+    "typescript-plugin-ast-inspector": "file:../typescript-plugin-ast-inspector",
+    "typescript-plugin-extract-interface": "file:../typescript-plugin-extract-interface",
     "typescript-plugin-method-delegate": "file:../typescript-plugin-method-delegate",
-    "typescript": "^2.8.3"
+    "typescript-plugin-move-declaration": "file:../typescript-plugin-move-declaration",
+    "typescript-plugin-move-file": "file:../typescript-plugin-move-file",
+    "typescript-plugin-postfix": "file:../typescript-plugin-postfix",
+    "typescript-plugin-proactive-code-fixes": "file:../typescript-plugin-proactive-code-fixes",
+    "typescript-plugin-subclasses-of": "file:../typescript-plugin-subclasses-of"
   }
 }
