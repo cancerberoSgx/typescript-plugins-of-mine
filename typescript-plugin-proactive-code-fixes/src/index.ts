@@ -25,14 +25,9 @@ export = getPluginCreate(pluginDefinition, (modules, anInfo) => {
 //TODO use fromNow to clear the code from logging
 
 let target: CodeFixOptions
-// let lastFileName
-// let lastSnapshot
 function getApplicableRefactors(fileName: string, positionOrRange: number | ts.TextRange)
   : ts.ApplicableRefactorInfo[] {
   const t0 = now()
-  // if(!lastFileName){
-  //   lastFileName = 
-  // }
   const refactors = info.languageService.getApplicableRefactors(fileName, positionOrRange) || []
   const program = info.languageService.getProgram()
   const sourceFile = program.getSourceFile(fileName)
@@ -107,7 +102,6 @@ function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSetti
     sourceFile = simpleProject.getSourceFile(fileName)
     target.simpleNode = sourceFile.getDescendantAtPos(positionOrRangeToNumber(positionOrRange)) || sourceFile
     target.simpleProject = simpleProject
-    // target.formatOptions = formatOptions
     if (!target.simpleNode) {
       info.project.projectService.logger.info(`${PLUGIN_NAME} no getEditsForRefactor because sourceFile is null for fileName=== ${fileName}, actionName == ${actionName}`)
       return refactors

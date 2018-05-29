@@ -17,6 +17,7 @@ import { getKindName, findAscendant } from 'typescript-ast-util';
 import { CodeFix, CodeFixOptions } from '../codeFixes';
 import { VariableDeclarationKind, TypeGuards, Type, SourceFile, Node } from 'ts-simple-ast';
 import { prototype } from 'stream';
+import { buildParameterStructure, fixSignature } from '../util';
 
 export const objectLiteralImplementInterface: CodeFix = {
   name: 'objectLiteralImplementInterface',
@@ -61,44 +62,68 @@ export const objectLiteralImplementInterface: CodeFix = {
     const init = varDecl.getInitializerIfKind(ts.SyntaxKind.ObjectLiteralExpression)
 
     varDecl.getType().getSymbol().getDeclarations().forEach(decl => {
-      if (TypeGuards.isInterfaceDeclaration(decl)) {
-
-        const toRemove: Node[] = []
-
-        // init.getProperties().forEach(prop => {
-        //   //  -TODO: this doesn't work here : TypeGuards.isNameableNode(prop) so we ugly cast 
-        //   if ((prop as any).getName && !decl.getMembers().find(m => (m as any).getName() === (prop as any).getName())) {            
-        //     // if(this.config.addMissingPropertiesToInterface){ // TODO: doesn't work 
-        //     // decl.addProperty({name: prop.getName(), type: prop.getType().getText()})
-        //     // } else {
-        //     toRemove.push(prop)
-        //   }
-        // })
-        decl.getProperties().forEach(prop => {
-          if (!init.getProperty(prop.getName())) {
-            init.addPropertyAssignment({ name: prop.getName(), initializer: getDefaultValueForType(prop.getType()) })
-          }
-        })
-
-        decl.getMethods().forEach(method => {
-          if (!init.getProperty(method.getName())) {
-            init.addMethod({
-              name: method.getName(), parameters: method.getParameters().map(p => ({ name: p.getName(), type: p.getType().getText(), hasQuestionToken: p.hasQuestionToken() })), returnType: method.getReturnType().getText(),
-              bodyText: 'throw new Error(\'Not Implemented\')'
-            })
-          }
-        })
-
-        // only remove if user explicitly configure
-        // if(this.config.removeStrangeMembersFromLiteral){ // TODO: doesn't work 
-        // toRemove.forEach(prop => {
-        //   prop.getSourceFile().removeText(prop.getFullStart(),
-        //     prop.getNextSibling() && prop.getNextSibling().getKind() === ts.SyntaxKind.CommaToken ? prop.getNextSibling().getEnd() : prop.getEnd())
-        // })
-        // }
-       
-
+      if (!TypeGuards.isInterfaceDeclaration(decl)) {
+        return // TODO: log
       }
+      const toRemove: Node[] = []
+
+      // init.getProperties().forEach(prop => {
+      //   //  -TODO: this doesn't work here : TypeGuards.isNameableNode(prop) so we ugly cast 
+      //   if ((prop as any).getName && !decl.getMembers().find(m => (m as any).getName() === (prop as any).getName())) {            
+      //     // if(this.config.addMissingPropertiesToInterface){ // TODO: doesn't work 
+      //     // decl.addProperty({name: prop.getName(), type: prop.getType().getText()})
+      //     // } else {
+      //     toRemove.push(prop)
+      //   }
+      // })
+      
+      decl.getProperties().forEach(prop => {
+        const existingProp = init.getProperty(prop.getName())
+        if (existingProp) {
+          (existingProp as any).remove()
+        }else {
+          init.addPropertyAssignment({ name: prop.getName(), initializer: getDefaultValueForType(prop.getType()) })
+        }
+      })
+
+      decl.getMethods().forEach(method => {
+        const existingProp = init.getProperty(method.getName())
+        // if (!TypeGuards.isMethodDeclaration(existingProp)) {
+        //   return
+        // }
+        // if (existingProp) {
+        //   (existingProp as any).remove()
+        // }
+        // let parameters = method.getParameters().map(buildParameterStructure)
+        if(existingProp && TypeGuards.isMethodDeclaration(existingProp)){
+          fixSignature(existingProp, method )
+          arg.log('fixSignature1')
+        }
+        else {
+          if(existingProp){
+            try{(existingProp as any).remove()}catch(ex){
+              arg.log('fixSignature222')}
+          }
+          init.addMethod({
+            name: method.getName(),
+            parameters: method.getParameters().map(buildParameterStructure ),
+            returnType: method.getReturnType().getText(),
+            bodyText: 'throw new Error(\'Not Implemented\')'
+          })
+        }
+        
+      })
+
+      // only remove if user explicitly configure
+      // if(this.config.removeStrangeMembersFromLiteral){ // TODO: doesn't work 
+      // toRemove.forEach(prop => {
+      //   prop.getSourceFile().removeText(prop.getFullStart(),
+      //     prop.getNextSibling() && prop.getNextSibling().getKind() === ts.SyntaxKind.CommaToken ? prop.getNextSibling().getEnd() : prop.getEnd())
+      // })
+      // }
+
+
+
     })
   }
 }
