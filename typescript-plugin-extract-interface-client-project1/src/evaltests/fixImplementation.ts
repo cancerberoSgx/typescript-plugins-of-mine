@@ -14,7 +14,7 @@ interface SuperInterface2 {
 interface SuperInterface1 extends SomeInterface3 { }
 class OtherImplementation implements SuperInterface1 { }
 class SomeImplementation extends OtherImplementation implements SomeInterface, SomeInterface2 {
-  method3(p: boolean): Date {
+  method3(p: string): Date {
     throw new Error("Method not implemented.");
   }
   method1(param: number): number[] {
@@ -27,7 +27,7 @@ class Class2 implements SomeInterface {
   constructor(foo: Date)
 }
 const obj: SomeInterface2 = {
-  method3(p: string[][], b: boolean): number {
+  method3(p: string, b: boolean): Date {
     throw new Error("Method not implemented.");
   }
 }

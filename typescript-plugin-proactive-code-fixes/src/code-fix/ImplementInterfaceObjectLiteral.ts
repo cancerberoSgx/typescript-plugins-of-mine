@@ -17,10 +17,10 @@ import { getKindName, findAscendant } from 'typescript-ast-util';
 import { CodeFix, CodeFixOptions } from '../codeFixes';
 import { VariableDeclarationKind, TypeGuards, Type, SourceFile, Node } from 'ts-simple-ast';
 import { prototype } from 'stream';
-import { buildParameterStructure, fixSignature } from '../util';
+import { buildParameterStructure, fixSignature, getDefaultValueForType } from '../util';
 
-export const objectLiteralImplementInterface: CodeFix = {
-  name: 'objectLiteralImplementInterface',
+export const implementInterfaceObjectLiteral: CodeFix = {
+  name: 'implementInterfaceObjectLiteral',
   config: { recursive: false, addMissingPropertiesToInterface: false }, // recursive tre will generate the whole sub literals.. 
   predicate: (arg: CodeFixOptions): boolean => {
     const targetLine = ts.getLineAndCharacterOfPosition(arg.sourceFile, arg.containingTarget.getStart()).line
@@ -125,23 +125,5 @@ export const objectLiteralImplementInterface: CodeFix = {
 
 
     })
-  }
-}
-
-
-function getDefaultValueForType(t: Type): string {
-  // TODO: this should be recursive in case it references another interface - we can recreate the whole thing recursively... 
-  if (!t) {
-    return 'null'
-  } else if (t.getText() === 'string') {
-    return '\'\''
-  } else if (t.getText() === 'boolean') {
-    return 'false'
-  } else if (t.getText() === 'number') {
-    return '0'
-  } else if (t.isArrayType()) {
-    return '[]'
-  } else {
-    return 'null'
   }
 }
