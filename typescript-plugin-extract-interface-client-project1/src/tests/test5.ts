@@ -1,24 +1,24 @@
-// class Alpha {
-// }
+class Alpha {
+}
 
-// function main() {
-//   alpha2 = new Alpha('hello', 1, new Date()) // declare constructor and
-// }
-// counter = 9 // declare valuiable
-
-
-// const alpha1 = new Alpha('hello') // declare constructor decalre variable alpha
+function main() {
+  alpha2 = new Alpha('hello', 1, new Date()) // declare constructor and
+} 
+counter = 9 // declare variable
 
 
-// value1 = alpha1.getData() // add missing
-// value1 = null // const to let
+const alpha1 = new Alpha('hello') // declare constructor decalre variable alpha
 
-// // declare type inferring from return value
-// function fn<T>(): FNResult<T> {
-//   return {
-//     a: 1,
-//     b: 's',
-//     log: (string) => { return Math.random() },
-//     kill: function <T>() { return 1 }
-//   }
-// }
+
+value1 = alpha1.getData() // add missing
+value1 = null // const to let
+
+// declare type inferring from return value
+function fn<T>(): FNResult<T> {
+  return {
+    a: 1,
+    b: 's',
+    log: (string) => { return Math.random() },
+    kill: function <T>() { return 1 }
+  }
+}
