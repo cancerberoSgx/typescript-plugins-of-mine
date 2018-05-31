@@ -100,8 +100,12 @@ d===l only if we add the new property as any or ugly casting. i think is OK if w
 
 * idea for gui-no-more (text-based-user-interactoin): example for move member . user select a method, a refactor is suggested "cut method foo()". user goes to other file and select a class identifier. a refactor is suggested "paste method foo()". result. method decl is movesd from first class oththe second one (and all its references are updated across the project.)
 
-* (d: l, u: m) variable redefinition - suggest other name and try to apply rename 
-
+* (d: l, u: m) variable redefinition - suggest other name and try to apply rename . example: 
+let a = 1
+//....
+let a = 's'//"code": "2451",	"message": "Cannot redeclare block-scoped variable 'a'.",
+// ....
+function a(){}
 
 * (d:l, u: l) (done ) ts dont like annon functions : `function(){}` as statements. as expressions is ok "return function(){}" but as statements is wrong: "var i = 0; function(){}; " fix it "adding identifier" - put dummy name
 	"code": "1003",

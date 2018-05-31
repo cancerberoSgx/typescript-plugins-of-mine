@@ -16,7 +16,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@types/node": "^10.0.4"
+    "@types/node": "^10.0.4",
+    "typescript-ast-util": "file:../typescript-ast-util"
   },
   "devDependencies": {
     "ts-simple-ast": "^11.2.1",

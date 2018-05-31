@@ -10,6 +10,7 @@ import { declareMember } from './code-fix/declareMember';
 import { addReturnStatement } from './code-fix/addReturnStatement';
 import { implementInterfaceObjectLiteral } from './code-fix/implementInterfaceObjectLiteral';
 import { implementInterfaceMember } from './code-fix/implementInterfaceMember';
+import { renameVariable } from './code-fix/variableRename';
 
 
 export interface CodeFix {
@@ -26,13 +27,14 @@ export interface CodeFix {
   apply(arg: CodeFixOptions): ts.ApplicableRefactorInfo[] | void
 }
 
-export const codeFixes: CodeFix[] = [codeFixCreateConstructor, codeFixCreateVariable, declareClass,  const2let, nameFunction, implementInterfaceObjectLiteral, declareReturnType, declareMember, addReturnStatement, implementInterfaceMember];
+export const codeFixes: CodeFix[] = [codeFixCreateConstructor, codeFixCreateVariable, declareClass,  const2let, nameFunction, implementInterfaceObjectLiteral, declareReturnType, declareMember, addReturnStatement, implementInterfaceMember, renameVariable];
 
 export interface CodeFixOptions {
   diagnostics: ts.Diagnostic[]
   containedTarget?: ts.Node|undefined
   log: (str: string) => void
-  containingTarget: ts.Node | undefined
+  containingTarget: ts.Node,
+  containingTargetLight: ts.Node,
   simpleNode?: Node,
   program: ts.Program,
   sourceFile: ts.SourceFile,

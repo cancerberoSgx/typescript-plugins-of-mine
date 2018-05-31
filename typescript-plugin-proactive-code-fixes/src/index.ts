@@ -1,6 +1,6 @@
 import { now, timeFrom } from 'hrtime-now';
 import { Project, SourceFile, SourceFileAddOptions } from 'ts-simple-ast';
-import { findChildContainedRange, findChildContainingRange, getKindName, positionOrRangeToNumber, positionOrRangeToRange } from 'typescript-ast-util';
+import { findChildContainedRange, findChildContainingRange, getKindName, positionOrRangeToNumber, positionOrRangeToRange, findChildContainingRangeLight } from 'typescript-ast-util';
 import { createSimpleASTProject, getPluginCreate, LanguageServiceOptionals } from 'typescript-plugin-util';
 import * as ts_module from 'typescript/lib/tsserverlibrary';
 import { CodeFixOptions, codeFixes, CodeFix } from './codeFixes';
@@ -96,6 +96,7 @@ function getCodeFix(fileName: string, positionOrRange: number | ts.TextRange, en
   log(`getPreEmitDiagnostics took ${timeFrom(getDiagnosticT0)}`)
   const range = positionOrRangeToRange(start+1)
   const containingTarget = findChildContainingRange(sourceFile, range)
+  const containingTargetLight = findChildContainingRangeLight(sourceFile, range)
   const containedTarget = findChildContainedRange(sourceFile, range) || sourceFile
   if (!containingTarget) {
     log(`no getCodeFix because findChildContainedRange  target node is undefined `)
@@ -103,7 +104,7 @@ function getCodeFix(fileName: string, positionOrRange: number | ts.TextRange, en
   }
   log(`getCodeFix info: containingTarget.kind == ${getKindName(containingTarget.kind)} containedTarget.kind == ${containedTarget ? getKindName(containedTarget.kind) : 'NOCONTAINEDCHILD'} `)
   const codeFixesFilterT0 = now()
-  const target = { diagnostics, containingTarget, containedTarget, log, program, sourceFile, /*range, fileName,project: info.project*/ }
+  const target = { diagnostics, containingTarget, containingTargetLight, containedTarget, log, program, sourceFile, /*range, fileName,project: info.project*/ }
   const fixes = codeFixes.filter(fix => {
     try {
       return fix.predicate(target)

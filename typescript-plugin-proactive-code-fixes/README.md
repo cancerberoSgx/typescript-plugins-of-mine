@@ -54,7 +54,8 @@ Make sure you have installed typescript in your project (`npm i --save-dev types
  * Performance - getAppRefactors is taking almost  sec. Make a generic predicate with cache (get which diags are in current position and cache it - make a generic predicate since almost all use the same thign)
  * apply all quick fixes in this file ! define a mechanism of priorities when two or more fixes attach the same position.
  * perhaps we could just recreate the simple-ast sourcefile instead of the whole project 
- * use getcodefixes instead of refactors
+ * use getcodefixes instead of refactors - blocked - done but no way of defining expensive fixes
+ * make sure for each if error is selected in problems view then that selection will suggest the fix
 
 # Ideas
 
