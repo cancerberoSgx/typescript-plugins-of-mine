@@ -8,7 +8,7 @@ import { nameFunction } from './code-fix/nameFunction';
 import { declareReturnType } from './code-fix/declareReturnType';
 import { declareMember } from './code-fix/declareMember';
 import { addReturnStatement } from './code-fix/addReturnStatement';
-import { implementInterfaceObjectLiteral } from './code-fix/ImplementInterfaceObjectLiteral';
+import { implementInterfaceObjectLiteral } from './code-fix/implementInterfaceObjectLiteral';
 import { implementInterfaceMember } from './code-fix/implementInterfaceMember';
 
 

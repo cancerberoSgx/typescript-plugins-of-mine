@@ -87,7 +87,7 @@ Each project has its own TODO but here are some general ones:
  a solutino could be: parsing the mssage and detecting this type "(diag: Diagnostic[], node: Node<Node>, log: any) => void" and replacing it by " (arg: PredicateArg) => any " ? 
 
 
-* (done) (d:l, u: m/h) adding a extra property to an object that implements an interface throw the foloowing error, we should suggest adding that to interface / class...  Q: what about other objects implementing it in the rest of the project
+* (done) (d:low, u: m/h) adding a extra property to an object that implements an interface throw the foloowing error, we should suggest adding that to interface / class...  Q: what about other objects implementing it in the rest of the project
 Type '{ diagnostics: Diagnostic[]; containingTarget: Identifier; log: { (message?: any, ...optionalPara...' is not assignable to type 'PredicateArg'.  Object literal may only specify known properties, and 'program' does not exist in type 'PredicateArg'.
 
 d===l only if we add the new property as any or ugly casting. i think is OK if we give hints, like {..., speed: "aMeasurement FIXME" as any}

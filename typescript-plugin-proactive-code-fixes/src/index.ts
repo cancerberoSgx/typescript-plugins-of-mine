@@ -166,39 +166,39 @@ function applyCodeFix(fix: CodeFix,  options: CodeFixOptions,   formatOptions, p
 
 
 
-// function getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: ReadonlyArray<number>, formatOptions: ts.FormatCodeSettings): ReadonlyArray<ts.CodeFixAction> {
-//   const originalCodeFixes = info.languageService.getCodeFixesAtPosition(fileName, start, end, errorCodes, formatOptions)
-//   const codeFix = getCodeFix(fileName, start, end, errorCodes, formatOptions)
-//   if (!codeFix) {
-//     log(`getCodeFixesAtPosition false because !codeFix`)
-//     return originalCodeFixes
-//   }
-//   target = codeFix.target
-//   const codeFixActions = codeFix.fixes.map(f => ({
-//     fixId: REFACTOR_ACTION_NAME + '-' + f.name,
-//     description: f.description(codeFix.target),
-//     changes: []
-//   }))
-//   log(`getCodeFixesAtPosition - completions returned by .languageService.getCodeFixesAtPosition are  ${codeFixActions ? JSON.stringify(originalCodeFixes) : 'codeFixActions'}  -  ${start}`)
-//   return originalCodeFixes.concat(codeFixActions)
-// }
+function getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: ReadonlyArray<number>, formatOptions: ts.FormatCodeSettings): ReadonlyArray<ts.CodeFixAction> {
+  const originalCodeFixes = info.languageService.getCodeFixesAtPosition(fileName, start, end, errorCodes, formatOptions)
+  const codeFix = getCodeFix(fileName, start, end, errorCodes, formatOptions)
+  if (!codeFix) {
+    log(`getCodeFixesAtPosition false because !codeFix`)
+    return originalCodeFixes
+  }
+  target = codeFix.target
+  const codeFixActions = codeFix.fixes.map(f => ({
+    fixId: REFACTOR_ACTION_NAME + '-' + f.name,
+    description: f.description(codeFix.target),
+    changes: []
+  }))
+  log(`getCodeFixesAtPosition - completions returned by .languageService.getCodeFixesAtPosition are  ${codeFixActions ? JSON.stringify(originalCodeFixes) : 'codeFixActions'}  -  ${start}`)
+  return originalCodeFixes.concat(codeFixActions)
+}
 
 
-// function getCombinedCodeFix(scope: ts.CombinedCodeFixScope, fixId: string, formatOptions: ts.FormatCodeSettings): ts.CombinedCodeActions {
-//   const t0 = now()
-//   log(`getCombinedCodeFix fixId`)
-//   const prior = getCombinedCodeFix(scope, fixId, formatOptions)
-//   if (!fixId.startsWith(REFACTOR_ACTION_NAME) || !target.containingTarget) {
-//     log(`no getCombinedCodeFix ${fixId} because and !fixId.startsWith(REFACTOR_ACTION_NAME) || !target.containingTarget`)
-//     return prior
-//   }
-//   const fixName = fixId.substring(REFACTOR_ACTION_NAME.length + 1, fixId.length)
-//   const fix = codeFixes.find(fix => fix.name === fixName)
-//   if (!fix) {
-//     info.project.projectService.logger.info(`no getCombinedCodeFix ${fixId} because no fix was found for actionName == ${fixId}`)
-//     return prior
-//   }
-//   applyCodeFix(fix, target, formatOptions, target.containingTarget.getStart())
-//   log(`no getCombinedCodeFix ${fixId} total time took ${timeFrom(t0)}`)
-//   return prior
-// }
+function getCombinedCodeFix(scope: ts.CombinedCodeFixScope, fixId: string, formatOptions: ts.FormatCodeSettings): ts.CombinedCodeActions {
+  const t0 = now()
+  log(`getCombinedCodeFix fixId`)
+  const prior = getCombinedCodeFix(scope, fixId, formatOptions)
+  if (!fixId.startsWith(REFACTOR_ACTION_NAME) || !target.containingTarget) {
+    log(`no getCombinedCodeFix ${fixId} because and !fixId.startsWith(REFACTOR_ACTION_NAME) || !target.containingTarget`)
+    return prior
+  }
+  const fixName = fixId.substring(REFACTOR_ACTION_NAME.length + 1, fixId.length)
+  const fix = codeFixes.find(fix => fix.name === fixName)
+  if (!fix) {
+    info.project.projectService.logger.info(`no getCombinedCodeFix ${fixId} because no fix was found for actionName == ${fixId}`)
+    return prior
+  }
+  applyCodeFix(fix, target, formatOptions, target.containingTarget.getStart())
+  log(`no getCombinedCodeFix ${fixId} total time took ${timeFrom(t0)}`)
+  return prior
+}

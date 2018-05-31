@@ -3,7 +3,7 @@ class Alpha {
 
 function main() {
   alpha2 = new Alpha('hello', 1, new Date()) // declare constructor and
-} 
+}
 counter = 9 // declare variable
 
 
@@ -21,4 +21,19 @@ function fn<T>(): FNResult<T> {
     log: (string) => { return Math.random() },
     kill: function <T>() { return 1 }
   }
+}
+
+
+interface Named {
+  name: string
+}
+const named: Named = {
+  name: 'seba',
+  lastname: 'gurin'
+}
+class Unit {
+  energy: number
+}
+const unit: Unit = {
+  energy: 123, color: 'red'
 }

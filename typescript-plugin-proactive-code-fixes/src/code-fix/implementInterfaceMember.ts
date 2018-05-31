@@ -1,7 +1,3 @@
-// Heads up - this plugin and ObjectLiteralImplementInterface have the same description and attack the same problem}
-// TODO: joing both in a single code fix / file. 
-
-// attacks the error : "code": "2416","message": "Property 'method1' in type 'SomeImplementation' is not assignable to the same property in base type 'SomeInterface'.\n  Type '(param: number) => number[]' is not assignable to type '(param: string) => number[]'.\n    Types of parameters 'param' and 'param' are incompatible.\n      Type 'string' is not assignable to type 'number'.",
 
 
 import { TypeGuards } from 'ts-simple-ast';
@@ -10,11 +6,36 @@ import { findAscendant, getKindName } from 'typescript-ast-util';
 import { CodeFix, CodeFixOptions } from '../codeFixes';
 import { findInterfacesWithPropertyNamed, fixSignature } from '../util';
 
+
+/**
+# Description: 
+
+When implementation miss ot implement a member or is doing it incorrectly, select member name and accept suggestion "implement interface"
+
+# Diagnostic error attacked: 
+
+"code": "2416","message": "Property 'method1' in type 'SomeImplementation' is not assignable to the same property in base type 'SomeInterface'.\n  Type '(param: number) => number[]' is not assignable to type '(param: string) => number[]'.\n    Types of parameters 'param' and 'param' are incompatible.\n      Type 'string' is not assignable to type 'number'.",
+
+# How to reproduce: 
+```
+interface SomeInterface {
+  prop1: { s: string, n: Date }[]
+}
+class Class2 implements SomeInterface {
+  prop1: boolean[]        <----- here select prop1 and implement interface it will fix prop1 signature
+}
+```
+# TODO
+
+ * TODO: work for constructors and setter/getter members
+ * TODO: review
+
+*/
+
 export const implementInterfaceMember: CodeFix = {
   name: 'implementInterfaceMember',
   config: { recursive: false, addMissingPropertiesToInterface: false }, // recursive tre will generate the whole sub literals.. 
   predicate: (arg: CodeFixOptions): boolean => {
-
     const targetLine = ts.getLineAndCharacterOfPosition(arg.sourceFile, arg.containingTarget.getStart()).line
     const diagnostics = arg.diagnostics.filter(d => d.code === 2416).filter(diag => {
       const diagLineStart = ts.getLineAndCharacterOfPosition(arg.sourceFile, diag.start).line
@@ -51,13 +72,8 @@ export const implementInterfaceMember: CodeFix = {
 
   apply: (arg: CodeFixOptions): ts.ApplicableRefactorInfo[] | void => {
 
-    // print = c.print
-    // clone source file so this one is not modified
-    // const sourceFile = arg.simpleProject.createSourceFile('tmp/tmp_sourcefile_' + new Date().getTime() + '.ts', c.node.getSourceFile().getFullText())
-    // TODO: support constructors and getter/setter
     const sourceFile = arg.simpleNode.getSourceFile()
     const id = arg.simpleNode
-    // const id = sourceFile.getDescendantAtPos(487)//(755)//(655)//(764)
     const member = id.getParent()
     const decl = member.getParent()
     if (!(TypeGuards.isIdentifier(id) &&

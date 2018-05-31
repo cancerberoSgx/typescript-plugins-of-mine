@@ -1,8 +1,13 @@
-// attacks function declarations without names when they are not called
-// 	"code": "1003",
-// 	"message": "Identifier expected."
+/**
+ * 
+attacks function declarations without names when they are not called
 
+"code": "1003",	"message": "Identifier expected."
 
+Example: 
+
+function(){}
+*/
 import { TypeGuards } from 'ts-simple-ast';
 import * as ts from 'typescript';
 import { getKindName } from 'typescript-ast-util';

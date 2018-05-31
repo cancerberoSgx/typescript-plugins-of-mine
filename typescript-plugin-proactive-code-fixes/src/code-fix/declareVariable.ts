@@ -2,12 +2,13 @@ import * as ts from 'typescript';
 import { getKindName } from 'typescript-ast-util';
 import { CodeFix, CodeFixOptions } from '../codeFixes';
 
-// attacks :
-// "code": "2304", Cannot find name 'b'.",
+/**
+# attacks :
+"code": "2304", Cannot find name 'b'.",
 
-// TODO: test with jsdoc or a trailing comment
-// ISSUE : not suggesting in this case:  "a=new A(1)" - if in a new statement dont suggest
-
+TODO: test with jsdoc or a trailing comment
+ISSUE : not suggesting in this case:  "a=new A(1)" - if in a new statement dont suggest
+*/
 export const codeFixCreateVariable: CodeFix = {
 
   name: 'Declare variable',
