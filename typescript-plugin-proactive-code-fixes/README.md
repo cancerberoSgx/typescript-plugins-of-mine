@@ -11,6 +11,7 @@ TypeScript Langauge Service Plugin with several small proactive code refactors t
 * declare an interface from a return value
 * declare member - complements the code fix already existing in typescript to fullfill all cases. declaring missing properties / methods 
 * add missing return statement
+* variable rename when duplicate names exisits in the same code block
 
 and more to come!!
 
@@ -56,6 +57,8 @@ Make sure you have installed typescript in your project (`npm i --save-dev types
  * perhaps we could just recreate the simple-ast sourcefile instead of the whole project 
  * use getcodefixes instead of refactors - blocked - done but no way of defining expensive fixes
  * make sure for each if error is selected in problems view then that selection will suggest the fix
+ * new member declarations should add jsdoc
+ * dedsclare return type very buggy
 
 # Ideas
 

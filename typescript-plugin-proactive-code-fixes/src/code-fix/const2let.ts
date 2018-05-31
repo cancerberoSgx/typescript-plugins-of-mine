@@ -1,12 +1,23 @@
-// Attacks the following error by changing const declaration to let : 
-// 	"code": "2540",
-// 	"message": "Cannot assign to 'a' because it is a constant or a read-only property.",
 
 import * as ts from 'typescript';
 import { getKindName } from 'typescript-ast-util';
 import { CodeFix, CodeFixOptions } from '../codeFixes';
 import { VariableDeclarationKind } from 'ts-simple-ast';
 
+/*
+
+# description
+
+reassigning a const variable is an error  this fix suggest changing it to let:
+
+# example
+```
+const a = 1
+a = 2
+```
+# Attack: 	"code": "2540",	"message": "Cannot assign to 'a' because it is a constant or a read-only property.",
+
+  */
 export const const2let: CodeFix = {
   name: 'const2let',
   config: { changeTo: 'const' }, // to change to let or var
@@ -14,19 +25,11 @@ export const const2let: CodeFix = {
     if (!arg.diagnostics.find(d => d.code === 2540)) {  
       return false
     }
-    if (arg.containingTarget.kind === ts.SyntaxKind.Identifier){
-      // in this case user selected a fragment of the id. quick issue fix: 
-      if(arg.containedTarget && arg.containedTarget.kind === ts.SyntaxKind.SourceFile){
-        arg.containedTarget=undefined
-      }
-      return true
-    }
-    else if (arg.containedTarget && arg.containedTarget.kind === ts.SyntaxKind.Identifier){
-      // user selected the exactly the id (double click)
+    if (arg.containingTargetLight.kind === ts.SyntaxKind.Identifier){
       return true
     }
     else {
-      arg.log('codeFixCreateVariable predicate false because child.kind dont match ' + getKindName(arg.containingTarget.kind))
+      arg.log('codeFixCreateVariable predicate false because child.kind dont match ' + getKindName(arg.containingTargetLight.kind))
       return false
     }
   },

@@ -1,6 +1,13 @@
 // Solves this two errors by adding properties to the object literal definition (or adding extra properties declared by literal to the intereface (f config.addMissingPropertiesToInterface===true))
 
 /*
+
+# description
+
+you explicit a type for a object literal that is not declared - this fix will sugest create the interface automatically inferring from that object literals
+
+# example
+```
 const tree1: Living = { // 	"code": "2322",// 	"message": "Type '{}' is not assignable to type 'Living'.\n  Property 'name' is missing in type '{}'.",
 }
 interface Living {
@@ -10,6 +17,10 @@ const tree2: Living = {
   name: 'n',
   dddd: 'hshs' //	"code": "2322",	"message": "Type '{ name: string; dddd: string; }' is not assignable to type 'Living'.\n  Object literal may only specify known properties, and 'dddd' does not exist in type 'Living'.",
 }
+```
+
+# attacks
+	"code": "2322",// 	"message": "Type '{}' is not assignable to type 'Living'.\n  Property 'name' is missing in type '{}'.",
 */
 
 import * as ts from 'typescript';

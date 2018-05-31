@@ -8,6 +8,7 @@ import { findInterfacesWithPropertyNamed, fixSignature } from '../util';
 
 
 /**
+
 # Description: 
 
 When implementation miss ot implement a member or is doing it incorrectly, select member name and accept suggestion "implement interface"
@@ -48,17 +49,17 @@ export const implementInterfaceMember: CodeFix = {
       return false
     }
 
-    if (arg.containingTarget.kind === ts.SyntaxKind.Identifier) {
+    if (arg.containingTargetLight.kind === ts.SyntaxKind.Identifier) {
       // in this case user selected a fragment of the id. quick issue fix: 
       if (arg.containedTarget && arg.containedTarget.kind === ts.SyntaxKind.SourceFile) {
         arg.containedTarget = undefined
       }
       return true
     }
-    else if (arg.containedTarget && arg.containedTarget.kind === ts.SyntaxKind.Identifier) {
-      // user selected the exactly the id (double click)
-      return true
-    }
+    // else if (arg.containedTarget && arg.containedTarget.kind === ts.SyntaxKind.Identifier) {
+    //   // user selected the exactly the id (double click)
+    //   return true
+    // }
     else if (arg.containedTarget && (findAscendant(arg.containedTarget, n => n.kind === ts.SyntaxKind.PropertyDeclaration) || findAscendant(arg.containedTarget, n => n.kind === ts.SyntaxKind.VariableDeclaration))) {
       return true
     }

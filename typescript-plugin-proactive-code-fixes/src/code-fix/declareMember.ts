@@ -39,19 +39,10 @@ export const declareMember: CodeFix = {
   name: 'declareMember',
   config: {},
   predicate: (arg: CodeFixOptions): boolean => {
-    //TODO: review this predicate
     if (!arg.diagnostics.find(d => d.code === 2339)) {
       return false
     }
-    if (arg.containingTarget.kind === ts.SyntaxKind.Identifier) {
-      // in this case user selected a fragment of the id. quick issue fix: 
-      if (arg.containedTarget && arg.containedTarget.kind === ts.SyntaxKind.SourceFile) {
-        arg.containedTarget = undefined
-      }
-      return true
-    }
-    else if (arg.containedTarget && arg.containedTarget.kind === ts.SyntaxKind.Identifier) {
-      // user selected the exactly the id (double click)
+    if (arg.containingTargetLight.kind === ts.SyntaxKind.Identifier) {
       return true
     }
     else {
@@ -68,7 +59,6 @@ export const declareMember: CodeFix = {
     const newMemberName_ = node.getText()
     const accessExpr = node.getParent()
     if (!TypeGuards.isPropertyAccessExpression(accessExpr)) {
-      // ypescript-plugin-proactive-code-fixes declareMember apply WARNING !TypeGuards.isPropertyAccessExpression(accessExpr) BinaryExpression
       return print(`WARNING !TypeGuards.isPropertyAccessExpression(accessExpr) ${accessExpr.getKindName()}`)
     }
     const expressionWithTheType = accessExpr.getParent().getKind() === ts.SyntaxKind.CallExpression ?
@@ -105,15 +95,8 @@ const fixTargetDecl = (targetNode, newMemberName, newMemberType, args, print) =>
         .find(dd => (TypeGuards.isInterfaceDeclaration(dd) || TypeGuards.isClassDeclaration(dd)) && dd.getSourceFile() === d.getSourceFile()
         )
         if(typeDeclInThisFile && (TypeGuards.isInterfaceDeclaration(typeDeclInThisFile) || TypeGuards.isClassDeclaration(typeDeclInThisFile))){
-          // const typeDeclHasNoMemberAlready = typeDeclInThisFile.findReferences().find(r=>{r.getDefinition()})
         return fixTargetDecl(typeDeclInThisFile, newMemberName, newMemberType, args, print)
         }
-      
-      // if (){
-
-      // } &&  typeDeclInThisFile.getMembers().find(m=>true)
-    // ) {
-      // }
       else 
       if (!TypeGuards.isObjectLiteralExpression(targetInit)) {
         //TODO - unknown situation - we should print in the file for discover new cases.

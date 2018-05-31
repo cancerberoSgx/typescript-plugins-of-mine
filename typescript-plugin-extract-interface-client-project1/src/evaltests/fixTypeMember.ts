@@ -1,4 +1,6 @@
 
+// TODO: I think this is almost the same as declareMember
+
 
 // import * as ts from 'typescript'
 // import { ClassDeclaration, InterfaceDeclaration, TypeGuards, ExpressionWithTypeArguments, ParameterDeclaration, ParameterDeclarationStructure, Type, MethodSignature, FunctionLikeDeclaration } from 'ts-simple-ast'

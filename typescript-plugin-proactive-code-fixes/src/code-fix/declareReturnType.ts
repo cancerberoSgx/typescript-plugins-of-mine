@@ -1,21 +1,35 @@
 /*
-Attacks this problem:   
-
-"code": "2304",	"message": "Cannot find name 'GResult'.",
-
-Example, you declare a function like the following - return type is not declared. The suggested fix is to declare it automatically based on the return value of the fn (using typechecking inference)
-
-function fn<T>(): FNResult<T> {
-  return { a: 1, b: 's', log: (msg) => boolean, kill: function <T>() { return 1 } }
+buggy : TODOS and errors - things that works and things that doesn't work yet
+function g(): GResult {	// THIS works
+  return { a: 1, b: 's' }
+}
+const g2 = (): GResult2 => ({ a: 1, b: 's' })// TODO: doesn't work
+const g3 = (): GResult3 => { return { a: 1, b: 's' } } // TODO: doesn't work
+const h2 = (): HResult2 => ({ // TODO this doesn't work - error!
+  a: 1, b: 's', log: (msg) => true, kill: function () { return 1 }
+})
+const h3 = (): HelloType => {  // TODO this doesn't work 
+  return {
+    a: 1, b: 's', log: (msg) => true, kill: function () { return 1 }
+  }
+}
+function h(): Magallanes { //TODO: generates empty interface 
+  return {
+    a: 1, b: 's', log: (msg: boolean) => { return true }, kill: function () { return 1 }
+  }
+}
+function fn<T>(): FNResult<T> { // THIS works
+  return { a: 1, b: 's', log: (msg: string) => { return Math.random() > 0.1 ? true : 'foo' }, kill: function <T>() { return 1 } }
 }
 */
 
-
 // TODO: members type params (generics) - both in interface and in members and in params.
+// arrow functions with return and without braces _ error!
 // TODO: constructors
 // TODO: getters / setters ? 
 // TODO: test jsdoc
 //TODO: check if diagnostic is in the same position  in predicate 
+//TODO: appearing in places it shouldnt
 
 import * as ts from 'typescript';
 import { getKindName } from 'typescript-ast-util';
@@ -23,7 +37,24 @@ import { CodeFix, CodeFixOptions } from '../codeFixes';
 import { VariableDeclarationKind, FunctionDeclaration, TypeGuards, InterfaceDeclarationStructure, MethodSignatureStructure } from 'ts-simple-ast';
 import { now, timeFrom, fromNow } from 'hrtime-now';
 
+/** 
 
+# Description
+
+declare type for return value but no interface or class declaration is present for that - we create a new interface from return value 
+
+# Attacks
+
+"code": "2304",	"message": "Cannot find name 'GResult'.",
+
+# Example, 
+
+declare a function like the following - return type is not declared. The suggested fix is to declare it automatically based on the return value of the fn (using typechecking inference)
+
+function fn<T>(): FNResult<T> {
+  return { a: 1, b: 's', log: (msg) => boolean, kill: function <T>() { return 1 } }
+}
+*/
 export const declareReturnType: CodeFix = {
   name: 'declareReturnType',
   config: {  },  
@@ -32,15 +63,7 @@ export const declareReturnType: CodeFix = {
     if (!arg.diagnostics.find(d => d.code === 2304)) {
       return false
     } 
-    if (arg.containingTarget.kind === ts.SyntaxKind.Identifier) {
-      // in this case user selected a fragment of the id. quick issue fix: 
-      if (arg.containedTarget && arg.containedTarget.kind === ts.SyntaxKind.SourceFile) {
-        arg.containedTarget = undefined
-      }
-      return true
-    }
-    else if (arg.containedTarget && arg.containedTarget.kind === ts.SyntaxKind.Identifier) {
-      // user selected the exactly the id (double click)
+    if (arg.containingTargetLight.kind === ts.SyntaxKind.Identifier) {
       return true
     }
     else {

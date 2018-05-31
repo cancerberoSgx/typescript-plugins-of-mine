@@ -3,6 +3,16 @@ import { getKindName } from 'typescript-ast-util';
 import { CodeFix, CodeFixOptions } from '../codeFixes';
 
 /**
+
+# description 
+
+assign an undeclared variable to a vaalue
+
+example: 
+
+a=1
+
+
 # attacks :
 "code": "2304", Cannot find name 'b'.",
 

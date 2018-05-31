@@ -1,8 +1,3 @@
-/*
-Attacks this problem:   
-
-//"code": "2355",	"message": "A function whose declared type is neither 'void' nor 'any' must return a value.",
-*/
 
 import * as ts from 'typescript';
 import { getKindName } from 'typescript-ast-util';
@@ -10,11 +5,26 @@ import { CodeFix, CodeFixOptions } from '../codeFixes';
 import { Statement } from '../../../typescript-ast-util/node_modules/typescript/lib/tsserverlibrary';
 import { Block, SourceFile, TypeGuards, StatementedNode, Node } from 'ts-simple-ast';
 
+/**
+
+# description
+
+function-like is returning a value but no return type was declared in signature. suggest adding a return type inferring from return value
+
+# example
+
+```const other = (a: string): number => {}```
+
+# Attacks
+
+"code": "2355",	"message": "A function whose declared type is neither 'void' nor 'any' must return a value.",
+
+*/
+
 export const addReturnStatement: CodeFix = {
   name: 'addReturnStatement',
   config: {},
   predicate: (arg: CodeFixOptions): boolean => {
-    //TODO: review this predicate
     if (!arg.diagnostics.find(d => d.code === 2355)) {
       return false
     }
@@ -29,7 +39,7 @@ export const addReturnStatement: CodeFix = {
     }
   },
 
-  description: (arg: CodeFixOptions): string => `Add return statement?`,
+  description: (arg: CodeFixOptions): string => `Add Return Statement`,
 
   apply: (arg: CodeFixOptions): ts.ApplicableRefactorInfo[] | void => {
     const firstStatementedNode = arg.simpleNode.getAncestors().find(TypeGuards.isStatementedNode)
@@ -42,6 +52,8 @@ export const addReturnStatement: CodeFix = {
 function addReturnStatementImpl(sourceFile: SourceFile, node: StatementedNode&Node){
   const statements = node.getStatements()
   // methodDecl.addStatements('return null;')  // this fails (  https://github.com/dsherret/ts-ast-viewer/issues/20)so we hack: 
+  //TODO: should be fixed - update ts-simple-ast
+  //TODO: use getDefaultValueForType to return an example value instead of null
   if(statements.length){
     sourceFile.insertText(statements[statements.length-1].getEnd(), '\nreturn null;')
   }  

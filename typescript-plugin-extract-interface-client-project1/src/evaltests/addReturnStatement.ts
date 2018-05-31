@@ -1,12 +1,8 @@
 
 function ghghg(t?: boolean[]): string[] | number {
   console.log('forgot to return')
-  return null;
 }
-const other = (a: string): number => {
-
-  return null;
-}
+const other = (a: string): number => {}
 //"code": "2355",	"message": "A function whose declared type is neither 'void' nor 'any' must return a value.",
 import {forgotttt} from './forgottenExport'
 forgotttt.method1()

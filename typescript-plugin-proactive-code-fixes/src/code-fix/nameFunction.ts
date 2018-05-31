@@ -1,12 +1,17 @@
 /**
- * 
-attacks function declarations without names when they are not called
+
+#description
+
+function declarations without names when they are not called is an error - suggest putting a name
+
+# attacks
 
 "code": "1003",	"message": "Identifier expected."
 
 Example: 
 
 function(){}
+
 */
 import { TypeGuards } from 'ts-simple-ast';
 import * as ts from 'typescript';
