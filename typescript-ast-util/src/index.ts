@@ -96,14 +96,13 @@ export function findChildContainedRange(sourceFile: ts.SourceFile, r: ts.TextRan
  * @param predicate 
  */
 export function findParentFromPosition(
-  info: ts_module.server.PluginCreateInfo,
-  fileName: string,
+  sourceFile : ts_module.SourceFile|undefined,
   positionOrRange: number | ts.TextRange,
   predicate: (node: ts.Node) => boolean)
   : ts.Node | undefined {
-  const sourceFile = info.languageService.getProgram().getSourceFile(fileName)
+  // const sourceFile = info.languageService.getProgram().getSourceFile(fileName)
   if (!sourceFile) {
-    return
+    return 
   }
   const nodeAtCursor = findChildContainingPosition(sourceFile, positionOrRangeToNumber(positionOrRange))
   if (!nodeAtCursor) {
@@ -346,7 +345,7 @@ export function findChild2(
 //identifiers helpers
 
 export function findIdentifier(node: ts.Node | undefined): ts.Identifier {
-  return node.kind === ts_module.SyntaxKind.Identifier ? node as ts.Identifier : findChild(node, child => child.kind === ts_module.SyntaxKind.Identifier, false) as ts.Identifier
+  return node.kind === ts.SyntaxKind.Identifier ? node as ts.Identifier : findChild(node, child => child.kind === ts.SyntaxKind.Identifier, false) as ts.Identifier
 }
 export function findIdentifierString(node: ts.Node | undefined): string {
   const id = findIdentifier(node)

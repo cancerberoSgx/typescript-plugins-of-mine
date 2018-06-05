@@ -19,8 +19,9 @@
   "dependencies": {
     "hrtime-now": "^1.0.3",
     "stack-trace": "0.0.10",
-    "ts-simple-ast": "^11.2.0",
-    "typescript": "^2.8.3",
+    "@types/node": "^10.0.4",
+    "ts-simple-ast": "^12.1.0",
+    "typescript": "^2.9.1",
     "typescript-ast-util": "file:../typescript-ast-util",
     "typescript-plugin-util": "file:../typescript-plugin-util"
   },

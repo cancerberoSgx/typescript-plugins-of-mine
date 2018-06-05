@@ -40,8 +40,8 @@ export = function init(modules: { typescript: typeof ts_module }) {
 
 let nodeAtCursor: ts.Node | undefined
 
-function getApplicableRefactors(fileName: string, positionOrRange: number | ts.TextRange): ts_module.ApplicableRefactorInfo[] {
-  const refactors = info.languageService.getApplicableRefactors(fileName, positionOrRange) || []
+function getApplicableRefactors(fileName: string, positionOrRange: number | ts.TextRange, userPreferences: ts_module.UserPreferences): ts_module.ApplicableRefactorInfo[] {
+  const refactors = info.languageService.getApplicableRefactors(fileName, positionOrRange, userPreferences) || []
   const sourceFile = info.languageService.getProgram().getSourceFile(fileName)
   if (!sourceFile) {
     return refactors

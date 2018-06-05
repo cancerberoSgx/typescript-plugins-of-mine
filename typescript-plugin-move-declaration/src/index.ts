@@ -23,10 +23,10 @@ const interactionTool = create({
 
 let selectedAction: Action
 
-function getApplicableRefactors(fileName: string, positionOrRange: number | ts.TextRange)
+function getApplicableRefactors(fileName: string, positionOrRange: number | ts.TextRange, userPreferences: ts_module.UserPreferences)
   : ts.ApplicableRefactorInfo[] {
   const t0 = now()
-  const refactors = info.languageService.getApplicableRefactors(fileName, positionOrRange) || []
+  const refactors = info.languageService.getApplicableRefactors(fileName, positionOrRange, userPreferences) || []
   const program = info.languageService.getProgram()
   const sourceFile = program.getSourceFile(fileName)
   if (!sourceFile) {
@@ -49,9 +49,9 @@ function getApplicableRefactors(fileName: string, positionOrRange: number | ts.T
 
 function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSettings,
   positionOrRange: number | ts_module.TextRange, refactorName: string,
-  actionName: string): ts.RefactorEditInfo | undefined {
+  actionName: string, userPreferences: ts_module.UserPreferences): ts.RefactorEditInfo | undefined {
   const t0 = now()
-  const refactors = info.languageService.getEditsForRefactor(fileName, formatOptions, positionOrRange, refactorName, actionName)
+  const refactors = info.languageService.getEditsForRefactor(fileName, formatOptions, positionOrRange, refactorName, actionName, userPreferences)
   if (actionName !== REFACTOR_ACTION_NAME) {
     return refactors
   }

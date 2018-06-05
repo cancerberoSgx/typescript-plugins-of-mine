@@ -102,7 +102,7 @@ export function getDefaultValueForType(t: Type): string {
     return 'false'
   } else if (t.getText() === 'number') {
     return '0'
-  } else if (t.isArrayType()) {
+  } else if (t.isArray()) {
     return '[]'
   } else {
     return 'null'

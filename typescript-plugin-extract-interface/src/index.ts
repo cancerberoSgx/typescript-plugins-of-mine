@@ -6,6 +6,7 @@
 
 import { findParentFromPosition, positionOrRangeToNumber } from 'typescript-ast-util'
 import * as ts_module from 'typescript/lib/tsserverlibrary'
+// import * as ts from 'typescript'
 import { extractInterface } from './extract-interface'
 import { now } from 'hrtime-now'
 
@@ -24,7 +25,7 @@ function init(modules: { typescript: typeof ts_module }) {
     const proxy: ts.LanguageService = Object.create(null)
     for (let k of Object.keys(info.languageService) as Array<keyof ts.LanguageService>) {
       const x = info.languageService[k]
-      proxy[k] = (...args: Array<{}>) => x.apply(info.languageService, args)
+      proxy[k] = (...args: Array<{}>) => x!.apply(info.languageService, args)
     }
 
     proxy.getApplicableRefactors = getApplicableRefactors
@@ -40,9 +41,9 @@ export = init
 
 let selectedDef: ts.ReferencedSymbol | undefined
 
-function getApplicableRefactors(fileName: string, positionOrRange: number | ts.TextRange): ts_module.ApplicableRefactorInfo[] {
+function getApplicableRefactors(fileName: string, positionOrRange: number | ts.TextRange, preferences: ts_module.UserPreferences | undefined): ts_module.ApplicableRefactorInfo[] {
   const t0 = now()
-  const refactors = info.languageService.getApplicableRefactors(fileName, positionOrRange) || []
+  const refactors = info.languageService.getApplicableRefactors(fileName, positionOrRange, preferences) || []
   const refs = info.languageService.findReferences(fileName, positionOrRangeToNumber(positionOrRange))
   if (!refs || !refs.length) {
     return refactors
@@ -68,16 +69,20 @@ function getApplicableRefactors(fileName: string, positionOrRange: number | ts.T
 
 function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSettings,
   positionOrRange: number | ts_module.TextRange, refactorName: string,
-  actionName: string): ts.RefactorEditInfo | undefined {
+  actionName: string, preferences: ts_module.UserPreferences | undefined): ts.RefactorEditInfo | undefined {
   const t0 = now()
 
-  const refactors = info.languageService.getEditsForRefactor(fileName, formatOptions, positionOrRange, refactorName, actionName)
+  const refactors = info.languageService.getEditsForRefactor(fileName, formatOptions, positionOrRange, refactorName, actionName, preferences)
   if (actionName != REFACTOR_ACTION_NAME) {
     return refactors
   }
+  const sourceFile : ts.SourceFile|undefined = info.languageService.getProgram().getSourceFile(fileName)
   // find the first parent that is a class declaration starting from given position
-  const targetNode = findParentFromPosition(info, fileName, positionOrRange,
+  const targetNode  = findParentFromPosition(sourceFile, positionOrRange,
     parent => parent.kind === ts.SyntaxKind.ClassDeclaration)
+  if(targetNode && ts.isClassDeclaration(targetNode)){
+    
+  }
   const newText = extractInterface(targetNode as ts_module.ClassDeclaration)
   if (targetNode && newText) {
     const targetSourceFile = targetNode.getSourceFile()
@@ -99,3 +104,4 @@ function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSetti
   }
 
 }
+

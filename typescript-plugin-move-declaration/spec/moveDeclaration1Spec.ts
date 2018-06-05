@@ -66,7 +66,7 @@ function doAssert(projectPath: string) {
   })
 
   it(`other files with references to class should change its imports accordingly`, () => {
-    expect(cat(`${projectPath}/src/tools.ts`).toString()).toContain(`import { Apple, a as a2 } from "./model/level2/usingApples";`)
+    expect(cat(`${projectPath}/src/tools.ts`).toString()).toContain(`import { a as a2, Apple } from "./model/level2/usingApples";`)
   })
 }
 

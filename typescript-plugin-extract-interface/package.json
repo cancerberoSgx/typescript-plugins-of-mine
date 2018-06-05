@@ -17,9 +17,9 @@
   "author": "Sebastian Gurin",
   "license": "MIT",
   "dependencies": {
-    "hrtime-now": "^1.0.1",
+    "hrtime-now": "^1.0.5",
     "shelljs": "^0.8.2",
-    "typescript": "^2.8.3",
+    "typescript": "^2.9.1",
     "typescript-ast-util": "file:../typescript-ast-util"
   },
   "devDependencies": {},

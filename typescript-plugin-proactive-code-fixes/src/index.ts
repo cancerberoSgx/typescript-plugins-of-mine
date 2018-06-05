@@ -24,9 +24,9 @@ export = getPluginCreate(pluginDefinition, (modules, anInfo) => {
 
 let target: CodeFixOptions
 
-function getApplicableRefactors(fileName: string, positionOrRange: number | ts.TextRange)
+function getApplicableRefactors(fileName: string, positionOrRange: number | ts.TextRange, userPreferences: ts_module.UserPreferences)
   : ts.ApplicableRefactorInfo[] {
-  const refactors = info.languageService.getApplicableRefactors(fileName, positionOrRange) || []
+  const refactors = info.languageService.getApplicableRefactors(fileName, positionOrRange, userPreferences) || []
   const codeFix = getCodeFix(fileName, positionOrRange)
   if (!codeFix) {
     return refactors
@@ -47,10 +47,10 @@ function getApplicableRefactors(fileName: string, positionOrRange: number | ts.T
 
 
 
-function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSettings, positionOrRange: number | ts.TextRange, refactorName: string,   actionName: string): ts.RefactorEditInfo | undefined {
+function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSettings, positionOrRange: number | ts.TextRange, refactorName: string,   actionName: string, userPreferences: ts_module.UserPreferences): ts.RefactorEditInfo | undefined {
   const t0 = now()
   log(`getEditsForRefactor ${positionOrRange} ${refactorName} ${actionName}`)
-  const refactors = info.languageService.getEditsForRefactor(fileName, formatOptions, positionOrRange, refactorName, actionName)
+  const refactors = info.languageService.getEditsForRefactor(fileName, formatOptions, positionOrRange, refactorName, actionName, userPreferences)
   if (!actionName.startsWith(REFACTOR_ACTION_NAME) || !target.containingTarget) {
     return refactors
   }
@@ -167,8 +167,8 @@ function applyCodeFix(fix: CodeFix,  options: CodeFixOptions,   formatOptions, p
 
 
 
-function getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: ReadonlyArray<number>, formatOptions: ts.FormatCodeSettings): ReadonlyArray<ts.CodeFixAction> {
-  const originalCodeFixes = info.languageService.getCodeFixesAtPosition(fileName, start, end, errorCodes, formatOptions)
+function getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: ReadonlyArray<number>, formatOptions: ts.FormatCodeSettings, userPreferences: ts_module.UserPreferences): ReadonlyArray<ts.CodeFixAction> {
+  const originalCodeFixes = info.languageService.getCodeFixesAtPosition(fileName, start, end, errorCodes, formatOptions, userPreferences)
   const codeFix = getCodeFix(fileName, start, end, errorCodes, formatOptions)
   if (!codeFix) {
     log(`getCodeFixesAtPosition false because !codeFix`)
@@ -178,6 +178,7 @@ function getCodeFixesAtPosition(fileName: string, start: number, end: number, er
   const codeFixActions = codeFix.fixes.map(f => ({
     fixId: REFACTOR_ACTION_NAME + '-' + f.name,
     description: f.description(codeFix.target),
+    fixName: REFACTOR_ACTION_NAME + '-' + f.name,
     changes: []
   }))
   log(`getCodeFixesAtPosition - completions returned by .languageService.getCodeFixesAtPosition are  ${codeFixActions ? JSON.stringify(originalCodeFixes) : 'codeFixActions'}  -  ${start}`)

@@ -51,8 +51,8 @@ export function extractInterface(node: ts.ClassDeclaration): string {
       if (ts.isConstructorDeclaration(member)) {
         const constructor = member as ts.ConstructorDeclaration
         const propertySignature = ts.createConstructSignature(
-          constructor.typeParameters as ts.TypeParameterDeclaration[] | undefined,
-          constructor.parameters as any, constructor.type)  // TODO: had to cast dont know how safe
+          constructor.typeParameters,
+          constructor.parameters, constructor.type)  // TODO: had to cast dont know how safe
         let printed = printNode(propertySignature, constructor) // not ready yet will be something like this: new (iron: number);
         printed = printed.replace(/new/, 'constructor')
         if (node.name) {

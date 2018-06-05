@@ -3,16 +3,17 @@ import { getPluginCreate } from 'typescript-plugin-util';
 import * as ts_module from 'typescript/lib/tsserverlibrary';
 import { getAllPostfix } from './postfixHome';
 import { PostfixPredicateOptions } from './types';
+import * as ts from 'typescript' 
 
 const PLUGIN_NAME = 'typescript-plugin-postfix'
 const REFACTOR_ACTION_NAME = `${PLUGIN_NAME}-refactor-action`
 
-let ts: typeof ts_module
+// let ts: typeof ts_module
 let info: ts_module.server.PluginCreateInfo
 let log
 
 export = getPluginCreate({getCompletionsAtPosition, getCompletionEntryDetails}, (modules, anInfo) => {
-  ts = modules.typescript
+  // ts = modules.typescript
   info = anInfo
   log = function (msg) {
     info.project.projectService.logger.info(`${PLUGIN_NAME} ${msg}`)

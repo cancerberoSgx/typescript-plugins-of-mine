@@ -93,6 +93,16 @@ The result of my first steps dealing with TypeScript Language Service. I was so 
  * **[Tutorial with code](https://cancerberosgx.github.io/typescript-plugins-of-mine/sample-ts-plugin1/src/)**
  * [Project](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/sample-ts-plugin1)
 
+
+### TypeScript Language Service Plugin Tutorial
+
+The result of my first steps dealing with TypeScript Language Service. I was so happy with my first plugin (useless) that I write a tutorial : 
+
+ * **[Tutorial with code](https://cancerberosgx.github.io/typescript-plugins-of-mine/sample-ts-plugin1/src/)**
+ * [Project](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/sample-ts-plugin1)
+
+
+
 ### utility projects
 
 While developing these I realized There was too much repeated code so I ended up writing some utilities project: 
@@ -122,7 +132,7 @@ While developing these I realized There was too much repeated code so I ended up
    Search a lot didn't found anything.
  * The objective is to build well-tested typescript plugins to support these refactors, if possible, editor
    agnostic (others can program the nice GUIs for each editor)
- * This project is a mono-repo using [yamat](https://github.com/cancerberoSgx/yamat)
+ * This project is a mono-repo using [yamat](https://github.com/cancerberoSgx/yamat) - tool made by myself after fighting with complexities of lerna, yarn workspaces and rush. 
 
 
 

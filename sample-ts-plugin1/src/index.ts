@@ -26,7 +26,7 @@ function init(modules: { typescript: typeof ts_module }) {
     const proxy: ts.LanguageService = Object.create(null)
     for (let k of Object.keys(info.languageService) as Array<keyof ts.LanguageService>) {
       const x = info.languageService[k]
-      proxy[k] = (...args: Array<{}>) => x.apply(info.languageService, args)
+      proxy[k] = (...args: Array<{}>) => x!.apply(info.languageService, args)
     }
 
     // We will be overriding the methods we need from this proxy object, in our case getCompletionsAtPosition, getApplicableRefactors and getEditsForRefactor
@@ -54,7 +54,7 @@ function init(modules: { typescript: typeof ts_module }) {
     // Here starts our second behavior: a refactor that will always be suggested no matter where is the cursor and does nothing
     // overriding getApplicableRefactors we add our refactor metadata only if the user has the cursor on the place we desire, in our case a class or interface declaration identifier
     proxy.getApplicableRefactors = (fileName, positionOrRange): ts_module.ApplicableRefactorInfo[] => {
-      const refactors = info.languageService.getApplicableRefactors(fileName, positionOrRange) || []
+      const refactors = info.languageService.getApplicableRefactors(fileName, positionOrRange, undefined) || []
       const sourceFile = info.languageService.getProgram().getSourceFile(fileName)
       if (!sourceFile) {
         return refactors
@@ -78,8 +78,8 @@ function init(modules: { typescript: typeof ts_module }) {
       return refactors
     }
 
-    proxy.getEditsForRefactor = (fileName, formatOptions, positionOrRange, refactorName, actionName) => {
-      const refactors = info.languageService.getEditsForRefactor(fileName, formatOptions, positionOrRange, refactorName, actionName)
+    proxy.getEditsForRefactor = (fileName, formatOptions, positionOrRange, refactorName, actionName, preferences) => {
+      const refactors = info.languageService.getEditsForRefactor(fileName, formatOptions, positionOrRange, refactorName, actionName, preferences)
       // did the user select our refactor suggestion ? 
       if (actionName !== 'useless-rename') {
         // in case we can't find what we want we return this array, but we could return also undefined or empty array

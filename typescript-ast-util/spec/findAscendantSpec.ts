@@ -8,7 +8,7 @@ describe('findAscendant', () => {
     expect(number313.getText()).toBe('313')
     const fd = findAscendant(number313, (a)=>a.kind===SyntaxKind.FunctionDeclaration) as FunctionDeclaration
 
-    const isExpression = (node:ts.Node)=>getKindName(node).endsWith('Expression') || node.kind === SyntaxKind.Identifier || getKindName(node).endsWith('Literal')
+    const isExpression = (node:Node)=>getKindName(node).endsWith('Expression') || node.kind === SyntaxKind.Identifier || getKindName(node).endsWith('Literal')
     expect(fd.name.getText()).toBe('f')  
 
     expect(getAscendants(number313).map(getKindName).join(', ')).toBe('BinaryExpression, BinaryExpression, ParenthesizedExpression, BinaryExpression, ReturnStatement, Block, FunctionDeclaration, SourceFile')

@@ -19,7 +19,7 @@
   "author": "Sebastián Gurin",
   "license": "MIT",
   "dependencies": {
-    "typescript": "^2.8.3"
+    "typescript": "^2.9.1"
   },
   "devDependencies": {
     "docco": "^0.8.0"

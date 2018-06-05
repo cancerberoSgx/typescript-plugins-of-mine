@@ -7,6 +7,22 @@ import * as ts_module from 'typescript/lib/tsserverlibrary';
 const PLUGIN_NAME = 'typescript-plugin-move-file'
 const REFACTOR_ACTION_NAME = `${PLUGIN_NAME}-refactor-action`
 
+
+let ts: typeof ts_module
+let info: ts_module.server.PluginCreateInfo
+
+const pluginDefinition: LanguageServiceOptionals = {
+  getApplicableRefactors, getEditsForRefactor, getCompletionsAtPosition
+}
+
+export = getPluginCreate(pluginDefinition, (modules, anInfo) => {
+  ts = modules.typescript
+  info = anInfo
+  info.project.projectService.logger.info(`${PLUGIN_NAME} created`)
+})
+
+
+
 const interactionTool = create({
   prefix: '&%&%',
   actions: [
@@ -27,10 +43,10 @@ const interactionTool = create({
 
 let selectedAction: Action
 
-function getApplicableRefactors(fileName: string, positionOrRange: number | ts.TextRange)
+function getApplicableRefactors(fileName: string, positionOrRange: number | ts.TextRange, userPreferences: ts_module.UserPreferences)
   : ts.ApplicableRefactorInfo[] {
   const t0 = now()
-  const refactors = info.languageService.getApplicableRefactors(fileName, positionOrRange) || []
+  const refactors = info.languageService.getApplicableRefactors(fileName, positionOrRange, userPreferences) || []
   const program = info.languageService.getProgram()
   const sourceFile = program.getSourceFile(fileName)
   if (!sourceFile) {
@@ -53,9 +69,9 @@ function getApplicableRefactors(fileName: string, positionOrRange: number | ts.T
 
 function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSettings,
   positionOrRange: number | ts_module.TextRange, refactorName: string,
-  actionName: string): ts.RefactorEditInfo | undefined {
+  actionName: string, userPreferences: ts_module.UserPreferences): ts.RefactorEditInfo | undefined {
   const t0 = now()
-  const refactors = info.languageService.getEditsForRefactor(fileName, formatOptions, positionOrRange, refactorName, actionName)
+  const refactors = info.languageService.getEditsForRefactor(fileName, formatOptions, positionOrRange, refactorName, actionName, userPreferences)
   if (!actionName.startsWith(REFACTOR_ACTION_NAME) || !selectedAction) {
     return refactors
   }
@@ -88,11 +104,6 @@ function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSetti
       const saveSyncT0 = now()
       simpleProject.saveSync()
       info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor saveSync took ${timeFrom(saveSyncT0)}`)
-
-      // const emitT0 = now()
-      // simpleProject.emit() // emit doesnt do anythin and tatke considerable amount of time
-      // info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor emit took ${timeFrom(emitT0)}`)
-
     }
   } catch (error) {
     info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor error  ${selectedAction.name} ${error + ' - ' + error.stack}`)
@@ -108,17 +119,3 @@ function getCompletionsAtPosition(fileName: string, position: number, options: t
   }
   return prior;
 };
-
-let ts: typeof ts_module
-let info: ts_module.server.PluginCreateInfo
-
-const pluginDefinition: LanguageServiceOptionals = {
-  getApplicableRefactors, getEditsForRefactor, getCompletionsAtPosition
-}
-
-export = getPluginCreate(pluginDefinition, (modules, anInfo) => {
-  ts = modules.typescript
-  info = anInfo
-  info.project.projectService.logger.info(`${PLUGIN_NAME} created`)
-})
-

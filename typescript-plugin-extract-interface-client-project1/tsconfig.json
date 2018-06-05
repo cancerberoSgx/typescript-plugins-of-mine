@@ -34,9 +34,9 @@
       // {
       //   "name": "typescript-plugin-move-declaration"
       // },   
-      // {
-      //   "name": "typescript-plugin-postfix"
-      // },
+      {
+        "name": "typescript-plugin-postfix"
+      },
     ]
   }
 }

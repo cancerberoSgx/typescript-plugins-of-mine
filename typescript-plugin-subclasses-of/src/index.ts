@@ -1,4 +1,4 @@
-import { findChild2, findChildContainingPosition, findParent, positionOrRangeToNumber } from 'typescript-ast-util';
+import { findChild2, findChildContainingPosition, findAscendant, positionOrRangeToNumber } from 'typescript-ast-util';
 import * as ts_module from 'typescript/lib/tsserverlibrary';
 
 
@@ -37,9 +37,9 @@ export = init
 
 let selectedDef: ts.ReferencedSymbol | undefined
 
-function getApplicableRefactors(fileName: string, positionOrRange: number | ts.TextRange)
+function getApplicableRefactors(fileName: string, positionOrRange: number | ts.TextRange, userPreferences)
   : ts_module.ApplicableRefactorInfo[] {
-  const refactors = info.languageService.getApplicableRefactors(fileName, positionOrRange) || []
+  const refactors = info.languageService.getApplicableRefactors(fileName, positionOrRange, userPreferences) || []
 
   const refs = info.languageService.findReferences(fileName, positionOrRangeToNumber(positionOrRange))
   if (!refs || !refs.length) {
@@ -68,9 +68,9 @@ function getApplicableRefactors(fileName: string, positionOrRange: number | ts.T
 
 function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSettings,
   positionOrRange: number | ts_module.TextRange, refactorName: string,
-  actionName: string)
+  actionName: string, userPreferences)
   : ts.RefactorEditInfo | undefined {
-  const refactors = info.languageService.getEditsForRefactor(fileName, formatOptions, positionOrRange, refactorName, actionName)
+  const refactors = info.languageService.getEditsForRefactor(fileName, formatOptions, positionOrRange, refactorName, actionName, userPreferences)
   if (!selectedDef || (actionName != ACTION_NAME_DIRECT_SUBCLASSES && actionName != ACTION_NAME_INDIRECT_SUBCLASSES && actionName !== ACTION_NAME_INHERITANCE)) {
     return refactors;
   }
@@ -112,7 +112,7 @@ function getDirectDeclarationReferencesExtending(fileName: string, positionOrRan
       if (!refNode) {
         return;
       }
-      const heritageClause: ts.HeritageClause | undefined = findParent(refNode, (p => p.kind === ts.SyntaxKind.HeritageClause)) as ts.HeritageClause;
+      const heritageClause: ts.HeritageClause | undefined = findAscendant(refNode, (p => p.kind === ts.SyntaxKind.HeritageClause)) as ts.HeritageClause;
       if (!heritageClause) {
         return;
       }
