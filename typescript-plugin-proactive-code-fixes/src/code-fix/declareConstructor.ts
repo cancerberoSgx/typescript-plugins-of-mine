@@ -1,26 +1,27 @@
 import { Node, Scope, TypeGuards } from 'ts-simple-ast';
 import * as ts from 'typescript';
 import { CodeFix, CodeFixOptions } from '../codeFixes';
-import { getKindName } from 'typescript-ast-util';
+import { getKindName, findAscendant } from 'typescript-ast-util';
 
+let newExpr: ts.NewExpression
 export const codeFixCreateConstructor: CodeFix = {
   name: 'Declare constructor',
   config: { variableType: 'const' },
   
   predicate: (arg: CodeFixOptions) => {
-
     if (!arg.diagnostics.find(d=>d.code === 2554)) {
       return false
     }
-    if (arg.containingTarget.kind === ts.SyntaxKind.NewExpression) {
+    newExpr = ts.isNewExpression(arg.containingTarget) ? arg.containingTarget : findAscendant(arg.containingTarget, ts.isNewExpression)
+    if (newExpr) {
       return true
     } else {
-      arg.log(`codeFixCreateConstructor predicate false because  child.kind didn't match : child.kind==${getKindName(arg.containingTarget.kind)}, child.parent.kind==${getKindName(arg.containingTarget.parent.kind)}`)
+      arg.log(`codeFixCreateConstructor predicate false because no NewExpression ascendant was found containingTarget.kind==${getKindName(arg.containingTarget.kind)}, containingTarget.parent.kind==${getKindName(arg.containingTarget.parent.kind)}`)
       return false
     }
   },
 
-  description: (arg: CodeFixOptions): string => `Declare constructor "${arg.containingTarget.getText()}"`,
+  description: (arg: CodeFixOptions): string =>  `Declare constructor "${newExpr.expression.getText()}"`,
 
   apply: (arg: CodeFixOptions) => {
     const originalKind = arg.simpleNode.getKind()
@@ -42,9 +43,9 @@ export const codeFixCreateConstructor: CodeFix = {
           hasQuestionToken: false,
           type,
           isRestParameter: false,
-          // scope: Scope.,
-        })
-        )
+          scope: Scope.Public
+        })),
+        bodyText: `throw new Error('Not implemented');`
       })
     } else {
       arg.log(`codeFixCreateConstructor apply fail because arg.simpleNode is not ClassDeclaration is ${getKindName(classDeclaration.getKind())}`)

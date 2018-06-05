@@ -122,18 +122,18 @@ export function findParentFromPosition(
  * Find the parent for given node that comply with given predicate
  * @param orItSelf if true will first, check if node itself comply and if so returns it
  */
-export function findAscendant(node: ts.Node | undefined, predicate: (node: ts.Node) => boolean, orItSelf: boolean = false): ts.Node | undefined {
+export function findAscendant<T extends ts.Node>(node: ts.Node | undefined, predicate: (node: ts.Node) => boolean, orItSelf: boolean = false): T | undefined {
   if (!node) {
     return
   }
   else if (orItSelf && predicate(node)) {
-    return node
+    return node as T
   }
   else if (node.parent && predicate(node.parent)) {
-    return node.parent
+    return node.parent as T
   }
   else {
-    return findAscendant(node.parent as ts.Node, predicate)
+    return findAscendant(node.parent as T, predicate)
   }
 }
 

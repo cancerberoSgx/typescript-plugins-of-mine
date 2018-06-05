@@ -7,7 +7,7 @@ function main() {
 counter = 9 // declare variable
 
 
-const alpha1 = new Alpha('hello') // declare constructor decalre variable alpha
+const alpha1 = new Alpha('hello') // declare constructor declare variable alpha
 
 
 value1 = alpha1.getData() // add missing

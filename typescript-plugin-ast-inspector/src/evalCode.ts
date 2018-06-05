@@ -117,7 +117,7 @@ function prettyPrintEvalResult(evalResult) {
     var trace = stackTrace.parse(evalResult.error);
 
 // {"fileName":"/home/sg/git/typescript-plugins-of-mine/typescript-plugin-ast-inspector/node_modules/ts-simple-ast/dist/utils/TypeGuards.js","lineNumber":1246,"functionName":"Function.TypeGuards.isMethodSignature","typeName":"Function.TypeGuards","methodName":"isMethodSignature","columnNumber":20,"native":false}
-    error += `Error: (in)\n${evalResult.error}\nTrace: \n${stackTrace.parse(evalResult.error).map(i=>`${basename(i.fileName)}#${i.lineNumber},${i.columnNumber}) function ${i.functionName}`).join('\n')}\nOriginal Stack:\n ${evalResult.error.stack}\n`
+    error += `Error: (in)\n${evalResult.error}\nTrace: \n${stackTrace.parse(evalResult.error).map(i=>`${basename(i.fileName||'unknown.ts')}#${i.lineNumber},${i.columnNumber}) function ${i.functionName}`).join('\n')}\nOriginal Stack:\n ${evalResult.error.stack}\n`
   }
   if (evalResult.errorOuter) {
     error += `Error: (out) \n${evalResult.errorOuter}\nStack:\n ${evalResult.errorOuter.stack}\n`
@@ -169,6 +169,7 @@ export function executeEvalCode(config: EvalContextConfig): void {
         configToEval = Object.assign({}, config, { sourceFile: transpiledSourceFile })
       }
     } catch (ex) {
+      config.log(' log failed to transpile - we continue evaluating original function though. Error: '+ex+' - '+ex.stack)
       //TODO:  log failed to transpile - we continue evaluating original function though
     }
     const text = evalCodeAndPrintResult(configToEval, codeToEval)

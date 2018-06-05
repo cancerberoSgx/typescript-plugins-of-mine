@@ -5,3 +5,4 @@ tmp
 .yamat
 *.tgz
 separate-project-test1
+evaluated_*
