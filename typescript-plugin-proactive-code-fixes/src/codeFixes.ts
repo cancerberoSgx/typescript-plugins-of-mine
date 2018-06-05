@@ -11,6 +11,7 @@ import { addReturnStatement } from './code-fix/addReturnStatement';
 import { implementInterfaceObjectLiteral } from './code-fix/implementInterfaceObjectLiteral';
 import { implementInterfaceMember } from './code-fix/implementInterfaceMember';
 import { renameVariable } from './code-fix/variableRename';
+import { splitVariableDeclarationList } from './code-fix/splitVariableDeclarationList';
 
 
 export interface CodeFix {
@@ -27,7 +28,7 @@ export interface CodeFix {
   apply(arg: CodeFixOptions): ts.ApplicableRefactorInfo[] | void
 }
 
-export const codeFixes: CodeFix[] = [codeFixCreateConstructor, codeFixCreateVariable, declareClass,  const2let, nameFunction, implementInterfaceObjectLiteral, declareReturnType, declareMember, addReturnStatement, implementInterfaceMember, renameVariable];
+export const codeFixes: CodeFix[] = [codeFixCreateConstructor, codeFixCreateVariable, declareClass,  const2let, nameFunction, implementInterfaceObjectLiteral, declareReturnType, declareMember, addReturnStatement, implementInterfaceMember, renameVariable, splitVariableDeclarationList]
 
 export interface CodeFixOptions {
   diagnostics: ts.Diagnostic[]

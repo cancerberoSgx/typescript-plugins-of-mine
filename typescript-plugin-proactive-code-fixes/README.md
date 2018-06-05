@@ -2,16 +2,18 @@
 
 TypeScript Langauge Service Plugin with several small proactive code refactors to solve errors (diagnostics) like creating constructor when a non existent one is invoked, declaring a variable or class when non existent one is defined, reassigning a const, etc. The tool is based both on the context of the user and on the current diagnostic error in that line. Right now: 
 
-* create variable (when assigning non declared variable)
-* create constructor (when calling new A(a,b) on a class that doesn't have that constructor )
-* const2let
-* declare Class or interface 
-* name unnamed function declarations
-* make an object literal implement an interface by adding / removing necessary members
-* declare an interface from a return value
-* declare member - complements the code fix already existing in typescript to fullfill all cases. declaring missing properties / methods 
-* add missing return statement
-* variable rename when duplicate names exisits in the same code block
+ * create variable (when assigning non declared variable)
+ * create constructor (when calling new A(a,b) on a class that doesn't have that constructor )
+ * const2let
+ * declare Class or interface 
+ * name unnamed function declarations
+ * make an object literal implement an interface by adding / removing necessary members
+ * declare an interface from a return value
+ * declare member - complements the code fix already existing in typescript to fullfill all cases. declaring missing properties / methods 
+ * add missing return statement
+ * variable rename when duplicate names exists in the same code block
+ * split variable declaration list in individual variable statements. 
+
 
 and more to come!!
 
@@ -33,11 +35,9 @@ in your `tsconfig.json`, add the plugin:
 ```json
 {
   "compilerOptions": {
-    ...
     "plugins": [{
         "name": "typescript-plugin-proactive-code-fixes"
     }]
-    ...
   }
 }
 ```
@@ -45,20 +45,19 @@ in your `tsconfig.json`, add the plugin:
 Make sure you have installed typescript in your project (`npm i --save-dev typescript`) the editor you are using uses that typescript and not another. For example, Visual Studio Code comes with its own typescript version, so I need to "Select TypeScript Version" of the workspace: 
 ```json
 {
-  // Specifies the folder path containing the tsserver and lib*.d.ts files to use.
   "typescript.tsdk": "node_modules/typescript/lib"
 }
 ```
 
 # TODO
 
- * Performance - getAppRefactors is taking almost  sec. Make a generic predicate with cache (get which diags are in current position and cache it - make a generic predicate since almost all use the same thign)
+ * Performance - getAppRefactors is taking almost  sec. Make a generic predicate with cache (get which diags are in current position and cache it - make a generic predicate since almost all use the same thing)
  * apply all quick fixes in this file ! define a mechanism of priorities when two or more fixes attach the same position.
  * perhaps we could just recreate the simple-ast sourcefile instead of the whole project 
  * use getcodefixes instead of refactors - blocked - done but no way of defining expensive fixes
  * make sure for each if error is selected in problems view then that selection will suggest the fix
  * new member declarations should add jsdoc
- * dedsclare return type very buggy
+ * declare return type very buggy
 
 # Ideas
 

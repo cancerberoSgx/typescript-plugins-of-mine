@@ -37,3 +37,7 @@ class Unit {
 const unit: Unit = {
   energy: 123, color: 'red'
 }
+
+const underscore = require('underscore'), moment = require('moment'), handlebars = require('handlebars');  // split var decls
+
+let a = 1, PI = 3.14

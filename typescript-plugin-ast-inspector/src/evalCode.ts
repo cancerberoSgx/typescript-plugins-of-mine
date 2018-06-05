@@ -80,7 +80,7 @@ class EvalContextImpl implements EvalContext {
     this.project = config.project
   }
   print(s): void {
-    _printed.push(s + '') // use an external variable so users can do const print = c.print - in general we dont want to use "this". TODO: probably we dont want to use a "class" just an object
+    _printed.push(s + '')
   }
 }
 
@@ -116,8 +116,7 @@ function prettyPrintEvalResult(evalResult) {
   if (evalResult.error) {
     var trace = stackTrace.parse(evalResult.error);
 
-// {"fileName":"/home/sg/git/typescript-plugins-of-mine/typescript-plugin-ast-inspector/node_modules/ts-simple-ast/dist/utils/TypeGuards.js","lineNumber":1246,"functionName":"Function.TypeGuards.isMethodSignature","typeName":"Function.TypeGuards","methodName":"isMethodSignature","columnNumber":20,"native":false}
-    error += `Error: (in)\n${evalResult.error}\nTrace: \n${stackTrace.parse(evalResult.error).map(i=>`${basename(i.fileName||'unknown.ts')}#${i.lineNumber},${i.columnNumber}) function ${i.functionName}`).join('\n')}\nOriginal Stack:\n ${evalResult.error.stack}\n`
+    error += `Error: (in)\n${evalResult.error}\nTrace: \n${stackTrace.parse(evalResult.error).map(i=>`file:/${i.fileName||'unknown.ts'}#${i.lineNumber},${i.columnNumber}) function ${i.functionName}`).join('\n')}\nOriginal Stack:\n ${evalResult.error.stack}\n`
   }
   if (evalResult.errorOuter) {
     error += `Error: (out) \n${evalResult.errorOuter}\nStack:\n ${evalResult.errorOuter.stack}\n`

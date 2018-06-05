@@ -1,7 +1,7 @@
+import { TypeGuards } from 'ts-simple-ast';
 import * as ts from 'typescript';
 import { getKindName } from 'typescript-ast-util';
 import { CodeFix, CodeFixOptions } from '../codeFixes';
-import { TypeGuards } from 'ts-simple-ast';
 
 /**
  
@@ -29,7 +29,7 @@ export const renameVariable: CodeFix = {
 
   name: 'Rename variable',
 
-  config: {   },
+  config: {},
 
   predicate: (options: CodeFixOptions): boolean => {
     if (!options.diagnostics.find(d => d.code === 2451)) {
@@ -47,13 +47,15 @@ export const renameVariable: CodeFix = {
   description: (options: CodeFixOptions): string => `Rename variable "${options.containingTarget.getText()}"`,
 
   apply: (options: CodeFixOptions): ts.ApplicableRefactorInfo[] | void => {
-    const id = options.simpleNode//.getSourceFile().getDescendantAtPos(936)
-    if(!TypeGuards.isIdentifier(id)){
+    const id = options.simpleNode
+    if (!TypeGuards.isIdentifier(id)) {
       options.log('renameVariable apply false because  false because Identifier != ' + getKindName(options.containingTarget.kind))
-      return // TODO: log
+      return
     }
-    id.rename(id.getText()+'2')
+    id.rename(id.getText() + counter++)
     // options.simpleNode.getSourceFile().insertText(options.simpleNode.getStart(), 'const ')
   }
 
 }
+
+let counter = 2
