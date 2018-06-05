@@ -39,21 +39,26 @@ export class DeclareVariablePostFix implements Postfix {
     const { program, fileName, position, target, log } = opts
     const sourceFile = program.getSourceFile(fileName)
 
-    // the target expression that will be declared as variable. 
+    // // the target expression that will be declared as variable. 
     const targetExpression = findChild(findAscendant(target, isNotExpression), isExpression, false)
-
     const statementContainer = findAscendant(targetExpression, isBlock)
     const declarationNextSibling = findChild(statementContainer, isStatement, false)
 
+
+    
     // //Following commented code is also an implementation without transforms and printer that doesn't reformat the code but has some issues though...
     // // poor man indentation detector
+    // if(!ts.isPropertyAccessExpression(target)){
+    //   opts.log('declareVariable postfix doing nothing because ts.isPropertyAccessExpression(target')
+    //   return 
+    // }
     // const siblingIndentationMatch = /^(\s*)/m.exec(declarationNextSibling.getFullText())
     // const siblingIndentation = siblingIndentationMatch ? siblingIndentationMatch[1] : ''
     // let allText = sourceFile.getFullText()
     // // Let's remove ".let" from the target expression:
     // const targetExpressionTextWithoutNode =
-    //   allText.substring(targetExpression.pos, (target as any).expression.end) +  // -1 to remove the prefixed dot 
-    //   allText.substring(target.end, targetExpression.end)
+    //   allText.substring(targetExpression.pos, target.expression.end) //+  // -1 to remove the prefixed dot 
+    //   // allText.substring(target.name.end, targetExpression.end)
     // const allNewText = allText.substring(0, declarationNextSibling.pos) +  
     //   // the following lines add our dummy variable declaration instead of the targetlocation
     //   siblingIndentation + 'const renameIt = ' + targetExpressionTextWithoutNode + ';' + 
@@ -61,6 +66,11 @@ export class DeclareVariablePostFix implements Postfix {
     //   ' renameIt ' +
     //   allText.substring(targetExpression.end, sourceFile.end)  
     // return allNewText
+
+
+
+
+    // The following is implementation based on typescript transformations: 
 
     // this transformation will remove the postfix ".let" from the expression
     const removePostfix = (context) => {
@@ -88,7 +98,7 @@ export class DeclareVariablePostFix implements Postfix {
             const variableDeclarationList = ts.createVariableDeclarationList([variableDeclaration], this.getVariableFlag())
             return ts.updateBlock(node, [variableDeclarationList as any].concat(node.statements))
           }
-          return node
+          return node 
         }
         return ts.visitNode(rootNode, visit)
       }

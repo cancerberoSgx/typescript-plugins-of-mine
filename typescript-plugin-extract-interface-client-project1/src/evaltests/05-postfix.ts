@@ -11,9 +11,6 @@ declare const c: EvalContext
 
 function toEval() {
 
-  const assert = require('assert') // require assert utility inside this function body so is available
-  const fs = require('fs')
-
   // used functions as globals
   const getKindName = c.util.getKindName, ts = c.ts, print = c.print, findAscendant = c.util.findAscendant,
     getProgram = c.info.languageService.getProgram, findChild = c.util.findChild
@@ -30,7 +27,7 @@ function toEval() {
   // position inside 'let' identifier and we found it using t.he "print ascendants of selected node"
   // refactor utility. we hardcoded ere so we can test faster but this is provided dynamically
   // according to user current selection/cursor:
-  c.positionOrRange = 81
+  c.positionOrRange = 82
   const position = c.util.positionOrRangeToNumber(c.positionOrRange) // 
 
   // this is the "let" token that appears as part of the expression 
@@ -49,7 +46,7 @@ function toEval() {
   const statementContainer = findAscendant(targetExpression, isBlock)
   const declarationNextSibling = findChild(statementContainer, isStatement)
   // assert that this is the ascendant statement contained between curly braces not the return one
-  assert.ok(ts.isIfStatement(declarationNextSibling)) 
+  // assert.ok(ts.isIfStatement(declarationNextSibling)) 
   // we are ready, we start manipulating the text string. The correct way of doing this is
   // manipulating and printing the AST but I don't know how to do it with typescript natively. I do
   // now how to do it with ts-simple-ast but wanted to maintain this example using pure typescript
@@ -72,11 +69,11 @@ function toEval() {
     ' renameIt ' +
     allText.substring(targetExpression.end, sourceFile.end)  
 
-  // fs.writeFileSync(sourceFile.file Name, newText); // a file writing to itself, never seen before
   print(allNewText.substring(0, 200))
 
 
 }
+`
 
 
 /***@ 

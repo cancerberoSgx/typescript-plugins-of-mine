@@ -61,12 +61,16 @@ function getCompletionEntryDetails(fileName: string, position: number, name: str
     log(`${PLUGIN_NAME} - getCompletionEntryDetails cannot be completed because postfix with name ${name} couldn't be found `)
     return
   }
+  // info.project.updateGraph()
+  info.project.registerFileUpdate(fileName)
+
   const program = info.languageService.getProgram()
   const sourceFile = program.getSourceFile(fileName)
   const target = findChildContainingPosition(sourceFile, position - 1)
   const result = postfix.execute({ program, fileName, position, target, log }) as string
 
   log(`${PLUGIN_NAME} - getCompletionEntryDetails postfix.execute called with filename: ${fileName}, position: ${position}, target:  ${target && target.getText()} - parent is : ${target.parent.getText()} postfix.execute returned result ==  ${result}`)
+  
 
   //TODO: we return a codeAction.text change that basically replace all the text with the new one - we could do t better...
   return {
@@ -84,7 +88,7 @@ function getCompletionEntryDetails(fileName: string, position: number, name: str
           textChanges: [
             {
               newText: result,
-              span: { start: 0, length: result.length }
+              span: { start: 0, length: sourceFile.end }
             }
           ]
         }
