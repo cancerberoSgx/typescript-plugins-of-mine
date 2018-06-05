@@ -53,7 +53,6 @@ export const renameVariable: CodeFix = {
       return
     }
     id.rename(id.getText() + counter++)
-    // options.simpleNode.getSourceFile().insertText(options.simpleNode.getStart(), 'const ')
   }
 
 }

@@ -20,7 +20,7 @@ let print
  
 # Description
 
-convert multiple variabe declarations in the same decl list, into separate variable declaration list
+convert multiple variable declarations in the same decl list, into separate variable declaration list
 
 # Example
 
