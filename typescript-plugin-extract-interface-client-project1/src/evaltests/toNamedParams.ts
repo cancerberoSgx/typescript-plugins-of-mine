@@ -1,4 +1,5 @@
-function foo (a: number, b: string[], c: (n:number)=>boolean[], d?: boolean){}
+function foo (a: number, b: string[], c: (n:number)=>boolean[], d?: boolean, e=3.14): ()=>boolean {return ()=>true}
+
 
 /**
  
@@ -27,7 +28,7 @@ interface FooOptions{
 function foo({a,b,c}: FooOptions){}
 ```
 */
-import { TypeGuards, VariableStatementStructure, FunctionTypeNode, InterfaceDeclarationStructure } from 'ts-simple-ast';
+import { TypeGuards, VariableStatementStructure, FunctionTypeNode, InterfaceDeclarationStructure, ParameterDeclarationStructure } from 'ts-simple-ast';
 import * as ts from 'typescript';
 import { EvalContext } from 'typescript-plugin-ast-inspector';
 declare const c: EvalContext;
@@ -47,39 +48,45 @@ function evaluateMe() {
     return
   }
 
-  print('seba: '+  functionLikeDeclaration.getParameters().map(param=>param.getName()+'-'+param.getTypeNode().getKindName()).join(', ')+' - '+functionLikeDeclaration.getParent().getKindName()) //param.getTypeNode().getText()).join(', '))
-
-  let interfaceName = (functionLikeDeclaration as any).getName() ? (functionLikeDeclaration as any).getName()+'' : 'UnnamedOptions'
-  interfaceName = interfaceName.substring(0, 1).toUpperCase() + interfaceName.substring(1, interfaceName.length)
-  const interfaceStructure = {
-    name: interfaceName,
-    properties:  functionLikeDeclaration.getParameters().filter(param=>param.getTypeNode().getKind()!==ts.SyntaxKind.FunctionType).map(param=>({
-      name: param.getName(), 
-      type: param.getTypeNode().getText()
-    })),
-    methods: functionLikeDeclaration.getParameters().filter(param=>param.getTypeNode().getKind()==ts.SyntaxKind.FunctionType).map(param=>({
-      name: param.getName(), 
-      returnType: (param.getTypeNode() as FunctionTypeNode ).getReturnTypeNode().getText(),
-      parameters: (param.getTypeNode() as FunctionTypeNode ).getParameters().map(param=>({
-        name: param.getName(), 
-        type: param.getTypeNode().getText()})
-        //TODO question mark
-      )
-      // type: param.getTypeNode().getText()
-      //TODO: question mark
-    })),
-    //TODO: constructors ?
-  } as InterfaceDeclarationStructure; 
-
-  //TODO: what about function param initializers ? TODO: put initiailzers in the generated param object
+  // print('seba: '+  functionLikeDeclaration.getParameters().map(param=>param.getName()+'-'+param.getTypeNode().getKindName()).join(', ')+' - '+functionLikeDeclaration.getParent().getKindName()) //param.getTypeNode().getText()).join(', '))
 
   const container = functionLikeDeclaration.getParent()
   if(!TypeGuards.isStatementedNode(container)){
     return // TODO: log
   }
-  container.insertInterface(functionLikeDeclaration.getChildIndex(), interfaceStructure)
-  // functionLikeDeclaration.getAncestors().find(TypeGuards.isStatementedNode)
+  let interfaceName = (functionLikeDeclaration as any).getName() ? (functionLikeDeclaration as any).getName()+'' : 'UnnamedOptions'
+  interfaceName = interfaceName.substring(0, 1).toUpperCase() + interfaceName.substring(1, interfaceName.length)
+// print(  functionLikeDeclaration.getParameters().map(p=> p.getType().getTargetType().getText()).join(', '))
+  const interfaceStructure = {
+    name: interfaceName,
+    properties:  functionLikeDeclaration.getParameters().filter(param=>!param.getTypeNode() || param.getTypeNode().getKind()!==ts.SyntaxKind.FunctionType) // TODO: this will ignore/wrong-print parameters of type function that have an assignament
+    .map(property=>({
+      name: property.getName(), 
+      type: property.getTypeNode() && property.getTypeNode().getText() || property.getType() && property.getType().getText(),
+      hasQuestionToken: property.hasQuestionToken()
+    })),
+    methods: functionLikeDeclaration.getParameters().filter(param=>param.getTypeNode() && param.getTypeNode().getKind()==ts.SyntaxKind.FunctionType).map(method=>({
+      name: method.getName(), 
+      returnType: method.getTypeNode() &&  (method.getTypeNode() as FunctionTypeNode ).getReturnTypeNode() && (method.getTypeNode() as FunctionTypeNode ).getReturnTypeNode().getText(),
+      parameters: (method.getTypeNode() as FunctionTypeNode ).getParameters().map(param=>({
+        name: param.getName(), 
+        type: param.getTypeNode() &&  param.getTypeNode().getText()|| param.getType() && param.getType().getText(),
+        hasQuestionToken: param.hasQuestionToken()
+      })),
+      hasQuestionToken: method.hasQuestionToken()
+    })),
+  } as InterfaceDeclarationStructure; 
 
+  //TODO: what about function param initializers ? TODO: put initiailzers in the generated param object
+
+  container.insertInterface(functionLikeDeclaration.getChildIndex(), interfaceStructure)
+  const parameterDeclarationStructure: ParameterDeclarationStructure = {
+    name: '{'+functionLikeDeclaration.getParameters().map(param=>param.getName()+(param.getInitializer() ? (' = '+param.getInitializer().getText()) : '')).join(', ')+'}',
+    type: interfaceName
+  }
+  // print(parameterDeclarationStructure.name)
+  functionLikeDeclaration.getParameters().forEach(param=>param.remove())
+  functionLikeDeclaration.addParameter(parameterDeclarationStructure)
   print(sourceFile.getText())
   sourceFile.deleteImmediatelySync()
 }
