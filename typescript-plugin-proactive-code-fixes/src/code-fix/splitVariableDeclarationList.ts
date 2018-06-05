@@ -33,7 +33,7 @@ export const splitVariableDeclarationList: CodeFix = {
   predicate: (arg: CodeFixOptions): boolean => {
     const varDeclList = findAscendant<ts.VariableDeclarationList>(arg.containingTargetLight, ts.isVariableDeclarationList, true)
     if(!varDeclList){
-      arg.log('addReturnStatement predicate false because no VariableDeclarationList ascendant found - containingTarget was ' + getKindName(arg.containingTargetLight))
+      arg.log('splitVariableDeclarationList predicate false because no VariableDeclarationList ascendant found - containingTarget was ' + getKindName(arg.containingTargetLight))
       return false
     }
     return true

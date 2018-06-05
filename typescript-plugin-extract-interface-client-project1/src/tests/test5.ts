@@ -40,4 +40,7 @@ const unit: Unit = {
 
 const underscore = require('underscore'), moment = require('moment'), handlebars = require('handlebars');  // split var decls
 
-let a = 1, PI = 3.14
+let a23 = 1, PI = 3.14// split var decls
+
+
+function foo (a: number, b: string[], c: (n:number)=>boolean[], d?: boolean, e=3.14): ()=>boolean {return ()=>true} // to named params
