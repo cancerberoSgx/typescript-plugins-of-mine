@@ -34,7 +34,7 @@ export const const2let: CodeFix = {
     }
   },
 
-  description: (arg: CodeFixOptions): string => `Declare variable "${arg.containingTarget.getText()}"`,
+  description: (arg: CodeFixOptions): string => `Change "const ${arg.containingTarget.getText()}" to "let ${arg.containingTarget.getText()}"`,
 
   apply: (arg: CodeFixOptions): ts.ApplicableRefactorInfo[] | void => {
     const id = arg.simpleNode

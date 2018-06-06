@@ -30,6 +30,14 @@ class Class2 implements SomeInterface {
 
  * TODO: work for constructors and setter/getter members
  * TODO: review
+ * 
+ * TODO: this is failing: 
+class Unit {
+  energy: number
+}
+const unit: Unit = {
+  energy: 123, color: 'red' 
+}
 
 */
 

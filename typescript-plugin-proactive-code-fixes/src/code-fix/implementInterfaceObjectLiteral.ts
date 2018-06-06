@@ -41,7 +41,7 @@ export const implementInterfaceObjectLiteral: CodeFix = {
       return diagLineStart <= targetLine && diagLineEnd >= targetLine
     })
     if (!diagnostics || !diagnostics.length) {
-      arg.log('codeFixCreateVariable predicate false because no diagnostics found with code 2322 in same line as arg.containingTarget')
+      arg.log('implementInterfaceObjectLiteral predicate false because no diagnostics found with code 2322 in same line as arg.containingTarget')
       return false
     }
 
@@ -60,7 +60,7 @@ export const implementInterfaceObjectLiteral: CodeFix = {
       return true
     }
     else {
-      arg.log('codeFixCreateVariable predicate false because child.kind dont match ' + getKindName(arg.containingTarget.kind))
+      arg.log('implementInterfaceObjectLiteral predicate false because child.kind dont match ' + getKindName(arg.containingTarget.kind))
       return false
     }
   },
@@ -90,9 +90,13 @@ export const implementInterfaceObjectLiteral: CodeFix = {
       
       decl.getProperties().forEach(prop => {
         const existingProp = init.getProperty(prop.getName())
-        if (existingProp) {
+        if (existingProp && (existingProp as any).remove) {
           (existingProp as any).remove()
-        }else {
+        }
+        else if (existingProp && !(existingProp as any).remove){ // TODO : fixed with https://github.com/dsherret/ts-simple-ast/pull/343#issuecomment-394923115 - remove will be always present
+          arg.log(`implementInterfaceObjectLiteral apply WARNING existingProp &&  !(existingProp as any).remove: kind: ${existingProp.getKindName()} text: ${existingProp.getText()} init.getText() === ${init.getText()}` )
+        }
+        else {
           init.addPropertyAssignment({ name: prop.getName(), initializer: getDefaultValueForType(prop.getType()) })
         }
       })
@@ -110,11 +114,12 @@ export const implementInterfaceObjectLiteral: CodeFix = {
           fixSignature(existingProp, method )
           arg.log('fixSignature1')
         }
-        else {
-          if(existingProp){
-            try{(existingProp as any).remove()}catch(ex){
-              arg.log('fixSignature222')}
-          }
+        else  if(existingProp){
+            // try{
+              (existingProp as any).remove()
+          //   }catch(ex){
+          //     arg.log('fixSignature222')}
+          // }
           init.addMethod({
             name: method.getName(),
             parameters: method.getParameters().map(buildParameterStructure ),
@@ -132,9 +137,6 @@ export const implementInterfaceObjectLiteral: CodeFix = {
       //     prop.getNextSibling() && prop.getNextSibling().getKind() === ts.SyntaxKind.CommaToken ? prop.getNextSibling().getEnd() : prop.getEnd())
       // })
       // }
-
-
-
     })
   }
 }

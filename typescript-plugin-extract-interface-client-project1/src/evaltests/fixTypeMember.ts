@@ -1,5 +1,5 @@
 
-// TODO: I think this is almost the same as declareMember
+// // TODO: I think this is almost the same as declareMember
 
 
 // import * as ts from 'typescript'

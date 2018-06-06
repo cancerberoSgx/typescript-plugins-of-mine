@@ -36,6 +36,10 @@ export const splitVariableDeclarationList: CodeFix = {
       arg.log('splitVariableDeclarationList predicate false because no VariableDeclarationList ascendant found - containingTarget was ' + getKindName(arg.containingTargetLight))
       return false
     }
+    else if (varDeclList.declarations.length<=1){
+      arg.log('splitVariableDeclarationList predicate false because list has only one declaration')
+      return false
+    }
     return true
   },
 

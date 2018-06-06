@@ -13,6 +13,7 @@ TypeScript Langauge Service Plugin with several small proactive code refactors t
  * add missing return statement
  * variable rename when duplicate names exists in the same code block
  * split variable declaration list in individual variable statements. 
+ * to named parameters - select a fragment of a parameter declaration list and it will offer to declare all parameters in an interface and use them as an object literal - see: https://github.com/Microsoft/TypeScript/issues/23552
 
 
 and more to come!!
