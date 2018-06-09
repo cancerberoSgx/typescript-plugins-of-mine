@@ -57,91 +57,92 @@ function fn<T>(): FNResult<T> {
 */
 export const declareReturnType: CodeFix = {
   name: 'declareReturnType',
-  config: {  },  
+  config: {},
   predicate: (arg: CodeFixOptions): boolean => {
-    //TODO: review this predicate
-    if (!arg.diagnostics.find(d => d.code === 2304)) {
-      return false
-    } 
-    if (arg.containingTargetLight.kind === ts.SyntaxKind.Identifier) {
+    if (arg.containingTargetLight.kind === ts.SyntaxKind.Identifier && arg.containingTargetLight.parent.kind === ts.SyntaxKind.TypeReference && arg.diagnostics.find(d => d.code === 2304 && d.start === arg.containingTargetLight.getStart()) ) {
       return true
     }
     else {
-      arg.log('declareReturnType predicate false because child.kind dont match ' + getKindName(arg.containingTarget.kind))
+    arg.log('declareReturnType predicate false because child.kind dont match ' + getKindName(arg.containingTarget.kind))
       return false
-    }
-  },
-  description: (arg: CodeFixOptions): string => `Declare Type "${arg.containingTarget.getText()}" interring from return value`,
-  apply: (arg: CodeFixOptions): ts.ApplicableRefactorInfo[] | void => {
-    const id = arg.simpleNode
-    const decl = arg.simpleNode.getFirstAncestorByKind(ts.SyntaxKind.FunctionDeclaration)
-    const intStruct = fromNow(
-      ()=>inferReturnType(decl, arg), 
-      t=> arg.log('declareReturnType apply inferReturnType took '+t)
-    )
-    arg.simpleNode.getSourceFile().addInterface(intStruct)
   }
+},
+  description: (arg: CodeFixOptions): string => `Declare Type "${arg.containingTarget.getText()}" interring from return value`,
+    apply: (arg: CodeFixOptions): ts.ApplicableRefactorInfo[] | void => {
+      const id = arg.simpleNode
+      const decl = arg.simpleNode.getFirstAncestorByKind(ts.SyntaxKind.FunctionDeclaration)
+      const interfaceStructure = fromNow(
+        () => inferReturnType(decl, arg),
+        t => arg.log('declareReturnType apply inferReturnType took ' + t)
+      )
+      const siblingAncestor = arg.simpleNode.getAncestors().find(a => TypeGuards.isSourceFile(a.getParent()))
+      if (siblingAncestor) {
+        arg.simpleNode.getSourceFile().insertInterface(siblingAncestor.getChildIndex(), interfaceStructure)
+      } else {
+        arg.simpleNode.getSourceFile().addInterface(interfaceStructure)
+      }
+    }
 
 }
 
 
-const inferReturnType = (decl: FunctionDeclaration, arg: CodeFixOptions):InterfaceDeclarationStructure => {
+const inferReturnType = (decl: FunctionDeclaration, arg: CodeFixOptions): InterfaceDeclarationStructure => {
   const project = arg.simpleProject
   const tmpSourceFile = fromNow(
-    ()=>project.createSourceFile('tmp2.ts', decl.getText() + '; const tmp = ' + decl.getName() + '()'), 
-    (t)=>arg.log('declareReturnType apply inferReturnType createSourceFile took '+t)
+    () => project.createSourceFile('tmp2.ts', decl.getText() + '; const tmp = ' + decl.getName() + '()', { overwrite: true }),
+    (t) => arg.log('declareReturnType apply inferReturnType createSourceFile took ' + t)
   )
   const tmpDecl = tmpSourceFile.getDescendantsOfKind(ts.SyntaxKind.FunctionDeclaration)[0]
   const typeargs = tmpDecl.getReturnType().getTypeArguments()
   fromNow(
-    ()=>tmpDecl.removeReturnType(), 
-    t=>arg.log('declareReturnType apply inferReturnType tmpDecl.removeReturnType() took '+t)
+    () => tmpDecl.removeReturnType(),
+    t => arg.log('declareReturnType apply inferReturnType tmpDecl.removeReturnType() took ' + t)
   )
   const tmp = tmpSourceFile.getFirstDescendantByKind(ts.SyntaxKind.VariableDeclaration)
   const type = fromNow(
-    ()=>project.getTypeChecker().getTypeAtLocation(tmp), 
-    t=>arg.log('declareReturnType apply inferReturnType getTypeChecker().getTypeAtLocation took '+t))
+    () => project.getTypeChecker().getTypeAtLocation(tmp),
+    t => arg.log('declareReturnType apply inferReturnType getTypeChecker().getTypeAtLocation took ' + t))
 
-  const intStructureT0= now()
+  const intStructureT0 = now()
   const intStructure = {
     name: decl.getReturnTypeNode().getText(),
     properties: type.getProperties()
-      .filter(p => { 
-        const v = p.getValueDeclaration(); 
-        return TypeGuards.isPropertyAssignment(v) && !v.getInitializer().getKindName().includes('Function') 
+      .filter(p => {
+        const v = p.getValueDeclaration();
+        return TypeGuards.isPropertyAssignment(v) && !v.getInitializer().getKindName().includes('Function')
       })
       .map(p => ({
         name: p.getName(),
         type: project.getTypeChecker().getTypeAtLocation(p.getValueDeclaration()).getText(),
         val: p.getValueDeclaration()
       })),
-      methods: type.getProperties()
-        .filter(p => {
-          const v = p.getValueDeclaration(); 
-          return TypeGuards.isPropertyAssignment(v) && v.getInitializer().getKindName().includes('Function') 
-        })
-        .map(p => {
-          const v = p.getValueDeclaration()
-          if (!TypeGuards.isPropertyAssignment(v)) { 
-            return null
-          }
-          const init = v.getInitializer()
-          if (!TypeGuards.isArrowFunction(init) && !TypeGuards.isFunctionExpression(init)) {
-            return null
-          }          
-          return {
-            name: p.getName(),
-            returnType: init.getReturnType() ? init.getReturnType().getText():  'any',
-            parameters: init.getParameters().map(pa => ({
-              name: pa.getName(), 
-              type: pa.getType().getText() 
-            }))
-          }
-        })
-        .filter(p=>!!p),
-      typeParameters: typeargs.map(ta => ({ name: ta.getSymbol().getName() })),
+    methods: type.getProperties()
+      .filter(p => {
+        const v = p.getValueDeclaration();
+        return TypeGuards.isPropertyAssignment(v) && v.getInitializer().getKindName().includes('Function')
+      })
+      .map(p => {
+        const v = p.getValueDeclaration()
+        if (!TypeGuards.isPropertyAssignment(v)) {
+          return null
+        }
+        const init = v.getInitializer()
+        if (!TypeGuards.isArrowFunction(init) && !TypeGuards.isFunctionExpression(init)) {
+          return null
+        }
+        return {
+          name: p.getName(),
+          returnType: init.getReturnType() ? init.getReturnType().getText() : 'any',
+          parameters: init.getParameters().map(pa => ({
+            name: pa.getName(),
+            type: pa.getType().getText()
+          }))
+        }
+      })
+      .filter(p => !!p),
+    typeParameters: typeargs.map(ta => ({ name: ta.getSymbol().getName() })),
   }
-  arg.log('declareReturnType apply inferReturnType create InterfaceStructure took '+ timeFrom(intStructureT0))
-  fromNow(()=>tmpSourceFile.delete(), (t)=>arg.log(`declareReturnType apply inferReturnType tmpSourceFile.delete() took ${t}`))
+  fromNow(() => tmpSourceFile.delete(), (t) => arg.log(`declareReturnType apply inferReturnType tmpSourceFile.delete() took ${t}`))
+  arg.log('declareReturnType apply inferReturnType create InterfaceStructure took ' + timeFrom(intStructureT0))
   return intStructure
 }
