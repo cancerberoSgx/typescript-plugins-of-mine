@@ -31,11 +31,13 @@ function fn<T>(): FNResult<T> { // THIS works
 //TODO: check if diagnostic is in the same position  in predicate 
 //TODO: appearing in places it shouldnt
 
+import { fromNow, now, timeFrom } from 'hrtime-now';
+import * as tsa from 'ts-simple-ast';
+import { InterfaceDeclarationStructure, TypeGuards } from 'ts-simple-ast';
 import * as ts from 'typescript';
 import { getKindName } from 'typescript-ast-util';
 import { CodeFix, CodeFixOptions } from '../codeFixes';
-import { VariableDeclarationKind, FunctionDeclaration, TypeGuards, InterfaceDeclarationStructure, MethodSignatureStructure } from 'ts-simple-ast';
-import { now, timeFrom, fromNow } from 'hrtime-now';
+import { parse } from 'path';
 
 /** 
 
@@ -59,8 +61,9 @@ function fn<T>(): FNResult<T> {
 
 # TODO: 
 
+ * support unnamed functions and arrow
  * we could offer three alternatives : declare interface, declare type or declare class. see config
-
+ * ISSUE : support spreadproperty assignament and simple property assignment : i.e:  {simple} and {...spread}
 */
 
 export const declareReturnType: CodeFix = {
@@ -68,11 +71,16 @@ export const declareReturnType: CodeFix = {
 
   config: {
     // TODO: what should we declare. Could be 'interface'|'class'|'type'
-    declareWhat: 'interface'
+    declareWhat: 'interface',
+    // TODO: could be true|false|string . add jsdoc to new class/interface declaration
+    jsdoc: true
   },
 
   predicate: (arg: CodeFixOptions): boolean => {
-    if (arg.containingTargetLight.kind === ts.SyntaxKind.Identifier && arg.containingTargetLight.parent.kind === ts.SyntaxKind.TypeReference && arg.diagnostics.find(d => d.code === 2304 && d.start === arg.containingTargetLight.getStart())) {
+    if (arg.containingTargetLight.kind === ts.SyntaxKind.Identifier &&
+      arg.containingTargetLight.parent.kind === ts.SyntaxKind.TypeReference &&
+      arg.diagnostics.find(d => d.code === 2304 && d.start === arg.containingTargetLight.getStart()
+      )) {
       return true
     }
     else {
@@ -80,11 +88,11 @@ export const declareReturnType: CodeFix = {
       return false
     }
   },
-  
+
   description: (arg: CodeFixOptions): string => `Declare interface "${arg.containingTargetLight.getText()}"`,
 
   apply: (arg: CodeFixOptions): ts.ApplicableRefactorInfo[] | void => {
-    const decl = arg.simpleNode.getFirstAncestorByKind(ts.SyntaxKind.FunctionDeclaration)
+    const decl: tsa.Node & tsa.SignaturedDeclaration = arg.simpleNode.getAncestors().find(TypeGuards.isSignaturedDeclaration)
     const interfaceStructure = fromNow(
       () => inferReturnType(decl, arg),
       t => arg.log('apply inferReturnType took ' + t)
@@ -100,36 +108,50 @@ export const declareReturnType: CodeFix = {
 }
 
 
-const inferReturnType = (decl: FunctionDeclaration, arg: CodeFixOptions): InterfaceDeclarationStructure => {
+const inferReturnType = (decl: tsa.Node & tsa.SignaturedDeclaration, arg: CodeFixOptions): InterfaceDeclarationStructure => {
   const project = arg.simpleProject
+  const tmpFunctionName = `__function_name_${Date.now()}_`
+  const tmpVariableName = `__variable_name_${Date.now()}_`
   const tmpSourceFile = fromNow(
-    () => project.createSourceFile('tmp2.ts', decl.getText() + '; const tmp = ' + decl.getName() + '()', { overwrite: true }),
+    () => project.createSourceFile(`tmp2.ts`, `const ${tmpFunctionName} = ${decl.getText()};  const ${tmpVariableName} = ${tmpFunctionName}()`, { overwrite: true }),
     (t) => arg.log('apply inferReturnType createSourceFile took ' + t)
   )
-  const tmpDecl = tmpSourceFile.getDescendantsOfKind(ts.SyntaxKind.FunctionDeclaration)[0]
-  const typeargs = tmpDecl.getReturnType().getTypeArguments()
+  const tmpFuncDecl = tmpSourceFile.getVariableDeclaration(tmpFunctionName).getInitializer()
+  if (!TypeGuards.isSignaturedDeclaration(tmpFuncDecl)) {
+    arg.log(`apply aborted because !TypeGuards.isSignaturedDeclaration(tmpFuncDecl)`)
+    return
+  }
+  const typeargs = tmpFuncDecl.getReturnType().getTypeArguments()
   fromNow(
-    () => tmpDecl.removeReturnType(),
+    () => tmpFuncDecl.removeReturnType(),
     t => arg.log('apply inferReturnType tmpDecl.removeReturnType() took ' + t)
   )
-  const tmp = tmpSourceFile.getFirstDescendantByKind(ts.SyntaxKind.VariableDeclaration)
+  const tmpVarDecl = tmpSourceFile.getVariableDeclaration(tmpVariableName)
+  if (!tmpVarDecl) {
+    arg.log(`apply aborted because !tmpVarDecl`)
+    return
+  }
   const type = fromNow(
-    () => project.getTypeChecker().getTypeAtLocation(tmp),
-    t => arg.log('apply inferReturnType getTypeChecker().getTypeAtLocation took ' + t))
-
+    () => project.getTypeChecker().getTypeAtLocation(tmpVarDecl),
+    t => arg.log('apply inferReturnType getTypeChecker().getTypeAtLocation took ' + t)
+  )
   const intStructureT0 = now()
-  const intStructure = {
+  const intStructure: tsa.InterfaceDeclarationStructure = {
     name: decl.getReturnTypeNode().getText(),
     properties: type.getProperties()
       .filter(p => {
         const v = p.getValueDeclaration();
         return TypeGuards.isPropertyAssignment(v) && !v.getInitializer().getKindName().includes('Function')
       })
-      .map(p => ({
-        name: p.getName(),
-        type: project.getTypeChecker().getTypeAtLocation(p.getValueDeclaration()).getText(),
-        val: p.getValueDeclaration()
-      })),
+      .map(p => {
+        const v = p.getValueDeclaration()
+        return {
+          name: p.getName(),
+          type: project.getTypeChecker().getTypeAtLocation(p.getValueDeclaration()).getText(),
+          val: p.getValueDeclaration(),
+          hasQuestionToken: TypeGuards.isPropertyAssignment(v) && v.hasQuestionToken(),
+        }
+      }),
     methods: type.getProperties()
       .filter(p => {
         const v = p.getValueDeclaration();
@@ -138,7 +160,8 @@ const inferReturnType = (decl: FunctionDeclaration, arg: CodeFixOptions): Interf
       .map(p => {
         const v = p.getValueDeclaration()
         if (!TypeGuards.isPropertyAssignment(v)) {
-          return null
+          return null // TODO: dismissing sprea dproperty assignament and simple property assignment : i.e:  {simple} and {...spread}
+          // TODO: LOG
         }
         const init = v.getInitializer()
         if (!TypeGuards.isArrowFunction(init) && !TypeGuards.isFunctionExpression(init)) {
@@ -149,14 +172,22 @@ const inferReturnType = (decl: FunctionDeclaration, arg: CodeFixOptions): Interf
           returnType: init.getReturnType() ? init.getReturnType().getText() : 'any',
           parameters: init.getParameters().map(pa => ({
             name: pa.getName(),
-            type: pa.getType().getText()
-          }))
+            type: pa.getType().isTypeParameter() ? pa.getTypeNode().getText() :  pa.getType().getText(),
+            hasQuestionToken: pa.hasInitializer() || pa.hasQuestionToken(),
+          })),
+          typeParameters: init.getTypeParameters().map(p=>({
+            name: p.getName(),
+            constrain: p.getConstraintNode() && p.getConstraintNode().getText()
+          })),
         }
       })
       .filter(p => !!p),
     typeParameters: typeargs.map(ta => ({ name: ta.getSymbol().getName() })),
   }
-  fromNow(() => tmpSourceFile.delete(), (t) => arg.log(`apply inferReturnType tmpSourceFile.delete() took ${t}`))
-  arg.log('apply inferReturnType create InterfaceStructure took ' + timeFrom(intStructureT0))
+  fromNow(
+    () => tmpSourceFile.delete(),
+    t => arg.log(`apply inferReturnType tmpSourceFile.delete() took ${t}`)
+  )
+  arg.log(`apply inferReturnType create InterfaceStructure took ${timeFrom(intStructureT0)}`)
   return intStructure
 }

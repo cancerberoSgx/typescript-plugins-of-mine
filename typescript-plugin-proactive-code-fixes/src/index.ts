@@ -1,7 +1,7 @@
 import { now, timeFrom } from 'hrtime-now';
 import { Project, SourceFile, SourceFileAddOptions } from 'ts-simple-ast';
 import { findChildContainedRange, findChildContainingRange, getKindName, positionOrRangeToNumber, positionOrRangeToRange, findChildContainingRangeLight } from 'typescript-ast-util';
-import { createSimpleASTProject, getPluginCreate, LanguageServiceOptionals } from 'typescript-plugin-util';
+import { createSimpleASTProject, getPluginCreate, LanguageServiceOptionals, getConfigFilePath } from 'typescript-plugin-util';
 import * as ts_module from 'typescript/lib/tsserverlibrary';
 import { CodeFixOptions, codeFixes, CodeFix } from './codeFixes';
 
@@ -101,15 +101,14 @@ function getCodeFix(fileName: string, positionOrRange: number | ts.TextRange, en
     log(`no getCodeFix because findChildContainedRange  target node is undefined `)
     return
   }
-  log(`getCodeFix info: containingTarget.kind == ${getKindName(containingTarget.kind)} containedTarget.kind == ${containedTarget ? getKindName(containedTarget.kind) : 'NOCONTAINEDCHILD'} `)
+  log(`getCodeFix info: containingTarget.kind == ${getKindName(containingTarget.kind)} containedTarget.kind == ${containedTarget ? getKindName(containedTarget.kind) : 'NotContainedChild'} `)
   const codeFixesFilterT0 = now()
-  const target = { diagnostics, containingTarget, containingTargetLight, containedTarget, log, program, sourceFile, /*range, fileName,project: info.project*/ }
+  const target = { diagnostics, containingTarget, containingTargetLight, containedTarget, log, program, sourceFile }
   const fixes = codeFixes.filter(fix => {
     try {
       return fix.predicate(target)
     } catch (ex) {
       log('getCodeFix exception in plugin predicates ' + fix.name + ex + '\n' + ex.stack)
-      // TODO LOG
     }
   })
   log(`codeFixesFilterT0 took ${timeFrom(codeFixesFilterT0)}`)
@@ -130,7 +129,7 @@ function applyCodeFix(fix: CodeFix,  options: CodeFixOptions,   formatOptions, p
   const fileName = options.sourceFile.fileName
   if (fix && fix.needSimpleAst !== false) {
     const createSimpleASTProjectT0 = now()
-    simpleProject = createSimpleASTProject(info.project)
+    simpleProject = getSimpleProject(info.project)
     log(`applyCodeFix createSimpleASTProject took ${timeFrom(createSimpleASTProjectT0)}`)
     const simpleNodeT0 = now()
     sourceFile = simpleProject.getSourceFile(options.sourceFile.fileName)
@@ -148,7 +147,7 @@ function applyCodeFix(fix: CodeFix,  options: CodeFixOptions,   formatOptions, p
   try {
     fix.apply(options)
   } catch (error) {
-    log(`applyCodeFix fix.apply() error ${error} \n ${error.stack}`)
+    log(`applyCodeFix fix.apply() Exception ${error} \n ${error.stack}`)
   }
   log(`applyCodeFix fix.apply() took ${timeFrom(fixapplyT0)}`)
   if (fix.needSimpleAst !== false) {
@@ -163,45 +162,14 @@ function applyCodeFix(fix: CodeFix,  options: CodeFixOptions,   formatOptions, p
 }
 
 
-
-
-
-
-
-// function getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: ReadonlyArray<number>, formatOptions: ts.FormatCodeSettings, userPreferences: ts_module.UserPreferences): ReadonlyArray<ts.CodeFixAction> {
-//   const originalCodeFixes = info.languageService.getCodeFixesAtPosition(fileName, start, end, errorCodes, formatOptions, userPreferences)
-//   const codeFix = getCodeFix(fileName, start, end, errorCodes, formatOptions)
-//   if (!codeFix) {
-//     log(`getCodeFixesAtPosition false because !codeFix`)
-//     return originalCodeFixes
-//   }
-//   target = codeFix.target
-//   const codeFixActions = codeFix.fixes.map(f => ({
-//     fixId: REFACTOR_ACTION_NAME + '-' + f.name,
-//     description: f.description(codeFix.target),
-//     fixName: REFACTOR_ACTION_NAME + '-' + f.name,
-//     changes: []
-//   }))
-//   log(`getCodeFixesAtPosition - completions returned by .languageService.getCodeFixesAtPosition are  ${codeFixActions ? JSON.stringify(originalCodeFixes) : 'codeFixActions'}  -  ${start}`)
-//   return originalCodeFixes.concat(codeFixActions)
-// }
-
-
-// function getCombinedCodeFix(scope: ts.CombinedCodeFixScope, fixId: string, formatOptions: ts.FormatCodeSettings): ts.CombinedCodeActions {
-//   const t0 = now()
-//   log(`getCombinedCodeFix fixId`)
-//   const prior = getCombinedCodeFix(scope, fixId, formatOptions)
-//   if (!fixId.startsWith(REFACTOR_ACTION_NAME) || !target.containingTarget) {
-//     log(`no getCombinedCodeFix ${fixId} because and !fixId.startsWith(REFACTOR_ACTION_NAME) || !target.containingTarget`)
-//     return prior
-//   }
-//   const fixName = fixId.substring(REFACTOR_ACTION_NAME.length + 1, fixId.length)
-//   const fix = codeFixes.find(fix => fix.name === fixName)
-//   if (!fix) {
-//     info.project.projectService.logger.info(`no getCombinedCodeFix ${fixId} because no fix was found for actionName == ${fixId}`)
-//     return prior
-//   }
-//   applyCodeFix(fix, target, formatOptions, target.containingTarget.getStart())
-//   log(`no getCombinedCodeFix ${fixId} total time took ${timeFrom(t0)}`)
-//   return prior
-// }
+// encapsulate simple project creation here so we can start testing caching the project and refreshing it instead of fully create it
+// TODO: should be a class in separate file
+let simpleProject: Project
+let tsConfigPath: string
+function getSimpleProject(project: ts_module.server.Project) : Project {
+  // if(!simpleProject){
+    tsConfigPath = getConfigFilePath(info.project)
+    simpleProject = createSimpleASTProject(tsConfigPath)
+  // }
+  return simpleProject
+}

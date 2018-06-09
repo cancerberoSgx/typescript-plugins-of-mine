@@ -52,6 +52,7 @@ Make sure you have installed typescript in your project (`npm i --save-dev types
 
 # TODO
 
+ * create a json file {production: false}. npm prepare script will change it to {production: true}. index.ts will import it and it will log and load utility plugins only if production === false so its faster on production and we can log a lot stuff and heavy utilities while development
  * config - fixes have great ideas for config but is not currently working.
  * programmatical API
  * unit test for all!

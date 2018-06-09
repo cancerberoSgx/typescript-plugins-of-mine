@@ -4,6 +4,10 @@ import * as ts from 'typescript';
 import { getKindName, findAscendant } from 'typescript-ast-util';
 import { CodeFix, CodeFixOptions } from '../codeFixes';
 
+
+let heritageClause: ts.HeritageClause
+
+
 /**
 # Description
 
@@ -40,6 +44,7 @@ export const declareClass: CodeFix = {
 
   predicate: (arg: CodeFixOptions): boolean => {
     if (arg.containingTargetLight.kind === ts.SyntaxKind.Identifier &&
+      ( heritageClause = findAscendant<ts.HeritageClause>(arg.containingTargetLight, ts.isHeritageClause)) && 
       arg.diagnostics.find(d => d.code === 2304 && d.start === arg.containingTargetLight.getStart())) {
       return true
     }
@@ -50,8 +55,7 @@ export const declareClass: CodeFix = {
   },
 
   description: (arg: CodeFixOptions): string => {
-    const heritageClause = findAscendant<ts.HeritageClause>(arg.containingTargetLight, ts.isHeritageClause)
-    return `Declare ${heritageClause.token === ts.SyntaxKind.ImplementsKeyword ? 'interface' : 'class'} "${arg.containingTargetLight.getText()}"`
+    return `Declare ${heritageClause && heritageClause.token === ts.SyntaxKind.ImplementsKeyword ? 'interface' : 'class'} "${arg.containingTargetLight.getText()}"`
   },
 
   apply: (arg: CodeFixOptions) => {

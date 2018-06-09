@@ -1,10 +1,10 @@
 // declare constructor
 class Alpha {
-  private(){}
 }
 function main(): Alpha {
   return new Alpha('hello', 1, new Date())
 }
+
 
 
 
@@ -62,20 +62,20 @@ function foo(a: number, b: string[], c: (n: number) => boolean[], d?: boolean, e
 
 
 //add return statement
-const other = <T>(a: T): T[] => {}
+const other = <T>(a: T): T[] => { }
 
 
 
 
 // name function 
-function (){}
+function () { }
 
 
 
 
 // declare interface and class 
-class Onion extends NonExistent implements NonExistentInterface, ExistentInterface2{}
-class ExistentInterface2{}
+class Onion extends NonExistent implements NonExistentInterface, ExistentInterface2 { }
+class ExistentInterface2 { }
 
 
 
