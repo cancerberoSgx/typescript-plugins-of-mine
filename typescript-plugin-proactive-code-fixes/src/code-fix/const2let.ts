@@ -29,7 +29,7 @@ export const const2let: CodeFix = {
       return true
     }
     else {
-      arg.log('codeFixCreateVariable predicate false because child.kind dont match ' + getKindName(arg.containingTargetLight.kind))
+      arg.log('codeFixConst2let predicate false because child.kind dont match ' + getKindName(arg.containingTargetLight.kind))
       return false
     }
   },

@@ -53,7 +53,7 @@ export const implementInterfaceMember: CodeFix = {
     })
 
     if (!diagnostics || !diagnostics.length) {
-      arg.log('codeFixCreateVariable predicate false because no diagnostics found with code 2322 in same line as arg.containingTarget')
+      arg.log('codeFixImplementInterfaceMember predicate false because no diagnostics found with code 2322 in same line as arg.containingTarget')
       return false
     }
 
@@ -72,7 +72,7 @@ export const implementInterfaceMember: CodeFix = {
       return true
     }
     else {
-      arg.log('codeFixCreateVariable predicate false because child.kind dont match ' + getKindName(arg.containingTarget.kind))
+      arg.log('codeFixImplementInterfaceMember predicate false because child.kind dont match ' + getKindName(arg.containingTarget.kind))
       return false
     }
   },
