@@ -40,7 +40,9 @@ export const toNamedParameters: CodeFix = {
     // TODO: what should we declare. Could be 'interface'|'class'|'type'
     declarationKind: 'interface',
     // TODO: could be true|false|string . add jsdoc to new class/interface declaration
-    jsdoc: true
+    jsdoc: true,
+    // TODO: create interface decl in a separate file ? 
+    inNewFile: false
   },
   predicate: (arg: CodeFixOptions): boolean => {
     const param = findAscendant<ts.VariableDeclarationList>(arg.containingTargetLight, ts.isParameter, true)
@@ -68,14 +70,21 @@ export const toNamedParameters: CodeFix = {
     let interfaceName = (functionLikeDeclaration as any).getName() ? (functionLikeDeclaration as any).getName() + '' : 'UnnamedOptions'
     interfaceName = interfaceName.substring(0, 1).toUpperCase() + interfaceName.substring(1, interfaceName.length)
     const interfaceStructure = {
+      docs: ['TODO: Document me'],//TODO: jsdoc if configured
+      typeParameters: functionLikeDeclaration.getTypeParameters().map(tp=>({
+        name: tp.getName(), 
+        constrain: tp.getConstraintNode() && tp.getConstraintNode().getText()
+      })),
       name: interfaceName,
       properties: functionLikeDeclaration.getParameters().filter(param => !param.getTypeNode() || param.getTypeNode().getKind() !== ts.SyntaxKind.FunctionType) // TODO: this will ignore/wrong-print parameters of type function that have an assignament
         .map(property => ({
+          // TODO :reuse function-like @param jsdoc commend or create a new jsdoc comment if user configured to do so.
           name: property.getName(),
           type: property.getTypeNode() && property.getTypeNode().getText() || property.getType() && property.getType().getText(),
           hasQuestionToken: property.hasQuestionToken()
         })),
       methods: functionLikeDeclaration.getParameters().filter(param => param.getTypeNode() && param.getTypeNode().getKind() == ts.SyntaxKind.FunctionType).map(method => ({
+        // TODO : reuse function-like @param jsdoc commend or create a new jsdoc comment if user configured to do so.
         name: method.getName(),
         returnType: method.getTypeNode() && (method.getTypeNode() as FunctionTypeNode).getReturnTypeNode() && (method.getTypeNode() as FunctionTypeNode).getReturnTypeNode().getText(),
         parameters: (method.getTypeNode() as FunctionTypeNode).getParameters().map(param => ({
@@ -90,7 +99,9 @@ export const toNamedParameters: CodeFix = {
     container.insertInterface(functionLikeDeclaration.getChildIndex(), interfaceStructure)
     const parameterDeclarationStructure: ParameterDeclarationStructure = {
       name: '{' + functionLikeDeclaration.getParameters().map(param => param.getName() + (param.getInitializer() ? (' = ' + param.getInitializer().getText()) : '')).join(', ') + '}',
-      type: interfaceName
+      type: interfaceName + (functionLikeDeclaration.getTypeParameters().length ? 
+        `<${functionLikeDeclaration.getTypeParameters().map(tp=>tp.getText()).join(', ')}>` : ''),
+      
     }
     functionLikeDeclaration.getParameters().forEach(param => param.remove())
     functionLikeDeclaration.addParameter(parameterDeclarationStructure)

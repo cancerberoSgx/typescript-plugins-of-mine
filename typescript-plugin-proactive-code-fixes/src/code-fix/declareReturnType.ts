@@ -74,7 +74,9 @@ export const declareReturnType: CodeFix = {
     // TODO: what should we declare. Could be 'interface'|'class'|'type'
     declarationKind: 'interface',
     // TODO: could be true|false|string . add jsdoc to new class/interface declaration
-    jsdoc: true
+    jsdoc: true,
+    // TODO: create interface decl in a separate file ? 
+    inNewFile: false
   },
 
   predicate: (arg: CodeFixOptions): boolean => {

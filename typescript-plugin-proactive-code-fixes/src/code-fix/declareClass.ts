@@ -39,7 +39,9 @@ export const declareClass: CodeFix = {
     // TODO: declare it in new file ? only if user put a special comment ? 
     inNewFile: false,
     // TODO: could be true|false|string . add jsdoc to new class/interface declaration
-    jsdoc: true
+    jsdoc: true,
+    // TODO: create interface decl in a separate file ? 
+    inNewFile: false
   },
 
   predicate: (arg: CodeFixOptions): boolean => {

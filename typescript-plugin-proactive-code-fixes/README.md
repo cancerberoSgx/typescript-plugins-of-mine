@@ -30,7 +30,7 @@ A lot is still to be fixed and implemented but we have several helpful and stabl
 
  # Refactoring
 
- * split variable declaration list in individual variable statements. 
+ * Transform parameter list into a single "named" parameter. Split variable declaration list in individual variable statements. 
  * Transform parameter list into a single object parameter
 
 and more to come!!
@@ -73,19 +73,27 @@ In Atom editor, if you use [atom-typescript package](https://atom.io/packages/at
 
 # Fixes and demos
 
+
 ## Variable related fixes and refactors
 
 Quick fixes when you forgot to declare variables, have duplicates, reassigning a constant or need to transform a list of variable declarations into single declaration statements, etc: 
 
 ![Variable related fixes and refactors](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-proactive-code-fixes/doc-assets/variableRelatedFixesVsCode.gif?raw=true?p=.gif)
 
+
 ## Transform parameter list into a single object parameter
 
-When you have functions accepting several parameters and you keep adding more and more, sometimes it's a good idea to convert the parameter list into a single parameter object that implements an interface so the contract is there and not in the function signature. This is aprticularly useful when writing APIs that need to maintain backwards compatibility. 
+When you have functions accepting several parameters and you keep adding more and more, sometimes it's a good idea to convert the parameter list into a single parameter object that implements an interface so the contract is there and not in the function signature. 
 
-Select a fragment of a parameter declaration list and it will offer to declare all parameters in an interface and use them as an object literal
+This is particularly useful when writing APIs that need to maintain backwards compatibility. 
+
+Select a fragment of a parameter declaration list and it will offer to declare all parameters in an interface and use them as an object literal. 
 
 Idea taken from here: https://github.com/Microsoft/TypeScript/issues/23552
+
+Demo in Atom editor: 
+
+![Transform parameter list into a single object parameter Atom editor demo](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-proactive-code-fixes/doc-assets/convertToNamedParamsAtom.gif?raw=true?p=.gif)
 
 
 ## Declare interfaces from return values
