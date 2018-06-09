@@ -98,3 +98,6 @@ class SomeImplementation extends OtherImplementation implements SomeInterface, S
 class Class2 implements SomeInterface {
   prop1: boolean[]
 }
+
+
+const other = (a: string): number => {}

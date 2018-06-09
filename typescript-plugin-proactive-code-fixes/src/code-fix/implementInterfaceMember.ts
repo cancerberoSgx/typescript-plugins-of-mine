@@ -26,6 +26,7 @@ class Class2 implements SomeInterface {
   prop1: boolean[]        <----- here select prop1 and implement interface it will fix prop1 signature
 }
 ```
+
 # TODO
 
  * TODO: work for constructors and setter/getter members
@@ -39,40 +40,37 @@ const unit: Unit = {
   energy: 123, color: 'red' 
 }
 
+ *  we choose any member signature - we should choose the most similar one
+ 
+ * config: 
+```
+config: {
+    // recursive tre will generate the whole sub literals.. 
+    recursive: false,
+    // add missing properties declared to interface so there are no errors in strict mode
+    addMissingPropertiesToInterface: false
+  },
+```
 */
 
 export const implementInterfaceMember: CodeFix = {
+
   name: 'implementInterfaceMember',
-  config: { recursive: false, addMissingPropertiesToInterface: false }, // recursive tre will generate the whole sub literals.. 
+
+  config: {
+    // recursive tre will generate the whole sub literals.. 
+    recursive: false,
+    // add missing properties declared to interface so there are no errors in strict mode
+    addMissingPropertiesToInterface: false
+  },
+
   predicate: (arg: CodeFixOptions): boolean => {
-    const targetLine = ts.getLineAndCharacterOfPosition(arg.sourceFile, arg.containingTarget.getStart()).line
-    const diagnostics = arg.diagnostics.filter(d => d.code === 2416).filter(diag => {
-      const diagLineStart = ts.getLineAndCharacterOfPosition(arg.sourceFile, diag.start).line
-      const diagLineEnd = ts.getLineAndCharacterOfPosition(arg.sourceFile, diag.start + diag.length).line
-      return diagLineStart <= targetLine && diagLineEnd >= targetLine
-    })
-
-    if (!diagnostics || !diagnostics.length) {
-      arg.log('codeFixImplementInterfaceMember predicate false because no diagnostics found with code 2322 in same line as arg.containingTarget')
-      return false
-    }
-
-    if (arg.containingTargetLight.kind === ts.SyntaxKind.Identifier) {
-      // in this case user selected a fragment of the id. quick issue fix: 
-      if (arg.containedTarget && arg.containedTarget.kind === ts.SyntaxKind.SourceFile) {
-        arg.containedTarget = undefined
-      }
-      return true
-    }
-    // else if (arg.containedTarget && arg.containedTarget.kind === ts.SyntaxKind.Identifier) {
-    //   // user selected the exactly the id (double click)
-    //   return true
-    // }
-    else if (arg.containedTarget && (findAscendant(arg.containedTarget, n => n.kind === ts.SyntaxKind.PropertyDeclaration) || findAscendant(arg.containedTarget, n => n.kind === ts.SyntaxKind.VariableDeclaration))) {
+    if (arg.containingTargetLight.kind === ts.SyntaxKind.Identifier &&
+      arg.diagnostics.find(d => d.code === 2416 && d.start === arg.containingTargetLight.getStart())) {
       return true
     }
     else {
-      arg.log('codeFixImplementInterfaceMember predicate false because child.kind dont match ' + getKindName(arg.containingTarget.kind))
+      arg.log('codeFixImplementInterfaceMember predicate false because child.kind dont match ' + getKindName(arg.containingTargetLight.kind))
       return false
     }
   },
@@ -80,8 +78,6 @@ export const implementInterfaceMember: CodeFix = {
   description: (arg: CodeFixOptions): string => `Implement Interface`,
 
   apply: (arg: CodeFixOptions): ts.ApplicableRefactorInfo[] | void => {
-
-    const sourceFile = arg.simpleNode.getSourceFile()
     const id = arg.simpleNode
     const member = id.getParent()
     const decl = member.getParent()
@@ -96,9 +92,7 @@ export const implementInterfaceMember: CodeFix = {
     const memberSignature = interfaceWithMemberName.getMembers().filter(TypeGuards.isPropertyNamedNode).pop() // TODO: any arbitrary signature
 
     if (TypeGuards.isMethodSignature(memberSignature) && TypeGuards.isMethodDeclaration(member)) {
-
       fixSignature(member, memberSignature)
-
     } else if (TypeGuards.isPropertySignature(memberSignature) && TypeGuards.isPropertyDeclaration(member)) {
       member.setType(memberSignature.getType().getText())
     }
