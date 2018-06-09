@@ -3,7 +3,12 @@ function g34(): GResult {
 }
 
 const h77 = <T>(): HResult<T> => {
-  return { a: 1, b: 's', log: msg => msg + '', kill: function (probe: T) { return 1 }, status: { t: new Date() } }
+  return { 
+    a: 1, b: 's', 
+    log: msg => msg + '', 
+    kill: function (probe: T) { return 1 }, 
+    status: { t: new Date() } 
+  }
 }
 
 function fn87<T>(): FNResult<T> {
