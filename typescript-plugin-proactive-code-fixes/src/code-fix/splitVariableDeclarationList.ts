@@ -27,12 +27,6 @@ It doesn't attack any error diagnostic.
 
 # TODO
  * config
-```
-  config: {
-    // TODO; add inferred types to generated var decl stmts ?  currently adding. 
-    addTypes: true
-  }, 
-```
 */
 
 export const splitVariableDeclarationList: CodeFix = {
@@ -46,11 +40,11 @@ export const splitVariableDeclarationList: CodeFix = {
   predicate: (arg: CodeFixOptions): boolean => {
     const varDeclList = findAscendant<ts.VariableDeclarationList>(arg.containingTargetLight, ts.isVariableDeclarationList, true)
     if(!varDeclList){
-      arg.log('splitVariableDeclarationList predicate false because no VariableDeclarationList ascendant found - containingTarget was ' + getKindName(arg.containingTargetLight))
+      arg.log('predicate false because no VariableDeclarationList ascendant found - containingTarget was ' + getKindName(arg.containingTargetLight))
       return false
     }
     else if (varDeclList.declarations.length<=1){
-      arg.log('splitVariableDeclarationList predicate false because list has only one declaration')
+      arg.log('predicate false because list has only one declaration')
       return false
     }
     return true
@@ -61,7 +55,7 @@ export const splitVariableDeclarationList: CodeFix = {
   apply: (arg: CodeFixOptions): ts.ApplicableRefactorInfo[] | void => {
     const varDeclList = arg.simpleNode.getFirstAncestorByKind(ts.SyntaxKind.VariableDeclarationList)
     if (!varDeclList || !TypeGuards.isVariableDeclarationList(varDeclList)) { 
-      arg.log('splitVariableDeclarationList not apply because no splitVariableDeclarationList ancestor was found')
+      arg.log('not apply because no splitVariableDeclarationList ancestor was found')
       return
     }
     const container = varDeclList.getParent().getParent()
@@ -83,7 +77,7 @@ export const splitVariableDeclarationList: CodeFix = {
       container.removeStatement(indexToInsert)
       container.insertVariableStatements(indexToInsert, variableStatements)
     } else {
-      arg.log(`splitVariableDeclarationList not apply because condition not meet: TypeGuards.isBlock(container) || TypeGuards.isSourceFile(container) === ${TypeGuards.isBlock(container) || TypeGuards.isSourceFile(container)} - container kind is ${container.getKindName()}`)
+      arg.log(`not apply because condition not meet: TypeGuards.isBlock(container) || TypeGuards.isSourceFile(container) === ${TypeGuards.isBlock(container) || TypeGuards.isSourceFile(container)} - container kind is ${container.getKindName()}`)
     }
   }
 }

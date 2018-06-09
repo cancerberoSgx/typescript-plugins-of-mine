@@ -36,25 +36,19 @@ export const nameFunction: CodeFix = {
 
   predicate: (arg: CodeFixOptions): boolean => {
     const fn = findAscendant(arg.containingTargetLight, ts.isFunctionDeclaration, true)
-    if (!fn) {
-      arg.log('nameFunction predicate false because cannotfindAscendant(arg.containingTargetLight, ts.isFunctionDeclaration)')
+    if (!fn || !arg.diagnostics.find(d => d.code === 1003 && d.start >= fn.getStart(arg.sourceFile) && d.start + d.length <= fn.getEnd())) {
+      arg.log('predicate false because cannotfindAscendant(arg.containingTargetLight, ts.isFunctionDeclaration) or no diagnostic error 1003 code found in range')
       return false
     }
-    if (arg.diagnostics.find(d => d.code === 1003 && d.start >= fn.getStart(arg.sourceFile) && d.start + d.length <= fn.getEnd())) {
-      return true
-    }
-    else {
-      arg.log('nameFunction predicate false because cannot find diagnostic code 1003 inside FunctionDeclaration ancestor')
-      return false
-    }
+    return true
   },
 
-  description: (arg: CodeFixOptions): string => `Name Function ${getKindName(arg.containingTargetLight)}`,
+  description: (arg: CodeFixOptions): string => `Name function`,
 
   apply: (arg: CodeFixOptions): ts.ApplicableRefactorInfo[] | void => {
     const f = TypeGuards.isFunctionDeclaration(arg.simpleNode) ? arg.simpleNode : arg.simpleNode.getFirstAncestorByKind(ts.SyntaxKind.FunctionDeclaration)
     if (!f || f.getName()) {
-      arg.log(`nameFunction apply cannot exec because ${f.getKindName()} is not FunctionDeclaration or has name`)
+      arg.log(`apply cannot exec because ${f.getKindName()} is not FunctionDeclaration or has name`)
       return
     }
     else {

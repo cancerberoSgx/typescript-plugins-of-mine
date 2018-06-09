@@ -34,7 +34,7 @@ export const addReturnStatement: CodeFix = {
       return true
     }
     else {
-      arg.log(`addReturnStatement predicate false because child.kind===${kind} dont include any of ${kindToIncludeAnyOf.join(', ')}`)
+      arg.log(`predicate false because child.kind===${kind} dont include any of ${kindToIncludeAnyOf.join(', ')}`)
       return false
     }
   },
@@ -54,7 +54,7 @@ export const addReturnStatement: CodeFix = {
       firstStatementedNode.addStatements(`return ${returnValueString};`)
     }
     else {
-      arg.log('addReturnStatement apply aborted because firstStatementedNode is null')
+      arg.log('apply aborted because firstStatementedNode is null')
     }
   }
 }

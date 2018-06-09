@@ -38,7 +38,8 @@ export const toNamedParameters: CodeFix = {
   predicate: (arg: CodeFixOptions): boolean => {
     const param = findAscendant<ts.VariableDeclarationList>(arg.containingTargetLight, ts.isParameter, true)
     if(!param){
-      arg.log('toNamedParameters predicate false because no  Parameter ascendant found - containingTarget was ' + getKindName(arg.containingTargetLight))
+      arg.log('predicate false because no  Parameter ascendant found - containingTarget was ' + 
+        getKindName(arg.containingTargetLight))
       return false
     }
     return true
@@ -49,7 +50,7 @@ export const toNamedParameters: CodeFix = {
   apply: (arg: CodeFixOptions): ts.ApplicableRefactorInfo[] | void => {
     const functionLikeDeclaration = arg.simpleNode.getAncestors().find(TypeGuards.isFunctionLikeDeclaration)
     if (!functionLikeDeclaration) {
-      arg.log('toNamedParameters not applied because FunctionLikeDeclaration ancestor not found')
+      arg.log('not applied because FunctionLikeDeclaration ancestor not found')
       return
     }
     const container = functionLikeDeclaration.getParent()

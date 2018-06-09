@@ -39,7 +39,7 @@ export const codeFixCreateVariable: CodeFix = {
       return true
     }
     else {
-      options.log(`codeFixCreateVariable predicate false because child.kind dont match ${getKindName(options.containingTarget.kind)} - ${getKindName(options.containingTarget.parent.kind)}`)
+      options.log(`predicate false because child.kind dont match ${getKindName(options.containingTarget.kind)} - ${getKindName(options.containingTarget.parent.kind)}`)
       return false
     }
   },

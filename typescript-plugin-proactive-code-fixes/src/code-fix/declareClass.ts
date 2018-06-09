@@ -4,12 +4,29 @@ import * as ts from 'typescript';
 import { getKindName, findAscendant } from 'typescript-ast-util';
 import { CodeFix, CodeFixOptions } from '../codeFixes';
 
-// TODO: issue - break  target class' jsdoc
-// TODO:  modify the file using  insertClass or insertInterface using Structures no text
-// TODO: config
+/**
+# Description
 
-let classDecl: ts.ClassDeclaration | ts.InterfaceDeclaration | undefined
+Suggests declaring an empty class or interface when a something is extending or implementing something that is not found
 
+# Example
+
+```
+class Onion extends NonExistent implements NonExistentInterface{}
+```
+
+# Attacks
+ 
+	"code": "2304",	"message": "Cannot find name 'NonExistentInterface'.",
+
+# TODO
+ 
+ * issue: move scroll to end of file
+ * issue - break  target class' jsdoc
+ * TODO:  modify the file using  insertClass or insertInterface using Structures no text
+ * config
+
+ */
 export const declareClass: CodeFix = {
 
   name: 'Declare class',
@@ -27,7 +44,7 @@ export const declareClass: CodeFix = {
       return true
     }
     else {
-      arg.log('declareClass predicate false because child.kind dont match ' + getKindName(arg.containingTargetLight.kind))
+      arg.log('predicate false because child.kind dont match ' + getKindName(arg.containingTargetLight.kind))
       return false
     }
   },

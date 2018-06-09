@@ -59,31 +59,35 @@ function fn<T>(): FNResult<T> {
 
 # TODO: 
 
- * we could offer three alternatives : declare interface, declare type or declare class
+ * we could offer three alternatives : declare interface, declare type or declare class. see config
 
 */
 
 export const declareReturnType: CodeFix = {
   name: 'declareReturnType',
-  config: {},
+
+  config: {
+    // TODO: what should we declare. Could be 'interface'|'class'|'type'
+    declareWhat: 'interface'
+  },
+
   predicate: (arg: CodeFixOptions): boolean => {
     if (arg.containingTargetLight.kind === ts.SyntaxKind.Identifier && arg.containingTargetLight.parent.kind === ts.SyntaxKind.TypeReference && arg.diagnostics.find(d => d.code === 2304 && d.start === arg.containingTargetLight.getStart())) {
       return true
     }
     else {
-      arg.log('declareReturnType predicate false because child.kind dont match ' + getKindName(arg.containingTarget.kind))
+      arg.log('predicate false because child.kind dont match ' + getKindName(arg.containingTargetLight.kind))
       return false
     }
   },
   
-  description: (arg: CodeFixOptions): string => `Declare interface "${arg.containingTarget.getText()}"`,
+  description: (arg: CodeFixOptions): string => `Declare interface "${arg.containingTargetLight.getText()}"`,
 
   apply: (arg: CodeFixOptions): ts.ApplicableRefactorInfo[] | void => {
-    const id = arg.simpleNode
     const decl = arg.simpleNode.getFirstAncestorByKind(ts.SyntaxKind.FunctionDeclaration)
     const interfaceStructure = fromNow(
       () => inferReturnType(decl, arg),
-      t => arg.log('declareReturnType apply inferReturnType took ' + t)
+      t => arg.log('apply inferReturnType took ' + t)
     )
     const siblingAncestor = arg.simpleNode.getAncestors().find(a => TypeGuards.isSourceFile(a.getParent()))
     if (siblingAncestor) {
@@ -100,18 +104,18 @@ const inferReturnType = (decl: FunctionDeclaration, arg: CodeFixOptions): Interf
   const project = arg.simpleProject
   const tmpSourceFile = fromNow(
     () => project.createSourceFile('tmp2.ts', decl.getText() + '; const tmp = ' + decl.getName() + '()', { overwrite: true }),
-    (t) => arg.log('declareReturnType apply inferReturnType createSourceFile took ' + t)
+    (t) => arg.log('apply inferReturnType createSourceFile took ' + t)
   )
   const tmpDecl = tmpSourceFile.getDescendantsOfKind(ts.SyntaxKind.FunctionDeclaration)[0]
   const typeargs = tmpDecl.getReturnType().getTypeArguments()
   fromNow(
     () => tmpDecl.removeReturnType(),
-    t => arg.log('declareReturnType apply inferReturnType tmpDecl.removeReturnType() took ' + t)
+    t => arg.log('apply inferReturnType tmpDecl.removeReturnType() took ' + t)
   )
   const tmp = tmpSourceFile.getFirstDescendantByKind(ts.SyntaxKind.VariableDeclaration)
   const type = fromNow(
     () => project.getTypeChecker().getTypeAtLocation(tmp),
-    t => arg.log('declareReturnType apply inferReturnType getTypeChecker().getTypeAtLocation took ' + t))
+    t => arg.log('apply inferReturnType getTypeChecker().getTypeAtLocation took ' + t))
 
   const intStructureT0 = now()
   const intStructure = {
@@ -152,7 +156,7 @@ const inferReturnType = (decl: FunctionDeclaration, arg: CodeFixOptions): Interf
       .filter(p => !!p),
     typeParameters: typeargs.map(ta => ({ name: ta.getSymbol().getName() })),
   }
-  fromNow(() => tmpSourceFile.delete(), (t) => arg.log(`declareReturnType apply inferReturnType tmpSourceFile.delete() took ${t}`))
-  arg.log('declareReturnType apply inferReturnType create InterfaceStructure took ' + timeFrom(intStructureT0))
+  fromNow(() => tmpSourceFile.delete(), (t) => arg.log(`apply inferReturnType tmpSourceFile.delete() took ${t}`))
+  arg.log('apply inferReturnType create InterfaceStructure took ' + timeFrom(intStructureT0))
   return intStructure
 }

@@ -61,22 +61,14 @@ const beta1:Beta = {
 ```
 
 
- * config to modify interface or be recursive: 
-```
-  config: { 
-  //recursive tre will generate the whole sub literals.. TODO
-    recursive: false, 
- //will add members of literal that doesn't exists in interface. TODO 
-    addMissingPropertiesToInterface: false 
-  }, 
-```
+ * config
 */
 
 import { Node, TypeGuards } from 'ts-simple-ast';
 import * as ts from 'typescript';
 import { getKindName } from 'typescript-ast-util';
 import { CodeFix, CodeFixOptions } from '../codeFixes';
-import { buildParameterStructure, fixSignature, getDefaultValueForType } from '../util';
+import { buildParameterStructure, fixSignature, getDefaultValueForType, getName } from '../util';
 
 export const implementInterfaceObjectLiteral: CodeFix = {
 
@@ -86,7 +78,9 @@ export const implementInterfaceObjectLiteral: CodeFix = {
     // recursive tre will generate the whole sub literals.. TODO 
     recursive: false,
     // will add members of literal that doesn't exists in interface. TODO 
-    addMissingPropertiesToInterface: false
+    addMissingPropertiesToInterface: false,
+    // will remove members from literal that dont belong to interface so dont give errors on strict mode. TODO
+    removeStrangeMembersFromLiteral: false
   },
 
   predicate: (arg: CodeFixOptions): boolean => {
@@ -95,7 +89,7 @@ export const implementInterfaceObjectLiteral: CodeFix = {
       return true
     }
     else {
-      arg.log('implementInterfaceObjectLiteral predicate false because child.kind dont match ' + getKindName(arg.containingTargetLight.kind))
+      arg.log('predicate false because child.kind dont match ' + getKindName(arg.containingTargetLight.kind))
       return false
     }
   },
@@ -109,10 +103,10 @@ export const implementInterfaceObjectLiteral: CodeFix = {
 
     varDecl.getType().getSymbol().getDeclarations().forEach(decl => {
       if (!TypeGuards.isInterfaceDeclaration(decl)) {
-        return // TODO: log
+        arg.log(`doing nothing for decl ${getName(decl)}`)
+        return
       }
-      const toRemove: Node[] = []
-
+      // const toRemove: Node[] = []
       // init.getProperties().forEach(prop => {
       //   //  -TODO: this doesn't work here : TypeGuards.isNameableNode(prop) so we ugly cast 
       //   if ((prop as any).getName && !decl.getMembers().find(m => (m as any).getName() === (prop as any).getName())) {            
@@ -129,7 +123,7 @@ export const implementInterfaceObjectLiteral: CodeFix = {
           (existingProp as any).remove()
         }
         else if (existingProp && !(existingProp as any).remove) { // TODO : fixed with https://github.com/dsherret/ts-simple-ast/pull/343#issuecomment-394923115 - remove will be always present
-          arg.log(`implementInterfaceObjectLiteral apply WARNING existingProp &&  !(existingProp as any).remove: kind: ${existingProp.getKindName()} text: ${existingProp.getText()} init.getText() === ${init.getText()}`)
+          arg.log(`apply WARNING existingProp &&  !(existingProp as any).remove: kind: ${existingProp.getKindName()} text: ${existingProp.getText()} init.getText() === ${init.getText()}`)
         }
         else {
           init.addPropertyAssignment({ name: prop.getName(), initializer: getDefaultValueForType(prop.getType()) })
@@ -147,9 +141,9 @@ export const implementInterfaceObjectLiteral: CodeFix = {
         // let parameters = method.getParameters().map(buildParameterStructure)
         if (existingProp && TypeGuards.isMethodDeclaration(existingProp)) {
           fixSignature(existingProp, method)
-          arg.log('fixSignature1')
+          // arg.log('fixSignature1')
         }
-        else if (existingProp) {
+        else if (existingProp && (existingProp as any).remove) {
           // try{
           (existingProp as any).remove()
           //   }catch(ex){
@@ -162,10 +156,12 @@ export const implementInterfaceObjectLiteral: CodeFix = {
             bodyText: 'throw new Error(\'Not Implemented\')'
           })
         }
-
+        else {
+          arg.log(`could not do nothing for property ${existingProp && existingProp.getText && existingProp.getText()} - method was ${method.getName()}`)
+        }
       })
 
-      // only remove if user explicitly configure
+      // // only remove if user explicitly configure
       // if(this.config.removeStrangeMembersFromLiteral){ // TODO: doesn't work 
       // toRemove.forEach(prop => {
       //   prop.getSourceFile().removeText(prop.getFullStart(),

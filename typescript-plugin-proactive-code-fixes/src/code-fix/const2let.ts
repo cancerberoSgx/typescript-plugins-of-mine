@@ -23,21 +23,13 @@ a = 2
 # TODO
 
  * unit tests
- 
- * config: 
- 
- ```config: { 
-    // to change to let or var
-    changeTo: 'const' 
-  }, 
-  ```
-
+ * config
   */
 export const const2let: CodeFix = {
   name: 'const2let',
   config: {
-    // to change to let or var
-    changeTo: 'const'
+    // possible values: 'let' or 'var'
+    changeTo: 'let'
   },
 
   predicate: (arg: CodeFixOptions): boolean => {
@@ -46,7 +38,7 @@ export const const2let: CodeFix = {
       return true
     }
     else {
-      arg.log('codeFixConst2let predicate false because child.kind dont match ' + getKindName(arg.containingTargetLight.kind))
+      arg.log('predicate false because child.kind dont match ' + getKindName(arg.containingTargetLight.kind))
       return false
     }
   },
@@ -56,7 +48,7 @@ export const const2let: CodeFix = {
   apply: (arg: CodeFixOptions): ts.ApplicableRefactorInfo[] | void => {
     const id = arg.simpleNode
     if (!id || id.getKind() !== ts.SyntaxKind.Identifier) {
-      arg.log(`codeFixCreateVariable apply cannot exec because of this !id||id.getKind()!== ts.SyntaxKind.Identifier  `)
+      arg.log(`apply cannot exec because of this !id||id.getKind()!== ts.SyntaxKind.Identifier  `)
       return
     }
     else if (id.getParent() && id.getParent()!.getParent() && id.getParent()!.getParent()!.getKind() === ts.SyntaxKind.ExpressionStatement) {
@@ -64,7 +56,7 @@ export const const2let: CodeFix = {
       declStatement.setDeclarationKind(VariableDeclarationKind.Let)
     }
     else {
-      arg.log(`codeFixCreateVariable apply cannot exec because this was false: id.getParent() && id.getParent()!.getParent() && id.getParent()!.getParent()!.getKind()===ts.SyntaxKind.ExpressionStatement `)
+      arg.log(`apply cannot exec because this was false: id.getParent() && id.getParent()!.getParent() && id.getParent()!.getParent()!.getKind()===ts.SyntaxKind.ExpressionStatement `)
     }
   }
 

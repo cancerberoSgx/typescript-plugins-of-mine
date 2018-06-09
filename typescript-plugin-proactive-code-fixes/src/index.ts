@@ -10,13 +10,12 @@ const REFACTOR_ACTION_NAME = `${PLUGIN_NAME}-refactor-action`
 let ts: typeof ts_module
 let info: ts_module.server.PluginCreateInfo
 let log
-
-const pluginDefinition: LanguageServiceOptionals = { getApplicableRefactors, getEditsForRefactor/*,getCodeFixesAtPosition, getCombinedCodeFix*/ }
+const pluginDefinition: LanguageServiceOptionals = { getApplicableRefactors, getEditsForRefactor }
 export = getPluginCreate(pluginDefinition, (modules, anInfo) => {
   ts = modules.typescript
   info = anInfo
   log = function (msg) {
-    info.project.projectService.logger.info(`${PLUGIN_NAME} ${msg}`)
+    info.project.projectService.logger.info(`Plugin ${PLUGIN_NAME}, Fix: ${currentFix && currentFix.name}, Message: ${msg}`)
   }
   info.project.projectService.logger.info(`${PLUGIN_NAME} created`)
 })
@@ -124,6 +123,7 @@ function getCodeFix(fileName: string, positionOrRange: number | ts.TextRange, en
 
 
 
+let currentFix: CodeFix
 function applyCodeFix(fix: CodeFix,  options: CodeFixOptions,   formatOptions, positionOrRange: number | ts.TextRange) {
   let simpleProject: Project
   let sourceFile: SourceFile
@@ -144,6 +144,7 @@ function applyCodeFix(fix: CodeFix,  options: CodeFixOptions,   formatOptions, p
   }
   // we are ready, with or without ast-simple to perform the change
   const fixapplyT0 = now()
+  currentFix = fix
   try {
     fix.apply(options)
   } catch (error) {
@@ -167,40 +168,40 @@ function applyCodeFix(fix: CodeFix,  options: CodeFixOptions,   formatOptions, p
 
 
 
-function getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: ReadonlyArray<number>, formatOptions: ts.FormatCodeSettings, userPreferences: ts_module.UserPreferences): ReadonlyArray<ts.CodeFixAction> {
-  const originalCodeFixes = info.languageService.getCodeFixesAtPosition(fileName, start, end, errorCodes, formatOptions, userPreferences)
-  const codeFix = getCodeFix(fileName, start, end, errorCodes, formatOptions)
-  if (!codeFix) {
-    log(`getCodeFixesAtPosition false because !codeFix`)
-    return originalCodeFixes
-  }
-  target = codeFix.target
-  const codeFixActions = codeFix.fixes.map(f => ({
-    fixId: REFACTOR_ACTION_NAME + '-' + f.name,
-    description: f.description(codeFix.target),
-    fixName: REFACTOR_ACTION_NAME + '-' + f.name,
-    changes: []
-  }))
-  log(`getCodeFixesAtPosition - completions returned by .languageService.getCodeFixesAtPosition are  ${codeFixActions ? JSON.stringify(originalCodeFixes) : 'codeFixActions'}  -  ${start}`)
-  return originalCodeFixes.concat(codeFixActions)
-}
+// function getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: ReadonlyArray<number>, formatOptions: ts.FormatCodeSettings, userPreferences: ts_module.UserPreferences): ReadonlyArray<ts.CodeFixAction> {
+//   const originalCodeFixes = info.languageService.getCodeFixesAtPosition(fileName, start, end, errorCodes, formatOptions, userPreferences)
+//   const codeFix = getCodeFix(fileName, start, end, errorCodes, formatOptions)
+//   if (!codeFix) {
+//     log(`getCodeFixesAtPosition false because !codeFix`)
+//     return originalCodeFixes
+//   }
+//   target = codeFix.target
+//   const codeFixActions = codeFix.fixes.map(f => ({
+//     fixId: REFACTOR_ACTION_NAME + '-' + f.name,
+//     description: f.description(codeFix.target),
+//     fixName: REFACTOR_ACTION_NAME + '-' + f.name,
+//     changes: []
+//   }))
+//   log(`getCodeFixesAtPosition - completions returned by .languageService.getCodeFixesAtPosition are  ${codeFixActions ? JSON.stringify(originalCodeFixes) : 'codeFixActions'}  -  ${start}`)
+//   return originalCodeFixes.concat(codeFixActions)
+// }
 
 
-function getCombinedCodeFix(scope: ts.CombinedCodeFixScope, fixId: string, formatOptions: ts.FormatCodeSettings): ts.CombinedCodeActions {
-  const t0 = now()
-  log(`getCombinedCodeFix fixId`)
-  const prior = getCombinedCodeFix(scope, fixId, formatOptions)
-  if (!fixId.startsWith(REFACTOR_ACTION_NAME) || !target.containingTarget) {
-    log(`no getCombinedCodeFix ${fixId} because and !fixId.startsWith(REFACTOR_ACTION_NAME) || !target.containingTarget`)
-    return prior
-  }
-  const fixName = fixId.substring(REFACTOR_ACTION_NAME.length + 1, fixId.length)
-  const fix = codeFixes.find(fix => fix.name === fixName)
-  if (!fix) {
-    info.project.projectService.logger.info(`no getCombinedCodeFix ${fixId} because no fix was found for actionName == ${fixId}`)
-    return prior
-  }
-  applyCodeFix(fix, target, formatOptions, target.containingTarget.getStart())
-  log(`no getCombinedCodeFix ${fixId} total time took ${timeFrom(t0)}`)
-  return prior
-}
+// function getCombinedCodeFix(scope: ts.CombinedCodeFixScope, fixId: string, formatOptions: ts.FormatCodeSettings): ts.CombinedCodeActions {
+//   const t0 = now()
+//   log(`getCombinedCodeFix fixId`)
+//   const prior = getCombinedCodeFix(scope, fixId, formatOptions)
+//   if (!fixId.startsWith(REFACTOR_ACTION_NAME) || !target.containingTarget) {
+//     log(`no getCombinedCodeFix ${fixId} because and !fixId.startsWith(REFACTOR_ACTION_NAME) || !target.containingTarget`)
+//     return prior
+//   }
+//   const fixName = fixId.substring(REFACTOR_ACTION_NAME.length + 1, fixId.length)
+//   const fix = codeFixes.find(fix => fix.name === fixName)
+//   if (!fix) {
+//     info.project.projectService.logger.info(`no getCombinedCodeFix ${fixId} because no fix was found for actionName == ${fixId}`)
+//     return prior
+//   }
+//   applyCodeFix(fix, target, formatOptions, target.containingTarget.getStart())
+//   log(`no getCombinedCodeFix ${fixId} total time took ${timeFrom(t0)}`)
+//   return prior
+// }

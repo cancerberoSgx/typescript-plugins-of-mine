@@ -22,8 +22,7 @@ const o = {
   foo: () => { return 1 }
 }
 const val: string[] = o.bar(1, ['w'], true)      // <---- will add bar as method of literal object o
-interface Hello {
-}
+interface Hello {}
 const hello: Hello = {}
 let i: string[]
 i = hello.world([[1, 2, 3], [4, 5]])             // <----- will add world as method of interface Hello
@@ -41,6 +40,8 @@ const a = notDefined.foof + 9                              // will add property 
 ```
 
 # TODO: 
+
+ * lots of unknown situations - test more
 
  * declare member in other than interfaces ike classes, literal objects and type declarations: for example this doest work:
 
@@ -75,7 +76,7 @@ export const declareMember: CodeFix = {
       return true
     }
     else {
-      arg.log('declareReturnType predicate false because child.kind dont match ' + getKindName(arg.containingTarget.kind))
+      arg.log('predicate false because child.kind dont match ' + getKindName(arg.containingTarget.kind))
       return false
     }
   },
@@ -84,7 +85,7 @@ export const declareMember: CodeFix = {
 
   apply: (opts: CodeFixOptions): ts.ApplicableRefactorInfo[] | void => {
     const node = opts.simpleNode
-    const print = (msg) => { opts.log('declareMember apply ' + msg) }
+    const print = (msg) => { opts.log('apply ' + msg) }
     const typeChecker = opts.simpleProject.getTypeChecker()
     const newMemberName_ = node.getText()
     const accessExpr = node.getParent()

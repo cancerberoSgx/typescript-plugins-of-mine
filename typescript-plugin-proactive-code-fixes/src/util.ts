@@ -1,5 +1,4 @@
-import { ParameterDeclaration, ParameterDeclarationStructure, FunctionLikeDeclaration, MethodSignature, ExpressionWithTypeArguments, ClassDeclaration, TypeGuards, InterfaceDeclaration, Type } from "ts-simple-ast";
-// import {Type as ts.Type} from "../../typescript-ast-util/node_modules/typescript";
+import { ClassDeclaration, ExpressionWithTypeArguments, FunctionLikeDeclaration, InterfaceDeclaration, MethodSignature, Node, ParameterDeclaration, ParameterDeclarationStructure, SyntaxKind, Type, TypeGuards } from "ts-simple-ast";
 
 
 export const buildParameterStructure = (p: ParameterDeclaration): ParameterDeclarationStructure => ({
@@ -89,11 +88,11 @@ export const findInterfacesWithPropertyNamed = (decl: ClassDeclaration, memberNa
     .filter(d => d.getMembers().find(m => TypeGuards.isPropertyNamedNode(m) && m.getName() === memberName))
     .filter((value, pos, arr) => arr.indexOf(value) === pos) // union
 
-
-
-
+/**
+ * returns a default representation of given type, for example `''` for `string`, `[]` for `Array`, etc. 
+ * TODO: this should support recursion in case it references another interface - we can recreate the whole thing recursively... 
+ */
 export function getDefaultValueForType(t: Type): string {
-  // TODO: this should be recursive in case it references another interface - we can recreate the whole thing recursively... 
   if (!t) {
     return 'null'
   } else if (t.getText() === 'string') {
@@ -107,4 +106,10 @@ export function getDefaultValueForType(t: Type): string {
   } else {
     return 'null'
   }
+}
+
+export function getName(node: Node, defaultName: string = 'unknown_name'): string {
+  const a = node as any
+  let id
+  return a && a.getName && a.getName() || (id = node.getDescendantsOfKind(SyntaxKind.Identifier)) && id.getText() || defaultName
 }

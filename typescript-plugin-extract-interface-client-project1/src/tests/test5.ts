@@ -1,8 +1,12 @@
 // declare constructor
-class Alpha { }
+class Alpha {
+  private(){}
+}
 function main(): Alpha {
   return new Alpha('hello', 1, new Date())
 }
+
+
 
 
 // add missing const
@@ -10,9 +14,13 @@ value1 = 1
 
 
 
+
+
 // change const to let
 const value2 = '1'
 value12 = '2'
+
+
 
 
 
@@ -28,8 +36,12 @@ function fn<T>(): FNResult<T> {
 
 
 
+
+
 // split var decls
 const underscore = require('underscore'), moment = require('moment'), handlebars = require('handlebars')
+
+
 
 
 
@@ -40,6 +52,7 @@ let duplicatedVariable = 's'
 
 
 
+
 // to named params
 function foo(a: number, b: string[], c: (n: number) => boolean[], d?: boolean, e = 3.14): () => boolean {
   return () => true
@@ -47,8 +60,10 @@ function foo(a: number, b: string[], c: (n: number) => boolean[], d?: boolean, e
 
 
 
+
 //add return statement
-const other = <T>(a: T): T[] => { }
+const other = <T>(a: T): T[] => {}
+
 
 
 
@@ -56,9 +71,12 @@ const other = <T>(a: T): T[] => { }
 function (){}
 
 
-// declare interface and class : 
+
+
+// declare interface and class 
 class Onion extends NonExistent implements NonExistentInterface, ExistentInterface2{}
 class ExistentInterface2{}
+
 
 
 
@@ -81,6 +99,8 @@ class C {
   m(s: number[]) { return this.hello.grasp(s, [false, true]) } // same as before - instance is property accessor
 }
 new C().non()
+
+
 
 
 // implement interface

@@ -6,27 +6,23 @@ import { getKindName, findAscendant } from 'typescript-ast-util';
 let newExpr: ts.NewExpression
 
 /**
- * # description
- * 
- * adds missing constructor
- * 
- * # attacks
- * 
- * "code": "2554","message": "Expected 0 arguments, but got 3.",
- * 
- * # example
- * 
- * ```alpha2 = new Alpha('hello', 1, new Date())```
- * 
- * # TODO: 
- * 
- * * config 
- * ```
- * 
-    // TODO
-    variableType: 'const',
-    // TODO 'none'|'private'|'public'|'protected' 
-    constructorParameterScope: 'none' ```
+# description
+
+adds missing constructor
+
+# attacks
+
+"code": "2554","message": "Expected 0 arguments, but got 3.",
+
+# example
+
+```alpha2 = new Alpha('hello', 1, new Date())```
+
+# TODO
+
+ * should call super if class extends
+ * config 
+ 
  */
 export const codeFixCreateConstructor: CodeFix = {
 
@@ -36,7 +32,9 @@ export const codeFixCreateConstructor: CodeFix = {
     // TODO
     variableType: 'const',
     // TODO 'none'|'private'|'public'|'protected' 
-    constructorParameterScope: 'none' 
+    constructorParameterScope: 'none',
+    // TODO could be false|true|string
+    constructorJsDoc: true
   },
   
   predicate: (arg: CodeFixOptions) => {
@@ -45,7 +43,7 @@ export const codeFixCreateConstructor: CodeFix = {
     if (newExpr && arg.diagnostics.find(d => d.code === 2554 && d.start <= arg.containingTargetLight.getStart() && d.start+d.length>=arg.containingTargetLight.getEnd())) {
       return true
     } else {
-      arg.log(`codeFixCreateConstructor predicate false because no NewExpression ascendant was found containingTarget.kind==${getKindName(arg.containingTarget.kind)}, containingTarget.parent.kind==${getKindName(arg.containingTarget.parent.kind)}`)
+      arg.log(`predicate false because no NewExpression ascendant was found containingTarget.kind==${getKindName(arg.containingTarget.kind)}, containingTarget.parent.kind==${getKindName(arg.containingTarget.parent.kind)}`)
       return false
     }
   },
@@ -58,7 +56,7 @@ export const codeFixCreateConstructor: CodeFix = {
       arg.simpleNode = arg.simpleNode.getFirstAncestorByKind(ts.SyntaxKind.NewExpression)
     }
     if (!arg.simpleNode || !TypeGuards.isNewExpression(arg.simpleNode)) {
-      arg.log(`codeFixCreateConstructor apply fail because couldnt find a NewExpression from arg.simpleNode returned by sourcefile..getDescendantAtPos(positionOrRangeToNumber(positionOrRange) - returned arg.simpleNode kind was ${getKindName(originalKind)}`)
+      arg.log(`apply fail because couldnt find a NewExpression from arg.simpleNode returned by sourcefile..getDescendantAtPos(positionOrRangeToNumber(positionOrRange) - returned arg.simpleNode kind was ${getKindName(originalKind)}`)
       return
     }
     const argTypes = arg.simpleNode.getArguments().map(arg => arg.getType().getApparentType().getText())
@@ -77,7 +75,7 @@ export const codeFixCreateConstructor: CodeFix = {
         bodyText: `throw new Error('Not implemented');`
       })
     } else {
-      arg.log(`codeFixCreateConstructor apply fail because arg.simpleNode is not ClassDeclaration is ${getKindName(classDeclaration.getKind())}`)
+      arg.log(`apply fail because arg.simpleNode is not ClassDeclaration is ${getKindName(classDeclaration.getKind())}`)
     }
   }
 };

@@ -41,7 +41,7 @@ export const renameVariable: CodeFix = {
       return true
     }
     else {
-      options.log('renameVariable predicate false because Identifier != ' + getKindName(options.containingTarget.kind))
+      options.log('predicate false because Identifier != ' + getKindName(options.containingTarget.kind))
       return false
     }
   },
@@ -51,7 +51,7 @@ export const renameVariable: CodeFix = {
   apply: (options: CodeFixOptions): ts.ApplicableRefactorInfo[] | void => {
     const id = options.simpleNode
     if (!TypeGuards.isIdentifier(id)) {
-      options.log('renameVariable apply false because  false because Identifier != ' + getKindName(options.containingTarget.kind))
+      options.log('apply false because  false because Identifier != ' + getKindName(options.containingTarget.kind))
       return
     }
     // TODO: check if new variable doesn't already exists

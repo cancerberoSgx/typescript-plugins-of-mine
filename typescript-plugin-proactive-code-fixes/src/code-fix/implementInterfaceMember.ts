@@ -70,12 +70,12 @@ export const implementInterfaceMember: CodeFix = {
       return true
     }
     else {
-      arg.log('codeFixImplementInterfaceMember predicate false because child.kind dont match ' + getKindName(arg.containingTargetLight.kind))
+      arg.log('predicate false because child.kind dont match ' + getKindName(arg.containingTargetLight.kind))
       return false
     }
   },
 
-  description: (arg: CodeFixOptions): string => `Implement Interface`,
+  description: (arg: CodeFixOptions): string => `Implement interface`,
 
   apply: (arg: CodeFixOptions): ts.ApplicableRefactorInfo[] | void => {
     const id = arg.simpleNode
