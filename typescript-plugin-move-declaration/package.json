@@ -9,6 +9,7 @@
     "doc": "exit 0",
     "watch": "tsc --watch",
     "build": "tsc",
+    "prepare": "npm run build",
     "clean": "rm -rf node_modules/ package-lock.json"
   },
   "keywords": [
@@ -20,8 +21,8 @@
   "license": "MIT",
   "dependencies": {
     "hrtime-now": "^1.0.1",
-    "ts-simple-ast": "^12.1.0",
-    "typescript": "^2.9.1",
+    "ts-simple-ast": "12.2.0",
+    "typescript": "2.9.1",
     "typescript-plugin-util": "file:../typescript-plugin-util",
     "typescript-plugins-text-based-user-interaction": "file:../typescript-plugins-text-based-user-interaction"
   },

@@ -68,16 +68,16 @@
 
 
 
-interface Named {
-  name: string
-}
-const named: Named = {
-  name: 'seba',
-  lastname: 'gurin'
-}
-class Unit {
-  energy: number
-}
-const unit: Unit = {
-  energy: 123, color: 'red'
-}
+// interface Named {
+//   name: string
+// }
+// const named: Named = {
+//   name: 'seba',
+//   lastname: 'gurin'
+// }
+// class Unit {
+//   energy: number
+// }
+// const unit: Unit = {
+//   energy: 123, color: 'red'
+// }

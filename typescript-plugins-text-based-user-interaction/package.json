@@ -8,7 +8,7 @@
   "scripts": {
     "test": "ts-node node_modules/jasmine/bin/jasmine",
     "build": "tsc",
-    "prepare": "tsc",
+    "prepare": "npm run build",
     "doc": "exit 0"
   },
   "keywords": [
@@ -19,7 +19,7 @@
     "IDE"
   ],
   "dependencies": {
-    "typescript": "^2.8.3"
+    "typescript": "2.9.1"
   },
   "devDependencies": {
     "@types/jasmine": "^2.8.7",

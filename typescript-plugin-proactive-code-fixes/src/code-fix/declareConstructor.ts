@@ -43,7 +43,7 @@ export const codeFixCreateConstructor: CodeFix = {
           hasQuestionToken: false,
           type,
           isRestParameter: false,
-          scope: Scope.Public
+          // scope: Scope.Public
         })),
         bodyText: `throw new Error('Not implemented');`
       })

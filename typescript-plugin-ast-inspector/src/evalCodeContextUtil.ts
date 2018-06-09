@@ -1,8 +1,8 @@
 import * as assert from 'assert';
+import { EventEmitter } from 'events';
 import { Node } from "ts-simple-ast";
 import * as ts from 'typescript';
-import { dumpAst, dumpNode, dumpNodes, filterChildren, findAscendant, findChild, findChildContainingPosition, findChildContainingRange, getAscendants, getDiagnosticsInCurrentLocation, getKindName, positionOrRangeToNumber, positionOrRangeToRange, findChildContainedRange } from "typescript-ast-util";
-import { EventEmitter } from 'events';
+import { dumpAst, dumpNode, dumpNodes, filterChildren, findAscendant, findChild, findChildContainedRange, findChildContainingPosition, findChildContainingRange, getAscendants, getDiagnosticsInCurrentLocation, getKindName, positionOrRangeToNumber, positionOrRangeToRange } from "typescript-ast-util";
 
 
 
@@ -35,7 +35,7 @@ export class EvalContextUtilImpl implements EvalContextUtil {
   printAst(node: Node | ts.Node, getChildrenMode: boolean = false): string {
     return dumpAst((node as any).compilerNode || node, getChildrenMode)
   }
-  hostEmitter:  EventEmitter
+  hostEmitter: EventEmitter
   guestEmitter: EventEmitter
   positionOrRangeToRange = positionOrRangeToRange
   positionOrRangeToNumber = positionOrRangeToNumber

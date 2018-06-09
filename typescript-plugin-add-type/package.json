@@ -7,6 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 0",
     "watch": "tsc --watch",
     "build": "tsc",
+    "prepare": "npm run build",
     "doc": "exit 0"
   },
   "keywords": [
@@ -19,8 +20,8 @@
   "license": "MIT",
   "dependencies": {
     "hrtime-now": "^1.0.1",
-    "ts-simple-ast": "^12.1.0",
-    "typescript": "^2.9.1",
+    "ts-simple-ast": "12.2.0",
+    "typescript": "2.9.1",
     "typescript-ast-util": "file:../typescript-ast-util",
     "typescript-plugin-util": "file:../typescript-plugin-util"
   },

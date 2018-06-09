@@ -137,3 +137,18 @@ While developing these I realized There was too much repeated code so I ended up
 
 
   
+# Useful commands
+
+clean up everything install and rebuild and run tests of all projects
+
+```sh
+npm run all 
+```
+
+setup development mode (linked packages)
+
+```sh
+rm -rf .yamat/ node_modules package-lock.json && npx yamat link && npm i && npx yamat run "rm
+-rf node_modules package-lock.json" && npx yamat run "npm i"  && npx yamat run "npm run build" && npx yamat
+run npm test
+```

@@ -18,7 +18,6 @@ function getConfigFilePath(project: ts_module.server.Project): string | undefine
  * some time. Use it with discretion
  */
 export function createSimpleASTProject(nativeProject: ts_module.server.Project): Project {
-  const tsConfigFilePath = getConfigFilePath(nativeProject)
   const project = new Project({
     tsConfigFilePath: getConfigFilePath(nativeProject)
   })

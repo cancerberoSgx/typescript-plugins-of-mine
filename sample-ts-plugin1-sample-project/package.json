@@ -16,6 +16,6 @@
   "devDependencies": {
     "@types/node": "^10.0.9",
     "sample-ts-plugin1": "file:../sample-ts-plugin1",
-    "typescript": "^2.8.3"
+    "typescript": "2.9.1"
   }
 }

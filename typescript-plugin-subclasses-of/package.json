@@ -6,6 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 0",
     "build": "tsc",
+    "prepare": "npm run build",
     "doc": "exit 0"
   },
   "keywords": [
@@ -16,7 +17,7 @@
   "author": "Sebastian Gurin",
   "license": "MIT",
   "dependencies": {
-    "typescript": "^2.9.1",
+    "typescript": "2.9.1",
     "typescript-ast-util": "file:../typescript-ast-util"
   },
   "devDependencies": {},
