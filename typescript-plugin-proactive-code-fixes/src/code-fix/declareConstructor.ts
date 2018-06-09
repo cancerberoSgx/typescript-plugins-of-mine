@@ -36,7 +36,7 @@ export const codeFixCreateConstructor: CodeFix = {
     // TODO 'none'|'private'|'public'|'protected' 
     constructorParameterScope: 'none',
     // TODO could be false|true|string
-    constructorJsDoc: true
+    jsdoc: true
   },
 
   predicate: (arg: CodeFixOptions) => {

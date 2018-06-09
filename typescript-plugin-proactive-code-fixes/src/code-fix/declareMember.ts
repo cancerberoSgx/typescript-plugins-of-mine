@@ -41,6 +41,11 @@ const a = notDefined.foof + 9                              // will add property 
 
 # TODO: 
 
+ * use ast structures - we are not considering hasQuestion, modifiers, typeparams, etc
+ * Probably we are loosing existing JSdocs ? 
+
+ * generate jsdoc for new members added to the interface ?
+
  * lots of unknown situations - test more
 
  * declare member in other than interfaces ike classes, literal objects and type declarations: for example this doest work:
@@ -137,14 +142,23 @@ const fixTargetDecl = (targetNode: tsa.Node, newMemberName, newMemberType, args,
           return print(`WARNING  !TypeGuards.isObjectLiteralExpression(targetInit) targetInit.getKindName() === ${targetInit && targetInit.getKindName()} targetInit.getText() === ${targetInit && targetInit.getText()}  d.getKindName() === ${d && d.getKindName()} d.getText() === ${d && d.getText()}`)
         }
         else if (!args) {
-          targetInit.addPropertyAssignment({ name: newMemberName, initializer: 'null' })
+          targetInit.addPropertyAssignment({ 
+            //TODO: use ast getstructure. we are not considering: jsdoc, hasquestion, modifiers, etc
+            name: newMemberName, 
+            initializer: 'null' 
+          })
         }
         else {
           targetInit.addMethod({
+            //TODO: use ast getstructure. we are not considering: jsdoc, hasquestion, modifiers, etc
             name: newMemberName,
             returnType: newMemberType.getText(),
             bodyText: `throw new Error('Not Implemented')`,
-            parameters: args.map(a => ({ name: a.name, type: a.type.getText() }))
+            parameters: args.map(a => ({ 
+              //TODO: use ast getstructure. we are not considering: jsdoc, hasquestion, modifiers, etc
+              name: a.name, 
+              type: a.type.getText() 
+            }))
           })
         }
     } else if (TypeGuards.isInterfaceDeclaration(d)) {
@@ -153,9 +167,11 @@ const fixTargetDecl = (targetNode: tsa.Node, newMemberName, newMemberType, args,
       } else {
         d.addMethod(
           {
+            //TODO: use ast getstructure. we are not considering: jsdoc, hasquestion, modifiers, etc
             name: newMemberName,
             returnType: newMemberType.getText(),
             parameters: args.map(a => ({
+              //TODO: use ast getstructure. we are not considering: jsdoc, hasquestion, modifiers, etc
               name: a.name,
               type: a.type.getText()
             }))
@@ -163,13 +179,17 @@ const fixTargetDecl = (targetNode: tsa.Node, newMemberName, newMemberType, args,
       }
     } else if (TypeGuards.isClassDeclaration(d)) {
       if (!args) {
-        d.addProperty({ name: newMemberName, type: newMemberType.getText() })
+        d.addProperty({ 
+          name: newMemberName, 
+          type: newMemberType.getText() 
+        })
       } else {
         d.addMethod({
-          // TODO: jsdoc
+          //TODO: use ast getstructure. we are not considering: jsdoc, hasquestion, modifiers, etc
           name: newMemberName,
           returnType: newMemberType.getText(),
           parameters: args.map(a => ({
+            //TODO: use ast getstructure. we are not considering: jsdoc, hasquestion, modifiers, etc
             name: a.name,
             type: a.type.getText()
           })),

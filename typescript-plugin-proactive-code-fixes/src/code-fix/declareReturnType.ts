@@ -61,6 +61,7 @@ function fn<T>(): FNResult<T> {
 
 # TODO: 
 
+ * add jsdoc (configurable ) to new  members  and new interface
  * support unnamed functions and arrow
  * we could offer three alternatives : declare interface, declare type or declare class. see config
  * ISSUE : support spreadproperty assignament and simple property assignment : i.e:  {simple} and {...spread}
@@ -71,7 +72,7 @@ export const declareReturnType: CodeFix = {
 
   config: {
     // TODO: what should we declare. Could be 'interface'|'class'|'type'
-    declareWhat: 'interface',
+    declarationKind: 'interface',
     // TODO: could be true|false|string . add jsdoc to new class/interface declaration
     jsdoc: true
   },
@@ -124,7 +125,7 @@ const inferReturnType = (decl: tsa.Node & tsa.SignaturedDeclaration, arg: CodeFi
   const typeargs = tmpFuncDecl.getReturnType().getTypeArguments()
   fromNow(
     () => tmpFuncDecl.removeReturnType(),
-    t => arg.log('apply inferReturnType tmpDecl.removeReturnType() took ' + t)
+    t => arg.log(`apply inferReturnType tmpDecl.removeReturnType() took ${t}`)
   )
   const tmpVarDecl = tmpSourceFile.getVariableDeclaration(tmpVariableName)
   if (!tmpVarDecl) {
@@ -133,10 +134,11 @@ const inferReturnType = (decl: tsa.Node & tsa.SignaturedDeclaration, arg: CodeFi
   }
   const type = fromNow(
     () => project.getTypeChecker().getTypeAtLocation(tmpVarDecl),
-    t => arg.log('apply inferReturnType getTypeChecker().getTypeAtLocation took ' + t)
+    t => arg.log(`apply inferReturnType getTypeChecker().getTypeAtLocation took ${t}`)
   )
   const intStructureT0 = now()
   const intStructure: tsa.InterfaceDeclarationStructure = {
+    docs: ['TODO: Document me'],
     name: decl.getReturnTypeNode().getText(),
     properties: type.getProperties()
       .filter(p => {
@@ -146,6 +148,7 @@ const inferReturnType = (decl: tsa.Node & tsa.SignaturedDeclaration, arg: CodeFi
       .map(p => {
         const v = p.getValueDeclaration()
         return {
+          docs: ['TODO: Document me'],
           name: p.getName(),
           type: project.getTypeChecker().getTypeAtLocation(p.getValueDeclaration()).getText(),
           val: p.getValueDeclaration(),
@@ -160,7 +163,7 @@ const inferReturnType = (decl: tsa.Node & tsa.SignaturedDeclaration, arg: CodeFi
       .map(p => {
         const v = p.getValueDeclaration()
         if (!TypeGuards.isPropertyAssignment(v)) {
-          return null // TODO: dismissing spread property assignament and simple property assignment : i.e:  {simple} and {...spread}
+          return null // TODO: ignoring spread property assignament and simple property assignment : i.e:  {simple} and {...spread}
           // TODO: LOG
         }
         const init = v.getInitializer()
@@ -168,6 +171,7 @@ const inferReturnType = (decl: tsa.Node & tsa.SignaturedDeclaration, arg: CodeFi
           return null
         }
         return {
+          docs: ['TODO: Document me'],
           name: p.getName(),
           returnType: init.getReturnType() ? init.getReturnType().getText() : 'any',
           parameters: init.getParameters().map(pa => ({

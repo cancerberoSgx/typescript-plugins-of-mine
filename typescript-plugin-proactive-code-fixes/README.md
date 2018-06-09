@@ -2,20 +2,36 @@
 
 TypeScript Langauge Service Plugin with several small proactive code refactors to solve errors (diagnostics) like creating constructor when a non existent one is invoked, declaring a variable or class when non existent one is defined, reassigning a const, etc. The tool is based both on the context of the user and on the current diagnostic error in that line. 
 
+# Fixes
+
 A lot is still to be fixed and implemented but we have several helpful and stable fixes working already:
 
- * [Declare variable on the fly]() (when assigning non declared variable)
- * declare a new constructor when calling `new A(a,b)` on a class that doesn't have it
+## Prototyping
+
  * declare a new class or interface when trying to extend or implement something that doesn't exist
- * [Declare an interface from return value](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-proactive-code-fixes#declare-interfaces-from-return-values) (so you can prototype interfaces when writing implementation faster)
- * change const to let when reassigning a const variable
- * name unnamed function declarations
- * make an object literal implement an interface by adding / removing necessary members
+ * [Declare an interface from return value](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-proactive-code-fixes#declare-interfaces-from-return-values)
+
+## Fixing and refactoring variables
+
+ * [Variable declaration list split in different stataments](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-proactive-code-fixes#variable-related-fixes-and-refactors)
+ * [Declare missing variable](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-proactive-code-fixes#variable-related-fixes-and-refactors) 
+ * [Rename duplicated variables](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-proactive-code-fixes#variable-related-fixes-and-refactors)
+ * [Put a name to a function declaration without one](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-proactive-code-fixes#variable-related-fixes-and-refactors)
+ * [Change const to let when reassigning a const variable](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-proactive-code-fixes#variable-related-fixes-and-refactors)
+
+## Implementing types
+
+ * [Declare missing constructors](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-proactive-code-fixes#declare-constructors) when calling `new A(a,b)` on a class/interface that doesn't declare it
+ * [Declare interface from return value](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-proactive-code-fixes#declare-interfaces-from-return-values)
+ 
+ * Fix object literal so it implements its interface or class. It will adding / remove or change object literal members so it comply with its interface or class
  * declare member - complements the code fix already existing in typescript to fullfill all cases. declaring missing properties / methods 
  * add missing return statement
- * variable rename when duplicate names exists in the same code block
+
+ # Refactoring
+
  * split variable declaration list in individual variable statements. 
- * to named parameters - select a fragment of a parameter declaration list and it will offer to declare all parameters in an interface and use them as an object literal - see: https://github.com/Microsoft/TypeScript/issues/23552
+ * Transform parameter list into a single object parameter
 
 and more to come!!
 
@@ -57,31 +73,40 @@ In Atom editor, if you use [atom-typescript package](https://atom.io/packages/at
 
 # Fixes and demos
 
+## Variable related fixes and refactors
+
+Quick fixes when you forgot to declare variables, have duplicates, reassigning a constant or need to transform a list of variable declarations into single declaration statements, etc: 
+
+![Variable related fixes and refactors](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-proactive-code-fixes/doc-assets/variableRelatedFixesVsCode.gif?raw=true?p=.gif)
+
+## Transform parameter list into a single object parameter
+
+When you have functions accepting several parameters and you keep adding more and more, sometimes it's a good idea to convert the parameter list into a single parameter object that implements an interface so the contract is there and not in the function signature. This is aprticularly useful when writing APIs that need to maintain backwards compatibility. 
+
+Select a fragment of a parameter declaration list and it will offer to declare all parameters in an interface and use them as an object literal
+
+Idea taken from here: https://github.com/Microsoft/TypeScript/issues/23552
+
+
 ## Declare interfaces from return values
 
- * Visual Studio Code Editor:
+Useful for quickly prototype interfaces when writing the implementation.
+
+ * Visual Studio Code Editor
 
 ![Declare interfaces from return values - Visual Studio Code Editor](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-proactive-code-fixes/doc-assets/declareReturnTypeVsCode.gif?raw=true?p=.gif) 
 
- * Atom Editor:
+ * Atom Editor
 
 ![Declare interfaces from return values - Atom Editor](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-proactive-code-fixes/doc-assets/declareReturnTypeAtom.gif?raw=true?p=.gif) 
 
 
 ## Declare constructors
 
+Basic refactor of any descent strongly typed language IDE
+
 ![vscode demo creating variables and constructors declarations vscode ](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-proactive-code-fixes/doc-assets/declareConstructorVsCode.gif?raw=true?p=.gif)
 
-
-## Declare variables and constructors on the fly 
-
- * Visual Studio Code Editor
- 
-![vscode demo creating variables and constructors declarations vscode ](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-proactive-code-fixes/doc-assets/vscode.gif?raw=true?p=.gif)
- 
- * Atom Editor:
- 
-![vscode demo creating variables and constructors declarations atom](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-proactive-code-fixes/doc-assets/atom.gif?raw=true?p=.gif) 
 
 
 # TODO
