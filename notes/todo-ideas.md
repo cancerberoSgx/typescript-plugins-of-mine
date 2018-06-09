@@ -19,26 +19,41 @@ Each project has its own TODO but here are some general ones:
  
 ## plugin ideas - (refactor - code fix)
 
-* accessing non public members should suggest changing the member signature / decl to public. 
+* (Difficulty: low - Usefulness: medium) accessing non public members should suggest changing the member signature / decl to public. 
+
+
+* fix return type:
+ ```
+ function f(): Date {
+    return Date.now()
+  }
+```
+should suggest changing fixing the return type and the result of applying it should be : 
+```
+ function f(): number {
+    return Date.now()
+  }
+```
+
 
 * https://github.com/Microsoft/TypeScript/labels/Domain%3A%20Refactorings
+
 * a plugin like move-declaration /  move-file  but for commons.js
+
 * a plugin that changes expressions like cond1 && cond2 || !cond3 to its equivalent : (!cond1 || !cond2) && cond3 - useless and hard
+
 * move method to other class (complicated - move interfaces also or classes hierarchy!)
+
 * (done) add explicit type: select an identifier without explicit type - a refactor add its type based on the inferred one. (done)
 
 * (d:l,u:m) (done) return type not compatible with actual hierarchy fix declared return types	"code": "2355",	"message": "A function whose declared type is neither 'void' nor 'any' must return a value.", in that error add return undefined statement
 
 * agile dev - codegen - https://github.com/Microsoft/TypeScript/issues/10139
-// IDEA ast-inspector enhancement : other action that prints nodeAtCursor.arent.parent.arent to the top so I know where I'm standings
 
   * (d: l, u: m/h) variable chained replace it ith variable singl edecl  var a, b, b - replaced with var a ;var b; var c
 
-* "get absolute location" for ast-inspector - where-am'i - I want to know the absolute value of something, like a method, or member . for example module m{class A{prop: {name:string,val: {foo:number}}}} - for foo it should prnt something l ike m.A.prop.val.foo  or more friendly, module m, class A , property prop, prop val
-
   * (d: m, u: m) facilitate handling foo.getSomeCouldBeUndefined().bar() in strict mode . Create local variaable and (localVar1=foo.getSomeCouldBeUndefined()) && localVar.bar() - dont want to use ! or "orThrow" - wen dont want to throw - we want to if() or continue. 
 
- * autocomplete a function signature choosing randomly variables in current scope (matching by type) -.... crazy
 
  * Inline local refactoring  https://github.com/Microsoft/TypeScript/issues/18459 <<--- this one perhaps amerits its own project
  * Reorder Parameters Refactoring https://msdn.microsoft.com/en-us/library/5ss5z206.aspx
@@ -147,6 +162,10 @@ and that will generate an error "code": "2304","message": "Cannot find name 'Eva
 
 ##  other ideas
 
+
+* "get absolute location" for ast-inspector - where-am'i - I want to know the absolute value of something, like a method, or member . for example module m{class A{prop: {name:string,val: {foo:number}}}} - for foo it should prnt something l ike m.A.prop.val.foo  or more friendly, module m, class A , property prop, prop val
+
+ * autocomplete a function signature choosing randomly variables in current scope (matching by type) -.... crazy
 
 * go to definition / goto implementation hierarchy
 * views that shows the content of large. hierarchynode.d.ts, tsserverlibrary.d.ts, etc a more tree-view like for examine the structure and search

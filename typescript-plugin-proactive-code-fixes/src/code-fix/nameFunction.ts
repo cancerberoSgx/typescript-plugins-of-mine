@@ -1,6 +1,11 @@
-/**
 
-#description
+import { TypeGuards } from 'ts-simple-ast';
+import * as ts from 'typescript';
+import { findAscendant, getKindName } from 'typescript-ast-util';
+import { CodeFix, CodeFixOptions } from '../codeFixes';
+
+/**
+# description
 
 function declarations without names when they are not called is an error - suggest putting a name
 
@@ -8,33 +13,43 @@ function declarations without names when they are not called is an error - sugge
 
 "code": "1003",	"message": "Identifier expected."
 
-Example: 
-
+# Example: 
+```
 function(){}
+```
+
+# TODO
+
+ * check if new variable doesn't already exists
+
+ * config
 
 */
-import { TypeGuards } from 'ts-simple-ast';
-import * as ts from 'typescript';
-import { getKindName } from 'typescript-ast-util';
-import { CodeFix, CodeFixOptions } from '../codeFixes';
-
 export const nameFunction: CodeFix = {
+
   name: 'nameFunction',
-  config: { newName: 'unnamedFunction' },
+
+  config: {
+    // TODO: name to put to the unnamed function
+    newName: 'unnamedFunction'
+  },
+
   predicate: (arg: CodeFixOptions): boolean => {
-    if (!arg.diagnostics.find(d => d.code === 1003)) {
+    const fn = findAscendant(arg.containingTargetLight, ts.isFunctionDeclaration, true)
+    if (!fn) {
+      arg.log('nameFunction predicate false because cannotfindAscendant(arg.containingTargetLight, ts.isFunctionDeclaration)')
       return false
     }
-    if (arg.containingTarget && ts.isFunctionDeclaration(arg.containingTarget) && (!arg.containingTarget.name || !arg.containingTarget.name.getText()) || (arg.containedTarget && arg.containedTarget.parent &&ts.isFunctionDeclaration(arg.containedTarget.parent) && (!arg.containedTarget.parent.name || !arg.containedTarget.parent.name.getText()))) {
+    if (arg.diagnostics.find(d => d.code === 1003 && d.start >= fn.getStart(arg.sourceFile) && d.start + d.length <= fn.getEnd())) {
       return true
     }
     else {
-      arg.log(`nameFunction predicate false because ${arg.containingTarget && getKindName(arg.containingTarget)}  ${arg.containedTarget && getKindName(arg.containedTarget)} ${arg.containedTarget.parent && getKindName(arg.containedTarget.parent)} ${arg.containedTarget && arg.containedTarget.parent && arg.containedTarget.parent.parent && arg.containedTarget.parent.parent && getKindName(arg.containedTarget.parent.parent)} is not FunctionDeclaration or has name`)
+      arg.log('nameFunction predicate false because cannot find diagnostic code 1003 inside FunctionDeclaration ancestor')
       return false
     }
   },
 
-  description: (arg: CodeFixOptions): string => `Name Function`,
+  description: (arg: CodeFixOptions): string => `Name Function ${getKindName(arg.containingTargetLight)}`,
 
   apply: (arg: CodeFixOptions): ts.ApplicableRefactorInfo[] | void => {
     const f = TypeGuards.isFunctionDeclaration(arg.simpleNode) ? arg.simpleNode : arg.simpleNode.getFirstAncestorByKind(ts.SyntaxKind.FunctionDeclaration)
@@ -44,6 +59,7 @@ export const nameFunction: CodeFix = {
     }
     else {
       const start = f.getNameNode().getStart();
+      // TODO: check if new name doesn't already exists
       f.getSourceFile().insertText(f.getNameNode().getStart(), ' unnamedFunction')
     }
   }

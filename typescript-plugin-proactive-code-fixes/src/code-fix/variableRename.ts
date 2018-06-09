@@ -24,6 +24,10 @@ class a{}
 
 "code": "2451", "message": "Cannot redeclare block-scoped variable 'a'.",
 
+# TODO
+
+ * check if new variable doesn't already exists
+
 */
 export const renameVariable: CodeFix = {
 
@@ -50,6 +54,7 @@ export const renameVariable: CodeFix = {
       options.log('renameVariable apply false because  false because Identifier != ' + getKindName(options.containingTarget.kind))
       return
     }
+    // TODO: check if new variable doesn't already exists
     id.rename(id.getText() + counter++)
   }
 

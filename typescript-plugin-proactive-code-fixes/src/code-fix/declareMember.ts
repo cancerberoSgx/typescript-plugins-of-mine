@@ -42,8 +42,15 @@ const a = notDefined.foof + 9                              // will add property 
 
 # TODO: 
 
+ * declare member in other than interfaces ike classes, literal objects and type declarations: for example this doest work:
+
+```
+class C {}
+new C().nonExistentMethod()
+```
+
  * (very low priority) return type for method in some scenario
- * 
+
 ```
 interface Hello{}
 const hello: Hello = {}

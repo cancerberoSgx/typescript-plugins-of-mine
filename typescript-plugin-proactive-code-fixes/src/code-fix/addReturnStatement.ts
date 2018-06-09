@@ -1,5 +1,5 @@
 
-import { Node, SourceFile, StatementedNode, TypeGuards } from 'ts-simple-ast';
+import { TypeGuards } from 'ts-simple-ast';
 import * as ts from 'typescript';
 import { getKindName } from 'typescript-ast-util';
 import { CodeFix, CodeFixOptions } from '../codeFixes';
@@ -23,7 +23,9 @@ function-like is returning a value but no return type was declared in signature.
 
 export const addReturnStatement: CodeFix = {
   name: 'addReturnStatement',
+
   config: {},
+
   predicate: (arg: CodeFixOptions): boolean => {
     const kind = getKindName(arg.containingTargetLight)
     const kindToIncludeAnyOf = ['Identifier', 'Keyword', 'Type']
@@ -40,25 +42,19 @@ export const addReturnStatement: CodeFix = {
   description: (arg: CodeFixOptions): string => `Add return statement`,
 
   apply: (arg: CodeFixOptions): ts.ApplicableRefactorInfo[] | void => {
+    // try to get the type so we can return a nice object instead of just null
+    const fn = arg.simpleNode.getAncestors().find(TypeGuards.isSignaturedDeclaration)  //TODO: tsa issue - isFunctionLikeDeclaration should include arrowFunction - in general arrowFunction should be a functionlike declaration https://github.com/dsherret/ts-simple-ast/issues/345
+
+    let returnValueString = `null`
+    if (fn && fn.getReturnType()) {
+      returnValueString = getDefaultValueForType(fn.getReturnType())
+    }
     const firstStatementedNode = arg.simpleNode.getAncestors().find(TypeGuards.isStatementedNode)
     if (firstStatementedNode) {
-      addReturnStatementImpl(arg.simpleNode.getSourceFile(), firstStatementedNode)
+      firstStatementedNode.addStatements(`return ${returnValueString};`)
     }
     else {
       arg.log('addReturnStatement apply aborted because firstStatementedNode is null')
     }
   }
-}
-
-function addReturnStatementImpl(sourceFile: SourceFile, node: StatementedNode & Node) {
-  // const statements = node.getStatements()
-  node.addStatements(`return ${getDefaultValueForType(node.getType())};`)  // this fails (  https://github.com/dsherret/ts-ast-viewer/issues/20)so we hack: 
-  //TODO: should be fixed - update ts-simple-ast
-  //TODO: use getDefaultValueForType to return an example value instead of null
-  // if(statements.length){
-  //   sourceFile.insertText(statements[statements.length-1].getEnd(), '\nreturn null;')
-  // }  
-  // else{
-  //   sourceFile.insertText(node.getEnd()-1, '\nreturn null;\n')
-  // }
 }

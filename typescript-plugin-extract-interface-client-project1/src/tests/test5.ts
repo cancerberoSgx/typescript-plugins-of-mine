@@ -1,8 +1,5 @@
-// create constructor and declare variable
-class Alpha {
-}
-
-// declare constructor and
+// declare constructor
+class Alpha { }
 function main(): Alpha {
   return new Alpha('hello', 1, new Date())
 }
@@ -11,8 +8,13 @@ function main(): Alpha {
 // add missing const
 value1 = 1
 
+
+
 // change const to let
-value1 = null
+const value2 = '1'
+value12 = '2'
+
+
 
 // declare type inferring from return value
 function fn<T>(): FNResult<T> {
@@ -26,10 +28,42 @@ function fn<T>(): FNResult<T> {
 
 
 
+// split var decls
+const underscore = require('underscore'), moment = require('moment'), handlebars = require('handlebars')
+
+
+
+// variable rename 
+
+let duplicatedVariable = 1
+let duplicatedVariable = 's'
+
+
+
+// to named params
+function foo(a: number, b: string[], c: (n: number) => boolean[], d?: boolean, e = 3.14): () => boolean {
+  return () => true
+}
+
+
+
+//add return statement
+const other = <T>(a: T): T[] => { }
+
+
+
+// name function 
+function (){}
+
+
+// declare interface and class : 
+class Onion extends NonExistent implements NonExistentInterface, ExistentInterface2{}
+class ExistentInterface2{}
+
+
 
 
 // declare missing member
-
 const obj123 = {
   foo: () => { return 1 }
 }
@@ -46,29 +80,10 @@ class C {
   hello: Hello
   m(s: number[]) { return this.hello.grasp(s, [false, true]) } // same as before - instance is property accessor
 }
-
-
-
-// split var decls
-
-const underscore = require('underscore'), moment = require('moment'), handlebars = require('handlebars');  // split var decls
-
-let a23 = 1, PI = 3.14// split var decls
-
-
-
-
-// to named params
-
-function foo(a: number, b: string[], c: (n: number) => boolean[], d?: boolean, e = 3.14): () => boolean { return () => true }
-
-
-
+new C().non()
 
 
 // implement interface
-
-
 interface SomeInterface extends SuperInterface1, SuperInterface2 {
   prop1: { s: string, n: Date }[]
 }
@@ -76,8 +91,8 @@ interface SomeInterface2 {
   method3(p: string): Date
 }
 const obj: SomeInterface2 = {
-  method3(p: string, b: boolean): Date {
-    throw new Error("Method not implemented.");
+  method3(validation: RegExp, p: string, b: boolean, created?: Date): { color: string, modified: Date } {
+    return { color: 'red', modified: new Date() }
   }
 }
 interface SomeInterface3 {
@@ -100,4 +115,3 @@ class Class2 implements SomeInterface {
 }
 
 
-const other = (a: string): number => {}

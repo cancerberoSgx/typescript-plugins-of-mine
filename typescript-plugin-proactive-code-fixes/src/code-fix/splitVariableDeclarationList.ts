@@ -25,11 +25,24 @@ let arr = []
 
 It doesn't attack any error diagnostic.
 
+# TODO
+ * config
+```
+  config: {
+    // TODO; add inferred types to generated var decl stmts ?  currently adding. 
+    addTypes: true
+  }, 
+```
 */
 
 export const splitVariableDeclarationList: CodeFix = {
   name: 'splitVariableDeclarationList',
-  config: {}, // TODO; add inferred types to generated var decl stmts ?  currently adding. 
+
+  config: {
+    // TODO; add inferred types to generated var decl stmts ?  currently adding. 
+    addTypes: true
+  }, 
+
   predicate: (arg: CodeFixOptions): boolean => {
     const varDeclList = findAscendant<ts.VariableDeclarationList>(arg.containingTargetLight, ts.isVariableDeclarationList, true)
     if(!varDeclList){
