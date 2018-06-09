@@ -39,13 +39,14 @@ function fn<T>(): FNResult<T> {
 
 
 // split var decls
-const underscore = require('underscore'), moment = require('moment'), handlebars = require('handlebars')
+const underscore2 = require('underscore'), moment2 = require('moment'),
+  handlebars2 = require('handlebars')
 
 
 
 
 
-// variable rename 
+// variable rename
 
 let duplicatedVariable = 1
 let duplicatedVariable = 's'
@@ -67,13 +68,13 @@ const other = <T>(a: T): T[] => { }
 
 
 
-// name function 
+// name function
 function () { }
 
 
 
 
-// declare interface and class 
+// declare interface and class
 class Onion extends NonExistent implements NonExistentInterface, ExistentInterface2 { }
 class ExistentInterface2 { }
 
@@ -133,5 +134,3 @@ class SomeImplementation extends OtherImplementation implements SomeInterface, S
 class Class2 implements SomeInterface {
   prop1: boolean[]
 }
-
-

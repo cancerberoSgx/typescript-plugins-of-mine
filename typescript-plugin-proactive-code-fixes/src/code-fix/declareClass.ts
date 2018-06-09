@@ -40,8 +40,6 @@ export const declareClass: CodeFix = {
     inNewFile: false,
     // TODO: could be true|false|string . add jsdoc to new class/interface declaration
     jsdoc: true,
-    // TODO: create interface decl in a separate file ? 
-    inNewFile: false
   },
 
   predicate: (arg: CodeFixOptions): boolean => {
