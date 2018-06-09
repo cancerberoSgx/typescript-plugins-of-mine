@@ -42,7 +42,7 @@ export const declareMember: CodeFix = {
     if (!arg.diagnostics.find(d => d.code === 2339)) {
       return false
     }
-    if (arg.containingTargetLight.kind === ts.SyntaxKind.Identifier) {
+    if (arg.containingTargetLight.kind === ts.SyntaxKind.Identifier && arg.containingTargetLight.parent.kind === ts.SyntaxKind.PropertyAccessExpression && arg.diagnostics.find(d => d.code === 2339 && d.start === arg.containingTargetLight.getStart())) {
       return true
     }
     else {

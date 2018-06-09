@@ -71,17 +71,3 @@ function foo(a: number, b: string[], c: (n: number) => boolean[], d?: boolean, e
 
 
 
-
-interface Named {
-  name: string
-}
-const named: Named = {
-  name: 'seba',
-  lastname: 'gurin' // TODO: issue:  declare missing member not working - issue
-}
-class Unit {
-  energy: number
-}
-const unit: Unit = {
-  energy: 123, color: 'red' // TODO: issue:  declare missing member not working - issue
-}
