@@ -2,13 +2,13 @@
 
 TypeScript Langauge Service Plugin with several small proactive code refactors to solve errors (diagnostics) like creating constructor when a non existent one is invoked, declaring a variable or class when non existent one is defined, reassigning a const, etc. The tool is based both on the context of the user and on the current diagnostic error in that line. Right now: 
 
- * create variable (when assigning non declared variable)
- * create constructor (when calling new A(a,b) on a class that doesn't have that constructor )
- * const2let
- * declare Class or interface 
+ * declare variable on the fly (when assigning non declared variable)
+ * declare a new constructor when calling `new A(a,b)` on a class that doesn't have it
+ * declare an interface from return values (so you can prototype interfaces when writing implementation faster)
+ * change const to let when reassigning a const variable
+ * declare a new class or interface when trying to extend or implement something that doesn't exist
  * name unnamed function declarations
  * make an object literal implement an interface by adding / removing necessary members
- * declare an interface from a return value
  * declare member - complements the code fix already existing in typescript to fullfill all cases. declaring missing properties / methods 
  * add missing return statement
  * variable rename when duplicate names exists in the same code block
@@ -19,12 +19,23 @@ TypeScript Langauge Service Plugin with several small proactive code refactors t
 and more to come!!
 
 
-# Demo
+# Demos
 
- * declaring variables an constructors on the fly (Visual Studio Code Editor) : 
- * ![vscode demo creating variables and constructors declarations vscode ](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-proactive-code-fixes/doc-assets/vscode.gif?raw=true?p=.gif)
+## Declare variables and constructors on the fly 
+
+ * Visual Studio Code Editor
+ 
+![vscode demo creating variables and constructors declarations vscode ](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-proactive-code-fixes/doc-assets/vscode.gif?raw=true?p=.gif)
+ 
  * Atom Editor:
- * ![vscode demo creating variables and constructors declarations atom](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-proactive-code-fixes/doc-assets/atom.gif?raw=true?p=.gif) 
+ 
+![vscode demo creating variables and constructors declarations atom](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-proactive-code-fixes/doc-assets/atom.gif?raw=true?p=.gif) 
+
+## Declare interfaces from return values
+
+![vscode demo creating variables and constructors declarations atom](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-proactive-code-fixes/doc-assets/declareReturnTypeVsCode.gif?raw=true?p=.gif) 
+
+
 
 # How to use: 
 ```sh

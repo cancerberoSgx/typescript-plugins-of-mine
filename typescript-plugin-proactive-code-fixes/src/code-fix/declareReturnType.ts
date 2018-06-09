@@ -160,7 +160,7 @@ const inferReturnType = (decl: tsa.Node & tsa.SignaturedDeclaration, arg: CodeFi
       .map(p => {
         const v = p.getValueDeclaration()
         if (!TypeGuards.isPropertyAssignment(v)) {
-          return null // TODO: dismissing sprea dproperty assignament and simple property assignment : i.e:  {simple} and {...spread}
+          return null // TODO: dismissing spread property assignament and simple property assignment : i.e:  {simple} and {...spread}
           // TODO: LOG
         }
         const init = v.getInitializer()
