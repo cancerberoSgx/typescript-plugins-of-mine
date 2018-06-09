@@ -8,13 +8,13 @@ function main() {
 }
 
 // declare variable
-const counter = 9
+counter = 9
 
 // declare constructor declare variable alpha
 alpha1 = new Alpha('hello')
 
 // add missing const
-const value1 = alpha1.getData()
+value1 = alpha1.getData()
 
 // change const to let
 value1 = null
@@ -66,5 +66,8 @@ let a23 = 1, PI = 3.14// split var decls
 // to named params
 
 function foo(a: number, b: string[], c: (n: number) => boolean[], d?: boolean, e = 3.14): () => boolean { return () => true }
+
+
+
 
 

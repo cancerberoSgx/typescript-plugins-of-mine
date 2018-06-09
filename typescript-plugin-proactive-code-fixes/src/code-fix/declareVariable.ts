@@ -16,7 +16,7 @@ a=1
 "code": "2304", Cannot find name 'b'.",
 
 TODO: test with jsdoc or a trailing comment
-ISSUE : not suggesting in this case:  "a=new A(1)" - if in a new statement dont suggest
+ISSUE : incorrectly suggesting in this case when cursor is on "Alpha" : const foo = new Alpha('hello')
 */
 export const codeFixCreateVariable: CodeFix = {
 
@@ -32,9 +32,9 @@ export const codeFixCreateVariable: CodeFix = {
         options.containingTarget.parent.parent && options.containingTarget.parent.parent.kind === ts.SyntaxKind.BinaryExpression
       )
 
-      // &&
+      &&
 
-      // options.diagnostics.find(d => d.code === 2304 && d.start === options.containingTargetLight.getStart())
+      options.diagnostics.find(d => d.code === 2304 && d.start === options.containingTargetLight.getStart())
     ) {
       return true
     }
