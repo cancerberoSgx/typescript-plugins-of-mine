@@ -6,13 +6,17 @@ interface SomeInterface extends SuperInterface1, SuperInterface2 {
 interface SomeInterface2 {
   method3(p: string): Date
 }
+const obj: SomeInterface2 = {
+  method3(p: string, b: boolean): Date {
+    throw new Error("Method not implemented.");
+  }
+}
 interface SomeInterface3 {
   method5(p: string): Date
 }
-interface SuperInterface2 {
-}
+interface SuperInterface2 {}
 interface SuperInterface1 extends SomeInterface3 { }
-class OtherImplementation implements SuperInterface1 { }
+abstract class OtherImplementation implements SuperInterface1 { }
 class SomeImplementation extends OtherImplementation implements SomeInterface, SomeInterface2 {
   method3(p: string): Date {
     throw new Error("Method not implemented.");
@@ -25,11 +29,6 @@ class SomeImplementation extends OtherImplementation implements SomeInterface, S
 class Class2 implements SomeInterface {
   prop1: boolean[]
   constructor(foo: Date)
-}
-const obj: SomeInterface2 = {
-  method3(p: string, b: boolean): Date {
-    throw new Error("Method not implemented.");
-  }
 }
 // "code": "2416","message": "Property 'method1' in type 'SomeImplementation' is not assignable to the same property in base type 'SomeInterface'.\n  Type '(param: number) => number[]' is not assignable to type '(param: string) => number[]'.\n    Types of parameters 'param' and 'param' are incompatible.\n      Type 'string' is not assignable to type 'number'.",
 

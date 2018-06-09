@@ -52,6 +52,7 @@ Make sure you have installed typescript in your project (`npm i --save-dev types
 
 # TODO
 
+ * generate tsdocs because all fixes are very well documented / roadmap. 
  * Performance - getAppRefactors is taking almost  sec. Make a generic predicate with cache (get which diags are in current position and cache it - make a generic predicate since almost all use the same thing)
  * apply all quick fixes in this file ! define a mechanism of priorities when two or more fixes attach the same position.
  * perhaps we could just recreate the simple-ast sourcefile instead of the whole project 
@@ -59,14 +60,3 @@ Make sure you have installed typescript in your project (`npm i --save-dev types
  * make sure for each if error is selected in problems view then that selection will suggest the fix
  * new member declarations should add jsdoc
  * declare return type very buggy
-
-# Ideas
-
-(for future proactive plugins)
-
-
- * https://github.com/Microsoft/TypeScript/issues/22392
- * https://github.com/Microsoft/TypeScript/issues/23869
- * https://github.com/Microsoft/TypeScript/labels/Domain%3A%20Refactorings 
- * https://github.com/Microsoft/TypeScript/issues/10139
- * getters and setters: from  property - typescript 3.0.0 implemented this...

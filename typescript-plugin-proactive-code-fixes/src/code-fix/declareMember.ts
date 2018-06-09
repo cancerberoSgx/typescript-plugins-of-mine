@@ -1,8 +1,24 @@
-/*
-fix this error: 	"code": "2339", "message": "Property 'bar' does not exist on type '{ foo: () => number; }'.",
-In expressions lie the following: 
+import * as tsa from 'ts-simple-ast';
+import { TypeGuards } from 'ts-simple-ast';
+import * as ts from 'typescript';
+import { getKindName } from 'typescript-ast-util';
+import { CodeFix, CodeFixOptions } from '../codeFixes';
 
 
+/** 
+
+# description
+
+declares missing member in a property access expression
+
+
+# attacks
+```
+	"code": "2339", "message": "Property 'bar' does not exist on type '{ foo: () => number; }'.",
+```
+
+# Example: 
+```
 const o = {
   foo: () => { return 1 }
 }
@@ -23,26 +39,20 @@ class C {
 }
 const notDefined:C
 const a = notDefined.foof + 9                              // will add property foof to class C
+```
 
 */
 
-//TODO: check if diagnostic is in the same position  in predicate 
-
-import * as ts from 'typescript';
-import { getKindName } from 'typescript-ast-util';
-import { CodeFix, CodeFixOptions } from '../codeFixes';
-import { VariableDeclarationKind, FunctionDeclaration, TypeGuards, InterfaceDeclarationStructure, MethodSignatureStructure } from 'ts-simple-ast';
-import { now, timeFrom, fromNow } from 'hrtime-now';
-
-
 export const declareMember: CodeFix = {
+
   name: 'declareMember',
+
   config: {},
+
   predicate: (arg: CodeFixOptions): boolean => {
-    if (!arg.diagnostics.find(d => d.code === 2339)) {
-      return false
-    }
-    if (arg.containingTargetLight.kind === ts.SyntaxKind.Identifier && arg.containingTargetLight.parent.kind === ts.SyntaxKind.PropertyAccessExpression && arg.diagnostics.find(d => d.code === 2339 && d.start === arg.containingTargetLight.getStart())) {
+    if (arg.containingTargetLight.kind === ts.SyntaxKind.Identifier &&
+      arg.containingTargetLight.parent.kind === ts.SyntaxKind.PropertyAccessExpression &&
+      arg.diagnostics.find(d => d.code === 2339 && d.start === arg.containingTargetLight.getStart())) {
       return true
     }
     else {
@@ -50,10 +60,11 @@ export const declareMember: CodeFix = {
       return false
     }
   },
-  description: (arg: CodeFixOptions): string => `Declare Missing Member "${arg.containingTarget.getText()}"`,
+
+  description: (arg: CodeFixOptions): string => `Declare missing member "${arg.containingTarget.getText()}"`,
+
   apply: (opts: CodeFixOptions): ts.ApplicableRefactorInfo[] | void => {
     const node = opts.simpleNode
-
     const print = (msg) => { opts.log('declareMember apply ' + msg) }
     const typeChecker = opts.simpleProject.getTypeChecker()
     const newMemberName_ = node.getText()
@@ -69,7 +80,10 @@ export const declareMember: CodeFix = {
     const callExpression = accessExpr.getParent()
     if (TypeGuards.isCallExpression(callExpression)) {
       let argCounter = 0
-      args_ = callExpression.getArguments().map(a => ({ name: `arg${argCounter++}`, type: typeChecker.getTypeAtLocation(a).getBaseTypeOfLiteralType() }))
+      args_ = callExpression.getArguments().map(a => ({
+        name: `arg${argCounter++}`,
+        type: typeChecker.getTypeAtLocation(a).getBaseTypeOfLiteralType()
+      }))
     }
     fixTargetDecl(accessExpr, newMemberName_, newMemberType_, args_, print)
   }
@@ -77,9 +91,9 @@ export const declareMember: CodeFix = {
 
 
 // now we need to get the target declaration and add the member. It could be an object literal decl{}, an interface decl or a class decl
-const fixTargetDecl = (targetNode, newMemberName, newMemberType, args, print) => {
+const fixTargetDecl = (targetNode: tsa.Node, newMemberName, newMemberType, args, print) => {
   let decls
-  if (targetNode.getExpression) {
+  if (TypeGuards.isExpressionedNode(targetNode)) {
     decls = targetNode.getExpression().getSymbol().getDeclarations()
   } else if (targetNode && targetNode.getKindName().endsWith('Declaration')) {
     decls = [targetNode]
@@ -94,25 +108,25 @@ const fixTargetDecl = (targetNode, newMemberName, newMemberType, args, print) =>
       const typeDeclInThisFile = (d.getType() && d.getType().getSymbol() && d.getType().getSymbol().getDeclarations() && d.getType().getSymbol().getDeclarations() || [])
         .find(dd => (TypeGuards.isInterfaceDeclaration(dd) || TypeGuards.isClassDeclaration(dd)) && dd.getSourceFile() === d.getSourceFile()
         )
-        if(typeDeclInThisFile && (TypeGuards.isInterfaceDeclaration(typeDeclInThisFile) || TypeGuards.isClassDeclaration(typeDeclInThisFile))){
+      if (typeDeclInThisFile && (TypeGuards.isInterfaceDeclaration(typeDeclInThisFile) || TypeGuards.isClassDeclaration(typeDeclInThisFile))) {
         return fixTargetDecl(typeDeclInThisFile, newMemberName, newMemberType, args, print)
+      }
+      else
+        if (!TypeGuards.isObjectLiteralExpression(targetInit)) {
+          //TODO - unknown situation - we should print in the file for discover new cases.
+          return print(`WARNING  !TypeGuards.isObjectLiteralExpression(targetInit) targetInit.getKindName() === ${targetInit && targetInit.getKindName()} targetInit.getText() === ${targetInit && targetInit.getText()}  d.getKindName() === ${d && d.getKindName()} d.getText() === ${d && d.getText()}`)
         }
-      else 
-      if (!TypeGuards.isObjectLiteralExpression(targetInit)) {
-        //TODO - unknown situation - we should print in the file for discover new cases.
-        return print(`WARNING  !TypeGuards.isObjectLiteralExpression(targetInit) targetInit.getKindName() === ${targetInit && targetInit.getKindName()} targetInit.getText() === ${targetInit && targetInit.getText()}  d.getKindName() === ${d && d.getKindName()} d.getText() === ${d && d.getText()}`)
-      }
-      else if (!args) {
-        targetInit.addPropertyAssignment({ name: newMemberName, initializer: 'null' })
-      }
-      else {
-        targetInit.addMethod({
-          name: newMemberName,
-          returnType: newMemberType.getText(),
-          bodyText: `throw new Error('Not Implemented')`,
-          parameters: args.map(a => ({ name: a.name, type: a.type.getText() }))
-        })
-      }
+        else if (!args) {
+          targetInit.addPropertyAssignment({ name: newMemberName, initializer: 'null' })
+        }
+        else {
+          targetInit.addMethod({
+            name: newMemberName,
+            returnType: newMemberType.getText(),
+            bodyText: `throw new Error('Not Implemented')`,
+            parameters: args.map(a => ({ name: a.name, type: a.type.getText() }))
+          })
+        }
     } else if (TypeGuards.isInterfaceDeclaration(d)) {
       if (!args) {
         d.addProperty({ name: newMemberName, type: newMemberType.getText() })

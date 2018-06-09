@@ -19,6 +19,8 @@ Each project has its own TODO but here are some general ones:
  
 ## plugin ideas - (refactor - code fix)
 
+* accessing non public members should suggest changing the member signature / decl to public. 
+
 * https://github.com/Microsoft/TypeScript/labels/Domain%3A%20Refactorings
 * a plugin like move-declaration /  move-file  but for commons.js
 * a plugin that changes expressions like cond1 && cond2 || !cond3 to its equivalent : (!cond1 || !cond2) && cond3 - useless and hard

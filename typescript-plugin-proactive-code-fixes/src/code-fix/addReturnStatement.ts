@@ -39,7 +39,7 @@ export const addReturnStatement: CodeFix = {
     }
   },
 
-  description: (arg: CodeFixOptions): string => `Add Return Statement`,
+  description: (arg: CodeFixOptions): string => `Add return statement`,
 
   apply: (arg: CodeFixOptions): ts.ApplicableRefactorInfo[] | void => {
     const firstStatementedNode = arg.simpleNode.getAncestors().find(TypeGuards.isStatementedNode)

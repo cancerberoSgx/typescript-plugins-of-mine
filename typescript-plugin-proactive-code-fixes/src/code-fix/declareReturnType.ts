@@ -51,37 +51,47 @@ declare type for return value but no interface or class declaration is present f
 
 declare a function like the following - return type is not declared. The suggested fix is to declare it automatically based on the return value of the fn (using typechecking inference)
 
+```
 function fn<T>(): FNResult<T> {
   return { a: 1, b: 's', log: (msg) => boolean, kill: function <T>() { return 1 } }
 }
+```
+
+# TODO: 
+
+ * we could offer three alternatives : declare interface, declare type or declare class
+
 */
+
 export const declareReturnType: CodeFix = {
   name: 'declareReturnType',
   config: {},
   predicate: (arg: CodeFixOptions): boolean => {
-    if (arg.containingTargetLight.kind === ts.SyntaxKind.Identifier && arg.containingTargetLight.parent.kind === ts.SyntaxKind.TypeReference && arg.diagnostics.find(d => d.code === 2304 && d.start === arg.containingTargetLight.getStart()) ) {
+    if (arg.containingTargetLight.kind === ts.SyntaxKind.Identifier && arg.containingTargetLight.parent.kind === ts.SyntaxKind.TypeReference && arg.diagnostics.find(d => d.code === 2304 && d.start === arg.containingTargetLight.getStart())) {
       return true
     }
     else {
-    arg.log('declareReturnType predicate false because child.kind dont match ' + getKindName(arg.containingTarget.kind))
+      arg.log('declareReturnType predicate false because child.kind dont match ' + getKindName(arg.containingTarget.kind))
       return false
-  }
-},
-  description: (arg: CodeFixOptions): string => `Declare Type "${arg.containingTarget.getText()}" interring from return value`,
-    apply: (arg: CodeFixOptions): ts.ApplicableRefactorInfo[] | void => {
-      const id = arg.simpleNode
-      const decl = arg.simpleNode.getFirstAncestorByKind(ts.SyntaxKind.FunctionDeclaration)
-      const interfaceStructure = fromNow(
-        () => inferReturnType(decl, arg),
-        t => arg.log('declareReturnType apply inferReturnType took ' + t)
-      )
-      const siblingAncestor = arg.simpleNode.getAncestors().find(a => TypeGuards.isSourceFile(a.getParent()))
-      if (siblingAncestor) {
-        arg.simpleNode.getSourceFile().insertInterface(siblingAncestor.getChildIndex(), interfaceStructure)
-      } else {
-        arg.simpleNode.getSourceFile().addInterface(interfaceStructure)
-      }
     }
+  },
+  
+  description: (arg: CodeFixOptions): string => `Declare interface "${arg.containingTarget.getText()}"`,
+
+  apply: (arg: CodeFixOptions): ts.ApplicableRefactorInfo[] | void => {
+    const id = arg.simpleNode
+    const decl = arg.simpleNode.getFirstAncestorByKind(ts.SyntaxKind.FunctionDeclaration)
+    const interfaceStructure = fromNow(
+      () => inferReturnType(decl, arg),
+      t => arg.log('declareReturnType apply inferReturnType took ' + t)
+    )
+    const siblingAncestor = arg.simpleNode.getAncestors().find(a => TypeGuards.isSourceFile(a.getParent()))
+    if (siblingAncestor) {
+      arg.simpleNode.getSourceFile().insertInterface(siblingAncestor.getChildIndex(), interfaceStructure)
+    } else {
+      arg.simpleNode.getSourceFile().addInterface(interfaceStructure)
+    }
+  }
 
 }
 

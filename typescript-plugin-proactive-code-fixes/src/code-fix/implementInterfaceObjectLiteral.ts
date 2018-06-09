@@ -1,4 +1,3 @@
-// Solves this two errors by adding properties to the object literal definition (or adding extra properties declared by literal to the intereface (f config.addMissingPropertiesToInterface===true))
 
 /*
 
@@ -6,9 +5,12 @@
 
 you explicit a type for a object literal that is not declared - this fix will sugest create the interface automatically inferring from that object literals
 
+Notice that typescript already has an "implement interface" refactor but is vere very poor in case wrong signatures exists and other cases
+
 # example
+
 ```
-const tree1: Living = { // 	"code": "2322",// 	"message": "Type '{}' is not assignable to type 'Living'.\n  Property 'name' is missing in type '{}'.",
+const tree1: Living = {
 }
 interface Living {
   name: string
@@ -20,7 +22,38 @@ const tree2: Living = {
 ```
 
 # attacks
-	"code": "2322",// 	"message": "Type '{}' is not assignable to type 'Living'.\n  Property 'name' is missing in type '{}'.",
+  "code": "2322",// 	"message": "Type '{}' is not assignable to type 'Living'.\n  Property 'name' is missing in type '{}'.",
+  
+
+  
+# TODO
+
+ * constructors - doesn't fix them
+ * 
+* arrows  - this doesn't work: 
+
+```
+interface Beta {
+  id: number
+  canSwim: boolean
+  method2: (a: string) => { created: Date, color: string }
+}
+const beta1:Beta = {
+  id: 1, 
+  canSwim: true
+}
+```
+
+
+ * config to modify interface or be recursive: 
+```
+  config: { 
+  //recursive tre will generate the whole sub literals.. TODO
+    recursive: false, 
+ //will add members of literal that doesn't exists in interface. TODO 
+    addMissingPropertiesToInterface: false 
+  }, 
+```
 */
 
 import * as ts from 'typescript';
@@ -31,8 +64,16 @@ import { prototype } from 'stream';
 import { buildParameterStructure, fixSignature, getDefaultValueForType } from '../util';
 
 export const implementInterfaceObjectLiteral: CodeFix = {
+
   name: 'implementInterfaceObjectLiteral',
-  config: { recursive: false, addMissingPropertiesToInterface: false }, // recursive tre will generate the whole sub literals.. 
+
+  config: { 
+    /**recursive tre will generate the whole sub literals.. TODO */
+    recursive: false, 
+    /** will add members of literal that doesn't exists in interface. TODO */
+    addMissingPropertiesToInterface: false 
+  }, 
+
   predicate: (arg: CodeFixOptions): boolean => {
     const targetLine = ts.getLineAndCharacterOfPosition(arg.sourceFile, arg.containingTarget.getStart()).line
     const diagnostics = arg.diagnostics.filter(d => d.code === 2322).filter(diag => {

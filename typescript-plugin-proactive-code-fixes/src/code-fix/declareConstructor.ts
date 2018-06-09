@@ -4,9 +4,40 @@ import { CodeFix, CodeFixOptions } from '../codeFixes';
 import { getKindName, findAscendant } from 'typescript-ast-util';
 
 let newExpr: ts.NewExpression
+
+/**
+ * # description
+ * 
+ * adds missing constructor
+ * 
+ * # attacks
+ * 
+ * "code": "2554","message": "Expected 0 arguments, but got 3.",
+ * 
+ * # example
+ * 
+ * ```alpha2 = new Alpha('hello', 1, new Date())```
+ * 
+ * # TODO: 
+ * 
+ * * config 
+ * ```
+ * 
+    // TODO
+    variableType: 'const',
+    // TODO 'none'|'private'|'public'|'protected' 
+    constructorParameterScope: 'none' ```
+ */
 export const codeFixCreateConstructor: CodeFix = {
+
   name: 'Declare constructor',
-  config: { variableType: 'const' },
+
+  config: { 
+    // TODO
+    variableType: 'const',
+    // TODO 'none'|'private'|'public'|'protected' 
+    constructorParameterScope: 'none' 
+  },
   
   predicate: (arg: CodeFixOptions) => {
     if (!arg.diagnostics.find(d=>d.code === 2554)) {
@@ -43,7 +74,7 @@ export const codeFixCreateConstructor: CodeFix = {
           hasQuestionToken: false,
           type,
           isRestParameter: false,
-          // scope: Scope.Public
+          // scope: Scope.Public  TODO: this could be configurable
         })),
         bodyText: `throw new Error('Not implemented');`
       })
