@@ -1,4 +1,4 @@
 class Gamma {
-  private(){}
+  private() { }
 }
 const gamma = new Gamma('hello', 1, new Date())

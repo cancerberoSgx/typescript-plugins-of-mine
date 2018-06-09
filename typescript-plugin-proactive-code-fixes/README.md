@@ -1,12 +1,14 @@
 # typescript-plugin-proactive-code-fixes
 
-TypeScript Langauge Service Plugin with several small proactive code refactors to solve errors (diagnostics) like creating constructor when a non existent one is invoked, declaring a variable or class when non existent one is defined, reassigning a const, etc. The tool is based both on the context of the user and on the current diagnostic error in that line. Right now: 
+TypeScript Langauge Service Plugin with several small proactive code refactors to solve errors (diagnostics) like creating constructor when a non existent one is invoked, declaring a variable or class when non existent one is defined, reassigning a const, etc. The tool is based both on the context of the user and on the current diagnostic error in that line. 
 
- * declare variable on the fly (when assigning non declared variable)
+A lot is still to be fixed and implemented but we have several helpful and stable fixes working already:
+
+ * [Declare variable on the fly]() (when assigning non declared variable)
  * declare a new constructor when calling `new A(a,b)` on a class that doesn't have it
- * declare an interface from return values (so you can prototype interfaces when writing implementation faster)
- * change const to let when reassigning a const variable
  * declare a new class or interface when trying to extend or implement something that doesn't exist
+ * [Declare an interface from return value](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-proactive-code-fixes#declare-interfaces-from-return-values) (so you can prototype interfaces when writing implementation faster)
+ * change const to let when reassigning a const variable
  * name unnamed function declarations
  * make an object literal implement an interface by adding / removing necessary members
  * declare member - complements the code fix already existing in typescript to fullfill all cases. declaring missing properties / methods 
@@ -15,39 +17,22 @@ TypeScript Langauge Service Plugin with several small proactive code refactors t
  * split variable declaration list in individual variable statements. 
  * to named parameters - select a fragment of a parameter declaration list and it will offer to declare all parameters in an interface and use them as an object literal - see: https://github.com/Microsoft/TypeScript/issues/23552
 
-
 and more to come!!
 
+# Editor Support
 
-# Demos
+**This plugin will work with any text editor that leverages TypeScript Language Service**. I've successfully tested Visual Studio Code (without any extension) and Atom editor using  [atom-typescript package](https://atom.io/packages/atom-typescript). But other editors should also work like Sublime Text, webstorm, eclipse, emacs, vim. (TODO: test)
 
-## Declare variables and constructors on the fly 
-
- * Visual Studio Code Editor
- 
-![vscode demo creating variables and constructors declarations vscode ](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-proactive-code-fixes/doc-assets/vscode.gif?raw=true?p=.gif)
- 
- * Atom Editor:
- 
-![vscode demo creating variables and constructors declarations atom](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-proactive-code-fixes/doc-assets/atom.gif?raw=true?p=.gif) 
-
-## Declare interfaces from return values
-
- * Visual Sturio Code Editor:
-
-![Declare interfaces from return values - Visual Sturio Code Editor](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-proactive-code-fixes/doc-assets/declareReturnTypeVsCode.gif?raw=true?p=.gif) 
-
- * Atom Editor:
-
-![Declare interfaces from return values - Atom Editor](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-proactive-code-fixes/doc-assets/declareReturnTypeAtom.gif?raw=true?p=.gif) 
+The same example using vscode and atom is shown in [Declare an interface from return value demo](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-proactive-code-fixes#declare-interfaces-from-return-values) and the same is true for the rest of the fixes (I only show vscode for the rest). 
 
 
-# How to use: 
+# How to install and use it
+
 ```sh
 npm i --save-dev typescript-plugin-proactive-code-fixes
 ```
 
-in your `tsconfig.json`, add the plugin: 
+In your `tsconfig.json`, add the plugin like this:
 
 ```json
 {
@@ -59,12 +44,45 @@ in your `tsconfig.json`, add the plugin:
 }
 ```
 
-Make sure you have installed typescript in your project (`npm i --save-dev typescript`) the editor you are using uses that typescript and not another. For example, Visual Studio Code comes with its own typescript version, so I need to "Select TypeScript Version" of the workspace: 
+Make sure you have installed typescript in your project (`npm i --save-dev typescript`) the editor you are using uses that typescript and not another. For example, Visual Studio Code comes with its own typescript version, so you need to "Select TypeScript Version" of the workspace: 
 ```json
 {
   "typescript.tsdk": "node_modules/typescript/lib"
 }
 ```
+
+In Atom editor, if you use [atom-typescript package](https://atom.io/packages/atom-typescript) you don't need to do anything since by default it will use the workspace's TypeScript version.
+
+
+
+# Fixes and demos
+
+## Declare interfaces from return values
+
+ * Visual Studio Code Editor:
+
+![Declare interfaces from return values - Visual Studio Code Editor](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-proactive-code-fixes/doc-assets/declareReturnTypeVsCode.gif?raw=true?p=.gif) 
+
+ * Atom Editor:
+
+![Declare interfaces from return values - Atom Editor](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-proactive-code-fixes/doc-assets/declareReturnTypeAtom.gif?raw=true?p=.gif) 
+
+
+## Declare constructors
+
+![vscode demo creating variables and constructors declarations vscode ](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-proactive-code-fixes/doc-assets/declareConstructorVsCode.gif?raw=true?p=.gif)
+
+
+## Declare variables and constructors on the fly 
+
+ * Visual Studio Code Editor
+ 
+![vscode demo creating variables and constructors declarations vscode ](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-proactive-code-fixes/doc-assets/vscode.gif?raw=true?p=.gif)
+ 
+ * Atom Editor:
+ 
+![vscode demo creating variables and constructors declarations atom](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-proactive-code-fixes/doc-assets/atom.gif?raw=true?p=.gif) 
+
 
 # TODO
 

@@ -31,26 +31,22 @@ in your `tsconfig.json`, add the plugin:
 ```json
 {
   "compilerOptions": {
-    ...
     "plugins": [{
         "name": "typescript-plugin-move-file"
     }]
-    ...
   }
 }
 ```
 
-Make sure you have installed typescript in your project (`npm i --save-dev typescript`) the editor you are
-using uses that typescript and not another. For example, Visual Studio Code comes with its own typescript
-version, so I need to "Select TypeScript Version" of the workspace: 
 
+Make sure you have installed typescript in your project (`npm i --save-dev typescript`) the editor you are using uses that typescript and not another. For example, Visual Studio Code comes with its own typescript version, so you need to "Select TypeScript Version" of the workspace: 
 ```json
 {
-  // Specifies the folder path containing the tsserver and lib*.d.ts files to use.
   "typescript.tsdk": "node_modules/typescript/lib"
 }
 ```
 
+In Atom editor, if you use [atom-typescript package](https://atom.io/packages/atom-typescript) you don't need to do anything since by default it will use the workspace's TypeScript version.
 
 
 # TODO
