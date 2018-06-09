@@ -1,6 +1,6 @@
 {
   "name": "typescript-plugin-move-declaration",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "TypeScript plugin : move declarations. a.k.a : move classes, functions, interfaces to another file",
   "main": "dist/src/index.js",
   "typings": "dist/src/index.d.ts",

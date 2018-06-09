@@ -20,8 +20,8 @@
     "all-no-doc": "npm run clean-no-doc && npm i && yamat run npm i && yamat run npm run build && yamat run npm test",
     "all-light": "find . -name \"package-lock.json\" -exec rm -rf '{}' +; find . -name \"*.log\" -exec rm -rf '{}' +; find . -name \"dist\" -exec rm -rf '{}' + && npm i && yamat run npm i && yamat run npm run build && yamat run npm test"
   },
-  "devDependencies": {
-    "yamat": "0.0.11"
-  },
-  "dependencies": {}
+  "devDependencies": {},
+  "dependencies": {
+    "yamat": "0.0.13"
+  }
 }

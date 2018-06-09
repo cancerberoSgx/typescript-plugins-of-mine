@@ -1,6 +1,6 @@
 {
   "name": "typescript-plugin-subclasses-of",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "TypeScript Language Service plugin that shows what are all the sub classes (direct or indirect) a class have. The same for interfaces. ",
   "main": "dist/index.js",
   "scripts": {
