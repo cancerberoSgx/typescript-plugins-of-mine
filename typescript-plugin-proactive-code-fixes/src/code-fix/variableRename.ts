@@ -32,10 +32,8 @@ export const renameVariable: CodeFix = {
   config: {},
 
   predicate: (options: CodeFixOptions): boolean => {
-    if (!options.diagnostics.find(d => d.code === 2451)) {
-      return false
-    }
-    if (options.containingTargetLight.kind === ts.SyntaxKind.Identifier) {
+    if (options.containingTargetLight.kind === ts.SyntaxKind.Identifier &&
+      options.diagnostics.find(d => d.code === 2451 && d.start === options.containingTargetLight.getStart())) {
       return true
     }
     else {

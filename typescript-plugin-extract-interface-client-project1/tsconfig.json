@@ -7,14 +7,14 @@
     ],
     "outDir": "./dist",
     "strict": false,
-    "strictNullChecks": false, 
+    "strictNullChecks": false,
     "esModuleInterop": true,
     "removeComments": false,
     "noImplicitAny": false,
     "plugins": [
-      {
-        "name": "typescript-plugin-ast-inspector"
-      },
+      //{
+      //  "name": "typescript-plugin-ast-inspector"
+      //},
 
       // {
       //   "name": "typescript-plugin-extract-interface"
@@ -33,33 +33,10 @@
       },
       // {
       //   "name": "typescript-plugin-move-declaration"
-      // },   
+      // },
       // {
       //   "name": "typescript-plugin-postfix"
       // },
     ]
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

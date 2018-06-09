@@ -9,8 +9,7 @@ import { CodeFix, CodeFixOptions } from '../codeFixes';
 
 # description
 
-declares missing member in a property access expression
-
+declares missing member in a property access expression in some interface or class that the accessed reference implements/extends. 
 
 # attacks
 ```
@@ -41,6 +40,19 @@ const notDefined:C
 const a = notDefined.foof + 9                              // will add property foof to class C
 ```
 
+# TODO: 
+
+ * (very low priority) return type for method in some scenario
+ * 
+```
+interface Hello{}
+const hello: Hello = {}
+class C {
+  hello: Hello
+  // here - when we apply refactor on grasp I expect that generated method to return  {modified: Date, fully: boolean} and not just any
+  m(s: number[]):{modified: Date, fully: boolean} { return this.hello.grasp(s, [false, true]) } 
+}
+```
 */
 
 export const declareMember: CodeFix = {
@@ -93,7 +105,7 @@ export const declareMember: CodeFix = {
 // now we need to get the target declaration and add the member. It could be an object literal decl{}, an interface decl or a class decl
 const fixTargetDecl = (targetNode: tsa.Node, newMemberName, newMemberType, args, print) => {
   let decls
-  if (TypeGuards.isExpressionedNode(targetNode)) {
+  if (TypeGuards.isExpressionedNode(targetNode)||TypeGuards.isLeftHandSideExpressionedNode(targetNode)) {
     decls = targetNode.getExpression().getSymbol().getDeclarations()
   } else if (targetNode && targetNode.getKindName().endsWith('Declaration')) {
     decls = [targetNode]

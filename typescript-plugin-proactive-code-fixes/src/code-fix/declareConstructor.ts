@@ -40,11 +40,9 @@ export const codeFixCreateConstructor: CodeFix = {
   },
   
   predicate: (arg: CodeFixOptions) => {
-    if (!arg.diagnostics.find(d=>d.code === 2554)) {
-      return false
-    }
     newExpr = ts.isNewExpression(arg.containingTarget) ? arg.containingTarget : findAscendant(arg.containingTarget, ts.isNewExpression)
-    if (newExpr) {
+
+    if (newExpr && arg.diagnostics.find(d => d.code === 2554 && d.start <= arg.containingTargetLight.getStart() && d.start+d.length>=arg.containingTargetLight.getEnd())) {
       return true
     } else {
       arg.log(`codeFixCreateConstructor predicate false because no NewExpression ascendant was found containingTarget.kind==${getKindName(arg.containingTarget.kind)}, containingTarget.parent.kind==${getKindName(arg.containingTarget.parent.kind)}`)
