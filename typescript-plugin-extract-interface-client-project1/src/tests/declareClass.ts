@@ -1,15 +1,8 @@
 
-class C3 extends NonExistent implements NonExistentInterface, ExistentInterface{
+class C3 extends NonExistent3 implements NonExistentInterface3, ExistentInterface3{
 
 }
 
-class ExistentInterface{
-
-}
-
-/**
- * this class is awesome and this jsdoc will be broken because an issue. 
- */
-class C2 extends ShowsJsDocIssue implements NonExistentInterface, ExistentInterface{
+class ExistentInterface3{
 
 }

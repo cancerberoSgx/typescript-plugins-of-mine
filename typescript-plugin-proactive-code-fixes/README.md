@@ -23,11 +23,11 @@ A lot is still to be fixed and implemented but we have several helpful and stabl
 
  * [Declare missing constructors](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-proactive-code-fixes#declare-constructors) when calling `new A(a,b)` on a class/interface that doesn't declare it
  * [Declare interface from return value](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-proactive-code-fixes#declare-interfaces-from-return-values)
- 
  * Fix object literal so it implements its interface or class. It will adding / remove or change object literal members so it comply with its interface or class
  * declare member - complements the code fix already existing in typescript to fullfill all cases. declaring missing properties / methods 
  * add missing return statement
-
+ * [Declare missing classes and interfaces](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-proactive-code-fixes#declare-classes-and-interfaces)
+ 
  # Refactoring
 
  * Transform parameter list into a single "named" parameter. Split variable declaration list in individual variable statements. 
@@ -108,12 +108,18 @@ Useful for quickly prototype interfaces when writing the implementation.
 
 ![Declare interfaces from return values - Atom Editor](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-proactive-code-fixes/doc-assets/declareReturnTypeAtom.gif?raw=true?p=.gif) 
 
+## Declare classes and interfaces
+
+No much to say here - if you `extends` or `implements` an class or interface that is not declared yet the refactor will suggest you to declare it. 
+
+![Declare classes and interfaces vscode demo](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-proactive-code-fixes/doc-assets/declareClassAndInterfaceVsCode.gif?raw=true?p=.gif)
+
 
 ## Declare constructors
 
 Basic refactor of any descent strongly typed language IDE
 
-![vscode demo creating variables and constructors declarations vscode ](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-proactive-code-fixes/doc-assets/declareConstructorVsCode.gif?raw=true?p=.gif)
+![vscode demo creating variables and constructors declarations ](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-proactive-code-fixes/doc-assets/declareConstructorVsCode.gif?raw=true?p=.gif)
 
 
 

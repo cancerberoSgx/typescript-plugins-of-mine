@@ -6,3 +6,4 @@ tmp
 *.tgz
 separate-project-test1
 evaluated_*
+.idea

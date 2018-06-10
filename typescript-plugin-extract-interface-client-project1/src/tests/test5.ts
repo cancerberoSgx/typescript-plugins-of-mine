@@ -75,7 +75,7 @@ function () { }
 
 
 // declare interface and class
-class Onion extends NonExistent implements NonExistentInterface, ExistentInterface2 { }
+class Onion2 extends NonExistent2 implements NonExistentInterface2, ExistentInterface2 { }
 class ExistentInterface2 { }
 
 
