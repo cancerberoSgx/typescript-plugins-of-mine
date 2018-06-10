@@ -32,9 +32,9 @@ export const codeFixCreateVariable: CodeFix = {
         options.containingTarget.parent.parent && options.containingTarget.parent.parent.kind === ts.SyntaxKind.BinaryExpression
       )
 
-      // &&
+      &&
 
-      // options.diagnostics.find(d => d.code === 2304 && d.start === options.containingTargetLight.getStart())
+      options.diagnostics.find(d => d.code === 2304 && d.start === options.containingTargetLight.getStart())
     ) {
       return true
     }

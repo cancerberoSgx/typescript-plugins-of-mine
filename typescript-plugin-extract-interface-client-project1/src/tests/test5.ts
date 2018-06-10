@@ -87,7 +87,9 @@ const obj123 = {
   foo: () => { return 1 }
 }
 const val: string[] = obj123.bar(1, ['w'], true) // declare missing member to an object literal
-interface Hello { }
+interface Hello {
+    mama(arg0: number, arg1: number, arg2: number): string;
+ }
 const hello: Hello = {}
 let counter123: string[] = hello.world([[1, 2, 3], [4, 5]]) // declare missing member to instance's interface
 const k = hello.mama(1, 2, 3) + ' how are you?' // same as before - notice inferred return type

@@ -30,8 +30,7 @@ A lot is still to be fixed and implemented but we have several helpful and stabl
  
  # Refactoring
 
- * Transform parameter list into a single "named" parameter. Split variable declaration list in individual variable statements. 
- * Transform parameter list into a single object parameter
+ * [Transform parameter list into single "named" parameter](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-proactive-code-fixes#transform-parameter-list-into-single-object-parameter). Splits variable declaration list in individual variable statements. 
 
 and more to come!!
 
@@ -81,7 +80,7 @@ Quick fixes when you forgot to declare variables, have duplicates, reassigning a
 ![Variable related fixes and refactors](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-proactive-code-fixes/doc-assets/variableRelatedFixesVsCode.gif?raw=true?p=.gif)
 
 
-## Transform parameter list into a single object parameter
+## Transform parameter list into single object parameter
 
 When you have functions accepting several parameters and you keep adding more and more, sometimes it's a good idea to convert the parameter list into a single parameter object that implements an interface so the contract is there and not in the function signature. 
 

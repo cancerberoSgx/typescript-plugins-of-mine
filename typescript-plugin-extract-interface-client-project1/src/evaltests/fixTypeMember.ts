@@ -17,7 +17,7 @@
 
 // This is the opposite as fixImplementation* - when the implementation implements an interface or class incorrectly it ill fix the interface/class instead of the implementation by adding/removing
 
-// WARNING: this is probably very dangerous operation but could be useful on initial quick type modeling from data
+// WARNING: this is probably very dangerous operation but could be useful on initial quick type modeling / prototyping 
 
 // # Example: 
 // ```
@@ -39,7 +39,7 @@
 // }
 // const actor1: Actor = { //	"code": "2322",	"message": "Type '{ act(what: any, when: any): any[]; }' is not assignable to type 'Actor'.\n  Property 'talk' is missing in type '{ act(what: any, when: any): any[]; }'.",
 
-//   act(what: Actor): Date[] { return [what + 'sss'] }, // "code": "2322", "message": "Type 'string[]' is not assignable to type 'Date[]'.\n  Type 'string' is not assignable to type 'Date'.",
+//   act(other: Actor): string[] { return ['hello'] }, // "code": "2322", "message": "Type 'string[]' is not assignable to type 'Date[]'.\n  Type 'string' is not assignable to type 'Date'.",
 //   talk(script: boolean[]): Date[][] {return [[]]}
 // }
 // function fa(a: Actor) { }
@@ -57,3 +57,27 @@
 //   print(dumpAst(id.getParent().compilerNode))
 //   sourceFile.deleteImmediatelySync()
 // }
+// var __output = `
+// Output:
+// InterfaceDeclaration : "interface Actor { act(other: Actor): Array<Date> talk(script"
+// Actor Identifier : "Actor"
+// MethodSignature : "act(other: Actor): Array<Date>"
+//   act Identifier : "act"
+//   Parameter : "other: Actor"
+//     other Identifier : "other"
+//     TypeReference : "Actor"
+//       Actor Identifier : "Actor"
+//   TypeReference : "Array<Date>"
+//     Array Identifier : "Array"
+//     TypeReference : "Date"
+//       Date Identifier : "Date"
+// MethodSignature : "talk(script: string): number | boolean"
+//   talk Identifier : "talk"
+//   Parameter : "script: string"
+//     script Identifier : "script"
+//     StringKeyword : "string"
+//   UnionType : "number | boolean"
+//     NumberKeyword : "number"
+//     BooleanKeyword : "boolean"
+
+// `

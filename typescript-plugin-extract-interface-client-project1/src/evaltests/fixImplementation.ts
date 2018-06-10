@@ -14,7 +14,7 @@ const obj: SomeInterface2 = {
 interface SomeInterface3 {
   method5(p: string): Date
 }
-interface SuperInterface2 {}
+interface SuperInterface2 { }
 interface SuperInterface1 extends SomeInterface3 { }
 abstract class OtherImplementation implements SuperInterface1 { }
 class SomeImplementation extends OtherImplementation implements SomeInterface, SomeInterface2 {
@@ -24,14 +24,13 @@ class SomeImplementation extends OtherImplementation implements SomeInterface, S
   method1(param: number): number[] {
     throw new Error("Method not implemented.");
   }
-  method5(p: string, foo: boolean): Date[] { return null }
+  method5(p: string): Date { return null }
 }
 class Class2 implements SomeInterface {
   prop1: boolean[]
   constructor(foo: Date)
 }
 // "code": "2416","message": "Property 'method1' in type 'SomeImplementation' is not assignable to the same property in base type 'SomeInterface'.\n  Type '(param: number) => number[]' is not assignable to type '(param: string) => number[]'.\n    Types of parameters 'param' and 'param' are incompatible.\n      Type 'string' is not assignable to type 'number'.",
-
 
 
 import * as ts from 'typescript'
