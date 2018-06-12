@@ -1,6 +1,6 @@
 {
   "name": "typescript-plugin-proactive-code-fixes",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "testing ts related techologies",
   "main": "dist/src/index.js",
   "typings": "dist/src/typings.d.ts",

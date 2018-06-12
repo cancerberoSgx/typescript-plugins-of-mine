@@ -153,22 +153,34 @@ While developing these I realized There was too much repeated code so I ended up
 
 ## Useful commands
 
-**clean up everything install and rebuild and run tests of all projects:**
+### clean up everything install and rebuild and run tests of all projects:
 
 ```sh
 npm run all 
 ```
 
-**setup development mode (linked packages):**
+### setup development mode (linked packages):
 
 ```sh
-npx yamat link && npx yamat run "rm -rf node_modules package-lock.json" && npx yamat run "npm i"  && npx yamat run "npm run build" && npx yamat run npm test
+npx yamat link && \
+npx yamat run "rm -rf node_modules package-lock.json" && \
+npx yamat run "npm i"  && \
+npx yamat run "npm run build" && \
+npx yamat run npm test && \
+echo end
 ```
 
-**setup "pack" mode to test publishing without actually publishing**
+### setup "pack" mode to test publishing without actually publishing
 
 ```sh
-npx yamat run "rm -rf node_modules package-lock.json" && npx yamat run npm i && npx yamat unlink --version pack && npx yamat run "rm -rf node_modules package-lock.json" && npx yamat run npm i && npx yamat run npm run build && npx yamat run npm run test
+npx yamat run "rm -rf node_modules package-lock.json" && \
+npx yamat run npm i && \
+npx yamat unlink --version pack && \
+npx yamat run "rm -rf node_modules package-lock.json" && \
+npx yamat run npm i && \
+npx yamat run npm run build && \
+npx yamat run npm run test && \
+echo end
 ```
 
 Notice that : 
@@ -176,8 +188,11 @@ Notice that :
  * we clean up each module and npm install before yamat unlink so modules can build them self beforepublish/pack
  * we dont run npm run build before  yamat unlink so we test that packages have the npm script  prepare - should build themself on npm publish - npm pack
 
-**increment patch version on each package and publish them (run after previous command (unlink)):**
+### increment patch version on each package and publish them (run after previous command (unlink)):
 
 ```sh
-npx yamat run "npm version patch" && npx yamat unlink && npx yamat --break-on-error no run npm publish
+npx yamat run "npm version patch" &&\
+npx yamat unlink &&\
+npx yamat --break-on-error no run npm publish &&\
+echo end
 ```

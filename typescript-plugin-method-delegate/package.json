@@ -1,6 +1,6 @@
 {
   "name": "typescript-plugin-method-delegate",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "typescript plugin that will suggest a refactor to create delegate methods to selected property",
   "main": "dist/src/index.js",
   "typings": "dist/src/index.d.ts",

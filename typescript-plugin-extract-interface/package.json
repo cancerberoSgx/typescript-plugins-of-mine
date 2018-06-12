@@ -1,6 +1,6 @@
 {
   "name": "typescript-plugin-extract-interface",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "TypeScript Language Service plugin to extract an interface from a class",
   "main": "dist/index.js",
   "scripts": {

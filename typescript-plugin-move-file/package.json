@@ -1,6 +1,6 @@
 {
   "name": "typescript-plugin-move-file",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "typescript plugin that let the user move files and folders fixing all references (refactor)",
   "main": "dist/src/index.js",
   "scripts": {
