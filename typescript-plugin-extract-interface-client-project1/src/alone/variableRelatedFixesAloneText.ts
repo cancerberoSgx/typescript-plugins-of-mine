@@ -13,3 +13,6 @@ function(n) {
 
 const underscore = require('underscore'), moment = require('moment'),
   handlebars = require('handlebars'), gulp = require('gulp');
+
+const root1: { n: number }
+const tree = buildTree(root1, { leaveCount: 50, depth: [98] })
