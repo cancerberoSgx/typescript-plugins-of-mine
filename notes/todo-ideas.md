@@ -39,6 +39,23 @@ should suggest changing fixing the return type and the result of applying it sho
   }
 ```
 
+ * declare variabe / decare function - better than we have today - inferring params, props, etc: 
+
+```
+const args = {
+  help: null
+}
+const result6464: Date = func6785(args)/*
+if I stand on error in func6785 ("code": "2304",	"message": "Cannot find name 'func6785'." I expect to be suggested with "declare function func6785" 
+which will generate the following: 
+*/
+const arr: number[][] = literal67.method34(1, ['0'], { r: /12/g }) /* 
+If I stand over error in literal67 ("code": "2304"   "message": "Cannot find name 'literal67'.",)
+I expect to be suggested with "declare object 'literal67'" to generate the following statement right before this one : 
+const literal76 = {
+method34: (arg1: number, arg2: string[], arg3: {r: RegExp})=>{return null / or throw not impl}
+}
+```
 
  * https://github.com/Microsoft/TypeScript/labels/Domain%3A%20Refactorings
 

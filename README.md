@@ -5,14 +5,9 @@ Experiments with typescript compiler API, and Language Service plugins.
 
 # typescript-plugin-proactive-code-fixes
 
-TypeScript Language Service Plugin with several small proactive code refactors like creating constructor when a non existent one is invoked, declaring a variable or class when non existent one is defined, etc
+By far the most important package that implement all the "interesting refactors". It's a TypeScript Language Service Plugin with several small proactive code refactors like creating constructor when a non existent one is invoked, declaring a variable or class when non existent one is defined, etc
 
- * well-tested - **safe to use**
- * create-variable create-constructor : user select non declared variable or constructor identifier - a refactor will be suggested
- * Mode info in [Project](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-proactive-code-fixes)
- * Demo : ![vscode demo creating variables and constructors declarations](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-proactive-code-fixes/doc-assets/vscode.gif?raw=true?p=.gif)
-
-
+ * (with lots of demos and descriptions) [Project home ](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-proactive-code-fixes)
 
 
 ### typescript-plugin-extract-interface
@@ -136,7 +131,27 @@ While developing these I realized There was too much repeated code so I ended up
 
 
 
-### Useful commands
+## Status
+
+ * fun and learning. Exiting with TLS APIs and w the fact this is working on more than one editor coherently. 
+ * main focus on proactive-code-fixes
+ * more and more ideas come to mind while I'm programming so its both things impl and requirements
+ * plugins not tested exhaustive - objective more a demo and performance tests (proof of concepts) than production ready product
+ * there are some old (firsts) plugins that probably are broken and need a review to use "newer technologies" (extract-interface, method-delegate)
+ * other projects are too green: move-declaration
+ * more and more dependant to ts--simple-ast - at the beggingin I had my doubts but in my position it saved lots of time and performance is not SO bad. 
+ * other ideas / projects are being implemented slowly by typescript team (getters&setters, move to file (new file - not the same)) - point here is that probably ts team will reach to similar conclusions ideas than me and implmenet them the right way and more aligned with vscode. 
+ * others that dont make any sense or need a redesign / requirement :: subclasses-off, add-type
+ * others that are too strange UX / UI but still could be usefull to back up a concreate editor plugin (move-file, move-declaration)
+ * editor portability: atom and vscode works and are coherent. couldn't make it work on webstorm (the plugin is created but couldn't find any UI action to trigger its refactor suggestions.). others like sublime, emacs, vim, eclipse, netbeans doesn't seem to support TLS but I should investigate more. Probably if the same experience can be accomplished with codefix concept : i tried and I couldn't make the edition part to work . I was able to prompt suggestion's but I wasn't able to call the activation handler (or I didn't found which was it)
+
+
+## TODO / ROADMAP
+
+ * Each project has its own TODO / ROADMAP section in readme or separate file. 
+
+
+## Useful commands
 
 **clean up everything install and rebuild and run tests of all projects:**
 

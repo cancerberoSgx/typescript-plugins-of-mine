@@ -1,6 +1,10 @@
 # typescript-plugin-proactive-code-fixes
 
-TypeScript Langauge Service Plugin with several small proactive code refactors to solve errors (diagnostics) like creating constructor when a non existent one is invoked, declaring a variable or class when non existent one is defined, reassigning a const, etc. The tool is based both on the context of the user and on the current diagnostic error in that line. 
+TypeScript Langauge Service Plugin with several small proactive code refactors to solve errors (diagnostics) like creating constructor when a non existent one is invoked, declaring a variable or class when non existent one is defined, reassigning a const, etc. The tool is based both on the context of the user and on the current diagnostic error in cursor position / selection
+
+The objective is to provide most refactor suggestions for agile code development seen in other strongly typed languages / IDEs like Java/eclipse 
+
+In general refactors are non aggressive so the shouldn't do harm. Still more testing is needed and some suggestions appear where they shouldn't or viceversa doesn's appear in al places where they should. Still I think it's useful and is sowly reaching the objective. 
 
 # Fixes
 

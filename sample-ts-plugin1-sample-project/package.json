@@ -14,7 +14,7 @@
   "license": "ISC",
   "dependencies": {},
   "devDependencies": {
-    "@types/node": "^10.0.9",
+    "@types/node": "^10.3.2",
     "sample-ts-plugin1": "file:../sample-ts-plugin1",
     "typescript": "2.9.1"
   }

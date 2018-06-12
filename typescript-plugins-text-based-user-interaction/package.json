@@ -22,9 +22,9 @@
     "typescript": "2.9.1"
   },
   "devDependencies": {
-    "@types/jasmine": "^2.8.7",
+    "@types/jasmine": "^2.8.8",
     "jasmine": "^3.1.0",
-    "ts-node": "^6.0.3"
+    "ts-node": "^6.1.0"
   },
   "repository": "https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugins-text-based-user-interaction"
 }
