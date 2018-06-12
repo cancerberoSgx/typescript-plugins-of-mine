@@ -84,15 +84,14 @@ should suggest changing fixing the return type and the result of applying it sho
 
  * https://github.com/Microsoft/TypeScript/issues/20331
  quick fix for " Parameter 'config' of constructor from exported class has or is using private name 'ToolConfig'." - add export to the private decl
- 
- * (d:low, u: medium) forgotten this.
 
  * (d:low, u: low) missing comma like in fun(a b c) - add the commas
 
  * cool / hard extension: i don't know nothing about an API and I'm trying to call a method or instantiate something like const ps = new tss.server.ProjectService()  then on the call error, infer the types and create the minimal object that will comply w the signature  (no error)
- * // TODO: call(nonexistent) should suggest create it
+ 
+ * (d: medium, u: medium) (done declareVariable) TODO: call(nonexistent) should suggest create it
 
- * (d:low, u: low) accessing a private member - suggest make it public
+ * (d:low, u: low) (done) accessing a private member - suggest make it public
  
  * (d:low, u: low) accessing static member - suggest calling statically from a.method() to ClassA.method()
 
@@ -101,7 +100,6 @@ should suggest changing fixing the return type and the result of applying it sho
 	"code": "2345",
  parse it and suggest rename !
 
- * return types - a functon
  * (Difficulty: medium - Usefulness: high). (done) in case object dont implement interface correctly  suggest to fix the object to mathch the interface:
 	"code": "2322",
 	"message": "Type '{ name: string; config: { variableType: string; }; predicate: (arg: PredicateArg) => boolean; des...' is not assignable to type 'CodeFix'.\n  Types of property 'apply' are incompatible.\n    Type '(diag: Diagnostic[], node: Node<Node>, log: any) => void' is not assignable to type '(arg: PredicateArg) => any'.",

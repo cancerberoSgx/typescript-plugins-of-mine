@@ -28,6 +28,7 @@ const tree2: Living = {
   
 # TODO
 
+ * big issue : TODO: we are removing good properties implementations - we always perform remove() without actually checking if the property is breaking the interface or not - this removes good implementation / work 
  * constructors - doesn't fix them
 
  * methods from super interfaces (see implementinterfacemember.ts that does it ). example: 
@@ -94,82 +95,64 @@ export const implementInterfaceObjectLiteral: CodeFix = {
     }
   },
 
-  description: (arg: CodeFixOptions): string => `Implement Interface`,
+  description: (arg: CodeFixOptions): string => `Make object implement interface`,
 
   apply: (arg: CodeFixOptions): ts.ApplicableRefactorInfo[] | void => {
     const node = arg.simpleNode
     const varDecl = TypeGuards.isVariableDeclaration(node) ? node : node.getFirstAncestorByKind(ts.SyntaxKind.VariableDeclaration)
     const init = varDecl.getInitializerIfKind(ts.SyntaxKind.ObjectLiteralExpression)
-
-    varDecl.getType().getSymbol().getDeclarations().forEach(decl => {
+    const declarations = varDecl.getType().getSymbol().getDeclarations()
+    if (!declarations || !declarations.length) {
+      arg.log(`doing nothing since !declarations || !declarations.length`)
+      return
+    }
+    declarations.forEach(decl => {
       if (!TypeGuards.isInterfaceDeclaration(decl)) {
-        arg.log(`doing nothing for decl ${getName(decl)}`)
+        arg.log(`doing nothing for decl ${decl.getText()}`)
         return
       }
-      // const toRemove: Node[] = []
-      // init.getProperties().forEach(prop => {
-      //   //  -TODO: this doesn't work here : TypeGuards.isNameableNode(prop) so we ugly cast 
-      //   if ((prop as any).getName && !decl.getMembers().find(m => (m as any).getName() === (prop as any).getName())) {            
-      //     // if(this.config.addMissingPropertiesToInterface){ // TODO: doesn't work 
-      //     // decl.addProperty({name: prop.getName(), type: prop.getType().getText()})
-      //     // } else {
-      //     toRemove.push(prop)
-      //   }
-      // })
-
       decl.getProperties().forEach(prop => {
         const existingProp = init.getProperty(prop.getName())
-        
         if (existingProp) {
-          existingProp.remove()
+          existingProp.remove() //TODO: we are removing good properties implementation ! 
         }
-        // else if (existingProp && !(existingProp as any).remove) { // TODO : fixed with https://github.com/dsherret/ts-simple-ast/pull/343#issuecomment-394923115 - remove will be always present
-        //   arg.log(`apply WARNING existingProp &&  !(existingProp as any).remove: kind: ${existingProp.getKindName()} text: ${existingProp.getText()} init.getText() === ${init.getText()}`)
-        // }
-        else {
-          init.addPropertyAssignment({ name: prop.getName(), initializer: getDefaultValueForType(prop.getType()) })
-        }
+        init.addPropertyAssignment({ name: prop.getName(), initializer: getDefaultValueForType(prop.getType()) })
       })
-
       decl.getMethods().forEach(method => {
         const existingProp = init.getProperty(method.getName())
-        // if (!TypeGuards.isMethodDeclaration(existingProp)) {
-        //   return
-        // }
-        // if (existingProp) {
-        //   (existingProp as any).remove()
-        // }
-        // let parameters = method.getParameters().map(buildParameterStructure)
         if (existingProp && TypeGuards.isMethodDeclaration(existingProp)) {
           fixSignature(existingProp, method)
-          // arg.log('fixSignature1')
+          arg.log('fixSignature1')
+          return
         }
-        else if (existingProp) {
-          // try{
-          // (existingProp as any).remove()
-          //   }catch(ex){
-          //     arg.log('fixSignature222')}
-          // }
+        if (existingProp) { //TODO: we are removing good properties implementation ! 
           existingProp.remove()
-          init.addMethod({
-            name: method.getName(),
-            parameters: method.getParameters().map(buildParameterStructure),
-            returnType: method.getReturnType().getText(),
-            bodyText: 'throw new Error(\'Not Implemented\')'
-          })
+        }
+        init.addMethod({
+          name: method.getName(),
+          parameters: method.getParameters().map(buildParameterStructure),
+          returnType: method.getReturnType().getText(),
+          bodyText: 'throw new Error(\'Not Implemented\')'
+        })
+      })
+      init.getProperties().forEach(prop => {
+        let name
+        if (TypeGuards.isPropertyAssignment(prop) || TypeGuards.isShorthandPropertyAssignment(prop)) {
+          name = prop.getName()
+        }
+        else if (TypeGuards.isSpreadAssignment(prop)) {
+          name = prop.getExpression().getText()
+        }
+        if (name && (!decl.getProperty(name) && !decl.getMethod(name))) { //TODO: we are removing good properties implementation ! 
+          prop.remove()
+          arg.log('property removed '+name)
+          return
         }
         else {
-          arg.log(`doing nothing for property ${existingProp && existingProp.getText && existingProp.getText()} - method was ${method.getName()}`)
+          arg.log(`ignoring object assignment property ${prop.getText()}`)
+          return
         }
       })
-
-      // // only remove if user explicitly configure
-      // if(this.config.removeStrangeMembersFromLiteral){ // TODO: doesn't work 
-      // toRemove.forEach(prop => {
-      //   prop.getSourceFile().removeText(prop.getFullStart(),
-      //     prop.getNextSibling() && prop.getNextSibling().getKind() === ts.SyntaxKind.CommaToken ? prop.getNextSibling().getEnd() : prop.getEnd())
-      // })
-      // }
     })
   }
 }
