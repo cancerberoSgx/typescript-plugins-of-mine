@@ -21,7 +21,8 @@ A lot is still to be fixed and implemented but we have several helpful and stabl
  * [Declare missing variable](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-proactive-code-fixes#variable-related-fixes-and-refactors) 
  * [Rename duplicated variables](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-proactive-code-fixes#variable-related-fixes-and-refactors)
  * [Put a name to a function declaration without one](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-proactive-code-fixes#variable-related-fixes-and-refactors)
- * [Change const to let when reassigning a const variable](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-proactive-code-fixes#variable-related-fixes-and-refactors)
+ * [Change const to let when reassigning a const variable](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-proactive-code-fixes#variable-related-fixes-and-refactors) 
+ * [remove readonly keyword of property declaration when trying to modify it](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-proactive-code-fixes#variable-related-fixes-and-refactors)
 
 ## Implementing types
 
@@ -31,8 +32,8 @@ A lot is still to be fixed and implemented but we have several helpful and stabl
  * declare member - complements the code fix already existing in typescript to fullfill all cases. declaring missing properties / methods 
  * add missing return statement
  * [Declare missing classes and interfaces](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-proactive-code-fixes#declare-classes-and-interfaces)
- * Make member public (change the sope of a member when expression is trying to access it)
- 
+ * Make member public (change the scope of a member when expression is trying to access it)
+
  # Refactoring
 
  * [Transform parameter list into single "named" parameter](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-proactive-code-fixes#transform-parameter-list-into-single-object-parameter). Splits variable declaration list in individual variable statements. 
