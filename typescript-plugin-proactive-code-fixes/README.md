@@ -37,7 +37,8 @@ A lot is still to be fixed and implemented but we have several helpful and stabl
  # Refactoring
 
  * [Transform parameter list into single "named" parameter](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-proactive-code-fixes#transform-parameter-list-into-single-object-parameter). Splits variable declaration list in individual variable statements. 
- * [Arrow Functions - add / remove body braces](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-proactive-code-fixes#arrow-functions-remove-and-add-body-braces). 
+ * [Arrow Functions - add / remove body braces](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-proactive-code-fixes#arrow-functions-remove-and-add-body-braces).  
+ * [Extract interface from class or object literal declaration](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-proactive-code-fixes#extract-interface-from-class-or-object-literal-declaration). 
 
 
 
@@ -108,18 +109,10 @@ Demo in Atom editor:
 
 ![Arrow Function - remove - add body braces vscode editor demo](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-proactive-code-fixes/doc-assets/arrowFunctionsBodyTransformationsVsCode.gif?raw=true?p=.gif)
 
+## Extract interface from class or object literal declaration
 
-## Declare interfaces from return values
+![Extract interface from class or object literal declaration vscode editor demo](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-proactive-code-fixes/doc-assets/extractInterfaceVsCode.gif?raw=true?p=.gif)
 
-Useful for quickly prototype interfaces when writing the implementation.
-
- * Visual Studio Code Editor
-
-![Declare interfaces from return values - Visual Studio Code Editor](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-proactive-code-fixes/doc-assets/declareReturnTypeVsCode.gif?raw=true?p=.gif) 
-
- * Atom Editor
-
-![Declare interfaces from return values - Atom Editor](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-proactive-code-fixes/doc-assets/declareReturnTypeAtom.gif?raw=true?p=.gif) 
 
 ## Declare classes and interfaces
 
@@ -135,6 +128,18 @@ Basic refactor of any descent strongly typed language IDE
 ![vscode demo creating variables and constructors declarations ](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-proactive-code-fixes/doc-assets/declareConstructorVsCode.gif?raw=true?p=.gif)
 
 
+
+## Declare interfaces from return values
+
+Useful for quickly prototype interfaces when writing the implementation.
+
+ * Visual Studio Code Editor
+
+![Declare interfaces from return values - Visual Studio Code Editor](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-proactive-code-fixes/doc-assets/declareReturnTypeVsCode.gif?raw=true?p=.gif) 
+
+ * Atom Editor
+
+![Declare interfaces from return values - Atom Editor](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-proactive-code-fixes/doc-assets/declareReturnTypeAtom.gif?raw=true?p=.gif) 
 
 # TODO
 
