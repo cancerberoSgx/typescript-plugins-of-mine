@@ -1,3 +1,27 @@
+import { ClassDeclaration, InterfaceDeclarationStructure, MethodSignatureStructure, ObjectLiteralExpression, PropertySignatureStructure, Scope, TypeGuards, TypeParameterDeclarationStructure } from 'ts-simple-ast';
+import * as ts from 'typescript';
+import { findAscendant, getKindName } from 'typescript-ast-util';
+import { CodeFix, CodeFixOptions } from '../codeFixes';
+
+let target: ts.ClassDeclaration | ts.ObjectLiteralExpression
+
+/**
+
+# Description
+
+Extract current class declaration or object literal expression to a new interface and , if possible, make the original declaration to implement it. 
+```
+class Fruit {
+  color: string
+  private creationDate: Date
+  foo() {
+    return Promise.resolve([['haha']])
+  }
+}```
+
+will result in 
+
+```
 interface IFruit {
   color: string;
   foo(): () => Promise<string[][]>;
@@ -6,36 +30,76 @@ interface IFruit {
 
 class Fruit implements IFruit {
   color: string
-  /** shouldn't be exported */
   private creationDate: Date
   foo() {
     return Promise.resolve([['haha']])
   }
-  bar(greet: string): Promise<string[]> { return null }
-}
+}```
 
-const obj21: Iobj21 = {
+
+While in the case of a object literal , there is less metainformation to inffer from : 
+```
+const obj21 = {
   color: 'hshs',
-  /** shouldn't be exported */
   creationDate: new Date(),
   foo: () => {
     return Promise.resolve([new Date()])
   },
   bar(greet: string): Promise<string[]> { return null }
 }
+```
 
+will result in
+```
 interface Iobj21 {
   color: string;
   creationDate: Date;
   foo(): Promise<Date[]>;
   bar(greet: string): Promise<string[]>;
 }
+const obj21: Iobj21 = {
+  color: 'hshs',
+  creationDate: new Date(),
+  foo: () => {
+    console.log('hello');
+    return Promise.resolve([new Date()])
+  },
+  bar(greet: string): Promise<string[]> { return null }
+}
+```
 
-import { ClassDeclaration, InterfaceDeclarationStructure, MethodSignatureStructure, ObjectLiteralExpression, PropertySignatureStructure, Scope, TypeGuards, TypeParameterDeclarationStructure } from 'ts-simple-ast';
-import * as ts from 'typescript';
-import { EvalContext } from 'typescript-plugin-ast-inspector';
-declare const c: EvalContext;
+  
+# TODO
 
+ * config ? 
+
+*/
+export const extractInterface: CodeFix = {
+
+  name: 'extractInterface',
+
+  config: {
+  },
+
+  predicate: (options: CodeFixOptions): boolean => {
+    target = findAscendant<ts.ClassDeclaration | ts.ObjectLiteralExpression>(options.containingTargetLight, a => ts.isClassDeclaration(a) || ts.isObjectLiteralExpression(a), true)
+    return !!target
+  },
+
+  description: (options: CodeFixOptions): string => `Extract interface from outer ${getKindName(target)}`,
+
+  apply: (options: CodeFixOptions): ts.ApplicableRefactorInfo[] | void => {
+    const source = options.simpleNode.getAncestors().find(a => TypeGuards.isClassDeclaration(a) || TypeGuards.isObjectLiteralExpression(a))
+    if (!source) {
+      options.log('not applying since cannot node.getAncestors().find(a => TypeGuards.isClassDeclaration(a) || TypeGuards.isObjectLiteralExpression(a))')
+    }
+    else if (TypeGuards.isClassDeclaration(source)) {
+      fromClassDeclaration(source)
+    } else if (TypeGuards.isObjectLiteralExpression(source)) {
+      fromObjectLiteral(source)
+    }
+  }
+}
 
 function fromClassDeclaration(source: ClassDeclaration) {
   const interfaceName = `I${source.getName() || 'UnnamedInterface'}`
@@ -105,36 +169,4 @@ function fromObjectLiteral(source: ObjectLiteralExpression) {
     parent.setType(interfaceName)
   }
   source.getSourceFile().insertInterface(Math.max(0, source.getChildIndex() - 2), structure)
-}
-
-
-let print
-/**
- * # Description
- * 
- * will extract interface from class declaration or object literal ancestor making it implement the new interface 
- */
-function evaluateMe() {
-  print = c.print
-
-  const position = 234
-  const sourceFile = c.project.createSourceFile(`tmp/extractInterfaceNewOne${Date.now()}.ts`, c.node.getSourceFile().getText())
-
-  const node = sourceFile.getDescendantAtPos(position)
-
-  const source = node.getAncestors().find(a => TypeGuards.isClassDeclaration(a) || TypeGuards.isObjectLiteralExpression(a))
-  if (!source) {
-    print('not applying since cannot node.getAncestors().find(a => TypeGuards.isClassDeclaration(a) || TypeGuards.isObjectLiteralExpression(a))')
-    return
-  }
-  else if (TypeGuards.isClassDeclaration(source)) {
-    fromClassDeclaration(source)
-  } else if (TypeGuards.isObjectLiteralExpression(source)) {
-    fromObjectLiteral(source)
-  }
-
-  print(sourceFile.getText().substring(0, Math.min(sourceFile.getText().length, 800)))
-
-  sourceFile.deleteImmediatelySync()
-
 }
