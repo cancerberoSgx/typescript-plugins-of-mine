@@ -16,3 +16,9 @@ const underscore = require('underscore'), moment = require('moment'),
 
 const root1: { n: number }
 const tree = buildTree(root1, { leaveCount: 50, depth: [98] })
+
+class Something12{
+  readonly prop: number = 1
+}
+const s55 = new Something12()
+s55.prop = 1;

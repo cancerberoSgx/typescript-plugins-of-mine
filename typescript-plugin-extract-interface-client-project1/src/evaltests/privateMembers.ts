@@ -3,15 +3,16 @@
 function fn76() {
 
   class A {
-    private prop3: string
-    private constructor(private prop: number) { }
+    public readonly prop3: string = 'hello'
+    public constructor(private prop: number) { }
     private method(a: number): Date[] {
       return [new Date()]
     }
   }
-  const a = new A(12345)
+  const a = new A(12345) // suggestion
   new A(88585858).method(1) // suggestion
   a.method(2) // suggestion
+
   a.prop3 = 'seb';
 }
 

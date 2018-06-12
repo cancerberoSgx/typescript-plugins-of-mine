@@ -49,7 +49,7 @@ export const codeFixCreateVariable: CodeFix = {
     }
   },
 
-  description: (options: CodeFixOptions) => `Declare "${options.containingTargetLight.getText()}"`,
+  description: (options: CodeFixOptions) => `Declare variable "${options.containingTargetLight.getText()}"`,
 
   apply: (options: CodeFixOptions): ts.ApplicableRefactorInfo[] | void => {
     const parent = options.simpleNode.getParent()

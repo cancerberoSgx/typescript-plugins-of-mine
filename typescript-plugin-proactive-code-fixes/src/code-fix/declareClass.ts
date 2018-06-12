@@ -52,7 +52,7 @@ export const declareClass: CodeFix = {
   },
 
   description: (arg: CodeFixOptions): string => {
-    return `Declare "${arg.containingTargetLight.getText()}"`
+    return `Declare type "${arg.containingTargetLight.getText()}"`
   },
 
   apply: (arg: CodeFixOptions) => {
