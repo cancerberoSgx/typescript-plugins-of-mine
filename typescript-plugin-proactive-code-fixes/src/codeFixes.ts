@@ -14,6 +14,7 @@ import { renameVariable } from './code-fix/variableRename';
 import { splitVariableDeclarationList } from './code-fix/splitVariableDeclarationList';
 import { toNamedParameters } from './code-fix/toNamedParams';
 import { memberChangeScope } from './code-fix/memberChangeScope';
+import { removeEmptyLines } from './code-fix/removeEmptyLines';
 
 
 export interface CodeFix {
@@ -35,7 +36,7 @@ export interface CodeFix {
   
 }
 
-export const codeFixes: CodeFix[] = [codeFixCreateConstructor, codeFixCreateVariable, declareClass,  const2let, nameFunction, implementInterfaceObjectLiteral, declareReturnType, declareMember, addReturnStatement, implementInterfaceMember, renameVariable, splitVariableDeclarationList, toNamedParameters, memberChangeScope]
+export const codeFixes: CodeFix[] = [codeFixCreateConstructor, codeFixCreateVariable, declareClass,  const2let, nameFunction, implementInterfaceObjectLiteral, declareReturnType, declareMember, addReturnStatement, implementInterfaceMember, renameVariable, splitVariableDeclarationList, toNamedParameters, memberChangeScope, removeEmptyLines]
 
 export interface CodeFixOptions {
   diagnostics: ts.Diagnostic[]
@@ -46,5 +47,6 @@ export interface CodeFixOptions {
   simpleNode?: Node,
   program: ts.Program,
   sourceFile: ts.SourceFile,
-  simpleProject?: Project
+  simpleProject?: Project,
+  positionOrRange?: number | ts.TextRange
 }

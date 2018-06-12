@@ -103,7 +103,7 @@ function getCodeFix(fileName: string, positionOrRange: number | ts.TextRange, en
   }
   log(`getCodeFix info: containingTarget.kind == ${getKindName(containingTarget.kind)} containedTarget.kind == ${containedTarget ? getKindName(containedTarget.kind) : 'NotContainedChild'} `)
   const codeFixesFilterT0 = now()
-  const target = { diagnostics, containingTarget, containingTargetLight, containedTarget, log, program, sourceFile }
+  const target = { diagnostics, containingTarget, containingTargetLight, containedTarget, log, program, sourceFile, positionOrRange }
   const fixes = codeFixes.filter(fix => {
     try {
       return fix.predicate(target)
