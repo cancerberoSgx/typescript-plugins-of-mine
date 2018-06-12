@@ -1,7 +1,7 @@
-
+/*
 const arg1 = {a: 'i'}; 
 const a: boolean = nonExistentFunction<string>(1, arg1)  
-
+*/
 /**
  
 # Description

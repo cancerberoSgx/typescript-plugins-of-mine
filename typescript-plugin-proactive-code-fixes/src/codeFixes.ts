@@ -13,6 +13,7 @@ import { implementInterfaceMember } from './code-fix/implementInterfaceMember';
 import { renameVariable } from './code-fix/variableRename';
 import { splitVariableDeclarationList } from './code-fix/splitVariableDeclarationList';
 import { toNamedParameters } from './code-fix/toNamedParams';
+import { memberChangeScope } from './code-fix/memberChangeScope';
 
 
 export interface CodeFix {
@@ -34,7 +35,7 @@ export interface CodeFix {
   
 }
 
-export const codeFixes: CodeFix[] = [codeFixCreateConstructor, codeFixCreateVariable, declareClass,  const2let, nameFunction, implementInterfaceObjectLiteral, declareReturnType, declareMember, addReturnStatement, implementInterfaceMember, renameVariable, splitVariableDeclarationList, toNamedParameters]
+export const codeFixes: CodeFix[] = [codeFixCreateConstructor, codeFixCreateVariable, declareClass,  const2let, nameFunction, implementInterfaceObjectLiteral, declareReturnType, declareMember, addReturnStatement, implementInterfaceMember, renameVariable, splitVariableDeclarationList, toNamedParameters, memberChangeScope]
 
 export interface CodeFixOptions {
   diagnostics: ts.Diagnostic[]
