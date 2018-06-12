@@ -66,13 +66,13 @@ export const memberChangeScope: CodeFix = {
       return true
     }
     else {
-      options.log('predicate false because d.code === 2341 || d.code === 2673 || (Identifier||isNewExpression) != ' + getKindName(targetNode.kind))
+      options.log('predicate false because d.code === 2341 || d.code === 2673 || (Identifier||isNewExpression) != ' + getKindName(options.containingTargetLight.kind))
       return false
     }
   },
 
   description: (options: CodeFixOptions): string => {
-    let what = ts.isIdentifier(targetNode) ? `member ${options.containingTargetLight.getText()}` : ts.isNewExpression(targetNode) ? `constructor ${targetNode.expression.getText()}` : targetNode.getText()
+    let what = ts.isIdentifier(targetNode) ? `member ${options.containingTargetLight.getText()}` : ts.isNewExpression(targetNode) ? `constructor ${targetNode.expression.getText()}` : targetNode ? targetNode.getText() : options.containingTargetLight.getText()
     return `Make ${what} public`
   },
 
