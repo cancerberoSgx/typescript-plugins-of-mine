@@ -71,7 +71,7 @@ const obj21: Iobj21 = {
   
 # TODO
 
- * config ? 
+ * config 
 
 */
 export const extractInterface: CodeFix = {
@@ -79,6 +79,10 @@ export const extractInterface: CodeFix = {
   name: 'extractInterface',
 
   config: {
+    // TODO: 
+    copyJsdoc: true,
+    // TODO: is true it will remove jsdocs from source class for those members which jsdoc has been copied to the interface member signatures
+    removeCopiedJsdocFromClass: false
   },
 
   predicate: (options: CodeFixOptions): boolean => {
@@ -104,8 +108,10 @@ export const extractInterface: CodeFix = {
 function fromClassDeclaration(source: ClassDeclaration) {
   const interfaceName = `I${source.getName() || 'UnnamedInterface'}`
   const structure: InterfaceDeclarationStructure = {
+    docs: source.getJsDocs().map(doc=>doc.getInnerText()) || [`TODO: Document me`],
     name: interfaceName,
     properties: source.getProperties().filter(p => p.getScope() === Scope.Public).map(p => ({
+      docs: p.getJsDocs().map(doc=>doc.getInnerText()) || [`TODO: Document me`],
       name: p.getName(),
       type: p.getTypeNode() ? p.getTypeNode().getText() : p.getType() ? p.getType().getText() : undefined,
       questionToken: p.hasQuestionToken(),
@@ -113,6 +119,7 @@ function fromClassDeclaration(source: ClassDeclaration) {
       initializer: p.getInitializer() ? p.getInitializer().getText() : undefined
     } as PropertySignatureStructure)),
     methods: source.getMethods().filter(p => p.getScope() === Scope.Public).map(m => ({
+      docs: m.getJsDocs().map(doc=>doc.getInnerText()) || [`TODO: Document me`],
       name: m.getName(),
       returnType: m.getReturnTypeNode() ? m.getReturnTypeNode().getText() : m.getType() ? m.getType().getText() : undefined,
       // typeParameters: m. //TODO

@@ -1,35 +1,32 @@
-interface IFruit {
-  color: string;
-  foo(): () => Promise<string[][]>;
-  bar(greet: string): Promise<string[]>;
-}
-
-class Fruit implements IFruit {
-  color: string
+/**
+ * a fruit is a living thing, produced by trees
+ */
+class Fruit extends LivingThing {
+  /**
+   * use undefined for 100% transparency
+   */
+  color: string|undefined
   /** shouldn't be exported */
   private creationDate: Date
+  /**
+   * will resolve when it's worthwhile
+   */
   foo() {
-    return Promise.resolve([['haha']])
+    return Promise.resolve([['smile']])
   }
+  /**
+   * @param greet the greeting to show in all user's screens 
+   */
   bar(greet: string): Promise<string[]> { return null }
 }
 
-const obj21: Iobj21 = {
+const obj21 = {
   color: 'hshs',
-  /** shouldn't be exported */
   creationDate: new Date(),
-  foo: () => {
-    return Promise.resolve([new Date()])
-  },
+  foo: () => Promise.resolve([new Date()]),
   bar(greet: string): Promise<string[]> { return null }
 }
 
-interface Iobj21 {
-  color: string;
-  creationDate: Date;
-  foo(): Promise<Date[]>;
-  bar(greet: string): Promise<string[]>;
-}
 
 import { ClassDeclaration, InterfaceDeclarationStructure, MethodSignatureStructure, ObjectLiteralExpression, PropertySignatureStructure, Scope, TypeGuards, TypeParameterDeclarationStructure } from 'ts-simple-ast';
 import * as ts from 'typescript';
@@ -41,6 +38,7 @@ function fromClassDeclaration(source: ClassDeclaration) {
   const interfaceName = `I${source.getName() || 'UnnamedInterface'}`
   const structure: InterfaceDeclarationStructure = {
     name: interfaceName,
+    docs: source.getJsDocs().map(doc=>doc.getText()) || [`/**\n * Document me\n */`],
     properties: source.getProperties().filter(p => p.getScope() === Scope.Public).map(p => ({
       name: p.getName(),
       type: p.getTypeNode() ? p.getTypeNode().getText() : p.getType() ? p.getType().getText() : undefined,
