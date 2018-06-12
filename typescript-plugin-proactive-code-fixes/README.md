@@ -31,6 +31,7 @@ A lot is still to be fixed and implemented but we have several helpful and stabl
  * declare member - complements the code fix already existing in typescript to fullfill all cases. declaring missing properties / methods 
  * add missing return statement
  * [Declare missing classes and interfaces](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-proactive-code-fixes#declare-classes-and-interfaces)
+ * Make member public (change the sope of a member when expression is trying to access it)
  
  # Refactoring
 
