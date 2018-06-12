@@ -25,7 +25,12 @@ const result = nonDeclared(1,2,{a: 'g})
 
 "code": "2304", Cannot find name 'b'.",
 
-TODO: test with jsdoc or a trailing comment
+# TODO
+
+ * if (existingProp && hasWrongSignature(existingProp, method)) -- is doing strange things on suggestion at hasWrongSignature
+
+ * test with jsdoc or a trailing comment
+
 */
 export const codeFixCreateVariable: CodeFix = {
 

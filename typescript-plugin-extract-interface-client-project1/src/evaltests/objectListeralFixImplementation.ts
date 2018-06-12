@@ -1,6 +1,6 @@
 const tree1: Living = {
-  name: 'hello',
-  log: 877
+  log: 877,
+  strange: []
 }
 interface Living {
   name: string
@@ -12,8 +12,6 @@ const tree2: Living = {
 }
 
 
-
-
 import { EvalContext } from 'typescript-plugin-ast-inspector';
 declare const c: EvalContext;
 
@@ -22,12 +20,12 @@ function evaluateMe() {
   const arg = c, print = c.print, ts = c.ts, TypeGuards = c.tsa.TypeGuards
   const sourceFile = c.project.createSourceFile('tmp/tmp_sourcefile_' + new Date().getTime() + '.ts', c.node.getSourceFile().getFullText())
 
-  const node = sourceFile.getDescendantAtPos(47)
+  const node = sourceFile.getDescendantAtPos(8)
   const varDecl = TypeGuards.isVariableDeclaration(node) ? node : node.getFirstAncestorByKind(ts.SyntaxKind.VariableDeclaration)
-  const init = varDecl.getInitializerIfKind(ts.SyntaxKind.ObjectLiteralExpression)
+  let init = varDecl.getInitializerIfKind(ts.SyntaxKind.ObjectLiteralExpression)
   const declarations = varDecl.getType().getSymbol().getDeclarations()
   if (!declarations || !declarations.length) {
-    arg.log(`doing nothing since !declarations|| ! declarations.length`)
+    arg.log(`doing nothing since !declarations || !declarations.length`)
     return
   }
   declarations.forEach(decl => {
@@ -35,32 +33,40 @@ function evaluateMe() {
       arg.log(`doing nothing for decl ${decl.getText()}`)
       return
     }
-    decl.getProperties().forEach(prop => {
+    decl.getProperties().forEach(prop => {  
       const existingProp = init.getProperty(prop.getName())
-      if (existingProp  && thereisDisgnosticinpropname()) {
-        existingProp.remove()
-        init.addPropertyAssignment({ name: prop.getName(), initializer: getDefaultValueForType(prop.getType()) })
+      let oldText = ''
+      if (existingProp) {
+        oldText = existingProp.getText()
+        existingProp.remove() //TODO: we are removing good properties implementation ! 
+        existingProp.forget()
       }
+      init.addPropertyAssignment({ name: prop.getName(), initializer: getDefaultValueForType(prop.getType())+ (!oldText ? '' : '\n/* ORIGINAL IMPLEMENTATION: \n'+oldText+'\n*/') }).forget()
     })
     decl.getMethods().forEach(method => {
       const existingProp = init.getProperty(method.getName())
       if (existingProp && TypeGuards.isMethodDeclaration(existingProp)) {
         fixSignature(existingProp, method)
+        existingProp.forget()
         arg.log('fixSignature1')
         return
       }
-      if (existingProp && thereisDisgnosticinpropname()) {
+      let oldText = ''
+      if (existingProp) { //TODO: we are removing good properties implementation ! 
+        oldText = existingProp.getText()
         existingProp.remove()
-        init.addMethod({
-          name: method.getName(),
-          parameters: method.getParameters().map(buildParameterStructure),
-          returnType: method.getReturnType().getText(),
-          bodyText: 'throw new Error(\'Not Implemented\')'
-        })
+        existingProp.forget()
       }
+      init.addMethod({
+        name: method.getName(),
+        parameters: method.getParameters().map(buildParameterStructure),
+        returnType: method.getReturnType().getText(),
+        bodyText: 'throw new Error(\'Not Implemented\');' + (!oldText ? '' : '\n/* ORIGINAL IMPLEMENTATION: \n'+oldText+'\n*/')
+      }).forget()
     })
 
-    init.getProperties().forEach(prop => {
+    init = varDecl.getInitializerIfKind(ts.SyntaxKind.ObjectLiteralExpression)
+    init.getProperties().filter(p=>!p.wasForgotten()).forEach(prop => {
       let name
       if (TypeGuards.isPropertyAssignment(prop) || TypeGuards.isShorthandPropertyAssignment(prop)) {
         name = prop.getName()
@@ -68,16 +74,22 @@ function evaluateMe() {
       else if (TypeGuards.isSpreadAssignment(prop)) {
         name = prop.getExpression().getText()
       }
-      if (name && (!decl.getProperty(name) && !decl.getMethod(name))) {
-        prop.remove()
+      
+      if (name && !decl.getProperty(name) && !decl.getMethod(name)) {
+        const oldText = prop.getText()
+        prop.remove();
+        const statement = init.getAncestors().find(TypeGuards.isStatement);
+        const container = statement ? statement.getFirstAncestorByKind(ts.SyntaxKind.Block)||init.getSourceFile() : init.getSourceFile()
+        const index = statement ? statement.getChildIndex() : 0
+        container.insertStatements(index , '/* Property removed: \n'+ oldText+' \n */')
+
         arg.log('property removed '+name)
-        return
       }
       else {
         arg.log(`ignoring object assignment property ${prop.getText()}`)
-        return
       }
     })
+  
     print(sourceFile.getText().substring(0, Math.min(sourceFile.getText().length, 500)))
 
     sourceFile.deleteImmediatelySync()
@@ -89,19 +101,7 @@ function evaluateMe() {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-import { ClassDeclaration, ExpressionWithTypeArguments, FunctionLikeDeclaration, InterfaceDeclaration, MethodSignature, Node, ParameterDeclaration, ParameterDeclarationStructure, SyntaxKind, Type, TypeGuards } from "ts-simple-ast";
+import { ClassDeclaration, ExpressionWithTypeArguments, FunctionLikeDeclaration, InterfaceDeclaration, MethodSignature, Node, ParameterDeclaration, ParameterDeclarationStructure, SyntaxKind, Type, TypeGuards, ObjectLiteralElementLike } from "ts-simple-ast";
 
 
 export const buildParameterStructure = (p: ParameterDeclaration): ParameterDeclarationStructure => ({
@@ -113,20 +113,31 @@ export const buildParameterStructure = (p: ParameterDeclaration): ParameterDecla
 })
 
 
-/** fix given function-like declaration parameters and type to implement given signature */
-export function fixSignature(decl: FunctionLikeDeclaration, signature: MethodSignature): void {
+/** 
+ * fix given function-like declaration parameters and type to implement given signature
+ * @param onlyTest if true it wont make any modifications (useful to test if given signautre is compatible with given decl)
+ * @returns true if given declaration is not compatible with given signature 
+ */
+export function fixSignature(decl: FunctionLikeDeclaration, signature: MethodSignature, onlyTest: boolean = false): boolean {
   decl.setReturnType(signature.getReturnType().getText())
+  let result: boolean = false
   // add missing params and fix exiting param types
   let memberParams = decl.getParameters()
   let signatureParams = signature.getParameters()
   for (let i = 0; i < signatureParams.length; i++) {
     const signatureParam = signatureParams[i]
     if (memberParams.length <= i) {
-      decl.addParameter(buildParameterStructure(signatureParam))
+      if (!onlyTest) {
+        decl.addParameter(buildParameterStructure(signatureParam))
+      }
+      result = true
     } else {
       const memberParam = memberParams[i]
       if (!areTypesEqual(memberParam.getType(), signatureParam.getType())) {
-        memberParam.fill({ ...buildParameterStructure(signatureParam), name: memberParam.getName() })
+        if (!onlyTest) {
+          memberParam.fill({ ...buildParameterStructure(signatureParam), name: memberParam.getName() })
+        }
+        result = true
       }
     }
   }
@@ -136,10 +147,14 @@ export function fixSignature(decl: FunctionLikeDeclaration, signature: MethodSig
   if (memberParams.length > signatureParams.length) {
     for (let i = signatureParams.length; i < memberParams.length; i++) {
       if (!(memberParams[i].hasInitializer() || memberParams[i].isOptional())) {
-        memberParams[i].remove()
+        if (!onlyTest) {
+          memberParams[i].remove()
+        }
+        result = true
       }
     }
   }
+  return result;
 }
 
 /** dirty way of checking if two types are compatible */
