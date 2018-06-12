@@ -4,8 +4,8 @@ function ghghg(t?: boolean[]): string[] | number {
 }
 const other = (a: string): number => {}
 //"code": "2355",	"message": "A function whose declared type is neither 'void' nor 'any' must return a value.",
-import {forgotttt} from './forgottenExport'
-forgotttt.method1()
+// import {forgotttt} from './forgottenExport'
+// forgotttt.method1()
 import { EvalContext } from 'typescript-plugin-ast-inspector';
 declare const c: EvalContext;
 
