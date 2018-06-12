@@ -24,10 +24,10 @@ export const removeEmptyLines: CodeFix = {
     const range = options.positionOrRange as ts.TextRange;
     const lineAndChar1 = options.sourceFile.getLineAndCharacterOfPosition(range.pos)
     const lineAndChar2 = options.sourceFile.getLineAndCharacterOfPosition(range.end)
-    if (lineAndChar2.line - lineAndChar1.line < 3) {
+    if (lineAndChar2.line - lineAndChar1.line > 2) {
       return true
     }
-    return true
+    return false
   },
 
   description: (options: CodeFixOptions): string => `Remove selection's empty lines`,

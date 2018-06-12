@@ -37,6 +37,9 @@ A lot is still to be fixed and implemented but we have several helpful and stabl
  # Refactoring
 
  * [Transform parameter list into single "named" parameter](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-proactive-code-fixes#transform-parameter-list-into-single-object-parameter). Splits variable declaration list in individual variable statements. 
+ * [Arrow Functions - add / remove body braces](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-proactive-code-fixes#arrow-functions-remove-and-add-body-braces). 
+
+
 
 and more to come!!
 
@@ -99,6 +102,11 @@ Idea taken from here: https://github.com/Microsoft/TypeScript/issues/23552
 Demo in Atom editor: 
 
 ![Transform parameter list into a single object parameter Atom editor demo](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-proactive-code-fixes/doc-assets/convertToNamedParamsAtom.gif?raw=true?p=.gif)
+
+
+## Arrow Functions remove and add body braces
+
+![Arrow Function - remove - add body braces vscode editor demo](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-proactive-code-fixes/doc-assets/arrowFunctionsBodyTransformationsVsCode.gif?raw=true?p=.gif)
 
 
 ## Declare interfaces from return values
