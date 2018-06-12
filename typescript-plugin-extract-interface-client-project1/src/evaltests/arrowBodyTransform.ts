@@ -1,9 +1,9 @@
 
 const o = {
-  fn: (o1: string) => { return 'hello' + o1; },
-  bodied: a => { return a - 1 + 2 / 6; },
+  fn: <T>(o1: T) => { return 'hello' + toString<T>(o1); },
+  bodied: a => a - 1 + 2 / 6,
   zeroArg: () => foo(),
-  returningObjectLiteral: a => ({ a, b: 'hello world' })
+  returningObjectLiteral: <T>(a) => ({ a, b: 'hello world' })
 }
 import { EvalContext } from 'typescript-plugin-ast-inspector';
 import { findAscendant, getKindName } from 'typescript-ast-util';

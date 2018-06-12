@@ -15,7 +15,7 @@ import { splitVariableDeclarationList } from './code-fix/splitVariableDeclaratio
 import { toNamedParameters } from './code-fix/toNamedParams';
 import { memberChangeScope } from './code-fix/memberChangeScope';
 import { removeEmptyLines } from './code-fix/removeEmptyLines';
-import { arrowFunctionTransformations } from './code-fix/arrowFunctionTransformations';
+import { arrowFunctionBodyTransformations } from './code-fix/arrowFunctionTransformations';
 
 
 export interface CodeFix {
@@ -37,7 +37,7 @@ export interface CodeFix {
   
 }
 
-export const codeFixes: CodeFix[] = [codeFixCreateConstructor, codeFixCreateVariable, declareClass,  const2let, nameFunction, implementInterfaceObjectLiteral, declareReturnType, declareMember, addReturnStatement, implementInterfaceMember, renameVariable, splitVariableDeclarationList, toNamedParameters, memberChangeScope, removeEmptyLines, arrowFunctionTransformations]
+export const codeFixes: CodeFix[] = [codeFixCreateConstructor, codeFixCreateVariable, declareClass,  const2let, nameFunction, implementInterfaceObjectLiteral, declareReturnType, declareMember, addReturnStatement, implementInterfaceMember, renameVariable, splitVariableDeclarationList, toNamedParameters, memberChangeScope, removeEmptyLines, arrowFunctionBodyTransformations]
 
 export interface CodeFixOptions {
   diagnostics: ts.Diagnostic[]

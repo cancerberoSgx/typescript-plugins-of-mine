@@ -19,7 +19,7 @@ Implements the following kind of transformations related to arrow functions:
  * config
 
 */
-export const arrowFunctionTransformations: CodeFix = {
+export const arrowFunctionBodyTransformations: CodeFix = {
 
   name: 'arrowFunctionTransformations',
 
@@ -57,7 +57,7 @@ export const arrowFunctionTransformations: CodeFix = {
       return
     }
     const hasTypeParameters = simpleArrow.getTypeParameters().length
-    const parameterListMustHaveParen = simpleArrow.getParameters().length != 1 || !!simpleArrow.getParameters()[0].getTypeNode()
+    const parameterListMustHaveParen = hasTypeParameters || simpleArrow.getParameters().length != 1 || !!simpleArrow.getParameters()[0].getTypeNode()
 
     if (description === DESCRIPTION_REMOVE_BODY) {
       const firstChild = simpleArrow.getBody().getChildSyntaxList().getFirstChild()
@@ -66,8 +66,8 @@ export const arrowFunctionTransformations: CodeFix = {
         const newText =
           (hasTypeParameters ? '<' : '') + simpleArrow.getTypeParameters().map(tp => tp.getText()).join(', ') + (hasTypeParameters ? '>' : '') +
           (parameterListMustHaveParen ? '(' : '') + simpleArrow.getParameters().map(p => p.getText()).join(', ') + (parameterListMustHaveParen ? ')' : '') +
-          (simpleArrow.getReturnTypeNode() ? ': ' + simpleArrow.getReturnTypeNode().getText() : '') +
-          ' => ' + (firstChild.getExpression().getKind()===ts.SyntaxKind.ObjectLiteralExpression ? ('('+firstChild.getExpression().getText()+')') : firstChild.getExpression().getText())
+          (simpleArrow.getReturnTypeNode() ? ': ' + simpleArrow.getReturnTypeNode().getText() : '') + ' => ' + 
+          (firstChild.getExpression().getKind() === ts.SyntaxKind.ObjectLiteralExpression ? ('(' + firstChild.getExpression().getText() + ')') : firstChild.getExpression().getText())
 
         options.log(`DESCRIPTION_REMOVE_BODY replacing old text ${simpleArrow.getText()} new text: ${newText}`)
         simpleArrow.replaceWithText(newText)
@@ -82,9 +82,9 @@ export const arrowFunctionTransformations: CodeFix = {
         (hasTypeParameters ? '<' : '') + simpleArrow.getTypeParameters().map(tp => tp.getText()).join(', ') + (hasTypeParameters ? '>' : '') +
         (parameterListMustHaveParen ? '(' : '') + simpleArrow.getParameters().map(p => p.getText()).join(', ') + (parameterListMustHaveParen ? ')' : '') +
         (simpleArrow.getReturnTypeNode() ? ': ' + simpleArrow.getReturnTypeNode().getText() : '') +
-        ' => ' + ' { return ' + 
-        
-       (TypeGuards.isParenthesizedExpression(expression) ? expression.getExpression().getText() : expression.getText()) + '; }'
+        ' => ' + ' { return ' +
+
+        (TypeGuards.isParenthesizedExpression(expression) ? expression.getExpression().getText() : expression.getText()) + '; }'
 
       options.log(`DESCRIPTION_ADD_BODY replacing old text ${simpleArrow.getText()} new text: ${newText}`)
       simpleArrow.replaceWithText(newText)
