@@ -1,4 +1,13 @@
+# Obsolete
+
+obsolete by typescript-plugin-proactive-code-fixes - code fix extractInterface. 
+
+
+
+
+
 # typescript-plugin-extract-interface
+
 
 A TypeScript Language Server Plugin to extract an interface from an existing class. 
 

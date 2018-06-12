@@ -6,7 +6,6 @@ import { CodeFix, CodeFixOptions } from '../codeFixes';
 let target: ts.ClassDeclaration | ts.ObjectLiteralExpression
 
 /**
-
 # Description
 
 Extract current class declaration or object literal expression to a new interface and , if possible, make the original declaration to implement it. 
@@ -68,10 +67,13 @@ const obj21: Iobj21 = {
 }
 ```
 
-  
 # TODO
 
  * config 
+ * if the class already implements an interface, we shouldn't extract those methods. 
+ * what about methods of super classes ? this behavior could be configurable
+ * put the interface in a separate file and add an import?
+ * enhancement: if user selects only some methods, we should only extract those.
 
 */
 export const extractInterface: CodeFix = {
