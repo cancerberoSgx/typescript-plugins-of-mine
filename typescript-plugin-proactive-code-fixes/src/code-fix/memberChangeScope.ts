@@ -73,7 +73,7 @@ export const memberChangeScope: CodeFix = {
 
   description: (options: CodeFixOptions): string => {
     let what = ts.isIdentifier(targetNode) ? `member ${options.containingTargetLight.getText()}` : ts.isNewExpression(targetNode) ? `constructor ${targetNode.expression.getText()}` : targetNode.getText()
-    return `Make "${what}" public`
+    return `Make ${what} public`
   },
 
   apply: (options: CodeFixOptions): ts.ApplicableRefactorInfo[] | void => {

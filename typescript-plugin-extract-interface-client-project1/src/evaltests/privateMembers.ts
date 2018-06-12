@@ -4,7 +4,7 @@ function fn76() {
 
   class A {
     private prop3: string
-    public constructor(private prop: number) { }
+    private constructor(private prop: number) { }
     private method(a: number): Date[] {
       return [new Date()]
     }
@@ -15,9 +15,7 @@ function fn76() {
   a.prop3 = 'seb';
 }
 
-function evaluateMe() {
 
-}
 /**
  
 # Description
