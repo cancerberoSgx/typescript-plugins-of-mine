@@ -119,12 +119,13 @@ export const implementInterfaceObjectLiteral: CodeFix = {
 
       decl.getProperties().forEach(prop => {
         const existingProp = init.getProperty(prop.getName())
-        if (existingProp && (existingProp as any).remove) {
-          (existingProp as any).remove()
+        
+        if (existingProp) {
+          existingProp.remove()
         }
-        else if (existingProp && !(existingProp as any).remove) { // TODO : fixed with https://github.com/dsherret/ts-simple-ast/pull/343#issuecomment-394923115 - remove will be always present
-          arg.log(`apply WARNING existingProp &&  !(existingProp as any).remove: kind: ${existingProp.getKindName()} text: ${existingProp.getText()} init.getText() === ${init.getText()}`)
-        }
+        // else if (existingProp && !(existingProp as any).remove) { // TODO : fixed with https://github.com/dsherret/ts-simple-ast/pull/343#issuecomment-394923115 - remove will be always present
+        //   arg.log(`apply WARNING existingProp &&  !(existingProp as any).remove: kind: ${existingProp.getKindName()} text: ${existingProp.getText()} init.getText() === ${init.getText()}`)
+        // }
         else {
           init.addPropertyAssignment({ name: prop.getName(), initializer: getDefaultValueForType(prop.getType()) })
         }
@@ -143,12 +144,13 @@ export const implementInterfaceObjectLiteral: CodeFix = {
           fixSignature(existingProp, method)
           // arg.log('fixSignature1')
         }
-        else if (existingProp && (existingProp as any).remove) {
+        else if (existingProp) {
           // try{
-          (existingProp as any).remove()
+          // (existingProp as any).remove()
           //   }catch(ex){
           //     arg.log('fixSignature222')}
           // }
+          existingProp.remove()
           init.addMethod({
             name: method.getName(),
             parameters: method.getParameters().map(buildParameterStructure),
@@ -157,7 +159,7 @@ export const implementInterfaceObjectLiteral: CodeFix = {
           })
         }
         else {
-          arg.log(`could not do nothing for property ${existingProp && existingProp.getText && existingProp.getText()} - method was ${method.getName()}`)
+          arg.log(`doing nothing for property ${existingProp && existingProp.getText && existingProp.getText()} - method was ${method.getName()}`)
         }
       })
 

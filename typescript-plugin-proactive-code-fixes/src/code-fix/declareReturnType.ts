@@ -107,7 +107,6 @@ export const declareReturnType: CodeFix = {
       arg.simpleNode.getSourceFile().addInterface(interfaceStructure)
     }
   }
-
 }
 
 

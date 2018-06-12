@@ -101,6 +101,10 @@ export function getDefaultValueForType(t: Type): string {
     return 'false'
   } else if (t.getText() === 'number') {
     return '0'
+  } else if (t.getText() === 'Date') {
+    return 'new Date()'
+  } else if (t.getText() === 'RegExp') {
+    return '//ig'
   } else if (t.isArray()) {
     return '[]'
   } else {

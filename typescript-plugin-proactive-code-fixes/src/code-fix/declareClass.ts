@@ -1,11 +1,8 @@
 import { now, timeFrom } from 'hrtime-now';
-import { HeritageClause, TypeGuards } from 'ts-simple-ast';
+import { ClassDeclaration, HeritageClause, InterfaceDeclaration, TypeGuards } from 'ts-simple-ast';
 import * as ts from 'typescript';
-import { getKindName, findAscendant } from 'typescript-ast-util';
+import { getKindName } from 'typescript-ast-util';
 import { CodeFix, CodeFixOptions } from '../codeFixes';
-
-
-let heritageClause: ts.HeritageClause
 
 
 /**
@@ -44,8 +41,8 @@ export const declareClass: CodeFix = {
 
   predicate: (arg: CodeFixOptions): boolean => {
     if (arg.containingTargetLight.kind === ts.SyntaxKind.Identifier &&
-      ( heritageClause = findAscendant<ts.HeritageClause>(arg.containingTargetLight, ts.isHeritageClause)) && 
-      arg.diagnostics.find(d => d.code === 2304 && d.start === arg.containingTargetLight.getStart())) {
+      arg.diagnostics.find(d => d.code === 2304 && d.start === arg.containingTargetLight.getStart())
+    ) {
       return true
     }
     else {
@@ -55,18 +52,24 @@ export const declareClass: CodeFix = {
   },
 
   description: (arg: CodeFixOptions): string => {
-    return `Declare ${heritageClause && heritageClause.token === ts.SyntaxKind.ImplementsKeyword ? 'interface' : 'class'} "${arg.containingTargetLight.getText()}"`
+    return `Declare "${arg.containingTargetLight.getText()}"`
   },
 
   apply: (arg: CodeFixOptions) => {
     const t0 = now()
-    const simpleClassDec = arg.simpleNode.getFirstAncestorByKind(ts.SyntaxKind.ClassDeclaration)
+    let simpleClassDec: ClassDeclaration | InterfaceDeclaration = arg.simpleNode.getFirstAncestorByKind(ts.SyntaxKind.ClassDeclaration)
+    if (!simpleClassDec) {
+      simpleClassDec = arg.simpleNode.getFirstAncestorByKind(ts.SyntaxKind.InterfaceDeclaration)
+    }
+    if (!simpleClassDec) {
+      arg.log('not applying cause cannot find any ancestor of kind ClassDeclaration|InterfaceDeclaration')
+    }
     let h: HeritageClause
 
     if (!TypeGuards.isHeritageClause(h = arg.simpleNode.getFirstAncestorByKind(ts.SyntaxKind.HeritageClause))) {
       return
     }
-    const what = h.getToken() === ts.SyntaxKind.ImplementsKeyword ? 'interface' : 'class'
+    const what = simpleClassDec.getKind() === ts.SyntaxKind.InterfaceDeclaration ? 'interface' : h.getToken() === ts.SyntaxKind.ImplementsKeyword ? 'interface' : 'class'
     const code =
       `
 /**
@@ -75,7 +78,6 @@ export const declareClass: CodeFix = {
 ${simpleClassDec.isExported() ? 'export ' : ''}${what} ${arg.simpleNode.getText()} {
 
 }
-
 `
     // TODO:  modify the file using  insertClass or insertInterface using Structures no text
     arg.simpleNode.getSourceFile().insertText(simpleClassDec.getStart(), code)

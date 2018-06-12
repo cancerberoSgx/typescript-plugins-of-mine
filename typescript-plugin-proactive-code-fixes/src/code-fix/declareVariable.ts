@@ -1,7 +1,7 @@
+import { TypeGuards } from 'ts-simple-ast';
 import * as ts from 'typescript';
 import { getKindName } from 'typescript-ast-util';
 import { CodeFix, CodeFixOptions } from '../codeFixes';
-import { TypeGuards } from 'ts-simple-ast';
 
 /**
 
@@ -26,7 +26,6 @@ const result = nonDeclared(1,2,{a: 'g})
 "code": "2304", Cannot find name 'b'.",
 
 TODO: test with jsdoc or a trailing comment
-ISSUE : incorrectly suggesting in this case when cursor is on "Alpha" : const foo = new Alpha('hello')
 */
 export const codeFixCreateVariable: CodeFix = {
 
@@ -36,7 +35,11 @@ export const codeFixCreateVariable: CodeFix = {
 
   predicate: (options: CodeFixOptions): boolean => {
     if (
-      options.containingTargetLight.kind===ts.SyntaxKind.Identifier &&
+      (
+        acceptedParentKinds.includes(options.containingTarget.kind) ||
+        options.containingTarget.parent && acceptedParentKinds.includes(options.containingTarget.parent.kind) ||
+        options.containingTarget.parent.parent && acceptedParentKinds.includes(options.containingTarget.parent.parent.kind)
+      ) &&
       options.diagnostics.find(d => d.code === 2304 && d.start === options.containingTargetLight.getStart())) {
       return true
     }
@@ -46,27 +49,28 @@ export const codeFixCreateVariable: CodeFix = {
     }
   },
 
-  description: (options: CodeFixOptions) =>`Declare "${options.containingTargetLight.getText()}"`,
+  description: (options: CodeFixOptions) => `Declare "${options.containingTargetLight.getText()}"`,
 
   apply: (options: CodeFixOptions): ts.ApplicableRefactorInfo[] | void => {
     const parent = options.simpleNode.getParent()
-    if(TypeGuards.isIdentifier(options.simpleNode) && TypeGuards.isCallExpression(parent)){
+    if (TypeGuards.isIdentifier(options.simpleNode) && TypeGuards.isCallExpression(parent)) {
       const expression = parent.getExpression()
-      if(TypeGuards.isIdentifier(expression)){
+      if (TypeGuards.isIdentifier(expression)) {
         const container = parent.getFirstAncestorByKind(ts.SyntaxKind.Block) || parent.getSourceFile()//.sourceFile
-        const statementAncestor = parent.getAncestors().find(a=>a.getParent() === container)//TypeGuards.isStatement)
-        if(statementAncestor && container){
-          container.insertStatements(statementAncestor.getChildIndex(), `function ${options.simpleNode.getText()}(${parent.getArguments().map((a, index) => 'arg'+index+': '+a.getType().getText()).join(', ')}){
+        const statementAncestor = parent.getAncestors().find(a => a.getParent() === container)//TypeGuards.isStatement)
+        if (statementAncestor && container) {
+          container.insertStatements(statementAncestor.getChildIndex(), `function ${options.simpleNode.getText()}(${parent.getArguments().map((a, index) => 'arg' + index + ': ' + a.getType().getText()).join(', ')}){
             throw new Error('Not Implemented');
           }`)
         } // LOG else
       }// LOG else
     }
-    else{
+    else {
       // it's a variable declaration
       options.simpleNode.getSourceFile().insertText(options.simpleNode.getStart(), 'const ')
     }
 
   }
-
 }
+
+const acceptedParentKinds = [ts.SyntaxKind.BinaryExpression, ts.SyntaxKind.CallExpression]
