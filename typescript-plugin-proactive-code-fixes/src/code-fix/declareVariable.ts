@@ -7,12 +7,13 @@ import { TypeGuards } from 'ts-simple-ast';
 
 # description 
 
-declares an undeclared variable or function 
+declares undeclared variables or functions 
 
 # example
 
 a=1 // before
 const a = 1 // after
+
 const result = nonDeclared(1,2,{a: 'g}) // before
 // after:
 function nonDeclared(arg1: number, arg2: number, arg3: {a: string}) {
