@@ -30,7 +30,7 @@ class Onion extends NonExistent implements NonExistentInterface{}
  */
 export const declareClass: CodeFix = {
 
-  name: 'Declare class',
+  name: 'declareClass',
 
   config: {
     // TODO: declare it in new file ? only if user put a special comment ? 
