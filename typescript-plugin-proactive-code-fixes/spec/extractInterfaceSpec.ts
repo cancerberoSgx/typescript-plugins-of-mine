@@ -42,7 +42,7 @@ describe('declareInterface', () => {
 
   it('extract interface from class', async () => {
     const child = config.newSourceFile.getDescendantAtPos(161);
-    const arg: CodeFixOptions = { diagnostics: [], containingTarget: child.compilerNode, containingTargetLight: child.compilerNode, log, simpleNode: child, program: config.program, sourceFile: config.newSourceFile.compilerNode }
+    const arg: CodeFixOptions = { diagnostics: [], containingTarget: child.compilerNode, containingTargetLight: child.compilerNode, log, simpleNode: child, program: config.simpleProject.getProgram().compilerObject, sourceFile: config.newSourceFile.compilerNode }
     const fixes = codeFixes.filter(fix => fix.predicate(arg));
     if (!fixes || !fixes.length) {
       return fail();
@@ -56,7 +56,7 @@ describe('declareInterface', () => {
 
   it('extract interface from obj literal', async () => {
     const child = config.newSourceFile.getDescendantAtPos(641);
-    const arg: CodeFixOptions = { diagnostics: [], containingTarget: child.compilerNode, containingTargetLight: child.compilerNode, log, simpleNode: child, program: config.program, sourceFile: config.newSourceFile.compilerNode }
+    const arg: CodeFixOptions = { diagnostics: [], containingTarget: child.compilerNode, containingTargetLight: child.compilerNode, log, simpleNode: child, program: config.simpleProject.getProgram().compilerObject, sourceFile: config.newSourceFile.compilerNode }
     const fixes = codeFixes.filter(fix => fix.predicate(arg));
     if (!fixes || !fixes.length) {
       return fail();

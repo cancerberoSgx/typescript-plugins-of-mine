@@ -13,7 +13,7 @@ describe('tests', () => {
 
   beforeEach(() => {
     const result  = defaultBeforeEach({projectPath});
-    program = result.program
+    program = result.simpleProject.getProgram().compilerObject
     simpleProject = result.simpleProject
   });
 

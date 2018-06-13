@@ -35,7 +35,7 @@ export const addReturnStatement: CodeFix = {
       return true
     }
     else {
-      arg.log(`predicate false because child.kind===${kind} dont include any of ${kindToIncludeAnyOf.join(', ')}`)
+      arg.log(`predicate false because code is not 2355 or child.kind===${kind} dont include any of ${kindToIncludeAnyOf.join(', ')}`)
       return false
     }
   },

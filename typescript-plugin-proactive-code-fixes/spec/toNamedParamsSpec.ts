@@ -15,7 +15,7 @@ describe('tonamedParams', () => {
 
   it('basic', async () => {
     const child = config.newSourceFile.getDescendantAtPos(41);
-    const arg: CodeFixOptions = { diagnostics: [], containingTarget: child.compilerNode, containingTargetLight: child.compilerNode, log, simpleNode: child, program: config.program, sourceFile: config.newSourceFile.compilerNode }
+    const arg: CodeFixOptions = { diagnostics: [], containingTarget: child.compilerNode, containingTargetLight: child.compilerNode, log, simpleNode: child, program: config.simpleProject.getProgram().compilerObject, sourceFile: config.newSourceFile.compilerNode }
     const fixes = codeFixes.filter(fix => fix.predicate(arg));
     if (!fixes || !fixes.length) {
       return fail();

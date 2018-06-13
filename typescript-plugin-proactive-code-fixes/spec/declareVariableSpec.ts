@@ -7,25 +7,25 @@ import { defaultBeforeEach } from './testUtil';
 
 describe('tests', () => {
   let simpleProject: Project
-  let program: ts.Program
+  // let program: ts.Program
   const projectPath = `assets/sampleProject1_1_copy`;
   const log = (msg)=>{};//console.log
 
   beforeEach(() => {
     const result  = defaultBeforeEach({projectPath});
-    program = result.program
+    // program = result.program
     simpleProject = result.simpleProject
   });
 
   it('Declare variable fix', async () => {
     const sourceFile = simpleProject.getSourceFiles().find(sf => sf.getFilePath().includes(`src/index.ts`));
     const cursorPosition = 61
-    const diagnostics = getDiagnosticsInCurrentLocation(program, sourceFile.compilerNode, cursorPosition);
+    const diagnostics = getDiagnosticsInCurrentLocation(simpleProject.getProgram().compilerObject, sourceFile.compilerNode, cursorPosition);
     if (!diagnostics || !diagnostics.length) {
       return fail();
     }
     const child = sourceFile.getDescendantAtPos(cursorPosition);
-    const arg: CodeFixOptions = { diagnostics, containingTarget: child.compilerNode, containingTargetLight: child.compilerNode, log, simpleNode: child, program, sourceFile: sourceFile.compilerNode }
+    const arg: CodeFixOptions = { diagnostics, containingTarget: child.compilerNode, containingTargetLight: child.compilerNode, log, simpleNode: child, program: simpleProject.getProgram().compilerObject, sourceFile: sourceFile.compilerNode }
     const fixes = codeFixes.filter(fix => fix.predicate(arg));
     if (!fixes || !fixes.length) {
       return fail();
