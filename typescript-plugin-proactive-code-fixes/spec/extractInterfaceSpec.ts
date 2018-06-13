@@ -65,7 +65,7 @@ describe('declareInterface', () => {
     expect(!!fix.predicate(arg)).toBe(true)
     fix.apply(arg)
     
-    expect(removeWhiteSpaces(config.newSourceFile.getText(), ' ')).toContain(`const obj21: Iobj21 = { // suggested from anywhere inside the object literal expression color: 'red', creationDate: new Date(), foo: () => Promise.resolve([new Date()]), bar(greet: string): Promise<string[]> { return null } } interface Iobj21 { color: string; creationDate: any; foo(): any; bar(greet: string): Promise<string[]>; }`)
+    expect(removeWhiteSpaces(config.newSourceFile.getText(), ' ')).toContain(`const obj21: Iobj21 = { // suggested from anywhere inside the object literal expression color: 'red', creationDate: new Date(), foo: () => Promise.resolve([new Date()]), bar(greet: string): Promise<string[]> { return null } } interface Iobj21 { color: string; creationDate: Date; foo(): any; bar(greet: string): Promise<string[]>; }`)
   })
 
   afterEach(() => {
