@@ -6,7 +6,7 @@ The objective is to provide most refactor suggestions for agile code development
 
 In general refactors are non aggressive so the shouldn't do harm. Still more testing is needed and some suggestions appear where they shouldn't or viceversa doesn's appear in al places where they should. Still I think it's useful and is sowly reaching the objective. 
 
-# Fixes
+# Fixes and Refactors
 
 A lot is still to be fixed and implemented but we have several helpful and stable fixes working already:
 
@@ -40,7 +40,12 @@ A lot is still to be fixed and implemented but we have several helpful and stabl
  * [Arrow Functions - add / remove body braces](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-proactive-code-fixes#arrow-functions-remove-and-add-body-braces).  
  * [Extract interface from class or object literal declaration](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-proactive-code-fixes#extract-interface-from-class-or-object-literal-declaration). 
  * [Delegate Methods to Property](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-proactive-code-fixes#delegate-methods-to-property)
+ * Transform string literal concatenations into template literals and viceversa. (WIP)
 
+# Formatting
+
+ * change string literal quotes
+ * remove empty lines form selected region 
 
 
 and more to come!!

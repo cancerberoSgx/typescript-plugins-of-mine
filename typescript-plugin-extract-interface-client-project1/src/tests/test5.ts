@@ -10,7 +10,7 @@ function main(): Alpha {
 
 
 // add missing const
-value1 = 1
+value1444 = 1
 
 
 
@@ -18,7 +18,7 @@ value1 = 1
 
 // change const to let
 const value2 = '1'
-value12 = '2'
+value2 = '2'
 
 
 

@@ -31,6 +31,10 @@ const result = nonDeclared(1,2,{a: 'g})
 
  * test with jsdoc or a trailing comment
 
+ * Not offering for nonDeclared: ```afterEach(()=>{
+    nonDeclared(config)
+  })```
+
 */
 export const codeFixCreateVariable: CodeFix = {
 
