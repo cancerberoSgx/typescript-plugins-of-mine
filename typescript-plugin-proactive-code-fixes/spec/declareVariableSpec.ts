@@ -3,17 +3,14 @@ import  Project, { TypeGuards } from 'ts-simple-ast';
 import * as ts from 'typescript';
 import { getDiagnosticsInCurrentLocation } from 'typescript-ast-util';
 import { codeFixes, CodeFixOptions } from '../src/codeFixes';
-import { defaultBeforeEach } from './testUtil';
+import { defaultBeforeEach, defaultLog } from './testUtil';
 
 describe('tests', () => {
   let simpleProject: Project
-  // let program: ts.Program
   const projectPath = `assets/sampleProject1_1_copy`;
-  const log = (msg)=>{};//console.log
 
   beforeEach(() => {
     const result  = defaultBeforeEach({projectPath});
-    // program = result.program
     simpleProject = result.simpleProject
   });
 
@@ -25,7 +22,7 @@ describe('tests', () => {
       return fail();
     }
     const child = sourceFile.getDescendantAtPos(cursorPosition);
-    const arg: CodeFixOptions = { diagnostics, containingTarget: child.compilerNode, containingTargetLight: child.compilerNode, log, simpleNode: child, program: simpleProject.getProgram().compilerObject, sourceFile: sourceFile.compilerNode }
+    const arg: CodeFixOptions = { diagnostics, containingTarget: child.compilerNode, containingTargetLight: child.compilerNode, log: defaultLog, simpleNode: child, program: simpleProject.getProgram().compilerObject, sourceFile: sourceFile.compilerNode }
     const fixes = codeFixes.filter(fix => fix.predicate(arg));
     if (!fixes || !fixes.length) {
       return fail();

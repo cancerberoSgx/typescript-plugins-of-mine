@@ -9,7 +9,7 @@ describe('const2let', () => {
     config = defaultBeforeEach({ createNewFile: code })
   })
   it('basic', async () => {
-    basicTest(25, config, 'const2let', `let constant2 = 1`)
+    basicTest(25, config, 'const2let', [`let constant2 = 1`])
   })
   afterEach(() => {
     defaultAfterEach(config)

@@ -15,7 +15,7 @@ describe('declareClass', () => {
     config  = defaultBeforeEach({createNewFile: code})
   })
   it('Declare class when extending non existent', () => {
-    basicTest(19, config, 'declareClass', `class NonExistent {`)
+    basicTest(19, config, 'declareClass', [`class NonExistent {`])
   })
   afterEach(() => {
     defaultAfterEach(config)

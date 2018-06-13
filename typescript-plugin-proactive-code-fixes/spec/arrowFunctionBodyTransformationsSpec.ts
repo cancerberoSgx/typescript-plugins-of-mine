@@ -14,7 +14,7 @@ describe('arrowFunctionBodyTransformations', () => {
     config = defaultBeforeEach({ createNewFile: code })
   })
   it('add body single arg no parenth', async () => {
-    basicTest(30, config, 'arrowFunctionTransformations', `return 'hello' + o1`)
+    basicTest(30, config, 'arrowFunctionTransformations', [`return 'hello' + o1`])
   })
   afterEach(() => {
     defaultAfterEach(config)

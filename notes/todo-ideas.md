@@ -175,6 +175,10 @@ and that will generate an error "code": "2304","message": "Cannot find name 'Eva
 
  * (difficulty: low, usefulness: low) dirty js typechecking with property existence: 	"code": "2339", "message": "Property 'compilerNode' does not exist on type 'Node<Node> | Node'.\n  Property 'compilerNode' does not exist on type 'Node'.", correct  dumpAst(node.compilerNode || node) to be dumpAst((node as any).compilerNode || node)
 
+
+ * signature refactor : this is very ambitious, but, we can start with small useful things, like property of a param rename or transforming from type T to T[]
+
+ 
 ##  other ideas
 
 

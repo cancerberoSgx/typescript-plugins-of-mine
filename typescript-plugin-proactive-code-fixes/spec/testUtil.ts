@@ -25,8 +25,6 @@ export function defaultBeforeEach(config: DefaultBeforeEachInput): DefaultBefore
     newSourceFile = simpleProject.createSourceFile('tmp/sourceFileTmp__' + Date.now() + '.ts', '')
     if (typeof config.createNewFile === 'string') {
       newSourceFile.addStatements(config.createNewFile)
-      // simpleProject.saveSync()
-      // newSourceFile.saveSync()
     }
   }
   return Object.assign({}, config, { simpleProject, newSourceFile })
@@ -56,7 +54,6 @@ export function removeWhiteSpaces(s: string, sep: string = ''): string {
   return s.replace(/\s+/gm, sep)
 }
 export function defaultAfterEach(config: DefaultBeforeEachResult) {
-  // shell.rm('-rf', config.projectPath)
   if (config.newSourceFile)
     config.newSourceFile.deleteImmediatelySync()
 }
@@ -77,7 +74,7 @@ export function findLocationActiveFix(start: number, end: number, config: Defaul
 
 export function defaultLog(msg) { }
 
-export function basicTest(position: number, config: DefaultBeforeEachResult, fixerToContain: string, assertBeforeNotContainCode: string,  assertAfterContainCode: string = assertBeforeNotContainCode ) {
+export function basicTest(position: number, config: DefaultBeforeEachResult, fixerToContain: string, assertBeforeNotContainCode: string[],  assertAfterContainCode: string[] = assertBeforeNotContainCode ) {
   const child = config.newSourceFile.getDescendantAtPos(position)
   const diagnostics = getDiagnosticsInCurrentLocation(config.simpleProject.getProgram().compilerObject, config.newSourceFile.compilerNode, position)
   const arg: CodeFixOptions = { diagnostics, containingTarget: child.compilerNode, containingTargetLight: child.compilerNode, log: defaultLog, simpleNode: child, program: config.simpleProject.getProgram().compilerObject, sourceFile: config.newSourceFile.compilerNode }
@@ -88,7 +85,11 @@ export function basicTest(position: number, config: DefaultBeforeEachResult, fix
   }
   const fix = expectToContainFixer(fixes, fixerToContain)
   expect(!!fix.predicate(arg)).toBe(true)
-  expect(removeWhiteSpaces(config.newSourceFile.getText(), ' ')).not.toContain(assertBeforeNotContainCode)
+  assertBeforeNotContainCode.forEach(s=>expect(removeWhiteSpaces(config.newSourceFile.getText(), ' ')).not.toContain(s))
+  // expect(removeWhiteSpaces(config.newSourceFile.getText(), ' ')).not.toContain(assertBeforeNotContainCode)
+  // console.log(removeWhiteSpaces(config.newSourceFile.getText(), ' '));
   fix.apply(arg)
-  expect(removeWhiteSpaces(config.newSourceFile.getText(), ' ')).toContain(assertAfterContainCode)
+  assertAfterContainCode.forEach(s=>expect(removeWhiteSpaces(config.newSourceFile.getText(), ' ')).toContain(s))
+  // console.log(removeWhiteSpaces(config.newSourceFile.getText(), ' '));
+  // expect(removeWhiteSpaces(config.newSourceFile.getText(), ' ')).toContain(assertAfterContainCode)
 }
