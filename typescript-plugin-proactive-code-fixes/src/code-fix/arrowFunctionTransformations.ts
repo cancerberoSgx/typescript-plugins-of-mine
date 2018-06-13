@@ -33,7 +33,7 @@ export const arrowFunctionBodyTransformations: CodeFix = {
   predicate: (options: CodeFixOptions): boolean => {
     description = undefined
     const arrow = findAscendant<ts.ArrowFunction>(options.containingTargetLight, ts.isArrowFunction, true)
-    if (arrow.body.getChildren().find(c => c.kind === ts.SyntaxKind.OpenBraceToken)) {
+    if (arrow && arrow.body.getChildren().find(c => c.kind === ts.SyntaxKind.OpenBraceToken)) {
       // means it has a body {}
       if (arrow.body.getChildren()[1].kind === ts.SyntaxKind.SyntaxList && arrow.body.getChildren()[1].getChildCount() > 1) {
         // Means it has more than one statement - meaning braces cannot be removed
@@ -42,7 +42,7 @@ export const arrowFunctionBodyTransformations: CodeFix = {
         description = DESCRIPTION_REMOVE_BODY
       }
     }
-    else {
+    else if(arrow){
       description = DESCRIPTION_ADD_BODY
     }
     return !!description

@@ -24,10 +24,6 @@
     "path": "typescript-plugin-move-declaration"
   },
   {
-    "name": "typescript-plugin-method-delegate",
-    "path": "typescript-plugin-method-delegate"
-  },
-  {
     "name": "typescript-plugin-proactive-code-fixes",
     "path": "typescript-plugin-proactive-code-fixes"
   },

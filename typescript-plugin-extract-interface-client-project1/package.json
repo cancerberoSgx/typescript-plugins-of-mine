@@ -25,8 +25,6 @@
   },
   "devDependencies": {
     "typescript-plugin-add-type": "file:../typescript-plugin-add-type",
-    "typescript-plugin-extract-interface": "file:../typescript-plugin-extract-interface",
-    "typescript-plugin-method-delegate": "file:../typescript-plugin-method-delegate",
     "typescript-plugin-move-declaration": "file:../typescript-plugin-move-declaration",
     "typescript-plugin-move-file": "file:../typescript-plugin-move-file",
     "typescript-plugin-postfix": "file:../typescript-plugin-postfix"

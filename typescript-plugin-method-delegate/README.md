@@ -1,3 +1,9 @@
+# Obsolete
+
+obsolete by typescript-plugin-proactive-code-fixes - code fix methodDelegate. 
+
+
+
 # typescript-plugin-method-delegate
 
 

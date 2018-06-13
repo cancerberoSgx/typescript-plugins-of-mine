@@ -34,9 +34,9 @@
       // {
       //   "name": "typescript-plugin-move-declaration"
       // },
-      {
-        "name": "typescript-plugin-method-delegate"
-      },
+      // {
+      //   "name": "typescript-plugin-method-delegate"
+      // },
       
     ]
   }

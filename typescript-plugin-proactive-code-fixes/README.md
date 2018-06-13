@@ -39,6 +39,7 @@ A lot is still to be fixed and implemented but we have several helpful and stabl
  * [Transform parameter list into single "named" parameter](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-proactive-code-fixes#transform-parameter-list-into-single-object-parameter). Splits variable declaration list in individual variable statements. 
  * [Arrow Functions - add / remove body braces](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-proactive-code-fixes#arrow-functions-remove-and-add-body-braces).  
  * [Extract interface from class or object literal declaration](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-proactive-code-fixes#extract-interface-from-class-or-object-literal-declaration). 
+ * [Delegate Methods to Property](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-proactive-code-fixes#delegate-methods-to-property)
 
 
 
@@ -109,9 +110,15 @@ Demo in Atom editor:
 
 ![Arrow Function - remove - add body braces vscode editor demo](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-proactive-code-fixes/doc-assets/arrowFunctionsBodyTransformationsVsCode.gif?raw=true?p=.gif)
 
+
 ## Extract interface from class or object literal declaration
 
 ![Extract interface from class or object literal declaration vscode editor demo](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-proactive-code-fixes/doc-assets/extractInterfaceVsCode.gif?raw=true?p=.gif)
+
+
+## Delegate Methods to Property
+
+![Delegate Methods to Property-  vscode editor demo](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-proactive-code-fixes/doc-assets/delegateMethodVisualCode.gif?raw=true?p=.gif)
 
 
 ## Declare classes and interfaces
