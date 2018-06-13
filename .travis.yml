@@ -1,0 +1,10 @@
+language: node_js
+node_js:
+    - "10"
+before_script:
+    - npm install && npx yamat run npm install && npx yamat run npm run build
+script:
+    - yamat run npm test
+    - cd typescript-plugin-proactive-code-fixes && npm run test-coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
+after_script:
+    - npm run code-verification

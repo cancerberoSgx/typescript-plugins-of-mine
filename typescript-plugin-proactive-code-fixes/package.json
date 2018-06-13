@@ -6,6 +6,7 @@
   "typings": "dist/src/typings.d.ts",
   "scripts": {
     "test": "ts-node node_modules/jasmine/bin/jasmine",
+    "test-coverage": "nyc --clean --reporter=lcov -e .ts -x \"*Spec.ts\" ts-node node_modules/jasmine/bin/jasmine --config=./spec/support/jasmine.json",
     "doc": "exit 0",
     "watch": "tsc --watch",
     "build": "tsc",
@@ -34,6 +35,7 @@
     "@types/node": "^10.3.2",
     "@types/shelljs": "^0.8.0",
     "jasmine": "^3.1.0",
+    "nyc": "^11.7.1",
     "shelljs": "^0.8.2",
     "ts-node": "^6.1.0"
   },

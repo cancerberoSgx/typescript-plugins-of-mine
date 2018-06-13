@@ -8,3 +8,5 @@ assets
 src
 .vscode
 dist/spec
+/coverage
+/.nyc_output

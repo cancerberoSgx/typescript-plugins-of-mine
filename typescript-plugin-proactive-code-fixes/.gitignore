@@ -8,3 +8,5 @@ dist
 *.log
 tmp
 *_copy
+/coverage
+/.nyc_output
