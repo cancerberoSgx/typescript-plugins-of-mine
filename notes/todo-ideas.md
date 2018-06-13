@@ -17,7 +17,7 @@ Each project has its own TODO but here are some general ones:
  * Question: Performance and production:  Because of performance, should I pack useful plugins these plugins toughener in a single plugin to redistribute  so e request the AST / lang service minimal ? - regarding this - probably it is better to delegate more responsibility to plugin-util (impls of getapplicationrefactor/editRefactor) and plugins to be more like codefixs in project proactive-code-fixes. o(plugins implementations more desattached to ts api.)
 
  * build "Incremental build support using the language services" from https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API so we can debug the whole experience in debugger instead of debugging using plugin manually in the editor!  -- tried but failed see project typescript-plugin-test-helper - everything OKK but my custom plugins are not installed. tried a lot. even also with simple-ast.. report issue to ts. 
- * 
+ 
  
 
 ## plugin ideas - (refactor - code fix)
@@ -58,15 +58,21 @@ should suggest changing fixing the return type and the result of applying it sho
 
  * (d: m, u: m) facilitate handling foo.getSomeCouldBeUndefined().bar() in strict mode . Create local variable and (localVar1=foo.getSomeCouldBeUndefined()) && localVar.bar() - dont want to use ! or "orThrow" - when dont want to throw - we want to if() or continue. optional: adding ! could be configurable
 
+ * (done by typescript team) async await - "code": "1308",	"message": "'await' expression is only allowed within an async function.", - on that error - add the missing async keyword to parent signatured node. Enhancement : Fix the return type declared for it 
 
- * Inline local refactoring  https://github.com/Microsoft/TypeScript/issues/18459 <<--- this one perhaps amerits its own project
+ * (d: m, u: h) change string literal from " to ' or ` - escaping inner chars that might contain. 
+  
+ * (d: s, u: h) : wrap word or selection inside a temptae string with ${}
+
+
+ * Inline lol refactoring  https://github.com/Microsoft/TypeScript/issues/18459 <<--- this one perhaps amerits its own project
  * Reorder Parameters Refactoring https://msdn.microsoft.com/en-us/library/5ss5z206.aspx
 
- * (d: d/h, u: h) change function/method signature from arguments to single object argument: method("a", 1234, true, {s: '1'}) to method({{param1: 'a', param2: 1234, param3: true, param4: {s: '1'}}})  ... .probably would be nice if user can configure the name of parameters (sing text-based-user-interaction) - is this one : https://github.com/Microsoft/TypeScript/issues/23552
+ * (d: d/h, u: h) (done) change function/method signature from arguments to single object argument: method("a", 1234, true, {s: '1'}) to method({{param1: 'a', param2: 1234, param3: true, param4: {s: '1'}}})  ... .probably would be nice if user can configure the name of parameters (sing text-based-user-interaction) - is this one : https://github.com/Microsoft/TypeScript/issues/23552
 
  * transform between arrow to funcs related: https://github.com/Microsoft/TypeScript/issues/23299
 
- * add braces to arrow funcs -related: https://github.com/Microsoft/TypeScript/issues/23299 (others did this)
+ * (d: m, u: high) (done) add braces to arrow funcs aand viceversaa-related: https://github.com/Microsoft/TypeScript/issues/23299 (others did this)
  
  * fix signature of implementation methods and members in general: 	"code": "2416",  "message": "Property 'method1' in type 'A' is not assignable to the same property in base type 'IA'.\n  Type '() => void' is not assignable to type '() => string'.\n    Type 'void' is not assignable to type 'string'.",
  
@@ -75,6 +81,8 @@ should suggest changing fixing the return type and the result of applying it sho
  * good ideas for js : https://github.com/xsburg/vscode-javascript-booster - interesting using babel to parse typescript
  
  * not refactor but interesting enough https://marketplace.visualstudio.com/items?itemName=ipatalas.vscode-postfix-ts
+
+ * (d:m, u:h) refactor to rename variables to camel, mayus, and underscode style like someColor to some_color and SomeColor and Some_Color, etc
 
  * (d:low, u: medium)  convert from a&&f() to if(a){f} - we use && when hurry but hard to understand. but could be complex in case of ex1$$ex2&&ex3. If we extend to ore than 2 expressinos (d: medium, u: low)
 
@@ -134,13 +142,12 @@ function a(){}
  * (d: l, u: m) (done) declare undeclared variables: const = 4     throw the error :    "code": "1134",   "message": "Variable declaration expected.",  add a dummy variable identifier. 
 
 
- * refactor to remove all empty new lines in the selection
+ * (d:s,u:m) (done )refactor to remove all empty new lines in the selection
 
  * (d:s,u:s)	"code": "2448",	"message": "Block-scoped variable 'findInterfacesWithPropertyNamed' used before its declaration.",
  
  
- * (done) crate type from return value : two ideas for agile type definition and refactor:
-
+ * (d: m, u: s/m) (done) crate type from return value : two ideas for agile type definition and refactor:
  * (done)  (useful and cheap). Title: declare new type from return value. Imagine you componse this function that returns a rich object: 
  ```
 function doEval(string, context: EvalContext) {

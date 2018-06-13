@@ -75,7 +75,6 @@ export class MethodDelegate implements CodeFix {
   }
 
   apply(arg: CodeFixOptions): ts.ApplicableRefactorInfo[] | void {
-    const t0 = now()
     const propertyDeclaration = (TypeGuards.isPropertyDeclaration(arg.simpleNode) || TypeGuards.isPropertySignature(arg.simpleNode)) ? arg.simpleNode : arg.simpleNode.getAncestors().find(a => TypeGuards.isPropertyDeclaration(a) || TypeGuards.isPropertySignature(a))
     if (!propertyDeclaration) {
       arg.log(`apply aborted because no ancestor PropertyDeclaration can be found from  ${arg.simpleNode.getKindName()}`)
@@ -91,7 +90,6 @@ export class MethodDelegate implements CodeFix {
     else {
       arg.log(`apply aborted because typeguards didn't applied for typeDeclaration:${typeDeclaration.getKindName()}, propertyDeclaration:${propertyDeclaration.getKindName()}`)
     }
-    arg.log(`apply took ${now() - t0}`)
   }
 }
 

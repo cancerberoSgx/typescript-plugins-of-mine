@@ -1,4 +1,4 @@
-import { ClassDeclaration, ExpressionWithTypeArguments, FunctionLikeDeclaration, InterfaceDeclaration, MethodSignature, Node, ParameterDeclaration, ParameterDeclarationStructure, SyntaxKind, Type, TypeGuards } from "ts-simple-ast";
+import { ClassDeclaration, ExpressionWithTypeArguments, FunctionLikeDeclaration, InterfaceDeclaration, MethodSignature, Node, ParameterDeclaration, ParameterDeclarationStructure, SyntaxKind, Type, TypeGuards, StringLiteral, NoSubstitutionTemplateLiteral } from "ts-simple-ast";
 
 
 export const buildParameterStructure = (p: ParameterDeclaration): ParameterDeclarationStructure => ({
@@ -116,4 +116,13 @@ export function getName(node: Node, defaultName: string = 'unknown_name'): strin
   const a = node as any
   let id
   return a && a.getName && a.getName() || (id = node.getDescendantsOfKind(SyntaxKind.Identifier)) && id.getText() || defaultName
+}
+
+export function quote(s, q) {
+  return q + s + q
+}
+export function changeQuoteChar(node: StringLiteral | NoSubstitutionTemplateLiteral, newQuoteChar: string) {
+  const newLiteral = node.getLiteralText().replace(new RegExp(`${newQuoteChar}`, 'gmi'), `\\${newQuoteChar}`)
+  const newText = quote(newLiteral, newQuoteChar)
+  node.replaceWithText(newText)
 }
