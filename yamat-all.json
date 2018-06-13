@@ -8,8 +8,24 @@
     "path": "typescript-plugin-util"
   },
   {
+    "name": "sample-ts-plugin1",
+    "path": "sample-ts-plugin1"
+  },
+  {
+    "name": "typescript-plugin-extract-interface",
+    "path": "typescript-plugin-extract-interface"
+  },
+  {
     "name": "typescript-plugin-ast-inspector",
     "path": "typescript-plugin-ast-inspector"
+  },
+  {
+    "name": "typescript-plugin-subclasses-of",
+    "path": "typescript-plugin-subclasses-of"
+  },
+  {
+    "name": "typescript-plugin-add-type",
+    "path": "typescript-plugin-add-type"
   },
   {
     "name": "typescript-plugins-text-based-user-interaction",
@@ -30,6 +46,10 @@
   {
     "name": "typescript-plugin-proactive-code-fixes",
     "path": "typescript-plugin-proactive-code-fixes"
+  }, 
+  {
+    "name": "sample-ts-plugin1-sample-project",
+    "path": "sample-ts-plugin1-sample-project"
   },
   {
     "name": "typescript-plugin-extract-interface-client-project1",

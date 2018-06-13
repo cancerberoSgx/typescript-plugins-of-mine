@@ -22,11 +22,9 @@ in your `tsconfig.json`, add the plugin:
 ```json
 {
   "compilerOptions": {
-    ...
     "plugins": [{
         "name": "typescript-plugin-add-type"
     }]
-    ...
   }
 }
 ```
@@ -41,7 +39,7 @@ Make sure you have installed typescript in your project (`npm i --save-dev types
 
 
 TODO/IDEAS
-
+ * moe this to ast-inspector and make this separate plugin obsolete
 * generics / static types ? 
 * what about a tool that add all missing types to all named declarations in the entire sourcefile ? 
 * what about a tool that remove all the explicit types that can be removed with out introducing a compilation error ? (so code is cleaned)

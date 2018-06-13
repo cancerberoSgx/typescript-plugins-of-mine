@@ -26,6 +26,7 @@ let arr = []
 It doesn't attack any error diagnostic.
 
 # TODO
+ * unsplit variables - if we are in a more than one var decl statement 
  * config
 */
 
