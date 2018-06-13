@@ -67,10 +67,28 @@ export function findLocationActiveFix(start: number, end: number, config: Defaul
     const child = file.getDescendantAtPos(i);
     if (!child) return
     const diagnostics = getDiagnosticsInCurrentLocation(program, file.compilerNode, i)
-    const arg: CodeFixOptions = { diagnostics, containingTarget: child.compilerNode, containingTargetLight: child.compilerNode, log: (msg) => { }, simpleNode: child, program, sourceFile: file.compilerNode }
+    const arg: CodeFixOptions = { diagnostics, containingTarget: child.compilerNode, containingTargetLight: child.compilerNode, log: defaultLog, simpleNode: child, program, sourceFile: file.compilerNode }
     const fix = codeFixes.filter(fix => fix.predicate(arg) && fix.name === fixName);
     if (fix && fix.length) {
       return i
     }
   }
+}
+
+export function defaultLog(msg) { }
+
+export function basicTest(position: number, config: DefaultBeforeEachResult, fixerToContain: string, assertBeforeNotContainCode: string,  assertAfterContainCode: string = assertBeforeNotContainCode ) {
+  const child = config.newSourceFile.getDescendantAtPos(position)
+  const diagnostics = getDiagnosticsInCurrentLocation(config.simpleProject.getProgram().compilerObject, config.newSourceFile.compilerNode, position)
+  const arg: CodeFixOptions = { diagnostics, containingTarget: child.compilerNode, containingTargetLight: child.compilerNode, log: defaultLog, simpleNode: child, program: config.simpleProject.getProgram().compilerObject, sourceFile: config.newSourceFile.compilerNode }
+  const fixes = codeFixes.filter(fix => fix.predicate(arg))
+  // console.log(child.getKindName(), diagnostics, fixes)
+  if (!fixes || !fixes.length) {
+    return fail('no fixes found with true predicate')
+  }
+  const fix = expectToContainFixer(fixes, fixerToContain)
+  expect(!!fix.predicate(arg)).toBe(true)
+  expect(removeWhiteSpaces(config.newSourceFile.getText(), ' ')).not.toContain(assertBeforeNotContainCode)
+  fix.apply(arg)
+  expect(removeWhiteSpaces(config.newSourceFile.getText(), ' ')).toContain(assertAfterContainCode)
 }
