@@ -7,3 +7,4 @@ spec
 assets
 src
 .vscode
+dist/spec
