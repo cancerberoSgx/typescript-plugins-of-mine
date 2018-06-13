@@ -2,6 +2,7 @@ import * as shell from 'shelljs';
 import Project, { SourceFile } from 'ts-simple-ast';
 import { getDiagnosticsInCurrentLocation } from 'typescript-ast-util';
 import { CodeFix, codeFixes, CodeFixOptions } from '../src/typings';
+import { ScriptTarget } from '../../typescript-ast-util/node_modules/typescript/lib/tsserverlibrary';
 
 export function defaultBeforeEach(config: DefaultBeforeEachInput): DefaultBeforeEachResult {
   let simpleProject: Project
@@ -15,8 +16,7 @@ export function defaultBeforeEach(config: DefaultBeforeEachInput): DefaultBefore
   else {
     simpleProject = new Project({
       compilerOptions: {
-        tsConfigFilePath: "./tsconfig.json",
-        addFilesFromTsConfig: false
+        target:ScriptTarget.ES2018
       }
     })
   }
