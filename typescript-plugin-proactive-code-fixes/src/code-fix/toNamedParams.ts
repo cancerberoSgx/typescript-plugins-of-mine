@@ -44,6 +44,7 @@ export const toNamedParameters: CodeFix = {
     // TODO: create interface decl in a separate file ? 
     inNewFile: false
   },
+  
   predicate: (arg: CodeFixOptions): boolean => {
     const param = findAscendant<ts.VariableDeclarationList>(arg.containingTargetLight, ts.isParameter, true)
     if (!param) {
