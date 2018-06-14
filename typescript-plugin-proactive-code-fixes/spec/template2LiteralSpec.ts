@@ -18,8 +18,17 @@ describe('template2Literal', () => {
   it('to template basic', async () => {
     basicTest(110, config, 'template2Literal', ['const concat1 = `hello ${name}`'])
   })
-  it('to template complex concat', async () => {
+  it('to template complex concat token 1', async () => {
     basicTest(145, config, 'template2Literal', ['const concat2 = `hello ${name}. Have a good ${day}` const concat3'])
+  })
+  it('to template complex concat token 2', async () => {
+    basicTest(154, config, 'template2Literal', ['const concat2 = `hello ${name}. Have a good ${day}` const concat3'])
+  })
+  it('to template complex concat token 3', async () => {
+    basicTest(166, config, 'template2Literal', ['const concat2 = `hello ${name}. Have a good ${day}` const concat3'])
+  })
+  it('to template complex concat token 4', async () => {
+    basicTest(166, config, 'template2Literal', ['const concat2 = `hello ${name}. Have a good ${day}` const concat3'])
   })
   //TODO: make the other complex case concat3
   afterEach(() => {

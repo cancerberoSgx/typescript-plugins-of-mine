@@ -52,7 +52,7 @@ export class Template2Literal implements CodeFix {
     else if (binToken === '+') {
       const tc = arg.program.getTypeChecker()
       if (this.isString(bin.left, tc) || this.isString(bin.right, tc)) {
-        this.action = 'changeConcatenationToTemplate' // TODO: not implemented yet so we are not offering yet
+        this.action = 'changeConcatenationToTemplate'
       }
     }
     return !!this.action;
@@ -76,8 +76,17 @@ export class Template2Literal implements CodeFix {
     }
     if (this.action === 'changeConcatenationToTemplate') {
       const tc = arg.simpleProject.getProgram().getTypeChecker()
-      const innerStringConcatExpr = node.getAncestors()
-      .find(a => TypeGuards.isBinaryExpression(a) && a.getOperatorToken().getText() === '+' && (this.isString2(a.getLeft(), tc) || this.isString2(a.getRight(), tc))) as BinaryExpression
+      let innerStringConcatExpr = node.getAncestors()
+      .find(a => TypeGuards.isBinaryExpression(a) && a.getOperatorToken().getText() === '+' 
+        && (this.isString2(a.getLeft(), tc) || this.isString2(a.getRight(), tc))
+      )  as BinaryExpression
+
+      // now we look the more leftest child to start with it
+      let expr = innerStringConcatExpr
+      while((expr = expr.getLeft() as BinaryExpression) && TypeGuards.isBinaryExpression(expr)){
+        innerStringConcatExpr = expr
+      }
+      
       if (!innerStringConcatExpr) {
         arg.log('changeConcatenationToTemplate aborted - no outerStringConcatExpression found')
         return
@@ -99,8 +108,12 @@ export class Template2Literal implements CodeFix {
     arr.push(quote(expr.getHead().getLiteralText(), q))
     expr.getTemplateSpans().forEach(span => {
       // TODO: recurse on expressions that have templateExpressions
-      // TODO: only wrap in paren if there is more than one descentant expression
-      arr.push('(' + span.getExpression().getText() + ')')
+
+      // heads up : Only wrap in paren if there is more than one descentant expression
+      const expr = span.getExpression()
+      const wrapInParen = TypeGuards.isConditionalExpression(expr) || (TypeGuards.isBinaryExpression(expr) && expr.getOperatorToken().getText()==='+' && (TypeGuards.isBinaryExpression(expr.getParent())||expr.getFirstDescendantByKind(ts.SyntaxKind.BinaryExpression)) ) || TypeGuards.isBinaryExpression(expr) && expr.getOperatorToken().getText()!=='+'  // TODO: probably there are other cases missing here. 
+
+      arr.push((wrapInParen ? '(' : '') + expr.getText() + (wrapInParen ? ')' : ''))
       arr.push(quote(span.getLiteral().getLiteralText(), q))
     })
     text = (this.config.wrapStringConcatenationWithParenthesis ? '( ' : '') + arr.join(' + ') + (this.config.wrapStringConcatenationWithParenthesis ? ' )' : '')
@@ -116,15 +129,17 @@ export class Template2Literal implements CodeFix {
     while((expr = expr.getParent()) && TypeGuards.isBinaryExpression(expr)){
       this.stringConcatExpr2Template(expr, tc)
     }
+    // console.log({text: this.exprBuffer});
     const text = `\`${this.exprBuffer.join('')}\``
+    
     expr.getFirstChildByKind(ts.SyntaxKind.BinaryExpression)!.replaceWithText(text)
   }
 
   private stringConcatExpr2Template(expr: BinaryExpression, tc: TypeChecker, firstTime: boolean=false) {
-    //TODO: this shall be recursive - from bottom to top
     const left = expr.getLeft()
     const right = expr.getRight()
-    let leftText: string = expr.getLeft().getText(), rightText: string = expr.getRight().getText()
+    let leftText: string = expr.getLeft().getText()
+    let rightText: string = expr.getRight().getText()
     if (TypeGuards.isStringLiteral(left)) {
       leftText = left.getLiteralText()
     }
@@ -147,7 +162,7 @@ export class Template2Literal implements CodeFix {
     const t = tc.getTypeAtLocation(expr)
     return t.isStringLiteral() ? true : t.getSymbol() ? !!t.getSymbol().getDeclarations().find(d => tc.getTypeAtLocation(d).isStringLiteral()) : false
   }
-  
+
   private isString2(expr: Expression, tc: TypeChecker): boolean {
     const t = tc.getTypeAtLocation(expr)
     return t.isStringLiteral() ? true : t.getSymbol() ? !!t.getSymbol().getDeclarations().find(d => tc.getTypeAtLocation(d).isStringLiteral()) : false
