@@ -16,13 +16,14 @@ export function defaultBeforeEach(config: DefaultBeforeEachInput): DefaultBefore
   else {
     simpleProject = new Project({
       compilerOptions: {
-        target:ScriptTarget.ES2018
-      }
+        target: ScriptTarget.ES2018,
+      },
+      // useVirtualFileSystem: true
     })
   }
   let newSourceFile: SourceFile
   if (config.createNewFile) {
-    newSourceFile = simpleProject.createSourceFile('tmp/sourceFileTmp__' + Date.now() + '.ts', '')
+    newSourceFile = simpleProject.createSourceFile('tmp/sourceFileTmp__' + Date.now() + '.ts', '', {})
     if (typeof config.createNewFile === 'string') {
       newSourceFile.addStatements(config.createNewFile)
     }
@@ -74,20 +75,29 @@ export function findLocationActiveFix(start: number, end: number, config: Defaul
 
 export function defaultLog(msg) { }
 
-export function basicTest(position: number, config: DefaultBeforeEachResult, fixerToContain: string, assertBeforeNotContainCode: string[],  assertAfterContainCode: string[] = assertBeforeNotContainCode, verbose: boolean=false ) {
+export function basicTest(position: number, config: DefaultBeforeEachResult, fixerToContain: string, assertBeforeNotContainCode: string[], assertAfterContainCode: string[] = assertBeforeNotContainCode, verbose: boolean = false, transformText: string | false = ' ') {
+
   const child = config.newSourceFile.getDescendantAtPos(position)
   const diagnostics = getDiagnosticsInCurrentLocation(config.simpleProject.getProgram().compilerObject, config.newSourceFile.compilerNode, position)
-  const arg: CodeFixOptions = { diagnostics, containingTarget: child.compilerNode, containingTargetLight: child.compilerNode, log: defaultLog, simpleNode: child, program: config.simpleProject.getProgram().compilerObject, sourceFile: config.newSourceFile.compilerNode }
+  const arg: CodeFixOptions = {
+    simpleProject: config.simpleProject,
+    diagnostics, containingTarget: child.compilerNode, containingTargetLight: child.compilerNode, log: defaultLog, simpleNode: child, program: config.simpleProject.getProgram().compilerObject, sourceFile: config.newSourceFile.compilerNode
+  }
   const fixes = codeFixes.filter(fix => fix.predicate(arg))
-  // console.log(child.getKindName(), diagnostics, fixes)
   if (!fixes || !fixes.length) {
     return fail('no fixes found with true predicate')
   }
   const fix = expectToContainFixer(fixes, fixerToContain)
   expect(!!fix.predicate(arg)).toBe(true)
-  assertBeforeNotContainCode.forEach(s=>expect(removeWhiteSpaces(config.newSourceFile.getText(), ' ')).not.toContain(s))
-  if(verbose){console.log(removeWhiteSpaces(config.newSourceFile.getText(), ' '));}
+  let text = transformText === false ? config.newSourceFile.getText() : removeWhiteSpaces(config.newSourceFile.getText(), transformText)
+  assertBeforeNotContainCode.forEach(s => expect(text).not.toContain(s))
+  if (verbose) {
+    console.log(text, ' ')
+  }
   fix.apply(arg)
-  assertAfterContainCode.forEach(s=>expect(removeWhiteSpaces(config.newSourceFile.getText(), ' ')).toContain(s))
-  if(verbose){console.log(removeWhiteSpaces(config.newSourceFile.getText(), ' '));}
+  text = transformText === false ? config.newSourceFile.getText() : removeWhiteSpaces(config.newSourceFile.getText(), transformText)
+  assertAfterContainCode.forEach(s => expect(text).toContain(s))
+  if (verbose) {
+    console.log(text, ' ')
+  }
 }

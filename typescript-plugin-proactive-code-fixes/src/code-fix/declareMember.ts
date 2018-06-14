@@ -99,6 +99,7 @@ export const declareMember: CodeFix = {
     }
     const expressionWithTheType = accessExpr.getParent().getKind() === ts.SyntaxKind.CallExpression ?
       accessExpr.getParent().getParent() : accessExpr.getParent()
+      // console.log(expressionWithTheType.getText(), typeChecker.getTypeAtLocation(expressionWithTheType).getText());
     const newMemberType_ = typeChecker.getTypeAtLocation(expressionWithTheType).getBaseTypeOfLiteralType()
     // now we extract arguments in case is a method call, example: const k = hello.mama(1,2,3)+' how are you?'-.
     let args_
@@ -116,9 +117,9 @@ export const declareMember: CodeFix = {
 
 
 // now we need to get the target declaration and add the member. It could be an object literal decl{}, an interface decl or a class decl
-const fixTargetDecl = (targetNode: tsa.Node, newMemberName, newMemberType, args, print) => {
+const fixTargetDecl = (targetNode: tsa.Node, newMemberName: string, newMemberType: tsa.Type, args: { name: string, type: tsa.Type }[], print: (msg: string) => void) => {
   let decls
-  if (TypeGuards.isExpressionedNode(targetNode)||TypeGuards.isLeftHandSideExpressionedNode(targetNode)) {
+  if (TypeGuards.isExpressionedNode(targetNode) || TypeGuards.isLeftHandSideExpressionedNode(targetNode)) {
     decls = targetNode.getExpression().getSymbol().getDeclarations()
   } else if (targetNode && targetNode.getKindName().endsWith('Declaration')) {
     decls = [targetNode]
@@ -142,10 +143,10 @@ const fixTargetDecl = (targetNode: tsa.Node, newMemberName, newMemberType, args,
           return print(`WARNING  !TypeGuards.isObjectLiteralExpression(targetInit) targetInit.getKindName() === ${targetInit && targetInit.getKindName()} targetInit.getText() === ${targetInit && targetInit.getText()}  d.getKindName() === ${d && d.getKindName()} d.getText() === ${d && d.getText()}`)
         }
         else if (!args) {
-          targetInit.addPropertyAssignment({ 
+          targetInit.addPropertyAssignment({
             //TODO: use ast getstructure. we are not considering: jsdoc, hasquestion, modifiers, etc
-            name: newMemberName, 
-            initializer: 'null' 
+            name: newMemberName,
+            initializer: 'null'
           })
         }
         else {
@@ -154,10 +155,10 @@ const fixTargetDecl = (targetNode: tsa.Node, newMemberName, newMemberType, args,
             name: newMemberName,
             returnType: newMemberType.getText(),
             bodyText: `throw new Error('Not Implemented')`,
-            parameters: args.map(a => ({ 
+            parameters: args.map(a => ({
               //TODO: use ast getstructure. we are not considering: jsdoc, hasquestion, modifiers, etc
-              name: a.name, 
-              type: a.type.getText() 
+              name: a.name,
+              type: a.type.getText()
             }))
           })
         }
@@ -179,9 +180,9 @@ const fixTargetDecl = (targetNode: tsa.Node, newMemberName, newMemberType, args,
       }
     } else if (TypeGuards.isClassDeclaration(d)) {
       if (!args) {
-        d.addProperty({ 
-          name: newMemberName, 
-          type: newMemberType.getText() 
+        d.addProperty({
+          name: newMemberName,
+          type: newMemberType.getText()
         })
       } else {
         d.addMethod({

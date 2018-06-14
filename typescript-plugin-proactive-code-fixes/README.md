@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/cancerberoSgx/typescript-plugins-of-mine.svg?branch=master)](https://travis-ci.org/cancerberoSgx/typescript-plugins-of-mine)
+[![Coverage Status](https://coveralls.io/repos/cancerberoSgx/typescript-plugins-of-mine/badge.svg)](https://coveralls.io/r/cancerberoSgx/typescript-plugins-of-mine)
+
 # typescript-plugin-proactive-code-fixes
 
 TypeScript Langauge Service Plugin with several small proactive code refactors to solve errors (diagnostics) like creating constructor when a non existent one is invoked, declaring a variable or class when non existent one is defined, reassigning a const, etc. The tool is based both on the context of the user and on the current diagnostic error in cursor position / selection
