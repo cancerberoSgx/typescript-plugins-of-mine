@@ -99,7 +99,6 @@ export const declareMember: CodeFix = {
     }
     const expressionWithTheType = accessExpr.getParent().getKind() === ts.SyntaxKind.CallExpression ?
       accessExpr.getParent().getParent() : accessExpr.getParent()
-      // console.log(expressionWithTheType.getText(), typeChecker.getTypeAtLocation(expressionWithTheType).getText());
     const newMemberType_ = typeChecker.getTypeAtLocation(expressionWithTheType).getBaseTypeOfLiteralType()
     // now we extract arguments in case is a method call, example: const k = hello.mama(1,2,3)+' how are you?'-.
     let args_

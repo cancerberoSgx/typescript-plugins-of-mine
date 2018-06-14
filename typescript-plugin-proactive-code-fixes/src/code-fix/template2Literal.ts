@@ -28,23 +28,23 @@ utilities related to strings:
 
 export class Template2Literal implements CodeFix {
 
-  name = 'Template2Literal'
+  name = 'template2Literal'
 
   config = {
     // TODO: so we also transform all expressions recursively from/to templateexpressions - stringliterals
     recurseOnTemplateExpressions: false,
-    souroundStringConcatenationWithParenthesis: false
+    wrapStringConcatenationWithParenthesis: false
   }
 
-  action: 'changeToLiteral'|'changeToTemplate'|undefined;
+  action: 'changeToLiteral' | 'changeToTemplate' | undefined;
   expr: ts.TemplateExpression;
 
   predicate(arg: CodeFixOptions): boolean {
     this.action = undefined
-    if(ts.isStringLiteral(arg.containingTargetLight)){
+    if (ts.isStringLiteral(arg.containingTargetLight)) {
       this.action = 'changeToTemplate'
     }
-    else if(ts.isNoSubstitutionTemplateLiteral(arg.containingTargetLight) || ts.isTemplateExpression(arg.containingTargetLight) || (this.expr=findAscendant<ts.TemplateExpression>(arg.containingTargetLight, ts.isTemplateExpression, true))) {
+    else if (ts.isNoSubstitutionTemplateLiteral(arg.containingTargetLight) || ts.isTemplateExpression(arg.containingTargetLight) || (this.expr = findAscendant<ts.TemplateExpression>(arg.containingTargetLight, ts.isTemplateExpression, true))) {
       this.action = 'changeToLiteral'
     }
     return !!this.action;
@@ -56,33 +56,39 @@ export class Template2Literal implements CodeFix {
 
   apply(arg: CodeFixOptions): ts.ApplicableRefactorInfo[] | void {
     const node = arg.simpleNode
-    const changeTo = '"'
+    // const changeTo = '"'
     const templateExpr = TypeGuards.isNoSubstitutionTemplateLiteral(node) || TypeGuards.isTemplateExpression(node) ? node : node.getFirstAncestorByKind(ts.SyntaxKind.TemplateExpression)
 
     if (templateExpr && TypeGuards.isTemplateExpression(templateExpr)) {
-      this.templateExprToStringConcat(templateExpr, '"')
+      this.templateExprToStringConcat(templateExpr, '"', arg)
     }
     else {
-      arg.log('apply aborted - target node was not a string literal nor a stringtemplate expression or descendant. target node is '+node.getText() + ' - kind: '+node.getKindName())
+      arg.log('apply aborted - target node was not a string literal nor a stringtemplate expression or descendant. target node is ' + node.getText() + ' - kind: ' + node.getKindName())
     }
   }
 
-  private templateExprToStringConcat(expr: TemplateExpression|NoSubstitutionTemplateLiteral, q: string) {
-    let text:string
-    if(TypeGuards.isNoSubstitutionTemplateLiteral(expr)){
+  private templateExprToStringConcat(expr: TemplateExpression | NoSubstitutionTemplateLiteral, q: string, arg: CodeFixOptions) {
+    let text: string
+    if (TypeGuards.isNoSubstitutionTemplateLiteral(expr)) {
       changeQuoteChar(expr, '\'') //TODO: default quotes in case of NoSubstitutionTemplateLiteral ? 
       return
     }
     const arr = []
     arr.push(quote(expr.getHead().getLiteralText(), q))
     expr.getTemplateSpans().forEach(span => {
-      arr.push(span.getExpression().getText()) // TODO: recurse on expressions that have templateExpressions
+      // TODO: recurse on expressions that have templateExpressions
+      // TODO: only wrap in paren if there is more than one descentant expression
+      arr.push('(' + span.getExpression().getText() + ')') 
       arr.push(quote(span.getLiteral().getLiteralText(), q))
     })
-    text = (this.config.souroundStringConcatenationWithParenthesis ? '( ':'') + arr.join(' + ') + (this.config.souroundStringConcatenationWithParenthesis ? ' )':'')
+    text = (this.config.wrapStringConcatenationWithParenthesis ? '( ' : '') + arr.join(' + ') + (this.config.wrapStringConcatenationWithParenthesis ? ' )' : '')
+
+    // text = `( ${arr.join(' + ')} )`
+    arg.log('replacing with text : ' + text)
+
     expr.replaceWithText(text)
   }
-  
+
 }
 
 export const template2Literal = new Template2Literal()

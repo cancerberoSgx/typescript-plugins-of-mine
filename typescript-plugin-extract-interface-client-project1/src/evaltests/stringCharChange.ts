@@ -1,9 +1,8 @@
 const s = 'he"llo" `pwd` from don\'t'
 const s2 = 'hello `pwd`  string'
 const s3 = "no replaces here"
-const tpl = "hello " + 'seba' + " tomorrow " + new Date().toString() + " will be " + `another ${'day'}` + " ..."
-const tpl2 = ("hello " + 'seba' + " tomorrow " + new Date().toString() + " will be " + `another ${'day'}` + " ...")
-
+const name = ''
+const t1 = `hello ${name} we are "glad" ${'you'} have ${1 + 2 + 3} years old`
 
 import { NoSubstitutionTemplateLiteral, StringLiteral, TemplateExpression, TypeGuards } from 'ts-simple-ast';
 import * as ts from 'typescript';
@@ -16,7 +15,7 @@ function evaluateMe() {
   print = c.print
   const args = c
   const changeTo = '"'
-  const position = 14
+  const position = 136
   const sourceFile = c.project.createSourceFile(`tmp/extractInterfaceNewOne${Date.now()}.ts`, c.node.getSourceFile().getText())
   let node = sourceFile.getDescendantAtPos(position)
 
@@ -42,7 +41,7 @@ function evaluateMe() {
 
 
   if (TypeGuards.isStringLiteral(node) || TypeGuards.isNoSubstitutionTemplateLiteral(node)) {
-    print('sebaa' + node.compilerNode.getText())
+    // print('sebaa' + node.compilerNode.getText())
     changeQuoteChar(node, changeTo)
     return
   }

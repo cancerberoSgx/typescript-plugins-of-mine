@@ -119,10 +119,10 @@ export function getName(node: Node, defaultName: string = 'unknown_name'): strin
 }
 
 export function quote(s, q) {
-  return q + s + q
+  const newLiteral = s.replace(new RegExp(`${q}`, 'gmi'), `\\${q}`)
+  return q + newLiteral + q
 }
 export function changeQuoteChar(node: StringLiteral | NoSubstitutionTemplateLiteral, newQuoteChar: string) {
-  const newLiteral = node.getLiteralText().replace(new RegExp(`${newQuoteChar}`, 'gmi'), `\\${newQuoteChar}`)
-  const newText = quote(newLiteral, newQuoteChar)
+  const newText = quote(node.getLiteralText(), newQuoteChar)
   node.replaceWithText(newText)
 }
