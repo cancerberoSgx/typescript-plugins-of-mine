@@ -1,7 +1,9 @@
-[![Build Status](https://travis-ci.org/cancerberosgx/typescript-plugins-of-mine.svg?branch=master)](https://travis-ci.org/cancerberosgx/typescript-plugins-of-mine)
-[![Coverage Status](https://coveralls.io/repos/cancerberosgx/typescript-plugins-of-mine/badge.svg)](https://coveralls.io/r/cancerberosgx/typescript-plugins-of-mine)
+[![Build Status](https://travis-ci.org/cancerberoSgx/typescript-plugins-of-mine.svg?branch=master)](https://travis-ci.org/cancerberoSgx/typescript-plugins-of-mine)
+[![Coverage Status](https://coveralls.io/repos/cancerberoSgx/typescript-plugins-of-mine/badge.svg)](https://coveralls.io/r/cancerberoSgx/typescript-plugins-of-mine)
 
-Experiments with typescript compiler API, and Language Service plugins.
+
+TypeScript Language Service plugins for useful code fixes and refactors available in other typed languages IDEs ike Java / eclipse. Most of them are currently being implemented [sub-package typescript-plugin-proactive-code-fixes](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-proactive-code-fixes). See there for details and live demo. 
+ 
 
 
 ## List of work produced: 
@@ -26,7 +28,7 @@ By far the most important package that implement all the "interesting refactors"
    atom - but should work on many more!)
  * See [Project home](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-move-file)
  * See it in Action: 
- * ![See it in Action: ](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-move-file/doc-assets/vs-code-move-file.gif?raw=true?p=.gif)
+ <!-- * ![See it in Action: ](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-move-file/doc-assets/vs-code-move-file.gif?raw=true?p=.gif) -->
  * see more demos in other editors in [Project home](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-move-file)
 
 ### typescript-plugin-move-declaration
@@ -40,8 +42,8 @@ By far the most important package that implement all the "interesting refactors"
    atom - but should work on many more!)
  * Uses [ts-simple-ast](https://dsherret.github.io/ts-simple-ast)
  * See [Project home](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-move-declaration)
- * See it in Action: ![Moving an interface to another
-   file](https://raw.githubusercontent.com/cancerberoSgx/typescript-plugins-of-mine/master/typescript-plugin-move-declaration/doc-assets/vscode-move-interface.gif)
+ <!-- * See it in Action: ![Moving an interface to another
+   file](https://raw.githubusercontent.com/cancerberoSgx/typescript-plugins-of-mine/master/typescript-plugin-move-declaration/doc-assets/vscode-move-interface.gif) -->
  
 ### typescript-plugin-add-type
 
@@ -49,7 +51,7 @@ By far the most important package that implement all the "interesting refactors"
  * well-tested - **safe to use**
  * If user selects an identifier that has no explicit type declared this plugin will suggest you to automatically add the type inferred by the compiler. 
  * [Project](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-add-type)
- * DEMO: ![Adding types in Visual studio Code Editor](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-add-type/doc-assets/vscode.gif?raw=true?p=.gif)
+ <!-- * DEMO: ![Adding types in Visual studio Code Editor](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-add-type/doc-assets/vscode.gif?raw=true?p=.gif) -->
 
 
 
@@ -60,8 +62,8 @@ By far the most important package that implement all the "interesting refactors"
  * user has to select (part of) the name of class of interface for refactor to be suggested
  * prints the output at the end of current file with links to the exact position (ctrl-click will take you there)
  * See it in action: 
- * ![subclasses-of screencast
-   WIP](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-subclasses-of/doc-assets/screencast.gif?raw=true?p=.gif)
+ <!-- * ![subclasses-of screencast
+   WIP](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-subclasses-of/doc-assets/screencast.gif?raw=true?p=.gif) -->
  * See [Project home](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-subclasses)
 
 ### typescript-plugin-ast-util
@@ -91,8 +93,8 @@ The result of my first steps dealing with TypeScript Language Service. I was so 
  * well-tested - **safe to use**
  * suggest a refactor to create delegate methods to selected property
  * See it in action: 
- * ![subclasses-of screencast
-   WIP](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-method-delegate/doc-assets/vscode.gif?raw=true?p=.gif)
+ <!-- * ![subclasses-of screencast
+   WIP](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-method-delegate/doc-assets/vscode.gif?raw=true?p=.gif) -->
  * See [Project home](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-method-delegate)
 
 ### typescript-plugin-extract-interface
@@ -102,7 +104,7 @@ The result of my first steps dealing with TypeScript Language Service. I was so 
  * While inside a class, when you select something it activates and suggest "Extract interface". It generates the interface right after the class declaration. 
  * [Project](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-extract-interface)
  * See it in Action: 
- * ![See it in Action: ](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-extract-interface/doc-assets/extract-interface.gif?raw=true?p=.gif)
+ <!-- * ![See it in Action: ](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-extract-interface/doc-assets/extract-interface.gif?raw=true?p=.gif) -->
 
 
 ### utility projects
@@ -141,7 +143,7 @@ While developing these I realized There was too much repeated code so I ended up
 ## Status
 
  * fun and learning. Exiting with TLS APIs and w the fact this is working on more than one editor coherently. 
- * main focus on proactive-code-fixes
+ * main focus on [sub-package typescript-plugin-proactive-code-fixes](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-proactive-code-fixes)
  * more and more ideas come to mind while I'm programming so its both things impl and requirements
  * plugins not tested exhaustive - objective more a demo and performance tests (proof of concepts) than production ready product
  * there are some old (firsts) plugins that probably are broken and need a review to use "newer technologies" (extract-interface, method-delegate)
