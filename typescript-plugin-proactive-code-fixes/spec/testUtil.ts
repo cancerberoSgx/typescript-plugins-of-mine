@@ -86,10 +86,8 @@ export function basicTest(position: number, config: DefaultBeforeEachResult, fix
   const fix = expectToContainFixer(fixes, fixerToContain)
   expect(!!fix.predicate(arg)).toBe(true)
   assertBeforeNotContainCode.forEach(s=>expect(removeWhiteSpaces(config.newSourceFile.getText(), ' ')).not.toContain(s))
-  // expect(removeWhiteSpaces(config.newSourceFile.getText(), ' ')).not.toContain(assertBeforeNotContainCode)
   // console.log(removeWhiteSpaces(config.newSourceFile.getText(), ' '));
   fix.apply(arg)
   assertAfterContainCode.forEach(s=>expect(removeWhiteSpaces(config.newSourceFile.getText(), ' ')).toContain(s))
   // console.log(removeWhiteSpaces(config.newSourceFile.getText(), ' '));
-  // expect(removeWhiteSpaces(config.newSourceFile.getText(), ' ')).toContain(assertAfterContainCode)
 }

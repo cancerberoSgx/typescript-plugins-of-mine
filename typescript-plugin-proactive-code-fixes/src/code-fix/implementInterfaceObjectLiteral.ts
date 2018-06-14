@@ -23,9 +23,7 @@ const tree2: Living = {
 
 # attacks
   "code": "2322",// 	"message": "Type '{}' is not assignable to type 'Living'.\n  Property 'name' is missing in type '{}'.",
-  
 
-  
 # TODO
 
 * arrows  - this doesn't work: 

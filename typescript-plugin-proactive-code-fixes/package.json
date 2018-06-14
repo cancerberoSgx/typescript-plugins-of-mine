@@ -34,6 +34,7 @@
     "@types/jasmine": "^2.8.8",
     "@types/node": "^10.3.2",
     "@types/shelljs": "^0.8.0",
+    "coveralls": "^3.0.1",
     "jasmine": "^3.1.0",
     "nyc": "^11.7.1",
     "shelljs": "^0.8.2",
