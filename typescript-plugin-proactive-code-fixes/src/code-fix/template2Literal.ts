@@ -1,4 +1,4 @@
-import { BinaryExpression, Expression, NoSubstitutionTemplateLiteral, TemplateExpression, TypeChecker, TypeGuards } from "ts-simple-ast";
+import { BinaryExpression, Expression, NoSubstitutionTemplateLiteral, TemplateExpression, TypeChecker, TypeGuards, Node } from "ts-simple-ast";
 import * as ts from 'typescript';
 import { findAscendant } from "typescript-ast-util";
 import { CodeFix, CodeFixOptions } from "../codeFixes";
@@ -36,7 +36,6 @@ export class Template2Literal implements CodeFix {
   }
 
   action: 'changeToLiteral' | 'changeToTemplate' | 'changeConcatenationToTemplate' | undefined;
-  // expr: ts.TemplateExpression;
 
   predicate(arg: CodeFixOptions): boolean {
     this.action = undefined
@@ -77,15 +76,13 @@ export class Template2Literal implements CodeFix {
     }
     if (this.action === 'changeConcatenationToTemplate') {
       const tc = arg.simpleProject.getProgram().getTypeChecker()
-      const outerStringConcatExpression = node.getAncestors()
-        .find(a => TypeGuards.isBinaryExpression(a) && a.getOperatorToken().getText() === '+' && (this.isString2(a.getLeft(), tc) || this.isString2(a.getRight(), tc))) as BinaryExpression
-      // .reverse()
-      // .find(a => TypeGuards.isBinaryExpression(a) && (isString2(a.getLeft(), tc) || isString2(a.getRight(), tc))) as BinaryExpression
-      if (!outerStringConcatExpression) {
+      const innerStringConcatExpr = node.getAncestors()
+      .find(a => TypeGuards.isBinaryExpression(a) && a.getOperatorToken().getText() === '+' && (this.isString2(a.getLeft(), tc) || this.isString2(a.getRight(), tc))) as BinaryExpression
+      if (!innerStringConcatExpr) {
         arg.log('changeConcatenationToTemplate aborted - no outerStringConcatExpression found')
         return
       }
-      this.stringConcatExpr2Template(outerStringConcatExpression, tc)
+      this.stringConcatExpr2TemplateRecursively(innerStringConcatExpr, tc)
     }
     else {
       arg.log('action not implemented yet : ' + this.action)
@@ -107,21 +104,23 @@ export class Template2Literal implements CodeFix {
       arr.push(quote(span.getLiteral().getLiteralText(), q))
     })
     text = (this.config.wrapStringConcatenationWithParenthesis ? '( ' : '') + arr.join(' + ') + (this.config.wrapStringConcatenationWithParenthesis ? ' )' : '')
-    log('replacing with text : ' + text)
-
+    log('replacing with text : ' + text);
     expr.replaceWithText(text)
   }
 
-  private isString(expr: ts.Expression, tc: ts.TypeChecker): boolean {
-    const t = tc.getTypeAtLocation(expr)
-    return t.isStringLiteral() ? true : t.getSymbol() ? !!t.getSymbol().getDeclarations().find(d => tc.getTypeAtLocation(d).isStringLiteral()) : false
-  }
-  private isString2(expr: Expression, tc: TypeChecker): boolean {
-    const t = tc.getTypeAtLocation(expr)
-    return t.isStringLiteral() ? true : t.getSymbol() ? !!t.getSymbol().getDeclarations().find(d => tc.getTypeAtLocation(d).isStringLiteral()) : false
+  private exprBuffer = []
+  private stringConcatExpr2TemplateRecursively(exprBase: BinaryExpression, tc: TypeChecker) {
+    this.exprBuffer = []
+    let expr: Node = exprBase
+    this.stringConcatExpr2Template(exprBase, tc, true)
+    while((expr = expr.getParent()) && TypeGuards.isBinaryExpression(expr)){
+      this.stringConcatExpr2Template(expr, tc)
+    }
+    const text = `\`${this.exprBuffer.join('')}\``
+    expr.getFirstChildByKind(ts.SyntaxKind.BinaryExpression)!.replaceWithText(text)
   }
 
-  private stringConcatExpr2Template(expr: BinaryExpression, tc: TypeChecker) {
+  private stringConcatExpr2Template(expr: BinaryExpression, tc: TypeChecker, firstTime: boolean=false) {
     //TODO: this shall be recursive - from bottom to top
     const left = expr.getLeft()
     const right = expr.getRight()
@@ -130,15 +129,28 @@ export class Template2Literal implements CodeFix {
       leftText = left.getLiteralText()
     }
     else {
-      leftText = '${leftText}'
+      leftText = '${'+leftText+'}'
+    }
+    if(firstTime){
+      this.exprBuffer.push(leftText)
     }
     if (TypeGuards.isStringLiteral(right)) {
       rightText = right.getLiteralText()
     }
     else {
-      rightText = '${rightText}'
+      rightText = '${'+rightText+'}'
     }
-    expr.replaceWithText(`\`${leftText}${rightText}\``)
+    this.exprBuffer.push(rightText)
+  }
+
+  private isString(expr: ts.Expression, tc: ts.TypeChecker): boolean {
+    const t = tc.getTypeAtLocation(expr)
+    return t.isStringLiteral() ? true : t.getSymbol() ? !!t.getSymbol().getDeclarations().find(d => tc.getTypeAtLocation(d).isStringLiteral()) : false
+  }
+  
+  private isString2(expr: Expression, tc: TypeChecker): boolean {
+    const t = tc.getTypeAtLocation(expr)
+    return t.isStringLiteral() ? true : t.getSymbol() ? !!t.getSymbol().getDeclarations().find(d => tc.getTypeAtLocation(d).isStringLiteral()) : false
   }
 }
 

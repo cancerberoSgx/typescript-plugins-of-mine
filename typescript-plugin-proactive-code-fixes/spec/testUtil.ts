@@ -79,10 +79,9 @@ export function basicTest(position: number, config: DefaultBeforeEachResult, fix
 
   const child = config.newSourceFile.getDescendantAtPos(position)
   const diagnostics = getDiagnosticsInCurrentLocation(config.simpleProject.getProgram().compilerObject, config.newSourceFile.compilerNode, position)
-  const log = verbose ? (msg)=>console.log('DEBUG log: '+msg) : defaultLog
   const arg: CodeFixOptions = {
     simpleProject: config.simpleProject,
-    diagnostics, containingTarget: child.compilerNode, containingTargetLight: child.compilerNode, log, simpleNode: child, program: config.simpleProject.getProgram().compilerObject, sourceFile: config.newSourceFile.compilerNode
+    diagnostics, containingTarget: child.compilerNode, containingTargetLight: child.compilerNode, log: defaultLog, simpleNode: child, program: config.simpleProject.getProgram().compilerObject, sourceFile: config.newSourceFile.compilerNode
   }
   if(verbose){
     console.log(`Target node ${child.getKindName()}, text: ${child.getText()}`)
@@ -97,12 +96,13 @@ export function basicTest(position: number, config: DefaultBeforeEachResult, fix
   let text = transformText === false ? config.newSourceFile.getText() : removeWhiteSpaces(config.newSourceFile.getText(), transformText)
   assertBeforeNotContainCode.forEach(s => expect(text).not.toContain(s))
   if (verbose) {
-    console.log(text, ' ')
+    console.log(text)
   }
+  arg.log = verbose ? (msg)=>console.log('DEBUG log: '+msg) : defaultLog
   fix.apply(arg)
   text = transformText === false ? config.newSourceFile.getText() : removeWhiteSpaces(config.newSourceFile.getText(), transformText)
   assertAfterContainCode.forEach(s => expect(text).toContain(s))
   if (verbose) {
-    console.log(text, ' ')
+    console.log(text)
   }
 }
