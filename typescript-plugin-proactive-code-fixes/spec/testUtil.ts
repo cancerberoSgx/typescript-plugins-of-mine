@@ -79,9 +79,14 @@ export function basicTest(position: number, config: DefaultBeforeEachResult, fix
 
   const child = config.newSourceFile.getDescendantAtPos(position)
   const diagnostics = getDiagnosticsInCurrentLocation(config.simpleProject.getProgram().compilerObject, config.newSourceFile.compilerNode, position)
+  const log = verbose ? (msg)=>console.log('DEBUG log: '+msg) : defaultLog
   const arg: CodeFixOptions = {
     simpleProject: config.simpleProject,
-    diagnostics, containingTarget: child.compilerNode, containingTargetLight: child.compilerNode, log: defaultLog, simpleNode: child, program: config.simpleProject.getProgram().compilerObject, sourceFile: config.newSourceFile.compilerNode
+    diagnostics, containingTarget: child.compilerNode, containingTargetLight: child.compilerNode, log, simpleNode: child, program: config.simpleProject.getProgram().compilerObject, sourceFile: config.newSourceFile.compilerNode
+  }
+  if(verbose){
+    console.log(`Target node ${child.getKindName()}, text: ${child.getText()}`)
+    console.log(`Diagnostics matched in that position: ${diagnostics.map(d=>d.messageText).join(', ')}`)
   }
   const fixes = codeFixes.filter(fix => fix.predicate(arg))
   if (!fixes || !fixes.length) {
