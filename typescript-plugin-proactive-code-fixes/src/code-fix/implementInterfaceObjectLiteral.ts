@@ -100,7 +100,7 @@ export const implementInterfaceObjectLiteral: CodeFix = {
   apply: (arg: CodeFixOptions): ts.ApplicableRefactorInfo[] | void => {
     const node = arg.simpleNode
     const varDecl = TypeGuards.isVariableDeclaration(node) ? node : node.getFirstAncestorByKind(ts.SyntaxKind.VariableDeclaration)
-    let init = varDecl.getInitializerIfKind(ts.SyntaxKind.ObjectLiteralExpression)
+    const init = varDecl.getInitializerIfKind(ts.SyntaxKind.ObjectLiteralExpression)
     const declarations = varDecl.getType().getSymbol().getDeclarations()
     if (!declarations || !declarations.length) {
       arg.log(`doing nothing since !declarations || !declarations.length`)
@@ -113,38 +113,40 @@ export const implementInterfaceObjectLiteral: CodeFix = {
       }
       decl.getProperties().forEach(prop => {
         const existingProp = init.getProperty(prop.getName())
-        let oldText = ''
-        if (existingProp) {
-          oldText = existingProp.getText()
-          existingProp.remove() //TODO: we are removing good properties implementation ! 
-          existingProp.forget()
+        let oldText
+        if((existingProp && prop.getTypeNode().getText()!==existingProp.getType().getText())){ //TODO: poor's man typechecking. make a good one and put it in utils and test it !
+          if (existingProp) {
+            oldText = existingProp.getText()
+            existingProp.remove()
+          }
         }
-        init.addPropertyAssignment({ name: prop.getName(), initializer: getDefaultValueForType(prop.getType()) + (!oldText ? '' : '\n/* ORIGINAL IMPLEMENTATION: \n' + oldText + '\n*/') }).forget()
+        else if(!existingProp){
+          init.addPropertyAssignment({ name: prop.getName(), initializer: getDefaultValueForType(prop.getType()) + (!oldText ? '' : '\n/* ORIGINAL IMPLEMENTATION: \n' + oldText + '\n*/') })
+        }
       })
       decl.getMethods().forEach(method => {
         const existingProp = init.getProperty(method.getName())
         if (existingProp && TypeGuards.isMethodDeclaration(existingProp)) {
           fixSignature(existingProp, method)
-          existingProp.forget()
-          arg.log('fixSignature1')
           return
         }
         let oldText = ''
         if (existingProp) { //TODO: we are removing good properties implementation ! 
           oldText = existingProp.getText()
           existingProp.remove()
-          existingProp.forget()
         }
         init.addMethod({
           name: method.getName(),
           parameters: method.getParameters().map(buildParameterStructure),
           returnType: method.getReturnType().getText(),
           bodyText: 'throw new Error(\'Not Implemented\');' + (!oldText ? '' : '\n/* ORIGINAL IMPLEMENTATION: \n' + oldText + '\n*/')
-        }).forget()
+        })
       })
 
-      init = varDecl.getInitializerIfKind(ts.SyntaxKind.ObjectLiteralExpression)
-      init.getProperties().filter(p => !p.wasForgotten()).forEach(prop => {
+      
+      // init = varDecl.getInitializerIfKind(ts.SyntaxKind.ObjectLiteralExpression)
+      init.getProperties()
+      .forEach(prop => {
         let name
         if (TypeGuards.isPropertyAssignment(prop) || TypeGuards.isShorthandPropertyAssignment(prop)) {
           name = prop.getName()
@@ -152,7 +154,6 @@ export const implementInterfaceObjectLiteral: CodeFix = {
         else if (TypeGuards.isSpreadAssignment(prop)) {
           name = prop.getExpression().getText()
         }
-
         if (name && !decl.getProperty(name) && !decl.getMethod(name)) {
           const oldText = prop.getText()
           prop.remove();
@@ -160,7 +161,6 @@ export const implementInterfaceObjectLiteral: CodeFix = {
           const container = statement ? statement.getFirstAncestorByKind(ts.SyntaxKind.Block) || init.getSourceFile() : init.getSourceFile()
           const index = statement ? statement.getChildIndex() : 0
           container.insertStatements(index, '/* Property removed: \n' + oldText + ' \n */')
-
           arg.log('property removed ' + name)
         }
         else {

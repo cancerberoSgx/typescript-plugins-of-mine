@@ -1,4 +1,8 @@
+[![Build Status](https://travis-ci.org/cancerberosgx/typescript-plugins-of-mine.svg?branch=master)](https://travis-ci.org/cancerberosgx/typescript-plugins-of-mine)
+[![Coverage Status](https://coveralls.io/repos/cancerberosgx/typescript-plugins-of-mine/badge.svg)](https://coveralls.io/r/cancerberosgx/typescript-plugins-of-mine)
+
 Experiments with typescript compiler API, and Language Service plugins.
+
 
 ## List of work produced: 
 
@@ -10,13 +14,6 @@ By far the most important package that implement all the "interesting refactors"
  * (with lots of demos and descriptions) [Project home ](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-proactive-code-fixes)
 
 
-### typescript-plugin-extract-interface
-
- * well-tested - **safe to use**
- * While inside a class, when you select something it activates and suggest "Extract interface". It generates the interface right after the class declaration. 
- * [Project](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-extract-interface)
- * See it in Action: 
- * ![See it in Action: ](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-extract-interface/doc-assets/extract-interface.gif?raw=true?p=.gif)
 
 ### typescript-plugin-move-file
 
@@ -57,15 +54,6 @@ By far the most important package that implement all the "interesting refactors"
 
 
 
-### typescript-plugin-method-delegate
-
- * well-tested - **safe to use**
- * suggest a refactor to create delegate methods to selected property
- * See it in action: 
- * ![subclasses-of screencast
-   WIP](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-method-delegate/doc-assets/vscode.gif?raw=true?p=.gif)
- * See [Project home](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-method-delegate)
-
 ### typescript-plugin-subclasses
 
  * well-tested - **safe to use**
@@ -96,6 +84,25 @@ The result of my first steps dealing with TypeScript Language Service. I was so 
  * **[Tutorial with code](https://cancerberosgx.github.io/typescript-plugins-of-mine/sample-ts-plugin1/src/)**
  * [Project](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/sample-ts-plugin1)
 
+
+### typescript-plugin-method-delegate
+
+ * Deprecated by typescript-plugin-proactive-code-fixes moveInterface code fix refactor
+ * well-tested - **safe to use**
+ * suggest a refactor to create delegate methods to selected property
+ * See it in action: 
+ * ![subclasses-of screencast
+   WIP](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-method-delegate/doc-assets/vscode.gif?raw=true?p=.gif)
+ * See [Project home](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-method-delegate)
+
+### typescript-plugin-extract-interface
+ 
+ * Deprecated by typescript-plugin-proactive-code-fixes moveInterface code fix refactor
+ * well-tested - **safe to use**
+ * While inside a class, when you select something it activates and suggest "Extract interface". It generates the interface right after the class declaration. 
+ * [Project](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-extract-interface)
+ * See it in Action: 
+ * ![See it in Action: ](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-extract-interface/doc-assets/extract-interface.gif?raw=true?p=.gif)
 
 
 ### utility projects
