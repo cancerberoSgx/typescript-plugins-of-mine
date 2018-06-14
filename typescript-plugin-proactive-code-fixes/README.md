@@ -43,7 +43,7 @@ A lot is still to be fixed and implemented but we have several helpful and stabl
  * [Arrow Functions - add / remove body braces](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-proactive-code-fixes#arrow-functions-remove-and-add-body-braces).  
  * [Extract interface from class or object literal declaration](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-proactive-code-fixes#extract-interface-from-class-or-object-literal-declaration). 
  * [Delegate Methods to Property](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-proactive-code-fixes#delegate-methods-to-property)
- * Transform string literal concatenations into template literals and viceversa. (WIP)
+ * [Transform string concatenation into string templates and viceversa](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-proactive-code-fixes#string-concatenation-to-template-and-viceversa)
 
 # Formatting
 
@@ -126,7 +126,14 @@ Demo in Atom editor:
 
 ## Delegate Methods to Property
 
+When you want to expose the methods of a property in parent class or interface. Suggested when standing in a class or interface property.
+
 ![Delegate Methods to Property-  vscode editor demo](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-proactive-code-fixes/doc-assets/delegateMethodVisualCode.gif?raw=true?p=.gif)
+
+
+## String concatenation to templates and viceversa
+
+![String concatenation to templates and viceversa -  vscode editor demo](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-proactive-code-fixes/doc-assets/template2LiteralVsCode.gif?raw=true?p=.gif)
 
 
 ## Declare classes and interfaces
@@ -155,6 +162,8 @@ Useful for quickly prototype interfaces when writing the implementation.
  * Atom Editor
 
 ![Declare interfaces from return values - Atom Editor](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-proactive-code-fixes/doc-assets/declareReturnTypeAtom.gif?raw=true?p=.gif) 
+
+
 
 # TODO
 

@@ -22,7 +22,7 @@ utilities related to strings:
  * TaggedTemplateExpression getExpression and remove tag - has some utilitiesfor working with rxjs - perhaps we want to include those here?
  * TODO: recurse on expressions that have templateExpressions descendants
  * allow me to convert string concat (a binaryoperationexpression into a single templateExpression 
- * config
+ * console.log('a'+b+'c') -  change to template or viceversa works funny....
 */
 
 export class Template2Literal implements CodeFix {
@@ -77,16 +77,16 @@ export class Template2Literal implements CodeFix {
     if (this.action === 'changeConcatenationToTemplate') {
       const tc = arg.simpleProject.getProgram().getTypeChecker()
       let innerStringConcatExpr = node.getAncestors()
-      .find(a => TypeGuards.isBinaryExpression(a) && a.getOperatorToken().getText() === '+' 
-        && (this.isString2(a.getLeft(), tc) || this.isString2(a.getRight(), tc))
-      )  as BinaryExpression
+        .find(a => TypeGuards.isBinaryExpression(a) && a.getOperatorToken().getText() === '+'
+          && (this.isString2(a.getLeft(), tc) || this.isString2(a.getRight(), tc))
+        ) as BinaryExpression
 
       // now we look the more leftest child to start with it
       let expr = innerStringConcatExpr
-      while((expr = expr.getLeft() as BinaryExpression) && TypeGuards.isBinaryExpression(expr)){
+      while ((expr = expr.getLeft() as BinaryExpression) && TypeGuards.isBinaryExpression(expr)) {
         innerStringConcatExpr = expr
       }
-      
+
       if (!innerStringConcatExpr) {
         arg.log('changeConcatenationToTemplate aborted - no outerStringConcatExpression found')
         return
@@ -105,16 +105,23 @@ export class Template2Literal implements CodeFix {
       return
     }
     const arr = []
-    arr.push(quote(expr.getHead().getLiteralText(), q))
+    let textToPush = expr.getHead().getLiteralText()
+    if (textToPush) {
+      arr.push(quote(textToPush, q))
+    }
     expr.getTemplateSpans().forEach(span => {
       // TODO: recurse on expressions that have templateExpressions
-
       // heads up : Only wrap in paren if there is more than one descentant expression
       const expr = span.getExpression()
-      const wrapInParen = TypeGuards.isConditionalExpression(expr) || (TypeGuards.isBinaryExpression(expr) && expr.getOperatorToken().getText()==='+' && (TypeGuards.isBinaryExpression(expr.getParent())||expr.getFirstDescendantByKind(ts.SyntaxKind.BinaryExpression)) ) || TypeGuards.isBinaryExpression(expr) && expr.getOperatorToken().getText()!=='+'  // TODO: probably there are other cases missing here. 
+      const wrapInParen = TypeGuards.isConditionalExpression(expr) ||
+        (TypeGuards.isBinaryExpression(expr) && expr.getOperatorToken().getText() === '+' && (TypeGuards.isBinaryExpression(expr.getParent()) || expr.getFirstDescendantByKind(ts.SyntaxKind.BinaryExpression))) ||
+        TypeGuards.isBinaryExpression(expr) && expr.getOperatorToken().getText() !== '+'  // TODO: probably there are other cases missing here. 
 
       arr.push((wrapInParen ? '(' : '') + expr.getText() + (wrapInParen ? ')' : ''))
-      arr.push(quote(span.getLiteral().getLiteralText(), q))
+      textToPush = span.getLiteral().getLiteralText()
+      if (textToPush) {
+        arr.push(quote(textToPush, q))
+      }
     })
     text = (this.config.wrapStringConcatenationWithParenthesis ? '( ' : '') + arr.join(' + ') + (this.config.wrapStringConcatenationWithParenthesis ? ' )' : '')
     log('replacing with text : ' + text);
@@ -126,36 +133,34 @@ export class Template2Literal implements CodeFix {
     this.exprBuffer = []
     let expr: Node = exprBase
     this.stringConcatExpr2Template(exprBase, tc, true)
-    while((expr = expr.getParent()) && TypeGuards.isBinaryExpression(expr)){
+    while ((expr = expr.getParent()) && TypeGuards.isBinaryExpression(expr)) {
       this.stringConcatExpr2Template(expr, tc)
     }
-    // console.log({text: this.exprBuffer});
     const text = `\`${this.exprBuffer.join('')}\``
-    
     expr.getFirstChildByKind(ts.SyntaxKind.BinaryExpression)!.replaceWithText(text)
   }
 
-  private stringConcatExpr2Template(expr: BinaryExpression, tc: TypeChecker, firstTime: boolean=false) {
-    const left = expr.getLeft()
-    const right = expr.getRight()
-    let leftText: string = expr.getLeft().getText()
-    let rightText: string = expr.getRight().getText()
-    if (TypeGuards.isStringLiteral(left)) {
-      leftText = left.getLiteralText()
-    }
-    else {
-      leftText = '${'+leftText+'}'
-    }
-    if(firstTime){
+  private stringConcatExpr2Template(expr: BinaryExpression, tc: TypeChecker, firstTime: boolean = false) {
+    let leftText: string = this.expression2String(expr.getLeft())
+    let rightText: string = this.expression2String(expr.getRight())
+    if (firstTime && leftText) {
       this.exprBuffer.push(leftText)
     }
-    if (TypeGuards.isStringLiteral(right)) {
-      rightText = right.getLiteralText()
+    if (rightText) {
+      this.exprBuffer.push(rightText)
+    }
+  }
+
+  private expression2String(expr: Expression): string {
+    if (TypeGuards.isParenthesizedExpression(expr)) {
+      expr = expr.getExpression()
+    }
+    if (TypeGuards.isStringLiteral(expr)) {
+      return expr.getLiteralText()
     }
     else {
-      rightText = '${'+rightText+'}'
+      return '${' + expr.getText() + '}'
     }
-    this.exprBuffer.push(rightText)
   }
 
   private isString(expr: ts.Expression, tc: ts.TypeChecker): boolean {

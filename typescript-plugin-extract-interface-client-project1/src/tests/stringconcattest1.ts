@@ -1,9 +1,5 @@
-const name = 'Seba'
+const name = 'Sebastian'
 const where = 'here'
 
-const concat2 = `hello ${name}. Have a good ${where}`
-
-const template1 = `hello ${name} we are "glad" ${'you'} have ${1 + 2 + 3} years old`;
-
-
-const concat3 = 'hello ' + name + '. We are glad you are ' + where
+const msg1 = "Hello " + name + " we are \"glad\" you have " + (1 + 2 + 3) + " years old"
+const msg2 = `Hello ${name}. We are glad you are ${where}`
