@@ -74,7 +74,7 @@ export function findLocationActiveFix(start: number, end: number, config: Defaul
 
 export function defaultLog(msg) { }
 
-export function basicTest(position: number, config: DefaultBeforeEachResult, fixerToContain: string, assertBeforeNotContainCode: string[],  assertAfterContainCode: string[] = assertBeforeNotContainCode ) {
+export function basicTest(position: number, config: DefaultBeforeEachResult, fixerToContain: string, assertBeforeNotContainCode: string[],  assertAfterContainCode: string[] = assertBeforeNotContainCode, verbose: boolean=false ) {
   const child = config.newSourceFile.getDescendantAtPos(position)
   const diagnostics = getDiagnosticsInCurrentLocation(config.simpleProject.getProgram().compilerObject, config.newSourceFile.compilerNode, position)
   const arg: CodeFixOptions = { diagnostics, containingTarget: child.compilerNode, containingTargetLight: child.compilerNode, log: defaultLog, simpleNode: child, program: config.simpleProject.getProgram().compilerObject, sourceFile: config.newSourceFile.compilerNode }
@@ -86,8 +86,8 @@ export function basicTest(position: number, config: DefaultBeforeEachResult, fix
   const fix = expectToContainFixer(fixes, fixerToContain)
   expect(!!fix.predicate(arg)).toBe(true)
   assertBeforeNotContainCode.forEach(s=>expect(removeWhiteSpaces(config.newSourceFile.getText(), ' ')).not.toContain(s))
-  // console.log(removeWhiteSpaces(config.newSourceFile.getText(), ' '));
+  if(verbose){console.log(removeWhiteSpaces(config.newSourceFile.getText(), ' '));}
   fix.apply(arg)
   assertAfterContainCode.forEach(s=>expect(removeWhiteSpaces(config.newSourceFile.getText(), ' ')).toContain(s))
-  // console.log(removeWhiteSpaces(config.newSourceFile.getText(), ' '));
+  if(verbose){console.log(removeWhiteSpaces(config.newSourceFile.getText(), ' '));}
 }
