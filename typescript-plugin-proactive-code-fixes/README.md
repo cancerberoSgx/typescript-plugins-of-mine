@@ -170,7 +170,7 @@ Useful for quickly prototype interfaces when writing the implementation.
  * create a json file {production: false}. npm prepare script will change it to {production: true}. index.ts will import it and it will log and load utility plugins only if production === false so its faster on production and we can log a lot stuff and heavy utilities while development
  * config - fixes have great ideas for config but is not currently working.
  * programmatical API
- * unit test for all!
+ * unit test: test that the suggestion appear only when it should - in other words test for false positive predicate
  * generate tsdocs because all fixes are very well documented / roadmap. 
  * Performance - getAppRefactors is taking almost  sec. Make a generic predicate with cache (get which diags are in current position and cache it - make a generic predicate since almost all use the same thing)
  * apply all quick fixes in this file ! define a mechanism of priorities when two or more fixes attach the same position.

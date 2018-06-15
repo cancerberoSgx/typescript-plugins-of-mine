@@ -26,14 +26,17 @@ class a{}
 
 # TODO
 
+ * config
  * check if new variable doesn't already exists
 
 */
 export const renameVariable: CodeFix = {
 
-  name: 'Rename variable',
+  name: 'variableRename',
 
-  config: {},
+  config: {
+    //TODO: rename policy - is a postfix counter, postfix prefix, static postfix or prefix or what 
+  },
 
   predicate: (options: CodeFixOptions): boolean => {
     if (options.containingTargetLight.kind === ts.SyntaxKind.Identifier &&
@@ -55,9 +58,6 @@ export const renameVariable: CodeFix = {
       return
     }
     // TODO: check if new variable doesn't already exists
-    id.rename(id.getText() + counter++)
+    id.rename(id.getText() + '2')
   }
-
 }
-
-let counter = 2
