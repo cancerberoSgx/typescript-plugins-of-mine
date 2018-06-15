@@ -75,23 +75,32 @@ export function findLocationActiveFix(start: number, end: number, config: Defaul
 
 export function defaultLog(msg) { }
 
-export function basicTest(position: number, config: DefaultBeforeEachResult, fixerToContain: string, assertBeforeNotContainCode: string[], assertAfterContainCode: string[] = assertBeforeNotContainCode, verbose: boolean = false, transformText: string | false = ' ') {
-
+export function getCodeFixOptionsForPredicate (positionOrRange: number|number[], config: DefaultBeforeEachResult): CodeFixOptions{
+  const position = typeof positionOrRange === 'number' ? positionOrRange : positionOrRange[0]
   const child = config.newSourceFile.getDescendantAtPos(position)
   const diagnostics = getDiagnosticsInCurrentLocation(config.simpleProject.getProgram().compilerObject, config.newSourceFile.compilerNode, position)
   const arg: CodeFixOptions = {
     simpleProject: config.simpleProject,
-    diagnostics, containingTarget: child.compilerNode, containingTargetLight: child.compilerNode, log: defaultLog, simpleNode: child, program: config.simpleProject.getProgram().compilerObject, sourceFile: config.newSourceFile.compilerNode
+    diagnostics, containingTarget: child.compilerNode, containingTargetLight: child.compilerNode, log: defaultLog, simpleNode: child, program: config.simpleProject.getProgram().compilerObject, sourceFile: config.newSourceFile.compilerNode, positionOrRange: typeof positionOrRange === 'number' ? {pos: positionOrRange, end: positionOrRange} : {pos: positionOrRange[0], end: positionOrRange[1]}
   }
+  return arg
+}
+
+export function getCodeFix(arg: CodeFixOptions, fixName: string, verbose: boolean = false ): CodeFix|undefined {
   if(verbose){
-    console.log(`Target node ${child.getKindName()}, text: ${child.getText()}`)
-    console.log(`Diagnostics matched in that position: ${diagnostics.map(d=>d.messageText).join(', ')}`)
+    console.log(`Target node ${arg.simpleNode.getKindName()}, text: ${arg.simpleNode.getText()}`)
+    console.log(`Diagnostics matched in that position: ${arg.diagnostics.map(d=>d.messageText).join(', ')}`)
   }
   const fixes = codeFixes.filter(fix => fix.predicate(arg))
   if (!fixes || !fixes.length) {
-    return fail('no fixes found with true predicate')
+    fail('no fixes found with true predicate')
+    return
   }
-  const fix = expectToContainFixer(fixes, fixerToContain)
+  return expectToContainFixer(fixes, fixName)
+}
+export function basicTest(position: number, config: DefaultBeforeEachResult, fixName: string, assertBeforeNotContainCode: string[], assertAfterContainCode: string[] = assertBeforeNotContainCode, verbose: boolean = false, transformText: string | false = ' ') {
+  const arg = getCodeFixOptionsForPredicate(position, config)
+  const fix = getCodeFix(arg, fixName, verbose)
   expect(!!fix.predicate(arg)).toBe(true)
   let text = transformText === false ? config.newSourceFile.getText() : removeWhiteSpaces(config.newSourceFile.getText(), transformText)
   assertBeforeNotContainCode.forEach(s => expect(text).not.toContain(s))

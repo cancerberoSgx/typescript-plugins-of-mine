@@ -94,14 +94,14 @@ function getCodeFix(fileName: string, positionOrRange: number | ts.TextRange, en
   }
   log(`getPreEmitDiagnostics took ${timeFrom(getDiagnosticT0)}`)
   const range = positionOrRangeToRange(start+1)
-  const containingTarget = findChildContainingRange(sourceFile, range)
-  const containingTargetLight = findChildContainingRangeLight(sourceFile, range)
+  const containingTarget = findChildContainingRange(sourceFile, range)|| sourceFile
+  const containingTargetLight = findChildContainingRangeLight(sourceFile, range)|| sourceFile
   const containedTarget = findChildContainedRange(sourceFile, range) || sourceFile
-  if (!containingTarget) {
-    log(`no getCodeFix because findChildContainedRange  target node is undefined `)
-    return
-  }
-  log(`getCodeFix info: containingTarget.kind == ${getKindName(containingTarget.kind)} containedTarget.kind == ${containedTarget ? getKindName(containedTarget.kind) : 'NotContainedChild'} `)
+  // if (!containingTarget) {
+  //   log(`no getCodeFix because findChildContainedRange  target node is undefined `)
+  //   return
+  // }
+  // log(`getCodeFix info: containingTarget.kind == ${getKindName(containingTarget.kind)} containedTarget.kind == ${containedTarget ? getKindName(containedTarget.kind) : 'NotContainedChild'} `)
   const codeFixesFilterT0 = now()
   const target = { diagnostics, containingTarget, containingTargetLight, containedTarget, log, program, sourceFile, positionOrRange }
   const fixes = codeFixes.filter(fix => {

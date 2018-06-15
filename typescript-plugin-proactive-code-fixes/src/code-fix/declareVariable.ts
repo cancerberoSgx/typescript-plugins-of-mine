@@ -47,7 +47,7 @@ export const codeFixCreateVariable: CodeFix = {
       (
         acceptedParentKinds.includes(options.containingTarget.kind) ||
         options.containingTarget.parent && acceptedParentKinds.includes(options.containingTarget.parent.kind) ||
-        options.containingTarget.parent.parent && acceptedParentKinds.includes(options.containingTarget.parent.parent.kind)
+        options.containingTarget.parent && options.containingTarget.parent.parent && acceptedParentKinds.includes(options.containingTarget.parent.parent.kind)
       ) &&
       options.diagnostics.find(d => d.code === 2304 && d.start === options.containingTargetLight.getStart())) {
       return true
