@@ -1,0 +1,12 @@
+node_modules
+package-deps.json
+*.log
+doc-assets
+tmp
+spec
+assets
+src
+.vscode
+dist/spec
+/coverage
+/.nyc_output
