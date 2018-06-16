@@ -69,6 +69,19 @@ export function reorderParameters(targetDeclaration:ReferenceFindableNode&Node, 
 
 function changeCallArgs(reorder: ReadonlyArray<number>, args: ReadonlyArray<Node>) {
   type T = { index: number, arg: string, name:string }
+  // let indexOccupied = [].concat(reorder).concat(new Array(args.length-reorder.length).fill(-1)).sort()
+  let indexOccupied  = new Array(args.length).fill(-1)
+  reorder.forEach((r, i)=>{
+    if(r>=indexOccupied.length){
+      //user error provided incorrect reorder array
+    }
+    indexOccupied[r] = i
+  })
+  function findNextFreeIndexFor(index){
+    const id = indexOccupied.indexOf(-1)
+    indexOccupied[id] =index
+    return id
+  }
   let reorderedArgs: T[] = args.map((arg, i)=>{
     if (i < reorder.length) {
       return { 
@@ -80,9 +93,12 @@ function changeCallArgs(reorder: ReadonlyArray<number>, args: ReadonlyArray<Node
   }).filter(a => !!a)
   reorderedArgs.sort((a, b) => a.index < b.index ? -1 : 1)
   const missingArgs: T[]  = args.map( (arg, index) => {
-    if (!reorder.includes(index)){ 
+    // if (!reorder.includes(index)){ 
+      if (index>=reorder.length){ 
+     const newIndex = findNextFreeIndexFor(index)
+      // const targetArg =  findNextFreeIndexFor(index)
       return { 
-        index, 
+        index: newIndex, 
         arg: arg.getText() ,
         name: getName(arg)
       }
@@ -95,13 +111,19 @@ function changeCallArgs(reorder: ReadonlyArray<number>, args: ReadonlyArray<Node
   // 'missingArgs', missingArgs.map(a=>a.index+'-'+a.name) + '-'+args[0].getSourceFile().getFilePath())
 
   reorderedArgs = reorderedArgs.concat(missingArgs)
- 
+  // console.log(args[0].getSourceFile().getFilePath(), reorderedArgs, missingArgs)
+      // 'reorderedArgs', reorderedArgs.map(a=>a.index))
+
+
   const replacements = []
   args.forEach((a, index) => {
     const arg = reorderedArgs.find(r => r.index === index)
-    if (arg) {
+    // if (arg) {
+      // if (args[reorderedArgs[index].index]) {
+        // const arg =  reorderedArgs[index]//.index
+        if (arg) {
       // const prev =  `${a.getSourceFile().getFilePath()}  ${a.getText()} is replaced with =>> ${arg.arg} `
-      replacements.push({node: a, text: arg.arg})
+      replacements.push({node: args[arg.index], text: arg.arg})
       // a.replaceWithText(arg.arg)
       // console.log(`${a.getSourceFile().getFilePath()}  ${a.getText()} is replaced with =>> ${arg.arg} `);
     }else {
