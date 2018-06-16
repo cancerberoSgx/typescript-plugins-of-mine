@@ -1,25 +1,12 @@
 import { now, timeFrom } from 'hrtime-now';
-import { Project, SourceFile, SourceFileAddOptions } from 'ts-simple-ast';
+import { Project, SourceFile } from 'ts-simple-ast';
 import { findChildContainedRange, findChildContainingRange, getKindName, positionOrRangeToNumber, positionOrRangeToRange, findChildContainingRangeLight } from 'typescript-ast-util';
-import { createSimpleASTProject, getPluginCreate, LanguageServiceOptionals, getConfigFilePath } from 'typescript-plugin-util';
+import { getPluginCreate, LanguageServiceOptionals, getSimpleProject } from 'typescript-plugin-util';
 import * as ts_module from 'typescript/lib/tsserverlibrary';
 import { CodeFixOptions, codeFixes, CodeFix } from './codeFixes';
 
 const PLUGIN_NAME = 'typescript-plugin-proactive-code-fixes'
 const REFACTOR_ACTION_NAME = `${PLUGIN_NAME}-refactor-action`
-let ts: typeof ts_module
-let info: ts_module.server.PluginCreateInfo
-let log
-const pluginDefinition: LanguageServiceOptionals = { getApplicableRefactors, getEditsForRefactor }
-export = getPluginCreate(pluginDefinition, (modules, anInfo) => {
-  ts = modules.typescript
-  info = anInfo
-  log = function (msg) {
-    info.project.projectService.logger.info(`Plugin ${PLUGIN_NAME}, Fix: ${currentFix && currentFix.name}, Message: ${msg}`)
-  }
-  info.project.projectService.logger.info(`${PLUGIN_NAME} created`)
-})
-
 
 let target: CodeFixOptions
 
@@ -157,14 +144,15 @@ function applyCodeFix(fix: CodeFix,  options: CodeFixOptions,   formatOptions, p
 }
 
 
-// encapsulate simple project creation here so we can start testing caching the project and refreshing it instead of fully create it
-// TODO: should be a class in separate file
-let simpleProject: Project
-let tsConfigPath: string
-function getSimpleProject(project: ts_module.server.Project) : Project {
-  // if(!simpleProject){
-    tsConfigPath = getConfigFilePath(info.project)
-    simpleProject = createSimpleASTProject(tsConfigPath)
-  // }
-  return simpleProject
-}
+let ts: typeof ts_module
+let info: ts_module.server.PluginCreateInfo
+let log
+const pluginDefinition: LanguageServiceOptionals = { getApplicableRefactors, getEditsForRefactor }
+export = getPluginCreate(pluginDefinition, (modules, anInfo) => {
+  ts = modules.typescript
+  info = anInfo
+  log = function (msg) {
+    info.project.projectService.logger.info(`Plugin ${PLUGIN_NAME}, Fix: ${currentFix && currentFix.name}, Message: ${msg}`)
+  }
+  info.project.projectService.logger.info(`${PLUGIN_NAME} created`)
+})

@@ -142,10 +142,13 @@ function a(){}
  * (d: l, u: m) (done) declare undeclared variables: const = 4     throw the error :    "code": "1134",   "message": "Variable declaration expected.",  add a dummy variable identifier. 
 
 
- * (d:s,u:m) (done )refactor to remove all empty new lines in the selection
+ * (d:s,u:m) (done )refactor to remove all empty new lines in the selection. 
+
+ * more general than previous one (seee its impl) - user defined template-based action to remove or not a line
 
  * (d:s,u:s)	"code": "2448",	"message": "Block-scoped variable 'findInterfacesWithPropertyNamed' used before its declaration.",
  
+ * if to switch and viceversa.
  
  * (d: m, u: s/m) (done) crate type from return value : two ideas for agile type definition and refactor:
  * (done)  (useful and cheap). Title: declare new type from return value. Imagine you componse this function that returns a rich object: 

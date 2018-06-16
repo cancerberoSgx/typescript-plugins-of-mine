@@ -28,6 +28,10 @@
     "path": "typescript-plugin-proactive-code-fixes"
   },
   {
+    "name": "typescript-plugin-function-signature-refactors",
+    "path": "typescript-plugin-function-signature-refactors"
+  },
+  {
     "name": "typescript-plugin-extract-interface-client-project1",
     "path": "typescript-plugin-extract-interface-client-project1"
   }

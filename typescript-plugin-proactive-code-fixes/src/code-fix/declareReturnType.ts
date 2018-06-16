@@ -1,6 +1,3 @@
-/*
-
-*/
 
 import { fromNow, now, timeFrom } from 'hrtime-now';
 import * as tsa from 'ts-simple-ast';
@@ -8,8 +5,6 @@ import { InterfaceDeclarationStructure, TypeGuards } from 'ts-simple-ast';
 import * as ts from 'typescript';
 import { getKindName } from 'typescript-ast-util';
 import { CodeFix, CodeFixOptions } from '../codeFixes';
-import { parse } from 'path';
-
 /** 
 
 # Description

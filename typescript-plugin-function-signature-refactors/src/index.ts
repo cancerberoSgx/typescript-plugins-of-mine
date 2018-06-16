@@ -7,13 +7,28 @@ import * as ts_module from 'typescript/lib/tsserverlibrary';
 import { reorderParameters } from './reorderParams';
 import { getFunctionSimple, getTextUITool, PLUGIN_NAME, REFACTOR_ACTION_NAME } from './reorderParamsPlugin';
 
-
-
-function log(msg: string) { info.project.projectService.logger.info(`${PLUGIN_NAME} ${msg}`) }
+const log = (msg: string) => info.project.projectService.logger.info(`${PLUGIN_NAME} ${msg}`)
 let uiTool: Tool
 
+function getCompletionsAtPosition(fileName: string, position: number, options: ts_module.GetCompletionsAtPositionOptions | undefined): ts_module.CompletionInfo {
+  const prior = info.languageService.getCompletionsAtPosition(fileName, position, options)
+  if (prior) {
+    prior.entries = prior.entries.concat(uiTool.getCompletionsAtPosition(fileName, position, options))
+  }
+  return prior
+}
 
-// This should be agnostic to any plugin such as proactive's
+let selectedAction: Action
+function getApplicableRefactors(fileName: string, positionOrRange: number | ts.TextRange, userPreferences: ts.UserPreferences): ts.ApplicableRefactorInfo[] {
+  const t0 = now()
+  const result = uiTool.getApplicableRefactors(info, `${PLUGIN_NAME}-refactor`, REFACTOR_ACTION_NAME, fileName, positionOrRange, userPreferences)
+  log(`getApplicableRefactors took ${timeFrom(t0)}`)
+  selectedAction = result.selectedAction
+  return result.refactors
+}
+
+
+// TODO: This should be agnostic to any plugin such as proactive's
 function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSettings, positionOrRange: number | ts_module.TextRange, refactorName: string, actionName: string, userPreferences: ts_module.UserPreferences): ts.RefactorEditInfo | undefined {
   const t0 = now()
   const refactors = info.languageService.getEditsForRefactor(fileName, formatOptions, positionOrRange, refactorName, actionName, userPreferences)
@@ -34,25 +49,8 @@ function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSetti
   log(`getEditsForRefactor ${selectedAction.name} took  ${timeFrom(t0)}`)
 }
 
-function getCompletionsAtPosition(fileName: string, position: number, options: ts_module.GetCompletionsAtPositionOptions | undefined): ts_module.CompletionInfo {
-  const prior = info.languageService.getCompletionsAtPosition(fileName, position, options)
-  if (prior) {
-    prior.entries = prior.entries.concat(uiTool.getCompletionsAtPosition(fileName, position, options))
-  }
-  return prior
-}
-
-let selectedAction: Action
-function getApplicableRefactors(fileName: string, positionOrRange: number | ts.TextRange, userPreferences: ts.UserPreferences): ts.ApplicableRefactorInfo[] {
-  const t0 = now()
-  const result = uiTool.getApplicableRefactors(info, `${PLUGIN_NAME}-refactor`, REFACTOR_ACTION_NAME, fileName, positionOrRange, userPreferences)
-  log(`getApplicableRefactors took ${timeFrom(t0)}`)
-  selectedAction = result.selectedAction
-  return result.refactors
-}
 
 let info: ts_module.server.PluginCreateInfo
-
 const pluginDefinition: LanguageServiceOptionals = {
   getApplicableRefactors, getEditsForRefactor, getCompletionsAtPosition
 }

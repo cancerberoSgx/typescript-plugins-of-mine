@@ -40,3 +40,18 @@ export function getChildrenForEachChild(n: Node): Node[] {
 export function getName(n: Node): string {
   return (n as any).getName ? ((n as any).getName() + '') : ''
 } 
+
+
+
+// encapsulate simple project creation here so we can start testing caching the project and refreshing it instead of fully create it
+
+
+export function getSimpleProject(project: ts_module.server.Project) : Project {
+  // TODO: try to cache and do unit test simulating TLS
+  // if(!simpleProject){
+    let tsConfigPath: string = getConfigFilePath(project)
+    let simpleProject: Project = createSimpleASTProject(tsConfigPath)
+  // }
+  return simpleProject
+}
+
