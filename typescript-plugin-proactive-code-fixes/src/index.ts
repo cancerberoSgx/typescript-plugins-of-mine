@@ -30,9 +30,6 @@ function getApplicableRefactors(fileName: string, positionOrRange: number | ts.T
 }
 
 
-
-
-
 function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSettings, positionOrRange: number | ts.TextRange, refactorName: string,   actionName: string, userPreferences: ts_module.UserPreferences): ts.RefactorEditInfo | undefined {
   const t0 = now()
   log(`getEditsForRefactor ${positionOrRange} ${refactorName} ${actionName}`)

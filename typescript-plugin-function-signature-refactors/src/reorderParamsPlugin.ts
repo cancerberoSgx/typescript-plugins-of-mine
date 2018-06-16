@@ -2,6 +2,7 @@ import * as ts from 'typescript';
 import { findAscendant, findChildContainingRangeLight, getNextSibling, getPreviousSibling, positionOrRangeToRange } from "typescript-ast-util";
 import { create, Tool, ToolConfig } from "typescript-plugins-text-based-user-interaction";
 import { SourceFile, SignaturedDeclaration, TypeGuards, NamedNode, Node } from 'ts-simple-ast';
+import { CodeFix } from 'typescript-plugin-util';
 
 
 export const PLUGIN_NAME = 'typescript-plugin-function-signature-refactors'
@@ -81,3 +82,11 @@ export function getFunctionSimple(file: SourceFile, position: number, name: stri
     return e
   }
 }
+
+class ReorderParams implements CodeFix {
+  needSimpleAst?: boolean;
+  name: string = 'reorderParams'
+  config: any = {}
+}
+
+export const reorderParams = new ReorderParams()

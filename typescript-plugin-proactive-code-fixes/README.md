@@ -13,11 +13,6 @@ In general refactors are non aggressive so the shouldn't do harm. Still more tes
 
 A lot is still to be fixed and implemented but we have several helpful and stable fixes working already:
 
-## Prototyping
-
- * declare a new class or interface when trying to extend or implement something that doesn't exist
- * [Declare an interface from return value](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-proactive-code-fixes#declare-interfaces-from-return-values)
-
 ## Fixing and refactoring variables
 
  * [Variable declaration list split in different stataments](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-proactive-code-fixes#variable-related-fixes-and-refactors)
@@ -27,8 +22,10 @@ A lot is still to be fixed and implemented but we have several helpful and stabl
  * [Change const to let when reassigning a const variable](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-proactive-code-fixes#variable-related-fixes-and-refactors) 
  * [remove readonly keyword of property declaration when trying to modify it](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-proactive-code-fixes#variable-related-fixes-and-refactors)
 
-## Implementing types
+## Implementing types / prototyping
 
+ * [Declare classes and interfaces](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-proactive-code-fixes#declare-classes-and-interfaces) when trying to extend or implement something that doesn't exist
+ * [Declare an interface from return value](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-proactive-code-fixes#declare-interfaces-from-return-values)
  * [Declare missing constructors](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-proactive-code-fixes#declare-constructors) when calling `new A(a,b)` on a class/interface that doesn't declare it
  * [Declare interface from return value](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-proactive-code-fixes#declare-interfaces-from-return-values)
  * Fix object literal so it implements its interface or class. It will adding / remove or change object literal members so it comply with its interface or class
@@ -52,6 +49,7 @@ A lot is still to be fixed and implemented but we have several helpful and stabl
 
 
 and more to come!!
+
 
 # Editor Support
 

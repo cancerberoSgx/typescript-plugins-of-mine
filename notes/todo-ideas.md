@@ -138,14 +138,15 @@ function a(){}
 	"code": "1003",
   "message": "Identifier expected.",
   
+ * refactor fragment to class method ? (from inside a method body select statements and move them to a new method) is it already supported ? 
 
  * (d: l, u: m) (done) declare undeclared variables: const = 4     throw the error :    "code": "1134",   "message": "Variable declaration expected.",  add a dummy variable identifier. 
-
 
  * (d:s,u:m) (done )refactor to remove all empty new lines in the selection. 
 
  * more general than previous one (seee its impl) - user defined template-based action to remove or not a line
 
+ * class ReorderParams implements CodeFix {} typescript nor mine proactive is suggesting to implement the interface because has missing method implementations. only for properties it works
  * (d:s,u:s)	"code": "2448",	"message": "Block-scoped variable 'findInterfacesWithPropertyNamed' used before its declaration.",
  
  * if to switch and viceversa.

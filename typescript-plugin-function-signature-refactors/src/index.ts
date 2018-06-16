@@ -4,9 +4,10 @@ import { positionOrRangeToNumber } from 'typescript-ast-util';
 import { createSimpleASTProject, getPluginCreate, LanguageServiceOptionals } from 'typescript-plugin-util';
 import { Action, Tool } from 'typescript-plugins-text-based-user-interaction';
 import * as ts_module from 'typescript/lib/tsserverlibrary';
-import { reorderParameters } from './reorderParams';
-import { getFunctionSimple, getTextUITool, PLUGIN_NAME, REFACTOR_ACTION_NAME } from './reorderParamsPlugin';
+// import { reorderParameters } from './reorderParams';
+// import { getFunctionSimple, getTextUITool, PLUGIN_NAME, REFACTOR_ACTION_NAME } from './reorderParamsPlugin';
 
+const PLUGIN_NAME = 'typescript-plugin-function-signature-refactors'
 const log = (msg: string) => info.project.projectService.logger.info(`${PLUGIN_NAME} ${msg}`)
 let uiTool: Tool
 
