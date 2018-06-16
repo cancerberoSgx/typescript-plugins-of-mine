@@ -5,6 +5,7 @@ import { CodeFix, CodeFixOptions } from '../codeFixes';
 # Description
 
 This will remove empty lines of selected range
+
 # TODO
 
  * dont remove empty lines that are inside a stringtemplate 

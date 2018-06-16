@@ -97,11 +97,6 @@ function getCodeFix(fileName: string, positionOrRange: number | ts.TextRange, en
   const containingTarget = findChildContainingRange(sourceFile, range)|| sourceFile
   const containingTargetLight = findChildContainingRangeLight(sourceFile, range)|| sourceFile
   const containedTarget = findChildContainedRange(sourceFile, range) || sourceFile
-  // if (!containingTarget) {
-  //   log(`no getCodeFix because findChildContainedRange  target node is undefined `)
-  //   return
-  // }
-  // log(`getCodeFix info: containingTarget.kind == ${getKindName(containingTarget.kind)} containedTarget.kind == ${containedTarget ? getKindName(containedTarget.kind) : 'NotContainedChild'} `)
   const codeFixesFilterT0 = now()
   const target = { diagnostics, containingTarget, containingTargetLight, containedTarget, log, program, sourceFile, positionOrRange }
   const fixes = codeFixes.filter(fix => {
@@ -157,7 +152,7 @@ function applyCodeFix(fix: CodeFix,  options: CodeFixOptions,   formatOptions, p
     log(`applyCodeFix saveSync took ${timeFrom(saveSyncT0)}`)
   }
   else {
-    // when needSimpleAst===false code fix implementation is responsible of save/emit/update the files / project 
+    // do nothing - when needSimpleAst===false code fix implementation is responsible of save/emit/update the files / project 
   }
 }
 

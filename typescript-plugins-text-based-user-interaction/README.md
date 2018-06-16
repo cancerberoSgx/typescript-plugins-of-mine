@@ -110,3 +110,18 @@ function getCompletionsAtPosition (fileName:string, position: number, options: t
 };
 
 ```
+
+
+# TODO / Roadmap 
+
+ * 
+
+
+# Changelog
+
+ 
+## 0.0.5 
+
+ * support for multi-line action declarations. 
+ * support for dinamic autocomplete suggestions
+

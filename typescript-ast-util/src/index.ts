@@ -342,7 +342,48 @@ export function findChild2(
   return found
 }
 
-//identifiers helpers
+
+export function getChildren(node: ts.Node | undefined, getChildrenMode: boolean = false): ts.Node[] {
+  if (!node) {
+    return []
+  }
+  if (getChildrenMode) {
+    return node.getChildren()
+  }
+  const result: ts.Node[] = []
+  node.forEachChild(c => {
+    result.push(c)
+  })
+  return result
+}
+/**
+ * @param children if caller already have called getChildren he can pass it here so this call is faster
+ */
+export function getChildIndex(node: ts.Node, getChildrenMode: boolean = false, children: ts.Node[] | undefined = undefined): number {
+  let result = -1
+  node.parent && (children || getChildren(node.parent, getChildrenMode)).find((c, i) => {
+    if (c === node) {
+      result = i
+      return true
+    }
+  })
+  return result
+}
+export function getNextSibling(node: ts.Node, getChildrenMode: boolean = false): ts.Node | undefined {
+  const children = getChildren(node.parent, getChildrenMode)
+  const index = getChildIndex(node, getChildrenMode, children)
+  return node.parent && index < children.length - 1 ? children[index + 1] : undefined
+}
+export function getPreviousSibling(node: ts.Node, getChildrenMode: boolean = false): ts.Node | undefined {
+  const children = getChildren(node.parent, getChildrenMode)
+  const index = getChildIndex(node, getChildrenMode, children)
+  return index > 0 && node.parent ? children[index - 1] : undefined
+}
+
+
+
+
+// identifiers helpers
 
 export function findIdentifier(node: ts.Node | undefined): ts.Identifier {
   return node.kind === ts.SyntaxKind.Identifier ? node as ts.Identifier : findChild(node, child => child.kind === ts.SyntaxKind.Identifier, false) as ts.Identifier
