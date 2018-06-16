@@ -1,17 +1,43 @@
-import { CallExpression, NamedNode, SignaturedDeclaration, TypeGuards } from "ts-simple-ast";
+import { CallExpression, NamedNode, SignaturedDeclaration, TypeGuards, Node, NameableNode, ReferenceFindableNode, ParameterDeclaration } from "ts-simple-ast";
+// import { ParameterDeclaration } from "../../typescript-ast-util/node_modules/typescript/lib/tsserverlibrary";
 
-function getAllCallsExpressions(f: NamedNode) {
-  const referencedSymbols = f.findReferences()
-  const calls: CallExpression[] = []
+function getAllCallsExpressions(targetDeclaration: ReferenceFindableNode&Node): ((CallExpression | SignaturedDeclaration) & Node)[] {
+  const referencedSymbols = targetDeclaration.findReferences()
+  const calls: (Node & (CallExpression | SignaturedDeclaration))[] =  []
   for (const referencedSymbol of referencedSymbols) {
     for (const reference of referencedSymbol.getReferences()) {
       const parent = reference.getNode().getParent()
-      if (TypeGuards.isCallExpression(parent)) {
-        calls.push(parent)
+      const extras = [parent, parent.getParent && parent.getParent(), targetDeclaration]
+      // if(TypeGuards.isPropertyAccessExpression(parent)&& parent.getParent() && !extras.includes(parent.getParent())){
+      //   extras.push(parent.getParent())
+      // }
+      // if( (TypeGuards.isCallExpression(targetDeclaration) || TypeGuards.isSignaturedDeclaration(targetDeclaration))&& !extras.includes(targetDeclaration)){
+      //   extras.push(targetDeclaration)
+      // }
+      const found =extras
+      .filter((value, pos, arr)=>arr.indexOf(value)===pos).concat(getChildrenForEachChild(parent))
+      .filter((value, pos, arr)=>arr.indexOf(value)===pos)
+      .find(p=>
+        // !console.log(p.getKindName()) &&
+        (!getName(p)||getName (targetDeclaration)===getName(p)) && 
+        
+          (TypeGuards.isCallExpression(p) || TypeGuards.isSignaturedDeclaration(p))
+        ) as  (CallExpression | SignaturedDeclaration) & Node
+      if (found) {
+        calls.push(found)
+      }
+      else {
+        console.log('getAllCallsExpressions ignoring reference parent: '+parent.getKindName()+
+        ' ref: '+reference.getNode().getKindName() + 
+        'chh '+parent.getChildren().map(c=>c.getKindName() ).join(', ') + 
+        ' ancest: '+parent.getAncestors().map(c=>c.getKindName() ).join(', ')
+        )
       }
     }
   }
+  // console.log(calls.map(c=>c.getSourceFile().getFilePath()+'-'+c.getText()), )
   return calls
+  .filter((value, pos, arr)=>arr.indexOf(value)===pos)
 }
 
 
@@ -21,72 +47,83 @@ function getAllCallsExpressions(f: NamedNode) {
  * @param targetDeclaration the function-like declaration to reorder its parameters
  * @param reorder [1,0] means switching the positions between first and second params
  */
-export function reorderParameters(targetDeclaration: SignaturedDeclaration & NamedNode, reorder: number[]) {
-  // targetDeclaration.getParameters()
-  const allCalls = getAllCallsExpressions(targetDeclaration)
-  function changeCallArgs (args: { getText: ()=>string, replaceWithText: (s:string)=>void} [] ) {
-    let reorderedArgs: { index: number, arg: string }[] = []
-    for (let i = 0; i < args.length; i++) {
-      if(i>=reorder.length){
-        continue
-      }
-      const arg = args[i];
-      reorderedArgs.push({ index: reorder[i], arg: arg.getText() })
+export function reorderParameters(targetDeclaration:ReferenceFindableNode&Node, reorder: number[]) {
+  // if(targetDeclaration)
+  getAllCallsExpressions(targetDeclaration).forEach(call => {
+    if (TypeGuards.isCallExpression(call)) {
+      changeCallArgs(reorder, call.getArguments())
     }
-    reorderedArgs.sort((a, b) => a.index < b.index ? -1 : 1)
-    args.forEach((a, index) => {
-      const arg = reorderedArgs.find(r => r.index === index)
-      if (arg) {
-        a.replaceWithText(arg.arg)
-      }
-    })
-  }
-  allCalls.forEach(call => {
-    changeCallArgs(call.getArguments())
-    changeCallArgs(targetDeclaration.getParameters())
-    // for (let i = 0; i < args.length; i++) {
-    //   if(i>=reorder.length){
-    //     continue
-    //   }
-    //   const arg = args[i];
-    //   reorderedArgs.push({ index: reorder[i], arg: arg.getText() })
+    // else if (TypeGuards.isSignaturedDeclaration(call)) {
+      else {
+      changeCallArgs(reorder, call.getParameters())
+    }
+    // else {
+    //   console.log('reorderParameters ignoring call: '+call.getKindName())
     // }
-    // reorderedArgs.sort((a, b) => a.index < b.index ? -1 : 1)
-    // args.forEach((a, index) => {
-    //   const arg = reorderedArgs.find(r => r.index === index)
-    //   if (arg) {
-    //     a.replaceWithText(arg.arg)
-    //   }
-    // })
+    // if(TypeGuards.isSignaturedDeclaration(targetDeclaration)){
+    //   changeCallArgs(reorder, targetDeclaration.getParameters())
+    // }
   })
-  // targetDeclaration
+}
+
+function changeCallArgs(reorder: ReadonlyArray<number>, args: ReadonlyArray<Node>) {
+  type T = { index: number, arg: string, name:string }
+  let reorderedArgs: T[] = args.map((arg, i)=>{
+    if (i < reorder.length) {
+      return { 
+        index: reorder[i], 
+        arg: arg.getText(), 
+        name: getName(arg)
+      }
+    }
+  }).filter(a => !!a)
+  reorderedArgs.sort((a, b) => a.index < b.index ? -1 : 1)
+  const missingArgs: T[]  = args.map( (arg, index) => {
+    if (!reorder.includes(index)){ 
+      return { 
+        index, 
+        arg: arg.getText() ,
+        name: getName(arg)
+      }
+    }
+  }).filter(a => !!a)
+
+  // console.log(
+  //   args[0].getParent().getKindName(), reorder, 
+  // 'reorderedArgs', reorderedArgs.map(a=>a.index+'-'+a.name), 
+  // 'missingArgs', missingArgs.map(a=>a.index+'-'+a.name) + '-'+args[0].getSourceFile().getFilePath())
+
+  reorderedArgs = reorderedArgs.concat(missingArgs)
+ 
+  const replacements = []
+  args.forEach((a, index) => {
+    const arg = reorderedArgs.find(r => r.index === index)
+    if (arg) {
+      // const prev =  `${a.getSourceFile().getFilePath()}  ${a.getText()} is replaced with =>> ${arg.arg} `
+      replacements.push({node: a, text: arg.arg})
+      // a.replaceWithText(arg.arg)
+      // console.log(`${a.getSourceFile().getFilePath()}  ${a.getText()} is replaced with =>> ${arg.arg} `);
+    }else {
+      console.log('changeCallArgs ignoring arg: '+a.getKindName() + ' - text: '+a.getText())
+    }
+  })
+  for (const r of replacements) {
+    r.node.replaceWithText(r.text)
+  }
+
 }
 
 
 
-// /**
-//  * @param targetDeclaration the function-like declaration to reorder its parameters
-//  * @param reorderString higher level, 
-//  */
-// export function reorderParametersFromParamTextChanges(targetDeclaration: SignaturedDeclaration & NamedNode, reorder: string) {
-//   targetDeclaration.getParameters()
-//   const allCalls = getAllCallsExpressions(targetDeclaration)
-//   allCalls.forEach(call => {
-//     let reorderedArgs: { index: number, arg: string }[] = []
-//     const args = call.getArguments()
-//     for (let i = 0; i < args.length; i++) {
-//       if(i>=reorder.length){
-//         continue
-//       }
-//       const arg = args[i];
-//       reorderedArgs.push({ index: reorder[i], arg: arg.getText() })
-//     }
-//     reorderedArgs.sort((a, b) => a.index < b.index ? -1 : 1)
-//     call.getArguments().forEach((a, index) => {
-//       const arg = reorderedArgs.find(r => r.index === index)
-//       if (arg) {
-//         a.replaceWithText(arg.arg)
-//       }
-//     })
-//   })
-// }
+
+
+
+function getChildrenForEachChild(n:Node): Node[]{
+  const result : Node[]= []
+  n.forEachChild(n=>result.push(n))
+  return result
+}
+
+function getName(n: Node){
+  return (n as any).getName ? ((n as any).getName()+'') : ''
+} 

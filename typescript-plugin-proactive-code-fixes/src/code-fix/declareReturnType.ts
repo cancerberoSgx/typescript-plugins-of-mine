@@ -169,12 +169,12 @@ const inferReturnType = (decl: tsa.Node & tsa.SignaturedDeclaration, arg: CodeFi
       .map(p => {
         const v = p.getValueDeclaration()
         if (!TypeGuards.isPropertyAssignment(v)) {
-          return null // TODO: ignoring spread property assignament and simple property assignment : i.e:  {simple} and {...spread}
+          return // TODO: ignoring spread property assignament and simple property assignment : i.e:  {simple} and {...spread}
           // TODO: LOG
         }
         const init = v.getInitializer()
         if (!TypeGuards.isArrowFunction(init) && !TypeGuards.isFunctionExpression(init)) {
-          return null
+          return
         }
         return {
           docs: ['TODO: Document me'],
@@ -182,16 +182,16 @@ const inferReturnType = (decl: tsa.Node & tsa.SignaturedDeclaration, arg: CodeFi
           returnType: init.getReturnType() ? init.getReturnType().getText() : 'any',
           parameters: init.getParameters().map(pa => ({
             name: pa.getName(),
-            type: pa.getType().isTypeParameter() ? pa.getTypeNode().getText() :  pa.getType().getText(),
+            type: pa.getType().isTypeParameter() ? pa.getTypeNode().getText() : pa.getType().getText(),
             hasQuestionToken: pa.hasInitializer() || pa.hasQuestionToken(),
           })),
-          typeParameters: init.getTypeParameters().map(p=>({
+          typeParameters: init.getTypeParameters().map(p => ({
             name: p.getName(),
             constrain: p.getConstraintNode() && p.getConstraintNode().getText()
           })),
         }
       })
-      .filter(p => !!p),
+      .filter(p => p !== undefined),
     typeParameters: typeargs.map(ta => ({ name: ta.getSymbol().getName() })),
   }
   fromNow(

@@ -1,8 +1,6 @@
 import { now } from 'hrtime-now';
 import * as ts from 'typescript';
 import { findAscendant, findChildContainingRangeLight, getNextSibling, getPreviousSibling, positionOrRangeToRange, positionOrRangeToNumber } from 'typescript-ast-util';
-// import { basename, dirname, isAbsolute, join } from 'path'
-// import Project from 'ts-simple-ast'
 import { getPluginCreate, LanguageServiceOptionals, createSimpleASTProject } from 'typescript-plugin-util';
 import { Action, create } from 'typescript-plugins-text-based-user-interaction';
 import * as ts_module from 'typescript/lib/tsserverlibrary';
@@ -32,10 +30,7 @@ function getFunction(fileName: string, position: number) {
 /** same as getFunction but in ts-simple-ast project */
 function getFunctionSimple(file: SourceFile, position: number, name:string) : SignaturedDeclaration & NamedNode & Node | undefined{
   let expr = file.getDescendantAtPos(position)
-  // log([expr].concat(expr.getAncestors()).map(e=>e.getKindName()).join(', '));
-  
   const e = [expr].concat(expr.getAncestors()).find(e=>TypeGuards.isSignaturedDeclaration(e) && TypeGuards.isNamedNode(e) && e.getName()===name)
-  // const e = [expr.getNextSibling(), expr.getPreviousSibling()].find(e=>TypeGuards.isSignaturedDeclaration(e) && TypeGuards.isNamedNode(e) && e.getName()===name)
   if(TypeGuards.isSignaturedDeclaration(e) && TypeGuards.isNamedNode(e)){
     return e
   }
@@ -88,7 +83,6 @@ function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSetti
     log(`getEditsForRefactor ${funcDecl&& funcDecl.getKindName()} [${selectedAction.args && selectedAction.args.reorder && selectedAction.args.reorder.join(', ')}] ${funcDecl && funcDecl.getText()}`)
     reorderParameters(funcDecl, selectedAction.args.reorder)
     sourceFile.saveSync()
-    // simpleProject.saveSync()
   } catch (error) {
     log(`getEditsForRefactor error ${error + ' - ' + error.stack}`)
     return refactors

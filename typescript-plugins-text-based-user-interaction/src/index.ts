@@ -76,7 +76,7 @@ class ToolImpl implements Tool {
       } catch (ex) {
         this.config.log('findActions eval error ' + ex + ' - ' + ex.stack)
       }
-    }).filter(a => !!a)
+    }).filter(a => a!==undefined)
   }
 
   public getCompletionsAtPosition(fileName: string, position: number, options: GetCompletionsAtPositionOptions | undefined): CompletionEntry[] {
@@ -99,7 +99,7 @@ class ToolImpl implements Tool {
         sortText: name,
         insertText: insertText.join('\n')
       } as CompletionEntry
-    }).filter(a => !!a)
+    }).filter(a => a!==undefined)
   }
 
 
