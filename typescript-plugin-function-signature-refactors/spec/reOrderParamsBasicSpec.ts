@@ -5,7 +5,7 @@ import { doTest, printDiagnostics, reorderAndAssert } from "./testUtil";
 describe('try to change signature param type', () => {
 
   it('simple - function declaration sibling', () => {
-    const test = doTest({
+    let test = doTest({
       files: [
         {
           name: 'helper',
@@ -22,13 +22,37 @@ describe('try to change signature param type', () => {
         }
       ]
     })
-
     // printDiagnostics(test.project)
 
-    const targetFunction = test.files.helper.getFunction('helper')
-    expect(test.files.index.getText()).not.toContain(`console.log(helper(3.14, 'param', true)`)
-    reorderParameters(targetFunction, [1, 0])
-    expect(test.files.index.getText()).toContain(`console.log(helper(3.14, 'param', true)`)
+    reorderAndAssert({
+      asserts: [
+      {
+        file: test.files.index, 
+        before: `console.log(helper('param', 3.14, true))`, 
+        after: `console.log(helper(3.14, 'param', true)`,
+      }
+    ],
+    node: test.files.helper.getFunction('helper'), 
+    reorder: [1,0] 
+  })
+//   reorderAndAssert({
+//     asserts: [
+//     {
+//       file: test.files.helper, 
+//       // before: `export function helper(param1: string, param2: number, param3: boolean)`, 
+//       after: `export function helper(param2: number, param1: string, param3: boolean)`,
+//     }
+//   ],
+//   // node: test.files.helper.getFunction('helper'), 
+//   // reorder: [1,0] 
+// })
+    // const targetFunction = test.files.helper.getFunction('helper')
+    // expect(test.files.index.getText()).not.toContain(`console.log(helper(3.14, 'param', true)`)
+    // reorderParameters(targetFunction, [1, 0])
+    // expect(test.files.index.getText()).toContain(`console.log(helper(3.14, 'param', true)`)
+
+
+    // test = run()
   })
 
 
@@ -55,7 +79,6 @@ describe('try to change signature param type', () => {
           export class Animal implements Alive {
             constructor(private environment?: Environment, private track: boolean=true, public immortal: boolean=false){}
             consume(things: Thing[], env?: Environment){ return Promise.resolve()}
-            // born(when: Date, parents: Alive[], where: number[], why: string){return true}
             born(parents: Alive[], when: Date, where: number[], why: string){return true}
           }
           export function create(environment?: Environment): Animal { return new Animal(environment)}

@@ -14,10 +14,11 @@ function getAllCallsExpressions(targetDeclaration: ReferenceFindableNode&Node): 
       // if( (TypeGuards.isCallExpression(targetDeclaration) || TypeGuards.isSignaturedDeclaration(targetDeclaration))&& !extras.includes(targetDeclaration)){
       //   extras.push(targetDeclaration)
       // }
-      const found =extras
-      .filter((value, pos, arr)=>arr.indexOf(value)===pos).concat(getChildrenForEachChild(parent))
-      .filter((value, pos, arr)=>arr.indexOf(value)===pos)
-      .find(p=>
+      const found =(extras
+        // .filter((value, pos, arr)=>arr.indexOf(value)===pos)
+        .concat(getChildrenForEachChild(parent)))
+        .filter((value, pos, arr)=>arr.indexOf(value)===pos)
+        .find(p=>
         // !console.log(p.getKindName()) &&
         (!getName(p)||getName (targetDeclaration)===getName(p)) && 
         
@@ -37,7 +38,7 @@ function getAllCallsExpressions(targetDeclaration: ReferenceFindableNode&Node): 
   }
   // console.log(calls.map(c=>c.getSourceFile().getFilePath()+'-'+c.getText()), )
   return calls
-  .filter((value, pos, arr)=>arr.indexOf(value)===pos)
+    .filter((value, pos, arr)=>arr.indexOf(value)===pos)
 }
 
 

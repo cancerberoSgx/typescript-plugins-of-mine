@@ -28,24 +28,40 @@ export function doTest(config: Config): Result {
 
 interface ReorderAndAssert {
   asserts: {
-    before: string, 
-    after: string, 
-    file: SourceFile}[],
-   node: SignaturedDeclaration & ReferenceFindableNode & Node, 
-   reorder: number[]
+    before?: string, 
+    after?: string, 
+    file?: SourceFile}[],
+   node?: SignaturedDeclaration & ReferenceFindableNode & Node, 
+   reorder?: number[]
   }
 export function reorderAndAssert( {node, reorder, asserts  }: ReorderAndAssert ) {
-  asserts.forEach( ({before, after, file}) =>{
+  asserts.filter(a=>a.before&&a.file).forEach( ({before, after, file}) =>{
+    
     expect(file.getText()).toContain(before)
     // console.log('BEFORE: '+file.getText())
-    // expect(file.getText()).not.toContain(after)
+    if(after){
+      // it(`file: ${file.getFilePath()} not.toContain`,()=>{
+        expect(file.getText()).not.toContain(after, `OFFENDING file: ${file.getFilePath()}`)
+
+      // })
+    }
   })
   
-  reorderParameters(node, reorder)
+  if(node && reorder && reorder.length){
+    reorderParameters(node, reorder)
+
+  }
   
-  asserts.forEach( ({before, after, file}) =>{
-    file.saveSync()
-    // expect(file.getText()).not.toContain(before)
+  asserts.filter(a=>a.after&&a.file).forEach( ({before, after, file}) =>{
+    // file.saveSync()
+    if(before){ 
+      // it(`file: ${file.getFilePath()} not.toContain`,()=>{
+      // expect(file.getText()).not.toContain(after)
+
+    // })
+      expect(file.getText()).not.toContain(before, `OFFENDING file: ${file.getFilePath()}`)
+    }
+    // 
   // console.log('AFTER: '+file.getText())
     expect(file.getText()).toContain(after)
   })
