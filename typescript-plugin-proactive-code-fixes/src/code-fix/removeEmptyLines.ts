@@ -8,9 +8,16 @@ This will remove empty lines of selected range
 
 # TODO
 
- * dont remove empty lines that are inside a stringtemplate 
+ * ISSUE: dont remove empty lines that are inside a stringtemplate 
+ * 
+ * this plugin could be much more generic and accept user defined **new** plugins based on templates in a file or in the condig. Examples: 
+   * remove all comments that doesn't start with /heads\ up/i or with /todo/i - {name: 'remove non relevant comments', predicate: (line) => line.toLowerCase().startsWith('heads') || line.toLowerCase().contains('todo: up')} 
+   * remove all console.log statements predicate: l=>l.trim().startsWith('console.log')
+   * etc - this one is just a particular case
+   * then probably it could be a good idea to make it a new project
 
 */
+
 export const removeEmptyLines: CodeFix = {
 
   name: 'removeEmptyLines',

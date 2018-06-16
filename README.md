@@ -6,7 +6,7 @@ TypeScript Language Service plugins for useful code fixes and refactors availabl
  
 
 
-## List of work produced: 
+## List of work produced
 
 
 # typescript-plugin-proactive-code-fixes
@@ -16,49 +16,43 @@ By far the most important package that implement all the "interesting refactors"
  * (with lots of demos and descriptions) [Project home ](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-proactive-code-fixes)
 
 
+# typescript-plugin-function-signature-refactors
 
-### typescript-plugin-move-file
+(https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-function-signature-refactors)
 
- * well-tested - **safe to use**
- * Move a file or folder fixing all imports to point to the new location. 
- * Based on [ts-simple-ast](https://dsherret.github.io/ts-simple-ast) file and directory move() operation
- * Uses
-   [typescript-plugins-text-based-user-interaction](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugins-text-based-user-interaction)
-   for interacting with the user via the source file itself.  Ugly user experience but editor agnostic (tested with vscode and
-   atom - but should work on many more!)
- * See [Project home](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-move-file)
- * See it in Action: 
- <!-- * ![See it in Action: ](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-move-file/doc-assets/vs-code-move-file.gif?raw=true?p=.gif) -->
- * see more demos in other editors in [Project home](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-move-file)
+While proactive-code-fixes are refactors reacted to code errors these are real refactors of moving things around, changing types, removing, adding, etc.
 
-### typescript-plugin-move-declaration
+ * These are much more difficult since often require refactor all the project's file in order not to break it. 
+ * Also these could dbe more dangerous. 
+ * I started with signatures - (move/add/remove parameters, change params/return types, etc. but other ideas will arrive. 
+ * Very very new and WIP
+ * should ha a collection of refactors under a single TLS manager plugin like proactive's
+ * by default user input implemented with text-based-ui tool. After they mature and prove useful we could start thinking on more nicelooking UIs like vscode. but not a priority - let others do that. 
+ * Already have some related to these (move-declaration - paramsToNamed) that I should move here. 
+ * There will be some common things / semantics to all refactors (like requireImport) so probably we should work with a input class hierarchy. 
 
- * WIP - **not safe yet**
- * Move any declaration to another file - a.k.a **move an exported class/interface/function/etc to another
-   file**
- * Uses
-   [typescript-plugins-text-based-user-interaction](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugins-text-based-user-interaction)
-   for interacting with the user via the source file itself. Ugly user experience but editor agnostic (tested with vscode and
-   atom - but should work on many more!)
- * Uses [ts-simple-ast](https://dsherret.github.io/ts-simple-ast)
- * See [Project home](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-move-declaration)
- <!-- * See it in Action: ![Moving an interface to another
-   file](https://raw.githubusercontent.com/cancerberoSgx/typescript-plugins-of-mine/master/typescript-plugin-move-declaration/doc-assets/vscode-move-interface.gif) -->
- 
+
+
 ### typescript-plugin-add-type
 
-
  * well-tested - **safe to use**
+ * we should probably move it to proactive 
  * If user selects an identifier that has no explicit type declared this plugin will suggest you to automatically add the type inferred by the compiler. 
  * [Project](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-add-type)
  <!-- * DEMO: ![Adding types in Visual studio Code Editor](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-add-type/doc-assets/vscode.gif?raw=true?p=.gif) -->
 
 
+### ast-inspector
+
+ * great for typescript language service plugin development (fast, agile, tools) 
+ contains the great *evalcode" plugin that let prototype pugins - tls delated code very quickly , evaluating and printing back in the same source file 
+ * See [Project home](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-ast-inspector)
 
 
 ### typescript-plugin-subclasses
 
  * well-tested - **safe to use**
+ * we should move it to ast-inspector
  * user has to select (part of) the name of class of interface for refactor to be suggested
  * prints the output at the end of current file with links to the exact position (ctrl-click will take you there)
  * See it in action: 
@@ -79,12 +73,26 @@ The result of my first steps dealing with TypeScript Language Service. I was so 
  * [Project](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/sample-ts-plugin1)
 
 
-### TypeScript Language Service Plugin Tutorial
 
-The result of my first steps dealing with TypeScript Language Service. I was so happy with my first plugin (useless) that I write a tutorial : 
+## utility projects
 
- * **[Tutorial with code](https://cancerberosgx.github.io/typescript-plugins-of-mine/sample-ts-plugin1/src/)**
- * [Project](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/sample-ts-plugin1)
+While developing these I realized There was too much repeated code so I ended up writing some utilities project: 
+
+### text-based-user-interaction
+ * [typescript-plugins-text-based-user-interaction](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugins-text-based-user-interaction) 
+ * default implementation for my plugins when need to inquire the user - not good looking but very powerful, portable, and cammon, here we are inquiring DEVELOPERS trying to refactor their source code, not Mickey Mouse! 
+ * a very small library starting to implement a very big idea: a way of interact with the editor's user through the source file itself so plugins can inquire information interactively independently of the editor/IDE being use. 
+ * almost automatic implementation of a plugin from a config object
+ * Or in other words, plugin authors don't need to learn/implement an editor's specific API/technology in
+   order wo ask the user for input) 
+ * Or in other words, typescript plugins editor/ide agnostic (run on any editor/ide that support TypeScript
+   Language Service)
+ * [typescript-plugin-util](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-util)
+ * [typescript-ast-util](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-ast-util)
+
+
+
+## Obsolete - old research
 
 
 ### typescript-plugin-method-delegate
@@ -107,22 +115,32 @@ The result of my first steps dealing with TypeScript Language Service. I was so 
  <!-- * ![See it in Action: ](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-extract-interface/doc-assets/extract-interface.gif?raw=true?p=.gif) -->
 
 
-### utility projects
+### typescript-plugin-move-file
 
-While developing these I realized There was too much repeated code so I ended up writing some utilities project: 
+ * kind of deprecated because of other plugin ts-move-files and new ts feature that fixes imports (kind of buggy still)
+ * well-tested - **safe to use**
+ * Move a file or folder fixing all imports to point to the new location. 
+ * Based on [ts-simple-ast](https://dsherret.github.io/ts-simple-ast) file and directory move() operation
+ * Uses
+   [typescript-plugins-text-based-user-interaction](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugins-text-based-user-interaction)
+   for interacting with the user via the source file itself.  Ugly user experience but editor agnostic (tested with vscode and
+   atom - but should work on many more!)
+ * See [Project home](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-move-file)
+ * See it in Action: 
+ <!-- * ![See it in Action: ](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-move-file/doc-assets/vs-code-move-file.gif?raw=true?p=.gif) -->
+ * see more demos in other editors in [Project home](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-move-file)
 
- * [typescript-plugins-text-based-user-interaction](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugins-text-based-user-interaction) a very small library starting to implement a very big
-   idea: a way of interact with the editor's user through the source file itself so plugins can inquire
-   information interactively independently of the editor/IDE being use. 
- * Or in other words, plugin authors don't need to learn/implement an editor's specific API/technology in
-   order wo ask the user for input) 
- * Or in other words, typescript plugins editor/ide agnostic (run on any editor/ide that support TypeScript
-   Language Service)
- * [typescript-plugin-util](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-util)
- * [typescript-ast-util](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-ast-util)
+### typescript-plugin-move-declaration
 
-
-
+ * WIP - **not safe yet** - buggy - first experiment - should try again from scratch
+ * Move any declaration to another file - a.k.a **move an exported class/interface/function/etc to another
+   file**
+ * Uses [typescript-plugins-text-based-user-interaction](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugins-text-based-user-interaction) for interacting with the user via the source file itself. Ugly user experience but editor agnostic (tested with vscode and atom - but should work on many more!)
+ * Uses [ts-simple-ast](https://dsherret.github.io/ts-simple-ast)
+ * See [Project home](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-move-declaration)
+ <!-- * See it in Action: ![Moving an interface to another
+   file](https://raw.githubusercontent.com/cancerberoSgx/typescript-plugins-of-mine/master/typescript-plugin-move-declaration/doc-assets/vscode-move-interface.gif) -->
+ 
 
 
 

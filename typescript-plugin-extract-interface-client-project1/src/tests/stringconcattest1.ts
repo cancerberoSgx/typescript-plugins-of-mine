@@ -6,7 +6,6 @@ const msg1 = "Hello " + name + " we are \"glad\" you have " + (1 + 2 + 3) + " ye
 
 const msg2 = `Hello ${name}. We are glad you are ${where}`
 
-
 function prettyFunction(a: string, b: number, c: Date[]): boolean {
   return null
 }

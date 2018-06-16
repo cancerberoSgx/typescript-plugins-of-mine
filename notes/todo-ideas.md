@@ -181,6 +181,7 @@ and that will generate an error "code": "2304","message": "Cannot find name 'Eva
  
 ##  other ideas
 
+ * vscode extension that allows me to load typescript plugins installed in current project tsconfig and package.json so I dont have to maintain a vscode pugin for eac o fmy tspugins. I install this tlspluginmaster vscode extension and via settings I choose which plugins are active for which workspace / user, etc - workspaces are responsible of installing the plugins dependencies or user install it globally. TODO: investigate if its possible to add contributions programatically instead vis .package.json.
 
  * "get absolute location" for ast-inspector - where-am'i - I want to know the absolute value of something, like a method, or member . for example module m{class A{prop: {name:string,val: {foo:number}}}} - for foo it should prnt something l ike m.A.prop.val.foo  or more friendly, module m, class A , property prop, prop val
 

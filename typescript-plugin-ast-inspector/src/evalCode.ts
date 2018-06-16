@@ -4,10 +4,10 @@ import SimpleProjectConstructor, { Node } from 'ts-simple-ast';
 import * as ts from 'typescript';
 import * as ts_module from 'typescript/lib/tsserverlibrary';
 import { EvalContextUtil, EvalContextUtilImpl } from './evalCodeContextUtil';
-import { matchGlobalRegexWithGroupIndex } from './regex-groups-index';
-import { basename } from 'path';
+// import { matchGlobalRegexWithGroupIndex } from './regex-groups-index';
+// import { basename } from 'path';
 
-export const EVAL_CODE_IN_COMMENTS_REFACTOR_ACTION_NAME = `plugin-ast-inspector-eval-code-in-comments`
+// export const EVAL_CODE_IN_COMMENTS_REFACTOR_ACTION_NAME = `plugin-ast-inspector-eval-code-in-comments`
 export const EVAL_SELECTION_REFACTOR_ACTION_NAME = `plugin-ast-inspector-eval-selection`
 export const EVAL_CURRENT_FUNCTION_BODY_REFACTOR_ACTION_NAME = `plugin-ast-inspector-eval-current-function-body`
 
@@ -185,25 +185,25 @@ export function executeEvalCode(config: EvalContextConfig): void {
     sourceFile.insertText(range.end, text)
     return
   }
-  // handle eval code in comments
-  else {
-    const regex = /\/\*\*\*@\s*([^@]+)\s*(@\*\*\*\/)/gim
-    const result = matchGlobalRegexWithGroupIndex(regex, originalSourceFile.getFullText())
-    config.log('executeEvalCode apply matchGlobalRegexWithGroupIndex result ' + JSON.stringify(result, null, 2))
-    const toPrint = result && result.length && result.map(match => {
-      return { text: evalCodeAndPrintResult(config, match[0].value), printPosition: match[1].end }
-    })
-    config.log('executeEvalCode apply return true and toPrint == ' + toPrint ? JSON.stringify(toPrint, null, 2) : 'undefined')
-    if (!toPrint) {
-      sourceFile.insertText(config.node.getSourceFile().getEnd(), evalHelpText)
-    }
-    else {
-      toPrint.forEach(content => {
-        sourceFile.insertText(content.printPosition, content.text)
-      })
-      config.log('executeEvalCode took ' + timeFrom(t0))
-    }
-  }
+  // // handle eval code in comments
+  // else {
+  //   const regex = /\/\*\*\*@\s*([^@]+)\s*(@\*\*\*\/)/gim
+  //   const result = matchGlobalRegexWithGroupIndex(regex, originalSourceFile.getFullText())
+  //   config.log('executeEvalCode apply matchGlobalRegexWithGroupIndex result ' + JSON.stringify(result, null, 2))
+  //   const toPrint = result && result.length && result.map(match => {
+  //     return { text: evalCodeAndPrintResult(config, match[0].value), printPosition: match[1].end }
+  //   })
+  //   config.log('executeEvalCode apply return true and toPrint == ' + toPrint ? JSON.stringify(toPrint, null, 2) : 'undefined')
+  //   if (!toPrint) {
+  //     sourceFile.insertText(config.node.getSourceFile().getEnd(), evalHelpText)
+  //   }
+  //   else {
+  //     toPrint.forEach(content => {
+  //       sourceFile.insertText(content.printPosition, content.text)
+  //     })
+  //     config.log('executeEvalCode took ' + timeFrom(t0))
+  //   }
+  // }
 }
 
 function evalCodeAndPrintResult(config: EvalContextConfig, code: string): string {
@@ -215,32 +215,32 @@ function evalCodeAndPrintResult(config: EvalContextConfig, code: string): string
   return text
 }
 
-const evalHelpText = `
-/***@ 
- // For evaluating code you can use a comment with a format like this one, (see how starts with "/*** followed
- // by "at") You could have many of these comments as this one as long they contain VALID JAVASCRIPT (this is
- // why we use line comments inside for this internal comments) IMPORTANT: make sure you save the file before
- // evaluating code - if not the content in editor buffer will be different (older) than filesystem (most
- // editors handle this OK but be advised) 
+// const evalHelpText = `
+// /***@ 
+//  // For evaluating code you can use a comment with a format like this one, (see how starts with "/*** followed
+//  // by "at") You could have many of these comments as this one as long they contain VALID JAVASCRIPT (this is
+//  // why we use line comments inside for this internal comments) IMPORTANT: make sure you save the file before
+//  // evaluating code - if not the content in editor buffer will be different (older) than filesystem (most
+//  // editors handle this OK but be advised) 
  
- //You have a "c" variable with a context object with useful utilities, among others:TODO: IEvalContext apidocs)
+//  //You have a "c" variable with a context object with useful utilities, among others:TODO: IEvalContext apidocs)
 
-// ts: typeof ts                             whole typescript namespace available
-// sts: typeof tsa                           whole ts-simple-ast namespace available
-// node: Node                                node selected by user when activated this refactor
-// print(s): void                            print text back here a analog to console.log 
-// printAst (node:Node|ts.Node): string      pretty prints AST structure of given node to understand it 
+// // ts: typeof ts                             whole typescript namespace available
+// // sts: typeof tsa                           whole ts-simple-ast namespace available
+// // node: Node                                node selected by user when activated this refactor
+// // print(s): void                            print text back here a analog to console.log 
+// // printAst (node:Node|ts.Node): string      pretty prints AST structure of given node to understand it 
 
-// This is the code will be executed here : 
+// // This is the code will be executed here : 
 
-c.print(\`
-Hello from editor. Using typescript version: \${c.ts.version}
+// c.print(\`
+// Hello from editor. Using typescript version: \${c.ts.version}
 
-Selected node by user is a \${c.node.getKindName()} and its parent's text is "\${c.node.getParent().getText()}"
+// Selected node by user is a \${c.node.getKindName()} and its parent's text is "\${c.node.getParent().getText()}"
 
-The AST structure of this file:  
-\${c.printAst(c.node.getSourceFile())}
-\`)
+// The AST structure of this file:  
+// \${c.printAst(c.node.getSourceFile())}
+// \`)
 
-@***/
-`
+// @***/
+// `

@@ -4,7 +4,9 @@ Tools to discover the AST of current TypeScript document. Oriented to TypeScript
 
 ## Eval code 
 
-This is the most important tool and probably will be maintained in its own project- but for now is here. TODO: youtube video and screencasts. 
+This is the most important tool and probably will be maintained in its own project- but for now is here. 
+
+TODO: youtube video and screencasts. 
 
 ## Print AST
 
@@ -29,19 +31,16 @@ in your `tsconfig.json`, add the plugin:
 ```json
 {
   "compilerOptions": {
-    ...
     "plugins": [{
         "name": "typescript-plugin-plugin-ast-inspector"
     }]
-    ...
   }
 }
 ```
 
-Make sure you have installed typescript in your project (`npm i --save-dev typescript`) the editor you are using uses that typescript and not another. For example, Visual Studio Code comes with its own typescript version, so I need to "Select TypeScript Version" of the workspace: 
+Make sure you have installed typescript in your project (`npm i --save-dev typescript`) the editor you are using uses that typescript and not another. For example, Visual Studio Code comes with its own typescript version, so I need to "TypeScript: Select TypeScript Version" of the workspace: 
 ```json
 {
-  // Specifies the folder path containing the tsserver and lib*.d.ts files to use.
   "typescript.tsdk": "node_modules/typescript/lib"
 }
 ```

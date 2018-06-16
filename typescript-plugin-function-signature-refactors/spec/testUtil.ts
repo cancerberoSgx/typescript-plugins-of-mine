@@ -1,18 +1,21 @@
-import Project, { NamedNode, ScriptTarget, SourceFile, ModuleKind, SignaturedDeclaration, ReferenceFindableNode, Node } from "ts-simple-ast";
+import Project, { ModuleKind, NamedNode, Node, ReferenceFindableNode, ScriptTarget, SignaturedDeclaration, SourceFile } from "ts-simple-ast";
 import { reorderParameters } from "../src/reorderParams";
+
 
 export interface Config {
   files: { name: string, text: string, path: string }[]
 }
+
 export interface Result {
   files: { [name: string]: SourceFile },
   project: Project
 }
+
 export function doTest(config: Config): Result {
   let project: Project = new Project({
     compilerOptions: {
       target: ScriptTarget.ES2018,
-      module:  ModuleKind.CommonJS,
+      module: ModuleKind.CommonJS,
       lib: [
         "es2018"
       ]
@@ -28,61 +31,53 @@ export function doTest(config: Config): Result {
 
 interface ReorderAndAssert {
   asserts: {
-    before?: string, 
-    after?: string, 
-    file?: SourceFile}[],
-   node?: SignaturedDeclaration & ReferenceFindableNode & Node, 
-   reorder?: number[]
-  }
-export function reorderAndAssert( {node, reorder, asserts  }: ReorderAndAssert ) {
-  asserts.filter(a=>a.before&&a.file).forEach( ({before, after, file}) =>{
-    
-    expect(file.getText()).toContain(before)
-    // console.log('BEFORE: '+file.getText())
-    if(after){
-      // it(`file: ${file.getFilePath()} not.toContain`,()=>{
-        expect(file.getText()).not.toContain(after, `OFFENDING file: ${file.getFilePath()}`)
+    before?: string,
+    after?: string,
+    file?: SourceFile
+  }[],
+  node?: SignaturedDeclaration & ReferenceFindableNode & Node,
+  reorder?: number[],
+  verbose?: boolean
+}
 
-      // })
+export function reorderAndAssert({ node, reorder, asserts, verbose = false }: ReorderAndAssert) {
+  asserts.filter(a => a.before && a.file).forEach(({ before, after, file }) => {
+    expect(file.getText()).toContain(before)
+    if (after) {
+      expect(file.getText()).not.toContain(after, `OFFENDING file: ${file.getFilePath()}`)
     }
   })
-  
-  if(node && reorder && reorder.length){
+  if (node && reorder && reorder.length) {
+    verbose && console.log('BEFORE: ' + node.getText())
     reorderParameters(node, reorder)
-
+    verbose && console.log('AFTER: ' + node.getText())
   }
-  
-  asserts.filter(a=>a.after&&a.file).forEach( ({before, after, file}) =>{
-    // file.saveSync()
-    if(before){ 
-      // it(`file: ${file.getFilePath()} not.toContain`,()=>{
-      // expect(file.getText()).not.toContain(after)
-
-    // })
+  asserts.filter(a => a.after && a.file).forEach(({ before, after, file }) => {
+    if (before) {
       expect(file.getText()).not.toContain(before, `OFFENDING file: ${file.getFilePath()}`)
     }
-    // 
-  // console.log('AFTER: '+file.getText())
-    expect(file.getText()).toContain(after)
+    expect(file.getText()).toContain(after, `OFFENDING file: ${file.getFilePath()}`)
   })
 }
 
 export function printDiagnostics(project: Project) {
-  console.log(project.getDiagnostics().map(d => d.getMessageText().toString() + ' - '+d.getSourceFile().getFilePath()).join('\n'))
+  console.log(project.getDiagnostics()
+    .map(d => d.getMessageText().toString() + ' - ' + d.getSourceFile().getFilePath() + '#' + d.getLineNumber())
+    .join('\n'))
 }
 
-export function printReferences(helperFunction: NamedNode) {
-  const referencedSymbols = helperFunction.findReferences()
-  for (const referencedSymbol of referencedSymbols) {
-    for (const reference of referencedSymbol.getReferences()) {
-      console.log("---------")
-      console.log("REFERENCE")
-      console.log("---------")
-      console.log("File path: " + reference.getSourceFile().getFilePath());
-      console.log("Start: " + reference.getTextSpan().getStart());
-      console.log("Length: " + reference.getTextSpan().getLength());
-      console.log("Parent kind: " + reference.getNode().getParentOrThrow().getKindName());
-      console.log("\n");
-    }
-  }
-}
+// export function printReferences(helperFunction: NamedNode) {
+//   const referencedSymbols = helperFunction.findReferences()
+//   for (const referencedSymbol of referencedSymbols) {
+//     for (const reference of referencedSymbol.getReferences()) {
+//       console.log("---------")
+//       console.log("REFERENCE")
+//       console.log("---------")
+//       console.log("File path: " + reference.getSourceFile().getFilePath());
+//       console.log("Start: " + reference.getTextSpan().getStart());
+//       console.log("Length: " + reference.getTextSpan().getLength());
+//       console.log("Parent kind: " + reference.getNode().getParentOrThrow().getKindName());
+//       console.log("\n");
+//     }
+//   }
+// }

@@ -1,8 +1,12 @@
 import { now, timeFrom } from 'hrtime-now';
-import { dumpAst, findChildContainingPosition, findChildContainingRange, getKindName, positionOrRangeToNumber, positionOrRangeToRange, printNode } from 'typescript-ast-util';
+import { dumpAst, findChildContainingPosition, findChildContainingRange, getKindName, positionOrRangeToNumber, positionOrRangeToRange, printNode, findChildContainingRangeLight, findAscendant } from 'typescript-ast-util';
 import { createSimpleASTProject } from 'typescript-plugin-util';
 import * as ts_module from 'typescript/lib/tsserverlibrary';
-import { EVAL_CODE_IN_COMMENTS_REFACTOR_ACTION_NAME, EVAL_CURRENT_FUNCTION_BODY_REFACTOR_ACTION_NAME, EVAL_SELECTION_REFACTOR_ACTION_NAME, executeEvalCode } from './evalCode';
+import { 
+  // EVAL_CODE_IN_COMMENTS_REFACTOR_ACTION_NAME, 
+  EVAL_CURRENT_FUNCTION_BODY_REFACTOR_ACTION_NAME, EVAL_SELECTION_REFACTOR_ACTION_NAME, executeEvalCode } from './evalCode';
+import * as ts from 'typescript'
+
 
 const PLUGIN_NAME = 'typescript-plugin-ast-inspector'
 const PRINT_AST_REFACTOR_ACTION_NAME = `${PLUGIN_NAME}-print-ast-refactor-action`
@@ -39,18 +43,22 @@ function getApplicableRefactors(fileName: string, positionOrRange: number | ts.T
   if (!sourceFile) {
     return refactors
   }
-  let actions = [
-    { name: EVAL_CODE_IN_COMMENTS_REFACTOR_ACTION_NAME, description: 'Eval code in comments' },
-    { name: EVAL_SELECTION_REFACTOR_ACTION_NAME, description: 'Eval selection' },
-    { name: EVAL_CURRENT_FUNCTION_BODY_REFACTOR_ACTION_NAME, description: 'Eval current function selection' }
-    // TODO: show only if we are inside a function
-  ]
-  nodeAtCursor = findChildContainingRange(sourceFile, positionOrRangeToRange(positionOrRange))
+  nodeAtCursor = findChildContainingRangeLight(sourceFile, positionOrRangeToRange(positionOrRange))
   if (!nodeAtCursor) {
     nodeAtCursor = findChildContainingPosition(sourceFile, positionOrRangeToNumber(positionOrRange))
   }
   if (!nodeAtCursor) {
     return refactors
+  }
+  const fn = findAscendant<ts.FunctionDeclaration>(nodeAtCursor, ts.isFunctionDeclaration, true)
+  let actions = []
+  if(fn){
+    actions.push(
+      { name: EVAL_CURRENT_FUNCTION_BODY_REFACTOR_ACTION_NAME, description: `Evaluate ${fn.name && fn.name.getText() || 'current'} function` }
+    )
+  }
+  if((positionOrRange as ts.TextRange).pos) {
+    actions.push({ name: EVAL_SELECTION_REFACTOR_ACTION_NAME, description: 'Evaluate selected code' })
   }
   actions = actions.concat([
     { name: PRINT_AST_REFACTOR_ACTION_NAME, description: 'Print AST of selected ' + getKindName(nodeAtCursor.kind) },
@@ -73,18 +81,18 @@ function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSetti
   else if (actionName === PRINT_PARENT_NODES_REFACTOR_ACTION_NAME && nodeAtCursor) {
     return printParentNodes(nodeAtCursor, fileName)
   }
-  else if (actionName === EVAL_CODE_IN_COMMENTS_REFACTOR_ACTION_NAME || actionName === EVAL_SELECTION_REFACTOR_ACTION_NAME || actionName === EVAL_CURRENT_FUNCTION_BODY_REFACTOR_ACTION_NAME) {
+  else if (/* actionName === EVAL_CODE_IN_COMMENTS_REFACTOR_ACTION_NAME ||  */actionName === EVAL_SELECTION_REFACTOR_ACTION_NAME || actionName === EVAL_CURRENT_FUNCTION_BODY_REFACTOR_ACTION_NAME) {
     return evalCode(fileName, positionOrRange, formatOptions, refactorName, actionName)
   }
 }
 
 function evalCode(fileName: string, positionOrRange: number | ts_module.TextRange, formatOptions: ts.FormatCodeSettings, refactorName: string, actionName: string): ts.RefactorEditInfo | undefined {
   const t0 = now()
-  const createSimpleASTProjectT0 = now()
+  // const createSimpleASTProjectT0 = now()
   const simpleProject = createSimpleASTProject(info.project)
   const sourceFile = simpleProject.getSourceFile(fileName)
   const simpleNode = sourceFile.getDescendantAtPos(positionOrRangeToNumber(positionOrRange)) || sourceFile
-  info.project.projectService.logger.info(`${PLUGIN_NAME} evalCode createSimpleASTProject took ${timeFrom(createSimpleASTProjectT0)}`)
+  // info.project.projectService.logger.info(`${PLUGIN_NAME} evalCode createSimpleASTProject took ${timeFrom(createSimpleASTProjectT0)}`)
   const fixapplyT0 = now()
   try {
     executeEvalCode({ log, node: simpleNode, fileName, info, positionOrRange, formatOptions, refactorName, actionName, project: simpleProject })

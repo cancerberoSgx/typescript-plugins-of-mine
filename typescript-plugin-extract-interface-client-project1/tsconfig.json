@@ -31,12 +31,15 @@
       {
         "name": "typescript-plugin-proactive-code-fixes"
       },
-      {
-        "name": "typescript-plugin-move-declaration"
-      },
+      // {
+      //   "name": "typescript-plugin-move-declaration"
+      // },
       // {
       //   "name": "typescript-plugin-method-delegate"
       // },
+      {
+        "name": "typescript-plugin-postfix"
+      },
       {
         "name": "typescript-plugin-function-signature-refactors"
       },
