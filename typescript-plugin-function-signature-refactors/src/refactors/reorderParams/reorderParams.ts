@@ -6,10 +6,9 @@ import { getChildrenForEachChild, getName } from "typescript-plugin-util";
 /**
  * collect al references of given node and returns those nodes that need to be refactored
  */
-function getAllCallsExpressions(targetDeclaration: ReferenceFindableNode & Node, log: (msg: string) => void): ((CallExpression | SignaturedDeclaration) & Node)[] {
-  const referencedSymbols = targetDeclaration.findReferences()
+function getAllCallsExpressions(targetDeclaration: Node & ReferenceFindableNode, log: (msg: string) => void): ((CallExpression | SignaturedDeclaration) & Node)[] {
   const calls: (Node & (CallExpression | SignaturedDeclaration))[] = []
-  for (const referencedSymbol of referencedSymbols) {
+  for (const referencedSymbol of targetDeclaration.findReferences()) {
     for (const reference of referencedSymbol.getReferences()) {
       const parent = reference.getNode().getParent()
       const extras = [parent, parent.getParent && parent.getParent(), targetDeclaration]
@@ -27,7 +26,7 @@ function getAllCallsExpressions(targetDeclaration: ReferenceFindableNode & Node,
         log('getAllCallsExpressions ignoring reference parent: ' + parent.getKindName() +
           ' ref: ' + reference.getNode().getKindName() +
           'chh ' + parent.getChildren().map(c => c.getKindName()).join(', ') +
-          ' ancest: ' + parent.getAncestors().map(c => c.getKindName()).join(', ')
+          ' ancestors: ' + parent.getAncestors().map(c => c.getKindName()).join(', ')
         )
       }
     }
@@ -44,15 +43,42 @@ function getAllCallsExpressions(targetDeclaration: ReferenceFindableNode & Node,
  * @param targetDeclaration the function-like declaration to reorder its parameters
  * @param reorder [1,0] means switching the positions between first and second params
  */
-export function reorderParameters(targetDeclaration: ReferenceFindableNode & Node, reorder: number[], log: (msg: string) => void) {
-  getAllCallsExpressions(targetDeclaration, log).forEach(call => {
-    if (TypeGuards.isCallExpression(call)) {
-      changeCallArgs(reorder, call.getArguments(), log)
-    }
-    else {
-      changeCallArgs(reorder, call.getParameters(), log)
-    }
-  })
+export function reorderParameters(node: Node, reorder: number[], log: (msg: string) => void) {
+
+  // let targetDeclaration: Node & ReferenceFindableNode
+  if(TypeGuards.isReferenceFindableNode(node)){
+    getAllCallsExpressions(node, log).forEach(call => {
+      if (TypeGuards.isCallExpression(call)) {
+        changeCallArgs(reorder, call.getArguments(), log)
+      }
+      else {
+        changeCallArgs(reorder, call.getParameters(), log)
+      }
+    })
+  }
+  else {// if(TypeGuards.isConstructorDeclaration(node)) {
+    console.log('!TypeGuards.isReferenceFindableNode(node)');
+    
+    //TODO: find interface constructor implememted by this one and rename that one and then run this function calling it with node.getAncestors().find(TypeGuards.isReferenceFindableNode) to rename new A calls
+    return []//TODO: 
+    // node.getFirstAncestorByKind(ts.SyntaxKind.ClassDeclaration)
+    // targetDeclaration = node.getAncestors().find(TypeGuards.isReferenceFindableNode)
+    // targetDeclaration = node
+  }
+  // if(!targetDeclaration){
+  //   log('getAllCallsExpressions aborted since cannot find a isReferenceFindableNode ')
+  //   return []
+  // }
+
+
+  // getAllCallsExpressions(targetDeclaration, log).forEach(call => {
+  //   if (TypeGuards.isCallExpression(call)) {
+  //     changeCallArgs(reorder, call.getArguments(), log)
+  //   }
+  //   else {
+  //     changeCallArgs(reorder, call.getParameters(), log)
+  //   }
+  // })
 }
 
 function changeCallArgs(reorder: ReadonlyArray<number>, args: ReadonlyArray<Node>, log: (msg: string) => void) {

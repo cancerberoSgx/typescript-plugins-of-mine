@@ -1,15 +1,15 @@
 import Project, { ModuleKind, Node, ScriptTarget, SourceFile } from "ts-simple-ast";
 
-export interface Config {
+export interface TestConfig {
   files: { name: string, text: string, path: string }[]
 }
 
-export interface Result {
+export interface TestResult {
   files: { [name: string]: SourceFile },
   project: Project
 }
 
-export function doTest(config: Config): Result {
+export function createProjectFiles(config: TestConfig): TestResult {
   let project: Project = new Project({
     compilerOptions: {
       target: ScriptTarget.ES2018,
@@ -20,14 +20,14 @@ export function doTest(config: Config): Result {
     },
     useVirtualFileSystem: true
   })
-  const result: Result = { project, files: {} }
+  const result: TestResult = { project, files: {} }
   config.files.forEach(f => {
     result.files[f.name] = project.createSourceFile(f.path, f.text)
   })
   return result
 }
 
-export interface TestModifyAndAssertConfig {
+export interface ModifyAndAssertConfig {
   asserts: {
     before?: string,
     after?: string,
@@ -38,7 +38,7 @@ export interface TestModifyAndAssertConfig {
   verbose?: boolean
 }
 
-export function modifyAndAssert({ node, modification, asserts, verbose = false }: TestModifyAndAssertConfig) {
+export function modifyAndAssert({ node, modification, asserts, verbose = false }: ModifyAndAssertConfig) {
   asserts.filter(a => a.before && a.file).forEach(({ before, after, file }) => {
     expect(file.getText()).toContain(before)
     if (after) {
@@ -63,6 +63,7 @@ export function printDiagnostics(project: Project) {
     .map(d => d.getMessageText().toString() + ' - ' + d.getSourceFile().getFilePath() + '#' + d.getLineNumber())
     .join('\n'))
 }
+
 
 // export function printReferences(helperFunction: NamedNode) {
 //   const referencedSymbols = helperFunction.findReferences()

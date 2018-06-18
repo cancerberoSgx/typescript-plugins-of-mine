@@ -1,8 +1,8 @@
 import { Node, ReferenceFindableNode } from 'ts-simple-ast';
+import { createProjectFiles, modifyAndAssert } from "typescript-plugin-util";
 import { reorderParameters } from '../src/refactors/reorderParams/reorderParams';
-import { doTest, modifyAndAssert } from "./testUtil";
 
-function operation(reorder: number[]) {
+export function operation(reorder: number[]) {
   return function (node: ReferenceFindableNode & Node) {
     reorderParameters(node, reorder, console.log)
   }
@@ -10,7 +10,7 @@ function operation(reorder: number[]) {
 describe('try to change signature param type', () => {
 
   it('simple - function declaration sibling', () => {
-    let test = doTest({
+    let test = createProjectFiles({
       files: [
         {
           name: 'helper',
@@ -122,9 +122,8 @@ describe('try to change signature param type', () => {
     ]
   }
 
-
   it('method declarations and signatures', () => {
-    let test = doTest(dataWithClassesAndInterfaces)
+    let test = createProjectFiles(dataWithClassesAndInterfaces)
     modifyAndAssert({
       node: test.files.Animal.getClass('Animal').getMethod('born'),
       modification: operation([1, 0]),

@@ -8,11 +8,11 @@
             "type": "node",
             "request": "launch",
             "protocol": "inspector",
-            "name": "reOrderParamsBasicSpec",
+            "name": "reOrderParamsLiteralObjectSpec",
             "preLaunchTask": "build",
             "args": [
                 "--config=spec/support/jasmine-js.json",
-                "**/reOrderParamsBasicSpec.js"
+                "**/reOrderParamsLiteralObjectSpec.js"
             ],
             "runtimeArgs": [
                 "--inspect",
