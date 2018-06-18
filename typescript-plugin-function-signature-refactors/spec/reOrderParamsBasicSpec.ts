@@ -2,7 +2,7 @@ import { Node, ReferenceFindableNode } from 'ts-simple-ast';
 import { createProjectFiles, modifyAndAssert } from "typescript-plugin-util";
 import { reorderParameters } from '../src/refactors/reorderParams/reorderParams';
 
-export function operation(reorder: number[]) {
+export function reorderParamOperation(reorder: number[]) {
   return function (node: ReferenceFindableNode & Node) {
     reorderParameters(node, reorder, console.log)
   }
@@ -41,7 +41,7 @@ describe('try to change signature param type', () => {
         }
       ],
       node: test.files.helper.getFunction('helper'),
-      modification: operation([1, 0])
+      modification: reorderParamOperation([1, 0])
     })
 
     modifyAndAssert({
@@ -58,7 +58,7 @@ describe('try to change signature param type', () => {
         }
       ],
       node: test.files.helper.getFunction('helper'),
-      modification: operation([2, 0, 1])
+      modification: reorderParamOperation([2, 0, 1])
     })
 
     modifyAndAssert({
@@ -75,7 +75,7 @@ describe('try to change signature param type', () => {
         }
       ],
       node: test.files.helper.getFunction('helper'),
-      modification: operation([2])
+      modification: reorderParamOperation([2])
     })
 
   })
@@ -126,7 +126,7 @@ describe('try to change signature param type', () => {
     let test = createProjectFiles(dataWithClassesAndInterfaces)
     modifyAndAssert({
       node: test.files.Animal.getClass('Animal').getMethod('born'),
-      modification: operation([1, 0]),
+      modification: reorderParamOperation([1, 0]),
       asserts: [
         {
           file: test.files.types,
@@ -145,6 +145,7 @@ describe('try to change signature param type', () => {
         }
       ],
     })
+
     modifyAndAssert({
       asserts: [
         {
@@ -154,8 +155,9 @@ describe('try to change signature param type', () => {
         }
       ],
       node: test.files.Animal.getClass('Animal').getMethod('born'),
-      modification: operation([1, 3, 0])
+      modification: reorderParamOperation([1, 3, 0])
     })
+    
   })
 
 

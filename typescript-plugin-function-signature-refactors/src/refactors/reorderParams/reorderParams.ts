@@ -1,6 +1,6 @@
 import { CallExpression, NamedNode, Node, ReferenceFindableNode, SignaturedDeclaration, SourceFile, TypeGuards } from "ts-simple-ast";
 import * as ts from 'typescript';
-import { findAscendant, findChildContainingRangeLight, getNextSibling, getPreviousSibling, positionOrRangeToRange } from 'typescript-ast-util';
+import { findAscendant, findChildContainingRangeLight, getNextSibling, getPreviousSibling, positionOrRangeToRange, findChild, getKindName } from 'typescript-ast-util';
 import { getChildrenForEachChild, getName } from "typescript-plugin-util";
 
 /**
@@ -12,9 +12,9 @@ function getAllCallsExpressions(targetDeclaration: Node & ReferenceFindableNode,
     for (const reference of referencedSymbol.getReferences()) {
       const parent = reference.getNode().getParent()
       const extras = [parent, parent.getParent && parent.getParent(), targetDeclaration]
-      const found = (extras
-        .concat(getChildrenForEachChild(parent)))
+      const collection = (extras.concat(getChildrenForEachChild(parent)))
         .filter((value, pos, arr) => arr.indexOf(value) === pos)
+      const found = collection
         .find(p =>
           (!getName(p) || getName(targetDeclaration) === getName(p)) &&
           (TypeGuards.isCallExpression(p) || TypeGuards.isSignaturedDeclaration(p))
@@ -25,7 +25,7 @@ function getAllCallsExpressions(targetDeclaration: Node & ReferenceFindableNode,
       else {
         log('getAllCallsExpressions ignoring reference parent: ' + parent.getKindName() +
           ' ref: ' + reference.getNode().getKindName() +
-          'chh ' + parent.getChildren().map(c => c.getKindName()).join(', ') +
+          ', chh ' + parent.getChildren().map(c => c.getKindName()).join(', ') +
           ' ancestors: ' + parent.getAncestors().map(c => c.getKindName()).join(', ')
         )
       }
@@ -44,8 +44,6 @@ function getAllCallsExpressions(targetDeclaration: Node & ReferenceFindableNode,
  * @param reorder [1,0] means switching the positions between first and second params
  */
 export function reorderParameters(node: Node, reorder: number[], log: (msg: string) => void) {
-
-  // let targetDeclaration: Node & ReferenceFindableNode
   if(TypeGuards.isReferenceFindableNode(node)){
     getAllCallsExpressions(node, log).forEach(call => {
       if (TypeGuards.isCallExpression(call)) {
@@ -57,28 +55,11 @@ export function reorderParameters(node: Node, reorder: number[], log: (msg: stri
     })
   }
   else {// if(TypeGuards.isConstructorDeclaration(node)) {
-    console.log('!TypeGuards.isReferenceFindableNode(node)');
+    console.log('!TypeGuards.isReferenceFindableNode(node) '+node.getText());
     
     //TODO: find interface constructor implememted by this one and rename that one and then run this function calling it with node.getAncestors().find(TypeGuards.isReferenceFindableNode) to rename new A calls
-    return []//TODO: 
-    // node.getFirstAncestorByKind(ts.SyntaxKind.ClassDeclaration)
-    // targetDeclaration = node.getAncestors().find(TypeGuards.isReferenceFindableNode)
-    // targetDeclaration = node
+    return []
   }
-  // if(!targetDeclaration){
-  //   log('getAllCallsExpressions aborted since cannot find a isReferenceFindableNode ')
-  //   return []
-  // }
-
-
-  // getAllCallsExpressions(targetDeclaration, log).forEach(call => {
-  //   if (TypeGuards.isCallExpression(call)) {
-  //     changeCallArgs(reorder, call.getArguments(), log)
-  //   }
-  //   else {
-  //     changeCallArgs(reorder, call.getParameters(), log)
-  //   }
-  // })
 }
 
 function changeCallArgs(reorder: ReadonlyArray<number>, args: ReadonlyArray<Node>, log: (msg: string) => void) {
@@ -138,27 +119,41 @@ function changeCallArgs(reorder: ReadonlyArray<number>, args: ReadonlyArray<Node
 }
 
 /** same as getFunction but in ts-simple-ast project */
-export function getFunctionSimple(file: SourceFile, position: number, name: string): SignaturedDeclaration & NamedNode & Node | undefined {
+export function getFunctionSimple(file: SourceFile, position: number, name: string, log: (msg: string) => void): SignaturedDeclaration & NamedNode & Node | undefined {
   let expr = file.getDescendantAtPos(position)
   if (!expr) {
     return
   }
-  const e = [expr].concat(expr.getAncestors()).find(e => TypeGuards.isSignaturedDeclaration(e) && TypeGuards.isNamedNode(e) && e.getName() === name)
-  if (TypeGuards.isSignaturedDeclaration(e) && TypeGuards.isNamedNode(e)) {
-    return e
+  // log('getfuncionsimple: '+expr.getKindName() + ' - ' + expr.getText() + ' - ' + expr.getAncestors().map(e=>e.getKindName() + ' - TypeGuards.isSignaturedDeclaration(e)||TypeGuards.isFunctionLikeDeclaration(e)' +( TypeGuards.isSignaturedDeclaration(e)||TypeGuards.isFunctionLikeDeclaration(e)) + ' - (TypeGuards.isNamedNode(e)||TypeGuards.isNameableNode(e)||TypeGuards.isPropertyNamedNode(e) '+((TypeGuards.isNamedNode(e)||TypeGuards.isNameableNode(e)||TypeGuards.isPropertyNamedNode(e)))))
+  const e = [expr].concat(expr.getAncestors()).find(e => (TypeGuards.isSignaturedDeclaration(e)||TypeGuards.isFunctionLikeDeclaration(e)) && (((TypeGuards.isNamedNode(e)||TypeGuards.isNameableNode(e)||TypeGuards.isPropertyNamedNode(e)) && e.getName() === name)))
+
+  if(!e){
+    return
   }
+  // if (TypeGuards.isSignaturedDeclaration(e) && TypeGuards.isNamedNode(e)) {
+    return e as any
+  // }
 }
 
-export function getFunction(fileName: string, position: number, program: ts.Program) {
+export function getFunction(fileName: string, position: number, program: ts.Program, log: (msg: string) => void) : ts.SignatureDeclaration|ts.CallExpression | ts.NewExpression{
   const sourceFile = program.getSourceFile(fileName)
   const node = findChildContainingRangeLight(sourceFile, positionOrRangeToRange(position))
   if (!node) {
+    log('getFunction !node ')
     return
   }
-  const expr = findAscendant<ts.ExpressionStatement>(node, ts.isExpressionStatement, true)
+  let expr = findAscendant<ts.ExpressionStatement>(node, ts.isExpressionStatement, true)
+  if(!expr){
+    expr = findAscendant<ts.ExpressionStatement>(node, n=>getKindName(n).endsWith('Declaration'), true)
+  }
   if (!expr) {
+    log('getFunction !expr ')
     return
   }
-  return [getNextSibling(expr), getPreviousSibling(expr)].find(ts.isFunctionLike)
+  let result: ts.SignatureDeclaration|ts.CallLikeExpression = [getNextSibling(expr)/* , getPreviousSibling(expr) */].find(ts.isFunctionLike)
+  if(!result){
+    findChild(getNextSibling(expr)/* || getPreviousSibling(expr) */, n => ts.isIdentifier(n) && !!(result = findAscendant(n, p=>/* log('getKindName '+getKindName(p)) || */ts.isCallSignatureDeclaration(p)||ts.isFunctionLike(p)||ts.isCallOrNewExpression(p))), true)
+  }
+  result && log('getFunction result '+getKindName(result) + ' - ' + result.getText())
+  return result
 }
-

@@ -1,5 +1,5 @@
 import { createProjectFiles, modifyAndAssert } from "typescript-plugin-util";
-import { operation } from './reOrderParamsBasicSpec';
+import { reorderParamOperation } from './reOrderParamsBasicSpec';
 import { ObjectLiteralElementLike, TypeGuards } from 'ts-simple-ast';
 import * as ts from 'typescript'
 
@@ -40,7 +40,7 @@ describe('reorder params literal objects', () => {
           export interface Interface1{
             method1(a: number,b: boolean,c: Date[][]): undefined
             method2: (d: Date, isIt: boolean, names: string[]): number
-            method3: function(f: Date[][], isIt: boolean[], lastName: string): number
+            method3: (f: Date[][], isIt: boolean[], lastName: string): number
           }
           `
         },
@@ -71,7 +71,7 @@ describe('reorder params literal objects', () => {
         }
       ],
       node: test.files.test1.getVariableDeclaration('obj').getFirstChildByKind(ts.SyntaxKind.ObjectLiteralExpression).getProperty('method1'),
-      modification: operation([1, 2])
+      modification: reorderParamOperation([1, 2])
     })
 
 
@@ -97,7 +97,19 @@ describe('reorder params literal objects', () => {
         }
       ],
       node: test.files.test1.getVariableDeclaration('obj').getFirstChildByKind(ts.SyntaxKind.ObjectLiteralExpression).getProperty('method2'),
-      modification: operation([2])
+      modification: reorderParamOperation([2])
+    })
+
+    modifyAndAssert({
+      asserts: [
+        {
+          file: test.files.test2,
+          before: `obj.method2(false, ['sebastian'], date2)`,
+          after: `obj.method2(['sebastian'], date2, false)`,
+        }, 
+      ],
+      node: test.files.test2.getStatements()[2].getFirstDescendantByKind(ts.SyntaxKind.PropertyAccessExpression).getNameNode(),
+      modification: reorderParamOperation([2])
     })
     
     

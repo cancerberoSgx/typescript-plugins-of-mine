@@ -19,7 +19,6 @@ function getCompletionsAtPosition(fileName: string, position: number, options: t
   return prior
 }
 
-let selectedAction: Action
 let opts: CodeFixOptions
 
 
@@ -76,7 +75,7 @@ function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSetti
     catch (error) {
       log(`getEditsForRefactor error ${error + ' - ' + error.stack}`)
     }
-    log(`getEditsForRefactor ${selectedAction.name} took  ${timeFrom(t0)}`)
+    log(`getEditsForRefactor ${actionName} took  ${timeFrom(t0)}`)
   }
   return
 }

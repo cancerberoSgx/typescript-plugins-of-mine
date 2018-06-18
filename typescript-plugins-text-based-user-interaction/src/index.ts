@@ -79,12 +79,13 @@ class ToolImpl implements Tool {
     }).filter(a => a!==undefined)
   }
 
-  public getCompletionsAtPosition(fileName: string, position: number, options: GetCompletionsAtPositionOptions | undefined): CompletionEntry[] {
+  public getCompletionsAtPosition(fileName: string, position: number, options: GetCompletionsAtPositionOptions | undefined): CompletionEntry[] { 
     const completionPrefix = this.config.completionPrefix || 'refactor'
     const result = this.config.actions.map(action => {
       let insertText = []
       const snippet = typeof action.snippet === 'function' ? (action.snippet as any)(fileName, position) : action.snippet
       if (!snippet) {
+        this.config.log('getCompletionsAtPosition aborted because !snippet')
         return
       }
       const splitted = snippet.split('\n')

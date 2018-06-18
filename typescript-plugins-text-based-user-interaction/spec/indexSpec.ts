@@ -1,4 +1,4 @@
-import { create, ToolConfig, Tool, buildUserCalls } from "../src";
+import { buildUserCalls, create, Tool } from "../src";
 
 describe('guiNoMore', () => {
 
@@ -43,10 +43,8 @@ export function b (){}
 
 
   it('findActions should return actions declared in given file ', () => {
-     const actions = tool.findActions(file1)
-     expect(buildUserCalls(file1, (tool as any).config as any).length).toBe(3)
-    // console.log(buildUserCalls(file1, (tool as any).config as any))
-    // console.log(actions.find(a => a.name === 'signatureChangeParameterOrder'))
+    const actions = tool.findActions(file1)
+    expect(buildUserCalls(file1, (tool as any).config as any).length).toBe(3)
     expect(actions.find(a => a.name === 'moveThisFileTo').args.dest).toBe('/home/sg/git/proj1/src/model/units/Warrior.ts')
     expect(actions.find(a => a.name === 'moveThisFolderTo').args.dest).toBe('../foo/bar')
     expect(actions.find(a => a.name === 'signatureChangeParameterOrder').args.config.functionName).toBe('f')

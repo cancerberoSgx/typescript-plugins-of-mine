@@ -75,6 +75,12 @@ export function findChildContainingRangeLight(sourceFile: ts.SourceFile, r: ts.T
   }
   return find(sourceFile)
 }
+export function findChildContainingRangeGetChildren(parent: ts.Node, r: ts.TextRange): ts.Node | undefined {
+  // let found:ts.Node = parent
+  let found:ts.Node = parent.getChildren().find(node => r.pos >= node.getFullStart() && r.end <= node.getEnd()) 
+  return found && findChildContainingRangeGetChildren(found, r) || parent
+}
+
 //TODO. rename to findFirstChildContainedRange
 export function findChildContainedRange(sourceFile: ts.SourceFile, r: ts.TextRange): ts.Node | undefined {
   function find(node: ts.Node): ts.Node | undefined {

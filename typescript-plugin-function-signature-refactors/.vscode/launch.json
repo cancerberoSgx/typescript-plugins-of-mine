@@ -11,8 +11,8 @@
             "name": "reOrderParamsLiteralObjectSpec",
             "preLaunchTask": "build",
             "args": [
-                "--config=spec/support/jasmine-js.json",
-                "**/reOrderParamsLiteralObjectSpec.js"
+                // "--config=spec/support/jasmine-js.json",
+                "/home/sg/git/typescript-plugins-of-mine/typescript-plugin-function-signature-refactors/dist/spec/reOrderParamsLiteralObjectSpec.js"
             ],
             "runtimeArgs": [
                 "--inspect",
