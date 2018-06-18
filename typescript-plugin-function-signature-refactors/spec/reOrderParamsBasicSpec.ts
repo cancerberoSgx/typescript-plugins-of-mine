@@ -1,5 +1,12 @@
-import { doTest, reorderAndAssert } from "./testUtil";
+import { Node, ReferenceFindableNode } from 'ts-simple-ast';
+import { reorderParameters } from '../src/refactors/reorderParams/reorderParams';
+import { doTest, modifyAndAssert } from "./testUtil";
 
+function operation(reorder: number[]) {
+  return function (node: ReferenceFindableNode & Node) {
+    reorderParameters(node, reorder, console.log)
+  }
+}
 describe('try to change signature param type', () => {
 
   it('simple - function declaration sibling', () => {
@@ -20,9 +27,8 @@ describe('try to change signature param type', () => {
         }
       ]
     })
-    // printDiagnostics(test.project)
 
-    reorderAndAssert({
+    modifyAndAssert({
       asserts: [
         {
           file: test.files.index,
@@ -35,10 +41,10 @@ describe('try to change signature param type', () => {
         }
       ],
       node: test.files.helper.getFunction('helper'),
-      reorder: [1, 0]
+      modification: operation([1, 0])
     })
 
-    reorderAndAssert({
+    modifyAndAssert({
       asserts: [
         {
           file: test.files.index,
@@ -52,10 +58,10 @@ describe('try to change signature param type', () => {
         }
       ],
       node: test.files.helper.getFunction('helper'),
-      reorder: [2, 0, 1]
+      modification: operation([2, 0, 1])
     })
 
-    reorderAndAssert({
+    modifyAndAssert({
       asserts: [
         {
           file: test.files.index,
@@ -69,7 +75,7 @@ describe('try to change signature param type', () => {
         }
       ],
       node: test.files.helper.getFunction('helper'),
-      reorder: [2]
+      modification: operation([2])
     })
 
   })
@@ -119,12 +125,9 @@ describe('try to change signature param type', () => {
 
   it('method declarations and signatures', () => {
     let test = doTest(dataWithClassesAndInterfaces)
-
-    // printDiagnostics(test.project)
-
-    reorderAndAssert({
+    modifyAndAssert({
       node: test.files.Animal.getClass('Animal').getMethod('born'),
-      reorder: [1, 0],
+      modification: operation([1, 0]),
       asserts: [
         {
           file: test.files.types,
@@ -143,7 +146,7 @@ describe('try to change signature param type', () => {
         }
       ],
     })
-    reorderAndAssert({
+    modifyAndAssert({
       asserts: [
         {
           before: 'born(when: Date, parents: Alive[], where: number[], why: string)',
@@ -152,7 +155,7 @@ describe('try to change signature param type', () => {
         }
       ],
       node: test.files.Animal.getClass('Animal').getMethod('born'),
-      reorder: [1, 3, 0]
+      modification: operation([1, 3, 0])
     })
   })
 

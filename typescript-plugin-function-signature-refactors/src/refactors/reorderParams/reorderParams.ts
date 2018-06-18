@@ -1,12 +1,12 @@
-import { CallExpression, Node, ReferenceFindableNode, SignaturedDeclaration, TypeGuards, SourceFile, NamedNode } from "ts-simple-ast";
-import { getName, getChildrenForEachChild } from "typescript-plugin-util";
-import { findChildContainingRangeLight, positionOrRangeToRange, findAscendant, getPreviousSibling, getNextSibling } from 'typescript-ast-util';
-import * as ts from 'typescript'
+import { CallExpression, NamedNode, Node, ReferenceFindableNode, SignaturedDeclaration, SourceFile, TypeGuards } from "ts-simple-ast";
+import * as ts from 'typescript';
+import { findAscendant, findChildContainingRangeLight, getNextSibling, getPreviousSibling, positionOrRangeToRange } from 'typescript-ast-util';
+import { getChildrenForEachChild, getName } from "typescript-plugin-util";
 
 /**
  * collect al references of given node and returns those nodes that need to be refactored
  */
-function getAllCallsExpressions(targetDeclaration: ReferenceFindableNode & Node): ((CallExpression | SignaturedDeclaration) & Node)[] {
+function getAllCallsExpressions(targetDeclaration: ReferenceFindableNode & Node, log: (msg: string) => void): ((CallExpression | SignaturedDeclaration) & Node)[] {
   const referencedSymbols = targetDeclaration.findReferences()
   const calls: (Node & (CallExpression | SignaturedDeclaration))[] = []
   for (const referencedSymbol of referencedSymbols) {
@@ -17,14 +17,14 @@ function getAllCallsExpressions(targetDeclaration: ReferenceFindableNode & Node)
         .concat(getChildrenForEachChild(parent)))
         .filter((value, pos, arr) => arr.indexOf(value) === pos)
         .find(p =>
-          (!getName(p) || getName(targetDeclaration) === getName(p)) && 
+          (!getName(p) || getName(targetDeclaration) === getName(p)) &&
           (TypeGuards.isCallExpression(p) || TypeGuards.isSignaturedDeclaration(p))
         ) as (CallExpression | SignaturedDeclaration) & Node
       if (found) {
         calls.push(found)
       }
       else {
-        console.log('getAllCallsExpressions ignoring reference parent: ' + parent.getKindName() +
+        log('getAllCallsExpressions ignoring reference parent: ' + parent.getKindName() +
           ' ref: ' + reference.getNode().getKindName() +
           'chh ' + parent.getChildren().map(c => c.getKindName()).join(', ') +
           ' ancest: ' + parent.getAncestors().map(c => c.getKindName()).join(', ')
@@ -35,7 +35,6 @@ function getAllCallsExpressions(targetDeclaration: ReferenceFindableNode & Node)
   return calls.filter((value, pos, arr) => arr.indexOf(value) === pos)
 }
 
-
 /**
  * For all references that must be refactored calls changeCallArgs.
  * 
@@ -45,18 +44,18 @@ function getAllCallsExpressions(targetDeclaration: ReferenceFindableNode & Node)
  * @param targetDeclaration the function-like declaration to reorder its parameters
  * @param reorder [1,0] means switching the positions between first and second params
  */
-export function reorderParameters(targetDeclaration: ReferenceFindableNode & Node, reorder: number[]) {
-  getAllCallsExpressions(targetDeclaration).forEach(call => {
+export function reorderParameters(targetDeclaration: ReferenceFindableNode & Node, reorder: number[], log: (msg: string) => void) {
+  getAllCallsExpressions(targetDeclaration, log).forEach(call => {
     if (TypeGuards.isCallExpression(call)) {
-      changeCallArgs(reorder, call.getArguments())
+      changeCallArgs(reorder, call.getArguments(), log)
     }
     else {
-      changeCallArgs(reorder, call.getParameters())
+      changeCallArgs(reorder, call.getParameters(), log)
     }
   })
 }
 
-function changeCallArgs(reorder: ReadonlyArray<number>, args: ReadonlyArray<Node>) {
+function changeCallArgs(reorder: ReadonlyArray<number>, args: ReadonlyArray<Node>, log: (msg: string) => void) {
   type T = { index: number, arg: string, name: string }
 
   // will use indexOccupied to reasign new positions to those nodes that must move implicitly
@@ -104,7 +103,7 @@ function changeCallArgs(reorder: ReadonlyArray<number>, args: ReadonlyArray<Node
     if (arg) {
       replacements.push({ node: args[arg.index], text: arg.arg })
     } else {
-      console.log('changeCallArgs ignoring arg: ' + a.getKindName() + ' - text: ' + a.getText())
+      log('changeCallArgs ignoring arg: ' + a.getKindName() + ' - text: ' + a.getText())
     }
   })
   for (const r of replacements) {
@@ -112,12 +111,10 @@ function changeCallArgs(reorder: ReadonlyArray<number>, args: ReadonlyArray<Node
   }
 }
 
-
-
 /** same as getFunction but in ts-simple-ast project */
 export function getFunctionSimple(file: SourceFile, position: number, name: string): SignaturedDeclaration & NamedNode & Node | undefined {
   let expr = file.getDescendantAtPos(position)
-  if(!expr) {
+  if (!expr) {
     return
   }
   const e = [expr].concat(expr.getAncestors()).find(e => TypeGuards.isSignaturedDeclaration(e) && TypeGuards.isNamedNode(e) && e.getName() === name)
@@ -125,8 +122,8 @@ export function getFunctionSimple(file: SourceFile, position: number, name: stri
     return e
   }
 }
+
 export function getFunction(fileName: string, position: number, program: ts.Program) {
-  // TODO: cache
   const sourceFile = program.getSourceFile(fileName)
   const node = findChildContainingRangeLight(sourceFile, positionOrRangeToRange(position))
   if (!node) {

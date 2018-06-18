@@ -1,5 +1,5 @@
 import * as ts from 'typescript';
-import { findAscendant, findChildContainingRangeLight, getNextSibling, getPreviousSibling, positionOrRangeToRange, positionOrRangeToNumber } from "typescript-ast-util";
+import { positionOrRangeToNumber } from "typescript-ast-util";
 import { CodeFixOptions } from 'typescript-plugin-util';
 import { Action, create, Tool, ToolConfig } from "typescript-plugins-text-based-user-interaction";
 import * as ts_module from 'typescript/lib/tsserverlibrary';
@@ -21,15 +21,15 @@ export class ReorderParamsCodeFixImpl implements SignatureRefactorsCodeFix {
   }
 
   apply(arg: CodeFixOptions): void | ts.ApplicableRefactorInfo[] {
-      const sourceFile = arg.simpleNode.getSourceFile()
-      const funcDecl = getFunctionSimple(sourceFile, positionOrRangeToNumber(arg.positionOrRange), this.selectedAction.args.name)
-      if(!funcDecl){
-        this.options.log(`reorderParamsPlugin apply aborted because function ${this.selectedAction.args.name} cannot be found at ${arg.positionOrRange}`)
-        return
-      }
-      this.options.log(`reorderParamsPlugin apply ${funcDecl && funcDecl.getKindName()} [${this.selectedAction.args && this.selectedAction.args.reorder && this.selectedAction.args.reorder.join(', ')}] ${funcDecl && funcDecl.getText()}`)
-      reorderParameters(funcDecl, this.selectedAction.args.reorder)
-      sourceFile.saveSync()
+    const sourceFile = arg.simpleNode.getSourceFile()
+    const funcDecl = getFunctionSimple(sourceFile, positionOrRangeToNumber(arg.positionOrRange), this.selectedAction.args.name)
+    if (!funcDecl) {
+      this.options.log(`reorderParamsPlugin apply aborted because function ${this.selectedAction.args.name} cannot be found at ${arg.positionOrRange}`)
+      return
+    }
+    this.options.log(`reorderParamsPlugin apply ${funcDecl && funcDecl.getKindName()} [${this.selectedAction.args && this.selectedAction.args.reorder && this.selectedAction.args.reorder.join(', ')}] ${funcDecl && funcDecl.getText()}`)
+    reorderParameters(funcDecl, this.selectedAction.args.reorder, this.options.log)
+    sourceFile.saveSync()
   }
 
   predicate(arg: CodeFixOptions): boolean {
@@ -44,7 +44,7 @@ export class ReorderParamsCodeFixImpl implements SignatureRefactorsCodeFix {
     refactors: ts.ApplicableRefactorInfo[];
     selectedAction?: Action;
   } {
-    const applicableRefactors =  this.getTextUITool().getApplicableRefactors(info, refactorName, refactorActionName, fileName, positionOrRange, userPreferences)
+    const applicableRefactors = this.getTextUITool().getApplicableRefactors(info, refactorName, refactorActionName, fileName, positionOrRange, userPreferences)
     this.selectedAction = applicableRefactors.selectedAction
     return applicableRefactors
   }

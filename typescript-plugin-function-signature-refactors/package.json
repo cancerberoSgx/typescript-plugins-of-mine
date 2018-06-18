@@ -6,6 +6,7 @@
   "typings": "dist/src/typings.d.ts",
   "scripts": {
     "test": "ts-node node_modules/jasmine/bin/jasmine",
+    "test-js": "node node_modules/jasmine/bin/jasmine --config=./spec/support/jasmine-js.json",
     "test-coverage": "nyc --clean --reporter=lcov -e .ts -x \"*Spec.ts\" ts-node node_modules/jasmine/bin/jasmine --config=./spec/support/jasmine.json",
     "doc": "exit 0",
     "watch": "tsc --watch",

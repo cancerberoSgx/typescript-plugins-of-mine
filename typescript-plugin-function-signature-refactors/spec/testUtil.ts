@@ -1,6 +1,4 @@
-import Project, { ModuleKind, NamedNode, Node, ReferenceFindableNode, ScriptTarget, SignaturedDeclaration, SourceFile } from "ts-simple-ast";
-import { reorderParameters } from "../src/refactors/reorderParams/reorderParams";
-
+import Project, { ModuleKind, Node, ScriptTarget, SourceFile } from "ts-simple-ast";
 
 export interface Config {
   files: { name: string, text: string, path: string }[]
@@ -29,27 +27,27 @@ export function doTest(config: Config): Result {
   return result
 }
 
-export interface ReorderAndAssert {
+export interface TestModifyAndAssertConfig {
   asserts: {
     before?: string,
     after?: string,
     file?: SourceFile
   }[],
-  node?: SignaturedDeclaration & ReferenceFindableNode & Node,
-  reorder?: number[],
+  node?: Node,
+  modification: (node: Node) => void
   verbose?: boolean
 }
 
-export function reorderAndAssert({ node, reorder, asserts, verbose = false }: ReorderAndAssert) {
+export function modifyAndAssert({ node, modification, asserts, verbose = false }: TestModifyAndAssertConfig) {
   asserts.filter(a => a.before && a.file).forEach(({ before, after, file }) => {
     expect(file.getText()).toContain(before)
     if (after) {
       expect(file.getText()).not.toContain(after, `OFFENDING file: ${file.getFilePath()}`)
     }
   })
-  if (node && reorder && reorder.length) {
+  if (node && modification) {
     verbose && console.log('BEFORE: ' + node.getText())
-    reorderParameters(node, reorder)
+    modification(node)
     verbose && console.log('AFTER: ' + node.getText())
   }
   asserts.filter(a => a.after && a.file).forEach(({ before, after, file }) => {
