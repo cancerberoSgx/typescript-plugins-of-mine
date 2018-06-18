@@ -1,19 +1,28 @@
+import { NamedNode, Node, SignaturedDeclaration, SourceFile, TypeGuards } from 'ts-simple-ast';
 import * as ts from 'typescript';
-import { positionOrRangeToNumber, getKindName, findChildContainingRangeLight, positionOrRangeToRange, findAscendant } from "typescript-ast-util";
+import { findAscendant, findChildContainingRangeLight, getAscendants, getKindName, positionOrRangeToNumber, positionOrRangeToRange } from "typescript-ast-util";
 import { CodeFixOptions } from 'typescript-plugin-util';
 import { Action, create, Tool, ToolConfig } from "typescript-plugins-text-based-user-interaction";
 import * as ts_module from 'typescript/lib/tsserverlibrary';
 import { PLUGIN_NAME, SignatureRefactorArgs, SignatureRefactorsCodeFix } from '../../refactors';
-import { getFunction, getFunctionSimple, reorderParameters } from './reorderParams';
+import { reorderParameters } from './reorderParams';
 
+/**
+ * # TODO
+ *  * refactor a nimplementation method wont change its interface signature - super 
+ *  * constructors not supported
+ */
 export class ReorderParamsCodeFixImpl implements SignatureRefactorsCodeFix {
 
   private interactionTool: Tool
+
   name: string = PLUGIN_NAME + '-reorderParams'
+
   config: any = {
     // print a comment with help on the autocomplete suggestion
     help: false
   }
+
   selectedAction?: Action;
 
   constructor(private options: SignatureRefactorArgs) {
@@ -25,14 +34,20 @@ export class ReorderParamsCodeFixImpl implements SignatureRefactorsCodeFix {
 
   apply(arg: CodeFixOptions): void | ts.ApplicableRefactorInfo[] {
     const sourceFile = arg.simpleNode.getSourceFile()
-    const funcDecl = getFunctionSimple(sourceFile, positionOrRangeToNumber(arg.positionOrRange), this.selectedAction.args.name, this.options.log)
+    const funcDecl = getSimpleTargetNode(sourceFile, positionOrRangeToNumber(arg.positionOrRange), this.selectedAction.args.name, this.options.log)
     if (!funcDecl) {
       this.options.log(`reorderParamsPlugin apply aborted because function ${this.selectedAction.args.name} cannot be found at ${arg.positionOrRange}`)
       return
     }
-    this.options.log(`reorderParamsPlugin apply ${funcDecl && funcDecl.getKindName()} [${this.selectedAction.args && this.selectedAction.args.reorder && this.selectedAction.args.reorder.join(', ')}] ${funcDecl && funcDecl.getText()}`)
-    reorderParameters(funcDecl, this.selectedAction.args.reorder, this.options.log)
+    // this.options.log(`reorderParamsPlugin apply ${funcDecl && funcDecl.getKindName()} [${this.selectedAction.args && this.selectedAction.args.reorder && this.selectedAction.args.reorder.join(', ')}] ${funcDecl && funcDecl.getText()}`)
+    reorderParameters(funcDecl, this.selectedAction.args.reorder, this.options.log);
     sourceFile.saveSync()
+    // try {
+    //   this.options.info.project.projectService.closeClientFile(arg.sourceFile.fileName)
+    //   arg.sourceFile.update(sourceFile.getFullText(), {newLength: sourceFile.getFullText().length,  span: {length:   arg.sourceFile.getFullText().length, start: 0}})
+    // }catch(ex){
+    //   this.options.log(`reorderParamsPlugin apply ex1: ${ex} ${ex.stack}`)
+    // }
   }
 
   predicate(arg: CodeFixOptions): boolean {
@@ -58,11 +73,14 @@ export class ReorderParamsCodeFixImpl implements SignatureRefactorsCodeFix {
     }
     return this.interactionTool
   }
-  // private getTargetNode(fileName: string, position: number){
-  //   const sourceFile = this.options.program.getSourceFile(fileName)
-  //   const target = findChildContainingRangeLight(sourceFile, positionOrRangeToRange(position))
-  //   return findAscendant(target, p=>ts.isCallSignatureDeclaration(p)||ts.isFunctionLike(p)||ts.isCallOrNewExpression(p), true)
-  // }
+
+  private getTargetNode(fileName: string, position: number) {
+    const sourceFile = this.options.info.languageService.getProgram().getSourceFile(fileName)
+    const target = findChildContainingRangeLight(sourceFile, positionOrRangeToRange(position));
+    const predicate = p => ts.isCallSignatureDeclaration(p) || ts.isFunctionLike(p) || ts.isCallOrNewExpression(p) || ts.isMethodSignature(p) || ts.isConstructSignatureDeclaration(p)
+    this.options.log('getTargetNode  concat(getAscendants, ' + [target].concat(getAscendants(target)).map(t => getKindName(t) + ' - ' + predicate(t)).join(', '))
+    return findAscendant(target, predicate, true)
+  }
 
   private getTextUIToolConfig(): ToolConfig {
     return {
@@ -72,30 +90,34 @@ export class ReorderParamsCodeFixImpl implements SignatureRefactorsCodeFix {
         {
           name: 'reorderParams',
           args: ['name', 'reorder'],
+          commentType: 'block',
           print: action => `Reorder parameters of "${action.args.name}"`,
 
           snippet: (fileName: string, position: number): string | undefined => {
-            let func = getFunction(fileName, position, this.options.program, this.options.log)
-            if(!func){
+            let func = this.getTargetNode(fileName, position)
+            if (!func) {
               return
             }
             let reorder = []
             let name
-            if(ts.isFunctionLike(func)){
+            if (ts.isFunctionLike(func)) {
               if (!func || func.parameters && func.parameters.length <= 1) {
                 return
               }
-              // this.options.log('seba123'+func.getText() + ' - '+getKindName(func))
-              name = func.name.getText()
+              name = func.name ? func.name.getText() : (func.parent && (func.parent as any).name && (func.parent as any).name) ? (func.parent as any).name.getText() : undefined
+
+              if (!name) {
+                return
+              }
               for (let i = 0; i < func.parameters.length; i++) {
                 reorder.push(func.parameters.length - i - 1)
               }
             }
-            else if( ts.isCallExpression(func)) {
+            else if (ts.isCallExpression(func)) {
               if (!func || func.arguments && func.arguments.length <= 1) {
                 return
               }
-              if(!ts.isIdentifier(func.expression)){
+              if (!ts.isIdentifier(func.expression)) {
                 return
               }
               name = func.expression.getText()
@@ -103,7 +125,9 @@ export class ReorderParamsCodeFixImpl implements SignatureRefactorsCodeFix {
                 reorder.push(func.arguments.length - i - 1)
               }
             }
+            //TODO: isCallNew and others that comply with : ts.isCallSignatureDeclaration(p)||ts.isFunctionLike(p)||ts.isCallOrNewExpression(p
             else {
+              this.options.log('snippet undefined because not isCallExpression and not isFunctionLike' + func.getText() + ' - ' + getKindName(func))
               return
             }
             const help = this.config.helpComment ? `
@@ -118,9 +142,13 @@ export class ReorderParamsCodeFixImpl implements SignatureRefactorsCodeFix {
 
           // TODO: we could give a more intuitive text-based API by letting the user provide the new signature. Then we create a new function with that signature in order to parse it correctly. 
           nameExtra: (fileName: string, position: number) => {
-            const func = getFunction(fileName, position, this.options.program, this.options.log)
-            if(func && ts.isFunctionLike(func)){             
-              return   `of ${func.name.getText()}`
+            const func = this.getTargetNode(fileName, position)
+            if (func && ts.isFunctionLike(func)) {
+              const name = func.name ? func.name.getText() : (func.parent && (func.parent as any).name && (func.parent as any).name) ? (func.parent as any).name.getText() : ''
+              return `of ${name}`
+            }
+            else if (ts.isCallExpression(func)) {
+              return `of ${func.expression ? func.expression.getText() : ''}`
             }
             else {
               return ''
@@ -130,4 +158,20 @@ export class ReorderParamsCodeFixImpl implements SignatureRefactorsCodeFix {
       ]
     }
   }
+}
+
+export function getSimpleTargetNode(file: SourceFile, position: number, name: string, log: (msg: string) => void): SignaturedDeclaration & NamedNode & Node | undefined {
+  let expr = file.getDescendantAtPos(position)
+  if (!expr) {
+    return
+  }
+  const predicate = e => (TypeGuards.isSignaturedDeclaration(e) || TypeGuards.isPropertySignature(e) || TypeGuards.isFunctionLikeDeclaration(e)) && (TypeGuards.isNamedNode(e) || TypeGuards.isNameableNode(e) || TypeGuards.isPropertyNamedNode(e)) && e.getName() === name
+  // log('getFunctionSimple: '+expr.getKindName() + ' - ' + expr.getText() + ' - ' + expr.getAncestors().map(e=>e.getKindName() + ' - predicate: ' + predicate(e) + ' - pred1: ' + (TypeGuards.isSignaturedDeclaration(e) || TypeGuards.isPropertySignature(e) || TypeGuards.isFunctionLikeDeclaration(e)) + ' - pred2 : ' + (TypeGuards.isNamedNode(e) || TypeGuards.isNameableNode(e) || TypeGuards.isPropertyNamedNode(e))).join(', '));
+  const e = [expr].concat(expr.getAncestors()).find(predicate)
+  if (!e) {
+    return
+  }
+  // if (TypeGuards.isSignaturedDeclaration(e) && TypeGuards.isNamedNode(e)) {
+  return e as any
+  // }
 }

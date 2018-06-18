@@ -2,7 +2,6 @@ import { now, timeFrom } from 'hrtime-now';
 import * as ts from 'typescript';
 import { findChildContainedRange, findChildContainingRange, findChildContainingRangeLight, positionOrRangeToNumber, positionOrRangeToRange } from 'typescript-ast-util';
 import { CodeFixOptions, createSimpleASTProject, getPluginCreate, LanguageServiceOptionals } from 'typescript-plugin-util';
-import { Action } from 'typescript-plugins-text-based-user-interaction';
 import * as ts_module from 'typescript/lib/tsserverlibrary';
 import { getRefactors, PLUGIN_NAME, SignatureRefactorArgs, SignatureRefactorsCodeFix } from './refactors';
 
@@ -69,6 +68,9 @@ function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSetti
       log(`getEditsForRefactor refactor found ${refactor.name}`)
       opts.simpleProject = createSimpleASTProject(info.project)
       const sourceFile = opts.simpleProject.getSourceFileOrThrow(fileName)
+      if (sourceFile.getFullText() !== opts.sourceFile.getFullText()) {
+        sourceFile.replaceWithText(opts.sourceFile.getFullText()) // update tsa sourcefile with buffer contents
+      }
       opts.simpleNode = sourceFile.getDescendantAtPos(positionOrRangeToNumber(positionOrRange)) || sourceFile
       refactor.apply(opts)
     }
@@ -79,7 +81,6 @@ function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSetti
   }
   return
 }
-
 
 let info: ts_module.server.PluginCreateInfo
 const pluginDefinition: LanguageServiceOptionals = {
@@ -94,5 +95,5 @@ function getAllRefactors(): SignatureRefactorsCodeFix[] {
   return getRefactors(getRefactorsConfig())
 }
 function getRefactorsConfig(): SignatureRefactorArgs {
-  return { log, program: info.languageService.getProgram() }
+  return { log, info }
 }

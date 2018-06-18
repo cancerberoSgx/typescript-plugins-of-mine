@@ -18,6 +18,7 @@ export interface ActionConfig {
   /** the example snippet to suggested for this action to the user on "refactor" autocomplete  */
   snippet: string | ((fileName: string, position: number) => string | undefined)
   nameExtra?: string | ((fileName: string, position: number) => string)
+  commentType?: 'line' | 'block' 
 }
 
 export interface Action {
@@ -42,6 +43,7 @@ class ToolImpl implements Tool {
   constructor(private config: ToolConfig) {
     this.config.prefix = this.config.prefix || '&%&%'
     this.config.log = this.config.log || ((msg: string) => { })
+    this.config.actions.forEach(a=>{a.commentType = a.commentType || 'line'})
     this.buildEvalExpr()
   }
   private allActionsEvalPrefix: string
@@ -90,7 +92,12 @@ class ToolImpl implements Tool {
       }
       const splitted = snippet.split('\n')
       for (let i = 0; i < splitted.length; i++) {
-        insertText.push(`// ${this.config.prefix} ${splitted[i]}`)
+        if( action.commentType === 'line'){
+          insertText.push(`// ${this.config.prefix} ${splitted[i]}`)
+        }
+        if( action.commentType === 'block'){
+          insertText.push(`\n/* ${this.config.prefix} ${splitted[i]} */\n`)
+        }
       }
       const name = `${completionPrefix} ${action.name} ${typeof action.nameExtra === 'function' ? action.nameExtra(fileName, position) : action.nameExtra || ''}`
       return {
@@ -139,12 +146,13 @@ export function buildUserCalls(fileStr: string, config: ToolConfig): string[] { 
   const lines = fileStr.split('\n') //TODO: use new line format in tsconfig
   let userCalls: string[] = []
   for (let lineIndex = 0; lineIndex < lines.length; lineIndex++) {
-    let line = lines[lineIndex];
+    let line = lines[lineIndex].trim();
     let i = line.indexOf(config.prefix)
     if (i === -1) {
       continue
     }
     let userCall = line.substr(i + config.prefix.length, line.length)
+    userCall = userCall.endsWith('*/') ? userCall.substring(0, userCall.length-3) : userCall
     for (lineIndex = lineIndex + 1; lineIndex < lines.length; lineIndex++) {
       line = lines[lineIndex]
       const i = line.indexOf(config.prefix)

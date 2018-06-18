@@ -6,8 +6,8 @@ import { ReorderParamsCodeFixImpl } from "./refactors/reorderParams/reorderParam
 export const PLUGIN_NAME = 'typescript-plugin-function-signature-refactors'
 
 export interface SignatureRefactorArgs {
-  log: (msg) => void
-  program: ts.Program
+  log: (msg) => void 
+  info: ts_module.server.PluginCreateInfo
 }
 
 export function getRefactors(options: SignatureRefactorArgs): SignatureRefactorsCodeFix[] {
