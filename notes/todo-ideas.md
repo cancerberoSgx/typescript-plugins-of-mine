@@ -4,6 +4,9 @@
 
 Each project has its own TODO but here are some general ones: 
 
+ * in the concrete vscode extension, should I update simplesourcefile when buffer change ? https://code.visualstudio.com/docs/extensions/example-language-server#_incremental-text-document-synchronization - probably yes so we dont get nasty error - tsa takes too long...
+
+
  * unit tests for all!!!
 
  * currently all refactors need to select a range in order to suggest - they should also be able to suggest witnout selecting anything - jsut the cursor...
@@ -172,6 +175,10 @@ that alone wont generate an error but you start calling it "eval result" and ref
 }
  ```
 and that will generate an error "code": "2304","message": "Cannot find name 'EvalResult'.", a refactor suggestion appear to create the type automatically from treturn type
+
+ * think on common deprecation API usecase. sht's more common use case ? removing members . changing params and return type (make this cllback based funciton now remoev callback and / or return promise. Examples: 
+   * https://github.com/Microsoft/TypeScript/wiki/API-Breaking-Changes
+   * https://jquery.com/upgrade-guide/3.0/#summary-of-important-changes
 
  * extending the previous refactor, call this one "change type from return type" Suppose in the previous example, you are inside the implementation and realise you need to add a coupe of properties (or remove / rename). Just add the properties to the return type (return { result, output: context._printed.join('\n'), extra: {a: 9} }) and since it was previously created from here - the member names will match and a new suggestion can be used to add the new property to the type. (decide if the refactor should change all code (what should we do in referenced files? ) I would do nothing, just in the method/function and let it break
 

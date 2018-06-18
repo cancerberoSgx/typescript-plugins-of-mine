@@ -87,7 +87,7 @@ function getCodeFix(fileName: string, positionOrRange: number | ts.TextRange, en
     try {
       return fix.predicate(target)
     } catch (ex) {
-      log('getCodeFix exception in plugin predicates ' + fix.name + ex + '\n' + ex.stack)
+      log('getCodeFix exception in plugin predicate ' + fix.name + ex + '\n' + ex.stack)
     }
   })
   log(`codeFixesFilterT0 took ${timeFrom(codeFixesFilterT0)}`)

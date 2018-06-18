@@ -1,12 +1,6 @@
-// Extract interface from a class declaration. Write it just before the class declaration and make the class implement it. Only members with "public" modifier will be extracted
-//
-// **Screencast**: 
-// 
-// ![See it in action](../plugin-screencast.gif)
 
 import { findParentFromPosition, positionOrRangeToNumber } from 'typescript-ast-util'
 import * as ts_module from 'typescript/lib/tsserverlibrary'
-// import * as ts from 'typescript'
 import { extractInterface } from './extract-interface'
 import { now } from 'hrtime-now'
 

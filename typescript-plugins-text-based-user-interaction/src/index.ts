@@ -81,7 +81,7 @@ class ToolImpl implements Tool {
 
   public getCompletionsAtPosition(fileName: string, position: number, options: GetCompletionsAtPositionOptions | undefined): CompletionEntry[] {
     const completionPrefix = this.config.completionPrefix || 'refactor'
-    return this.config.actions.map(action => {
+    const result = this.config.actions.map(action => {
       let insertText = []
       const snippet = typeof action.snippet === 'function' ? (action.snippet as any)(fileName, position) : action.snippet
       if (!snippet) {
@@ -99,12 +99,18 @@ class ToolImpl implements Tool {
         sortText: name,
         insertText: insertText.join('\n')
       } as CompletionEntry
-    }).filter(a => a!==undefined)
+    })
+    .filter(a => !!a)
+
+    // this.config.log && this.config.log(`TEXT getCompletionsAtPosition ${result.map(r=>JSON.stringify(r)).join(', ')}`)
+    return result
+
   }
 
 
   public getApplicableRefactors(info: ts_module.server.PluginCreateInfo, refactorName: string, refactorActionName: string, fileName: string, positionOrRange: number | ts.TextRange, userPreferences: UserPreferences)
     : { refactors: ts.ApplicableRefactorInfo[], selectedAction?: Action } {
+
     const refactors = info.languageService.getApplicableRefactors(fileName, positionOrRange, userPreferences) || []
     const program = info.languageService.getProgram()
     const sourceFile = program.getSourceFile(fileName)
@@ -124,6 +130,7 @@ class ToolImpl implements Tool {
     })
     return { refactors, selectedAction }
   }
+
 }
 
 

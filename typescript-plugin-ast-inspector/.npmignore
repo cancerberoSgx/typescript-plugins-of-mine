@@ -3,3 +3,6 @@ package-deps.json
 *.log
 doc-assets
 tmp
+src
+doc
+dist/doc

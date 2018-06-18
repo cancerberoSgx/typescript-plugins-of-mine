@@ -1,6 +1,5 @@
 import { now } from 'hrtime-now';
-import { findChild, findChildContainingRange, findIdentifier, getKindName, getTypeStringFor, 
-  hasDeclaredType, positionOrRangeToRange, isDeclaration, getTypeStringForDeclarations } from 'typescript-ast-util';
+import { findChild, findChildContainingRange, findIdentifier, getKindName, getTypeStringForDeclarations, hasDeclaredType, isDeclaration, positionOrRangeToRange } from 'typescript-ast-util';
 import { getPluginCreate } from 'typescript-plugin-util';
 import * as ts_module from 'typescript/lib/tsserverlibrary';
 
@@ -9,12 +8,14 @@ const REFACTOR_ACTION_NAME = `${PLUGIN_NAME}-refactor-action`
 let ts: typeof ts_module
 let info: ts_module.server.PluginCreateInfo
 
+const log = (msg: string) => info.project.projectService.logger.info(`${PLUGIN_NAME} ${msg}`)
+
 const pluginDefinition = { getApplicableRefactors, getEditsForRefactor }
 
 export = getPluginCreate(pluginDefinition, (modules, anInfo) => {
   ts = modules.typescript
   info = anInfo
-  info.project.projectService.logger.info(`${PLUGIN_NAME} created`)
+  log(` created`)
 })
 
 let target: ts.Node | undefined
@@ -31,7 +32,7 @@ function getApplicableRefactors(fileName: string, positionOrRange: number | ts.T
   target = undefined
   const node = findChildContainingRange(sourceFile, positionOrRangeToRange(positionOrRange))
   if (!node) {
-    info.project.projectService.logger.info(`${PLUGIN_NAME} no getEditsForRefactor because findChildContainedRange undefined`)
+    log(` no getEditsForRefactor because findChildContainedRange undefined`)
     return refactors
   }
   const noFilters = false
@@ -43,14 +44,13 @@ function getApplicableRefactors(fileName: string, positionOrRange: number | ts.T
       return node && isDeclaration(node) && !hasDeclaredType(node, program) // declaration without a type declaration 
     }
     let child
-    target = predicate(node, program) ? node : 
-      predicate(node.parent, program) ? node.parent : 
-        (child = findChild(node, c => predicate(c, program), false)) ? child : 
-            undefined
-   
+    target = predicate(node, program) ? node :
+      predicate(node.parent, program) ? node.parent :
+        (child = findChild(node, c => predicate(c, program), false)) ? child :
+          undefined
   }
-  if(!target){
-    info.project.projectService.logger.info(`${PLUGIN_NAME} no getEditsForRefactor because target not found undefined`)
+  if (!target) {
+    log(` no getEditsForRefactor because target not found undefined`)
     return refactors
   }
   const name = (node as ts.NamedDeclaration).name && (target as ts.NamedDeclaration).name.getText() || ''
@@ -58,10 +58,13 @@ function getApplicableRefactors(fileName: string, positionOrRange: number | ts.T
     name: `${PLUGIN_NAME}-refactor-info`,
     description: 'Add type',
     actions: [
-      { name: REFACTOR_ACTION_NAME, description: 'Add type to ' + getKindName(target.kind).replace(/Declaration/gi, '').toLowerCase() + ' "' + name + '"' }
+      { 
+        name: REFACTOR_ACTION_NAME,
+         description: 'Add type to ' + getKindName(target.kind).replace(/Declaration/gi, '').toLowerCase() + ' "' + name + '"' 
+        }
     ],
   })
-  info.project.projectService.logger.info(`${PLUGIN_NAME} getApplicableRefactors took ${now() - t0}`)
+  log(` getApplicableRefactors took ${now() - t0}`)
   return refactors
 }
 
@@ -83,23 +86,25 @@ function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSetti
     renameFilename: undefined,
     renameLocation: undefined,
   }
-  info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor took ${now() - t0}`)
+  log(` getEditsForRefactor took ${now() - t0}`)
   return refactorEditInfo
 }
 
- function getFileTextChanges(node: ts.Node, program: ts.Program): ts.TextChange {
-  let newText = ': '+getTypeStringForDeclarations(node, program)
+function getFileTextChanges(node: ts.Node, program: ts.Program): ts.TextChange {
+  let newText = ': ' + getTypeStringForDeclarations(node, program)
   let start = (findIdentifier(node) || node).getEnd() // this will work for variable declaration and non-declaration nodes
   let length = 0
 
   if (ts.isFunctionLike(node)) {
-    start = (node as ts.FunctionDeclaration).parameters.end+1
+    start = (node as ts.FunctionDeclaration).parameters.end + 1
   }
-  else/*if(!isDeclaration(node) || ts.isVariableDeclaration(node) || ts.isPropertyDeclaration(node))*/{
+  else/*if(!isDeclaration(node) || ts.isVariableDeclaration(node) || ts.isPropertyDeclaration(node))*/ {
     //do nothing, default value for newText seems to be doing fine
+
+    //TODO: log
   }
 
   return { newText, span: { start, length } }
-  
+
 }
 

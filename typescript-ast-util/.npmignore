@@ -4,3 +4,7 @@ package-deps.json
 doc-assets
 tmp
 spec
+src
+dist/spec
+dist/tests
+tests

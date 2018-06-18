@@ -1,5 +1,5 @@
 import Project, { ModuleKind, NamedNode, Node, ReferenceFindableNode, ScriptTarget, SignaturedDeclaration, SourceFile } from "ts-simple-ast";
-import { reorderParameters } from "../src/reorderParams";
+import { reorderParameters } from "../src/refactors/reorderParams/reorderParams";
 
 
 export interface Config {
@@ -29,7 +29,7 @@ export function doTest(config: Config): Result {
   return result
 }
 
-interface ReorderAndAssert {
+export interface ReorderAndAssert {
   asserts: {
     before?: string,
     after?: string,

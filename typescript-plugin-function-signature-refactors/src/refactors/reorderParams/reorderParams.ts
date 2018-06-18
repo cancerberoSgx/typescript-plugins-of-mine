@@ -1,7 +1,6 @@
-import { CallExpression, Node, ReferenceFindableNode, SignaturedDeclaration, TypeGuards } from "ts-simple-ast";
+import { CallExpression, Node, ReferenceFindableNode, SignaturedDeclaration, TypeGuards, SourceFile, NamedNode } from "ts-simple-ast";
 import { getName, getChildrenForEachChild } from "typescript-plugin-util";
-import { ToolConfig, create, Tool } from "typescript-plugins-text-based-user-interaction";
-import { findAscendant, findChildContainingRangeLight, positionOrRangeToRange, getNextSibling, getPreviousSibling } from "typescript-ast-util";
+import { findChildContainingRangeLight, positionOrRangeToRange, findAscendant, getPreviousSibling, getNextSibling } from 'typescript-ast-util';
 import * as ts from 'typescript'
 
 /**
@@ -112,3 +111,31 @@ function changeCallArgs(reorder: ReadonlyArray<number>, args: ReadonlyArray<Node
     r.node.replaceWithText(r.text)
   }
 }
+
+
+
+/** same as getFunction but in ts-simple-ast project */
+export function getFunctionSimple(file: SourceFile, position: number, name: string): SignaturedDeclaration & NamedNode & Node | undefined {
+  let expr = file.getDescendantAtPos(position)
+  if(!expr) {
+    return
+  }
+  const e = [expr].concat(expr.getAncestors()).find(e => TypeGuards.isSignaturedDeclaration(e) && TypeGuards.isNamedNode(e) && e.getName() === name)
+  if (TypeGuards.isSignaturedDeclaration(e) && TypeGuards.isNamedNode(e)) {
+    return e
+  }
+}
+export function getFunction(fileName: string, position: number, program: ts.Program) {
+  // TODO: cache
+  const sourceFile = program.getSourceFile(fileName)
+  const node = findChildContainingRangeLight(sourceFile, positionOrRangeToRange(position))
+  if (!node) {
+    return
+  }
+  const expr = findAscendant<ts.ExpressionStatement>(node, ts.isExpressionStatement, true)
+  if (!expr) {
+    return
+  }
+  return [getNextSibling(expr), getPreviousSibling(expr)].find(ts.isFunctionLike)
+}
+

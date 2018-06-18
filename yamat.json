@@ -16,14 +16,6 @@
     "path": "typescript-plugins-text-based-user-interaction"
   },
   {
-    "name": "typescript-plugin-move-file",
-    "path": "typescript-plugin-move-file"
-  },
-  {
-    "name": "typescript-plugin-move-declaration",
-    "path": "typescript-plugin-move-declaration"
-  },
-  {
     "name": "typescript-plugin-proactive-code-fixes",
     "path": "typescript-plugin-proactive-code-fixes"
   },
