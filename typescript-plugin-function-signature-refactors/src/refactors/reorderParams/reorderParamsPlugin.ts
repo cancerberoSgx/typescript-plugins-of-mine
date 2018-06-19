@@ -29,10 +29,10 @@ export class ReorderParamsCodeFixImpl implements SignatureRefactorsCodeFix {
 
   private selectedAction?: Action;
   private targetNameAndReorder: { name: string; reorder: number[]; targetNode: ts.Node } | undefined;
-  private thirdPartyInputProvider: ThirdPartyInputProviderManager;
+  private thirdPartyInputProvider: InputProviderManager;
 
   constructor(private options: SignatureRefactorArgs) {
-    this.thirdPartyInputProvider = new ThirdPartyInputProviderManager(options.log)
+    this.thirdPartyInputProvider = new InputProviderManager(options.log)
   }
 
   description(arg: CodeFixOptions): string {
@@ -60,17 +60,19 @@ export class ReorderParamsCodeFixImpl implements SignatureRefactorsCodeFix {
     this.thirdPartyInputProvider.askSupported()
     const applicableRefactors = this.getTextUITool().getApplicableRefactors(info, refactorName, refactorActionName, fileName, positionOrRange, userPreferences)
     this.selectedAction = applicableRefactors.selectedAction
-    this.options.log('if there is no textUITool special comment it could be still a third party in' + !applicableRefactors.selectedAction + ' ' + this.targetNameAndReorder + ' ' + this.thirdPartyInputProvider.supports.inputText)
+    // this.options.log('if there is no textUITool special comment it could be still a third party in' + !applicableRefactors.selectedAction + ' ' + this.targetNameAndReorder + ' ' + this.thirdPartyInputProvider.supports.inputText)
     // if there is no textUITool special comment it could be still a third party input provider ?
-    if (!applicableRefactors.selectedAction && this.targetNameAndReorder && this.thirdPartyInputProvider.supports.inputText) {
+    if (!applicableRefactors.selectedAction && this.targetNameAndReorder && this.thirdPartyInputProvider.supports.inputText 
+      // && !applicableRefactors.refactors.find(r=>r.name===refactorName && !!r.actions.find(a=>a.name===refactorActionName))
+    ) {
       // this.options.log('if there is no textUITool special comment it could be still a third party in')
+      // if(!applicableRefactors.refactors.find(r=>r.name===refactorName && !!r.actions.find(a=>a.name===refactorActionName))) 
       applicableRefactors.refactors.push({
         name: refactorName,
         description: `${refactorName} description`,
         actions: [{ name: refactorActionName, description: this.printRefactorSuggestionMessage(this.targetNameAndReorder.name) }]
       })
     }
-
     return applicableRefactors
   }
 
@@ -223,8 +225,11 @@ export class ReorderParamsCodeFixImpl implements SignatureRefactorsCodeFix {
 
 
 // EXPERIMENT TO COMMUNICATE WITH THIRD api ui PROVIDER
-
-class ThirdPartyInputProviderManager {
+interface InputTextOptions {
+  prompt?: string, 
+  placeHolder?: string
+}
+class InputProviderManager {
   supports: { inputText: boolean; } = { inputText: false }
   sock: any;
   constructor(private log: (msg) => void) {
@@ -242,7 +247,7 @@ class ThirdPartyInputProviderManager {
       // this.log('ThirdPartyInputProviderManager askSupported listened in plugin: ' + JSON.stringify(res))
     });
   }
-  inputText(options: {prompt: string, placeHolder: string}, response: (value: string) => void): string | undefined {
+  inputText(options: InputTextOptions, response: (value: string) => void): string | undefined {
     if (this.supports.inputText) {
       this.sock.send('inputText',options, (res) => {
         response(res.answer)

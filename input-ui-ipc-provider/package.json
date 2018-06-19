@@ -1,0 +1,35 @@
+{
+  "name": "input-ui-ipc-provider",
+  "version": "0.0.1",
+  "description": "high level API for external process providing with input user experience like inputText, selectOption, etc",
+  "main": "dist/src/index.js",
+  "typings": "dist/src/typings.d.ts",
+  "scripts": {
+    "test": "ts-node node_modules/jasmine/bin/jasmine",
+    "test-coverage": "nyc --clean --reporter=lcov -e .ts -x \"*Spec.ts\" ts-node node_modules/jasmine/bin/jasmine --config=./spec/support/jasmine.json",
+    "doc": "exit 0",
+    "watch": "tsc --watch",
+    "build": "tsc",
+    "prepare": "npm run build",
+    "clean": "rm -rf node_modules package-lock.json dist",
+    "all": "npm run clean && npm i && npm run build && npm test"
+  },
+  "keywords": [],
+  "author": "Sebastian Gurin",
+  "license": "MIT",
+  "dependencies": {
+    "axon": "^2.0.3"
+  },
+  "devDependencies": {
+    "typescript": "2.9.1",
+    "@types/jasmine": "^2.8.8",
+    "@types/node": "^10.3.2",
+    "@types/shelljs": "^0.8.0",
+    "coveralls": "^3.0.1",
+    "jasmine": "^3.1.0",
+    "nyc": "^11.7.1",
+    "shelljs": "^0.8.2",
+    "ts-node": "^6.1.0"
+  },
+  "repository": "https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/input-ui-ipc-provider"
+}

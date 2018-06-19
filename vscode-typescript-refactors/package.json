@@ -7,7 +7,7 @@
     "vscode:prepublish": "npm run build",
     "build": "tsc -p ./",
     "watch": "tsc -watch -p ./",
-    "test": "npm run build && node ./node_modules/vscode/bin/test"
+    "test-vscode": "npm run build && node ./node_modules/vscode/bin/test"
   },
   "dependencies": {
     "axon": "^2.0.3",

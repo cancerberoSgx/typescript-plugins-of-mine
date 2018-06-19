@@ -118,8 +118,8 @@ class ToolImpl implements Tool {
 
   public getApplicableRefactors(info: ts_module.server.PluginCreateInfo, refactorName: string, refactorActionName: string, fileName: string, positionOrRange: number | ts.TextRange, userPreferences: UserPreferences)
     : { refactors: ts.ApplicableRefactorInfo[], selectedAction?: Action } {
-    const refactors = info.languageService.getApplicableRefactors(fileName, positionOrRange, userPreferences) || []
-    // const refactors : ts.ApplicableRefactorInfo[]= []
+    // const refactors = info.languageService.getApplicableRefactors(fileName, positionOrRange, userPreferences) || []
+    const refactors : ts.ApplicableRefactorInfo[]= [] // heads up ! we want only to return the new refactors - user is responsible of concat to prior ones
     const program = info.languageService.getProgram()
     const sourceFile = program.getSourceFile(fileName)
     if (!sourceFile) {
