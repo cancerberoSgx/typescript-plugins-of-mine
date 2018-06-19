@@ -7,7 +7,7 @@ import { removeParamsCodeFixImpl } from './refactors/removeParam';
 export const PLUGIN_NAME = 'typescript-plugin-function-signature-refactors'
 
 export interface SignatureRefactorArgs {
-  log: (msg) => void 
+  log: (msg: string) => void 
   info: ts_module.server.PluginCreateInfo
 }
 

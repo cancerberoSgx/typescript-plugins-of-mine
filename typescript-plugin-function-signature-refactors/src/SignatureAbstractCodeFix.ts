@@ -58,7 +58,7 @@ export abstract class SignatureAbstractCodeFix implements SignatureRefactorsCode
     if (!expr) {
       return
     }
-    const predicate = e => (TypeGuards.isSignaturedDeclaration(e) || TypeGuards.isPropertySignature(e) || TypeGuards.isFunctionLikeDeclaration(e)) && (TypeGuards.isNamedNode(e) || TypeGuards.isNameableNode(e) || TypeGuards.isPropertyNamedNode(e)) && (!name || e.getName() === name)
+    const predicate = (e: Node) => (TypeGuards.isSignaturedDeclaration(e) || TypeGuards.isPropertySignature(e) || TypeGuards.isFunctionLikeDeclaration(e)) && (TypeGuards.isNamedNode(e) || TypeGuards.isNameableNode(e) || TypeGuards.isPropertyNamedNode(e)) && (!name || e.getName() === name)
     const e = [expr].concat(expr.getAncestors()).find(predicate)
     if (!e) {
       return

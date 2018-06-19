@@ -1,5 +1,5 @@
-import { InputSupport, InputTextOptions, InputTextResponse, INPUT_ACTIONS } from './types';
-const axon = require('axon');
+import { InputSupport, InputTextOptions, InputTextResponse, INPUT_ACTIONS } from './types'
+import axon = require('axon')
 
 export interface InputProviderConfig {
   log?: (msg: string) => void
@@ -24,16 +24,16 @@ export abstract class InputProviderImpl implements InputProvider {
   constructor(private config: InputProviderConfig) {
     this.config.log = this.config.log || console.log
     this.sock = axon.socket('rep')
-    this.sock.on('error', (e) => {
+    this.sock.on('error', (e: any) => {
       this.config.log(`provider socket error ${e}`)
     })
-    this.sock.on('ignored error', (e) => {
+    this.sock.on('ignored error', (e: any) => {
       this.config.log(`provider socket ignored error ${e}`)
     })
-    this.sock.on('socket error', (e) => {
+    this.sock.on('socket error', (e: any) => {
       this.config.log(`provider socket socket error ${e}`)
     })
-    this.sock.on('*', (e) => {
+    this.sock.on('*', (e: any) => {
       this.config.log(`provider socket event * ${e}`)
     })
     this.sock.connect(this.config.port, '127.0.0.1')

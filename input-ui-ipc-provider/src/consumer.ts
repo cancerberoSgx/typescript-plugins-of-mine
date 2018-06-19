@@ -1,4 +1,5 @@
 import { InputSupport, InputTextOptions, InputTextResponse, INPUT_ACTIONS } from './types';
+
 import axon = require('axon')
 
 export function createConsumer(config: InputConsumerConfig): InputConsumer {
@@ -36,16 +37,16 @@ class InputConsumerImpl implements InputConsumer {
 
     this.sock = axon.socket('req')
 
-    this.sock.on('error', (e) => {
+    this.sock.on('error', (e:any) => {
       this.config.log(`consumer error ${e}`)
     })
-    this.sock.on('ignored error', (e) => {
+    this.sock.on('ignored error', (e:any) => {
       this.config.log(`consumer ignored error ${e}`)
     })
-    this.sock.on('socket error', (e) => {
+    this.sock.on('socket error', (e:any) => {
       this.config.log(`consumer socket error ${e}`)
     })
-    this.sock.on('*', (e) => {
+    this.sock.on('*', (e:any) => {
       this.config.log(`consumer * event * ${e}`)
     })
 

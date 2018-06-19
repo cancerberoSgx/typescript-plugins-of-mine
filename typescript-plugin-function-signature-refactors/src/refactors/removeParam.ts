@@ -73,6 +73,12 @@ export class removeParamsCodeFixImpl extends SignatureAbstractCodeFix {
     }
   }
 
+  getTargetInfo(sourceFile: ts.SourceFile, position: number): TargetInfo | undefined {
+    const targetInfoPredicate = (targetNode: any) => !(!targetNode || targetNode.parameters && !targetNode.parameters.length) && 
+      !(!targetNode || targetNode.arguments && !targetNode.arguments.length)
+    return getTargetInfo(sourceFile, position, targetInfoPredicate)
+  }
+  
   private applyImpl(arg: CodeFixOptions, remove: number[]) {
     const sourceFile = arg.simpleNode.getSourceFile()
     const funcDecl = this.getSimpleTargetNode(sourceFile, positionOrRangeToNumber(arg.positionOrRange), this.targetInfo.name, this.options.log)
@@ -85,11 +91,6 @@ export class removeParamsCodeFixImpl extends SignatureAbstractCodeFix {
     sourceFile.saveSync()
   }
 
-  getTargetInfo(sourceFile: ts.SourceFile, position: number): TargetInfo | undefined {
-    const targetInfoPredicate = (targetNode: any) => !(!targetNode || targetNode.parameters && !targetNode.parameters.length) && !(!targetNode || targetNode.arguments && !targetNode.arguments.length)
-    return getTargetInfo(sourceFile, position, targetInfoPredicate)
-  }
-  
   apply(arg: CodeFixOptions): void | ts.ApplicableRefactorInfo[] {
     if (!this.selectedAction && this.inputConsumer.hasSupport(INPUT_ACTIONS.inputText)) {
       this.inputConsumer.inputText({ prompt: 'Enter removeParam definition', placeHolder: '[1]' })

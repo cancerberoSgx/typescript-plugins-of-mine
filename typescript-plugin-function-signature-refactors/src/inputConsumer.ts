@@ -1,6 +1,6 @@
 import { createConsumer, InputConsumerConfig, InputConsumer } from 'input-ui-ipc-provider';
 
-let inputConsumer
+let inputConsumer: InputConsumer
 
 export function getInputConsumer(): InputConsumer{
   if(!inputConsumer){

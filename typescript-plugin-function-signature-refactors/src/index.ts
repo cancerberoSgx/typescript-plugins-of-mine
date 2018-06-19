@@ -30,13 +30,13 @@ function getApplicableRefactors(fileName: string, positionOrRange: number | ts.T
     log(`getApplicableRefactors return empty because !sourceFile`)
     return
   }
-  const diagnostics = []
+  // const diagnostics = []
   const start = positionOrRangeToNumber(positionOrRange)
   const range = positionOrRangeToRange(start + 1)
   const containingTarget = findChildContainingRange(sourceFile, range) || sourceFile
   const containingTargetLight = findChildContainingRangeLight(sourceFile, range) || sourceFile
   const containedTarget = findChildContainedRange(sourceFile, range) || sourceFile
-  opts = { diagnostics, containingTarget, containingTargetLight, containedTarget, log, program, sourceFile, positionOrRange }
+  opts = { diagnostics: [], containingTarget, containingTargetLight, containedTarget, log, program, sourceFile, positionOrRange }
   getAllRefactors()
     .filter(refactor => {
       try {
