@@ -1,6 +1,8 @@
 import { CallExpression, Node, ReferenceFindableNode, SignaturedDeclaration, TypeGuards } from "ts-simple-ast";
 import { getChildrenForEachChild, getName } from "typescript-plugin-util";
 
+// this file isolates the AST implementation from plugin logic
+
 /**
  * collect al references of given node and returns those nodes that need to be refactored
  */

@@ -118,8 +118,8 @@ class ToolImpl implements Tool {
 
   public getApplicableRefactors(info: ts_module.server.PluginCreateInfo, refactorName: string, refactorActionName: string, fileName: string, positionOrRange: number | ts.TextRange, userPreferences: UserPreferences)
     : { refactors: ts.ApplicableRefactorInfo[], selectedAction?: Action } {
-
-    const refactors = info.languageService.getApplicableRefactors(fileName, positionOrRange, userPreferences) || []
+    // const refactors = info.languageService.getApplicableRefactors(fileName, positionOrRange, userPreferences) || []
+    const refactors : ts.ApplicableRefactorInfo[]= []
     const program = info.languageService.getProgram()
     const sourceFile = program.getSourceFile(fileName)
     if (!sourceFile) {
@@ -138,8 +138,7 @@ class ToolImpl implements Tool {
     })
     return { refactors, selectedAction }
   }
-
-}
+} 
 
 
 export function buildUserCalls(fileStr: string, config: ToolConfig): string[] { // public and exported so we can test it

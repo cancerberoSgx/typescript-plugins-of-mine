@@ -13,7 +13,7 @@ import { reorderParameters } from './reorderParams';
  *  Allows users to change a signature parameter order. 
  * 
  * # TODO
- *  * refactor a nimplementation method wont change its interface signature - super 
+ *  * refactor a implementation method wont change its interface signature - super 
  *  * constructors not supported
  */
 export class ReorderParamsCodeFixImpl implements SignatureRefactorsCodeFix {

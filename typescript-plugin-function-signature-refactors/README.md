@@ -43,6 +43,11 @@ The rule is this one: **Number N in index M means move the M-th argument to inde
 
 Also notice that parameters not referenced in this array will shift to the left in order to comply with the new order. For example, if we reorder `(a, b, c)` using `[2]` this will move a to the third place so `b` and `c` automatically will shift one place to the right, resulting in `(b, c, a)` 
 
+# TODO
+
+ * refactor a implementation method wont change its interface signature - super 
+ * constructors not supported
+
 
 
 # Ideas 
@@ -50,7 +55,7 @@ Also notice that parameters not referenced in this array will shift to the left 
  * Idea: make some params and/or return type an array of the current type. That should be easy to implement witout introducing errors and refactoring the whole project
  * Idea: change parameter modifiers (question, scope, init)
  * **add new parameter**. `addNewParam({functionDeclarationName: 'prettyFunction', paramIndex:"2", paramName: 'color', paramType: "string[]", paramDefaultValue: '[]'}). ` (paramDefaultValue will be used to fill current calls references)
- * **remove parameter**. We can do it - will it break the project ? I don't think so...
+ * **remove parameter**. We can do it - will it break the project ? I don't think so... `removeParam({functionDeclarationName: 'prettyFunction', paramIndex:"2"}). `
  * **change parameter type** - this should be the hardest thing to implement. The following could be an starting point. Using templates for new type and values:  
    * Example  "arrayize" : ```changeParamType({functionDeclarationName: 'prettyFunction', param:"2",paramType:old=>`[${old}]`, argumentValue: old=>`[${old}]`})```. (notice how user can also enter a template for refactor arguments in reference calls) 
    * Example "functionalize" : ```changeParamType({functionDeclarationName: 'prettyFunction', param: 2, newIndex: 4, newName: 'fn', paramType: old=>`(arg: ${old}|undefined):Promise<boolean>`, argumentValue: old=>`(${old})=>!!${old ? 'Promise.resolve(true)' : 'Promise.reject()'}`})```

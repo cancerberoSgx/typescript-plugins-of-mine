@@ -24,6 +24,10 @@
     "path": "typescript-plugin-function-signature-refactors"
   },
   {
+    "name": "vscode-typescript-refactors",
+    "path": "vscode-typescript-refactors"
+  },
+  {
     "name": "typescript-plugin-extract-interface-client-project1",
     "path": "typescript-plugin-extract-interface-client-project1"
   }

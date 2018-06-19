@@ -1,0 +1,50 @@
+{
+    "name": "vscode-typescript-refactors",
+    "description": "Contributes with several TypeScript Language Service Plugins that add refactors for agile source code development. [See details and demos here](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-proactive-code-fixes).",
+    "version": "0.0.11",
+    "scripts": {
+        "postinstall": "node ./node_modules/vscode/bin/install",
+        "vscode:prepublish": "npm run build",
+        "build": "tsc -p ./",
+        "watch": "tsc -watch -p ./",
+        "test": "npm run build && node ./node_modules/vscode/bin/test"
+    },
+    "dependencies": {
+        "typescript-plugin-proactive-code-fixes": "../typescript-plugin-proactive-code-fixes",
+        "typescript-plugin-function-signature-refactors": "../typescript-plugin-function-signature-refactors"
+    },
+    "devDependencies": {
+        "@types/mocha": "^5.2.2",
+        "@types/node": "^10.3.2",
+        "tslint": "^5.8.0",
+        "typescript": "2.9.1",
+        "vscode": "^1.1.6"
+    },
+    "displayName": "TypeScript Refactors",
+    "publisher": "cancerberosgx",
+    "engines": {
+        "vscode": "^1.24.0"
+    },
+    "categories": [
+        "Other"
+    ],
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://cancerberosgx.visualstudio.com/typescript-refactors/_git/typescript-refactors"
+    },
+    "activationEvents": [
+        "onCommand:typescriptRefactors.genericEvent"
+    ],
+    "main": "./out/extension",
+    "contributes": {
+        "typescriptServerPlugins": [
+            {
+                "name": "typescript-plugin-proactive-code-fixes"
+            },
+            {
+                "name": "typescript-plugin-function-signature-refactors"
+            }
+        ]
+    }
+}

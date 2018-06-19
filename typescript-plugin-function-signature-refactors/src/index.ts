@@ -57,12 +57,13 @@ function getApplicableRefactors(fileName: string, positionOrRange: number | ts.T
 
 function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSettings, positionOrRange: number | ts_module.TextRange, refactorName: string, actionName: string, userPreferences: ts_module.UserPreferences): ts.RefactorEditInfo | undefined {
   const t0 = now()
+  const refactors = info.languageService.getEditsForRefactor(fileName, formatOptions, positionOrRange, refactorName, actionName, userPreferences)
   if (actionName.startsWith(PLUGIN_NAME)) {
     const name = actionName.substring(PLUGIN_NAME.length + 1, actionName.length)
     const refactor = getAllRefactors().find(r => r.name === name)
     if (!refactor) {
       log(`getEditsForRefactor abort because refactor named ${name} not found`)
-      return
+      return refactors
     }
     try {
       log(`getEditsForRefactor refactor found ${refactor.name}`)
@@ -79,7 +80,7 @@ function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSetti
     }
     log(`getEditsForRefactor ${actionName} took  ${timeFrom(t0)}`)
   }
-  return
+  return refactors
 }
 
 let info: ts_module.server.PluginCreateInfo
