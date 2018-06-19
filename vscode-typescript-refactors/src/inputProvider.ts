@@ -1,17 +1,24 @@
-import { InputProviderImpl, InputSupport, InputTextResponse, InputTextOptions, MessageBoxOptions, MessageBoxResponse } from 'input-ui-ipc-provider'
+import { InputProviderImpl, InputSupport, InputTextResponse, InputTextOptions, MessageBoxOptions, MessageBoxResponse, SelectTextOptions, SelectTextResponse } from 'input-ui-ipc-provider'
 import * as vscode from 'vscode';
 
 export class VsCodeInputProvider extends InputProviderImpl {
   private supports: InputSupport = {
     inputText: true,
     askSupported: true,
-    messageBox: true
+    messageBox: true,
+    selectText: true
   }
+
+  askSupported(): Promise<InputSupport> {
+    return Promise.resolve(this.supports)
+  }
+
   inputText(options: InputTextOptions): Promise<InputTextResponse> {
     return new Promise(resolve => {
       vscode.window.showInputBox(options).then(answer => resolve({ answer }))
     })
   }
+
   messageBox(options: MessageBoxOptions): Promise<MessageBoxResponse> {
     return new Promise(resolve => {
       const opts = { modal: options.modal }
@@ -25,16 +32,24 @@ export class VsCodeInputProvider extends InputProviderImpl {
       else{
         promise = vscode.window.showInformationMessage(options.message, opts)
       }
-      // if (promise !== undefined) {
-        promise.then(result => {
-          resolve({ answer: !!result })
-        })
-      // }
+      promise.then(result => {
+        resolve({ answer: !!result })
+      })
     })
   }
   
-  askSupported(): Promise<InputSupport> {
-    return Promise.resolve(this.supports)
+  selectText(options: SelectTextOptions): Promise<SelectTextResponse> {
+    return new Promise((resolve, reject) => {
+      if(!vscode.window.activeTextEditor){
+        console.log('selectText no active text editor');
+        
+        return reject('no active text editor')
+      }
+      const start = vscode.window.activeTextEditor.document.positionAt(options.from)
+      const end =vscode.window.activeTextEditor.document.positionAt(options.to||options.from)
+      vscode.window.activeTextEditor.selection =  new vscode.Selection(start, end);
+      resolve()
+    })
   }
 }
 

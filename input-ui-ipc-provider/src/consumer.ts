@@ -1,4 +1,4 @@
-import { InputSupport, InputTextOptions, InputTextResponse, INPUT_ACTIONS, MessageBoxResponse, MessageBoxOptions } from './types';
+import { InputSupport, InputTextOptions, InputTextResponse, INPUT_ACTIONS, MessageBoxResponse, MessageBoxOptions, SelectTextOptions, SelectTextResponse } from './types';
 
 import axon = require('axon')
 
@@ -21,6 +21,7 @@ export interface InputConsumer {
   /** emits action `inputText` so provider execute its implementation (showing an input box). Returns a promise that it will be resolved with the user's input or undefined if user cancelled the operation. */
   inputText(options: InputTextOptions): Promise<InputTextResponse>
   messageBox(options: MessageBoxOptions): Promise<MessageBoxResponse> 
+  selectText(options: SelectTextOptions): Promise<SelectTextResponse>
 }
 
 class InputConsumerImpl implements InputConsumer {
@@ -28,7 +29,8 @@ class InputConsumerImpl implements InputConsumer {
   private supports: InputSupport = {
     inputText: false,
     askSupported: false,
-    messageBox: false
+    messageBox: false, 
+    selectText: false
   }
   private supportsSetted: boolean = false
 
@@ -59,7 +61,7 @@ class InputConsumerImpl implements InputConsumer {
   hasSupport(feature: INPUT_ACTIONS): boolean {
     return this.supports[feature]
   }
-  
+
   setLogger(log: (msg: string) => void): void {
     this.config.log = log
   }
@@ -109,4 +111,18 @@ class InputConsumerImpl implements InputConsumer {
     })
   }
   
+  selectText(options: SelectTextOptions): Promise<SelectTextResponse> {
+    this.config.log(`consumer requesting ${INPUT_ACTIONS.selectText}`)
+    return new Promise((resolve, reject) => {
+      if (this.supports.selectText) {
+        this.sock.send(INPUT_ACTIONS.selectText, options, (res: SelectTextResponse) => {
+          this.config.log(`consumer got ${INPUT_ACTIONS.selectText} response ${JSON.stringify(res)}`)
+          resolve(res)
+        })
+      }
+      else {
+        reject()
+      }
+    })
+  }
 }

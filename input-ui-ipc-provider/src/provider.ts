@@ -1,4 +1,4 @@
-import { InputSupport, InputTextOptions, InputTextResponse, INPUT_ACTIONS, MessageBoxOptions, MessageBoxResponse } from './types'
+import { InputSupport, InputTextOptions, InputTextResponse, INPUT_ACTIONS, MessageBoxOptions, MessageBoxResponse, SelectTextOptions, SelectTextResponse } from './types'
 import axon = require('axon')
 
 export interface InputProviderConfig {
@@ -20,7 +20,7 @@ export interface InputProvider {
 export abstract class InputProviderImpl implements InputProvider {
 
   private sock: any;
-
+  
   constructor(private config: InputProviderConfig) {
     this.config.log = this.config.log || console.log
     this.sock = axon.socket('rep')
@@ -38,32 +38,41 @@ export abstract class InputProviderImpl implements InputProvider {
     })
     this.sock.connect(this.config.port, '127.0.0.1')
     this.sock.on('message', (action: string, options: any, reply: (response: any) => void) => {
+      options = options || {}
       this.config.log('input provider message ' + action + ' - options: ' + JSON.stringify(options))
       if (action === INPUT_ACTIONS.askSupported) {
         this.askSupported().then(reply)
       }
       else if (action === INPUT_ACTIONS.inputText) {
-        options = options || {}
         options.prompt = options.prompt || 'Enter value'
         options.placeHolder = options.placeHolder || 'ValueExample'
         this.inputText(options).then(reply)
       }
       else if (action === INPUT_ACTIONS.messageBox) {
-        options = options || {}
         options.message = options.message || 'Generic message'
         this.messageBox(options).then(reply)
+      }
+      else if (action === INPUT_ACTIONS.selectText) {
+        options.from = options.from || 0
+        options.to = options.to || 0
+        this.selectText(options).then(reply)
       }
     })
     this.config.log('input provider connect ' + this.config.port)
   }
 
-  abstract inputText(options: InputTextOptions): Promise<InputTextResponse>
-
-  abstract messageBox(options: MessageBoxOptions): Promise<MessageBoxResponse>
-
-  abstract askSupported(): Promise<InputSupport>
-
   setLogger(log: (msg: string) => void):void{
     this.config.log = log
   }
+
+  abstract askSupported(): Promise<InputSupport>
+
+  abstract inputText(options: InputTextOptions): Promise<InputTextResponse>
+
+  abstract messageBox(options: MessageBoxOptions): Promise<MessageBoxResponse>
+  
+  abstract selectText(options: SelectTextOptions): Promise<SelectTextResponse>
+  
+  
+
 }

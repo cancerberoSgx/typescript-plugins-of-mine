@@ -17,7 +17,8 @@ function getApplicableRefactors(fileName: string, positionOrRange: number | ts.T
     description: `${PLUGIN_NAME}-description`,
     actions: [
       { name: `${PLUGIN_NAME}-action-inputText`, description: 'inputText' },
-      { name: `${PLUGIN_NAME}-action-messageBox`, description: 'messageBox' }
+      { name: `${PLUGIN_NAME}-action-messageBox`, description: 'messageBox' },
+      { name: `${PLUGIN_NAME}-action-selectText`, description: 'selectText' }
     ]
   })
   return refactors
@@ -31,7 +32,7 @@ function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSetti
   if (actionName === `${PLUGIN_NAME}-action-inputText`) {
     inputConsumer.inputText({ prompt: 'Please enter your name', placeHolder: 'John Doe' })
       .then(response=>{
-        printInFile(fileName, positionOrRange, `/* * * Thank you, ${response.answer}, have a nice day * * */`)
+        printInFile(fileName, positionOrRange, `Thank you, ${response.answer}, have a nice day`)
       })
   }
   else if (actionName === `${PLUGIN_NAME}-action-messageBox`) {
@@ -40,6 +41,13 @@ function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSetti
         printInFile(fileName, positionOrRange, response.answer ? 'user clicked OK' : 'user dismissed the dialog')
       })
   }
+  else if (actionName === `${PLUGIN_NAME}-action-selectText`) {
+    inputConsumer
+    .inputText({ prompt: 'Please enter [from, to] to select', placeHolder: '{"from": 2, "to": 23}' })
+    .then(response=> inputConsumer.selectText(JSON.parse(response.answer)))
+    .then(response=> printInFile(fileName, positionOrRange, `Text selected, can you see it ? `))
+    .catch(ex=> printInFile(fileName, positionOrRange, `ERROR parsing input json text ${ex}`))
+  }
   return refactors
 }
 
@@ -47,7 +55,7 @@ function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSetti
 function printInFile(fileName: string, positionOrRange: number | ts_module.TextRange, s: string) {
   const project = createSimpleASTProject(info.project)
   const sourceFile = project.getSourceFile(fileName)
-  sourceFile.insertText(positionOrRangeToNumber(positionOrRange), s )
+  sourceFile.insertText(positionOrRangeToNumber(positionOrRange), `/* ${s} */` )
   sourceFile.saveSync()
 }
 
