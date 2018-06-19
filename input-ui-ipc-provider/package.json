@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "high level API for external process providing with input user experience like inputText, selectOption, etc",
   "main": "dist/src/index.js",
-  "typings": "dist/src/typings.d.ts",
+  "typings": "dist/src/index.d.ts",
   "scripts": {
     "test": "ts-node node_modules/jasmine/bin/jasmine",
     "test-coverage": "nyc --clean --reporter=lcov -e .ts -x \"*Spec.ts\" ts-node node_modules/jasmine/bin/jasmine --config=./spec/support/jasmine.json",

@@ -6,7 +6,7 @@ import { Action, create, Tool, ToolConfig } from "typescript-plugins-text-based-
 import * as ts_module from 'typescript/lib/tsserverlibrary';
 import { PLUGIN_NAME, SignatureRefactorArgs, SignatureRefactorsCodeFix } from '../../refactors';
 import { reorderParameters } from './reorderParams';
-
+import {createConsumer, InputConsumer, INPUT_ACTIONS} from 'input-ui-ipc-provider'
 /**
  * # Description
  * 
@@ -29,10 +29,11 @@ export class ReorderParamsCodeFixImpl implements SignatureRefactorsCodeFix {
 
   private selectedAction?: Action;
   private targetNameAndReorder: { name: string; reorder: number[]; targetNode: ts.Node } | undefined;
-  private thirdPartyInputProvider: InputProviderManager;
+  private inputConsumer: InputConsumer;
 
   constructor(private options: SignatureRefactorArgs) {
-    this.thirdPartyInputProvider = new InputProviderManager(options.log)
+    this.inputConsumer = createConsumer({log: options.log, port: 3001})
+    this.inputConsumer.askSupported()
   }
 
   description(arg: CodeFixOptions): string {
@@ -40,7 +41,7 @@ export class ReorderParamsCodeFixImpl implements SignatureRefactorsCodeFix {
   }
 
   predicate(arg: CodeFixOptions): boolean {
-    this.thirdPartyInputProvider.askSupported()
+    this.inputConsumer.askSupported()
     this.targetNameAndReorder = this.getTargetNameAndReorder(arg.sourceFile.fileName, positionOrRangeToNumber(arg.positionOrRange))
     if (!this.targetNameAndReorder) {
       arg.log('predicate false because getTargetNameAndReorder did not found anything')
@@ -57,12 +58,12 @@ export class ReorderParamsCodeFixImpl implements SignatureRefactorsCodeFix {
     refactors: ts.ApplicableRefactorInfo[];
     selectedAction?: Action;
   } {
-    this.thirdPartyInputProvider.askSupported()
+    this.inputConsumer.askSupported()
     const applicableRefactors = this.getTextUITool().getApplicableRefactors(info, refactorName, refactorActionName, fileName, positionOrRange, userPreferences)
     this.selectedAction = applicableRefactors.selectedAction
-    // this.options.log('if there is no textUITool special comment it could be still a third party in' + !applicableRefactors.selectedAction + ' ' + this.targetNameAndReorder + ' ' + this.thirdPartyInputProvider.supports.inputText)
+    this.options.log('if there is no textUITool special comment it could be still a third party in' + !applicableRefactors.selectedAction + ' ' + this.targetNameAndReorder + ' ' + this.inputConsumer.hasSupport(INPUT_ACTIONS.inputText))
     // if there is no textUITool special comment it could be still a third party input provider ?
-    if (!applicableRefactors.selectedAction && this.targetNameAndReorder && this.thirdPartyInputProvider.supports.inputText 
+    if (!applicableRefactors.selectedAction && this.targetNameAndReorder && this.inputConsumer.hasSupport(INPUT_ACTIONS.inputText)
       // && !applicableRefactors.refactors.find(r=>r.name===refactorName && !!r.actions.find(a=>a.name===refactorActionName))
     ) {
       // this.options.log('if there is no textUITool special comment it could be still a third party in')
@@ -191,16 +192,30 @@ export class ReorderParamsCodeFixImpl implements SignatureRefactorsCodeFix {
     if (!funcDecl) {
       this.options.log(`reorderParamsPlugin applyImpl aborted because function ${this.targetNameAndReorder.name} cannot be found at ${arg.positionOrRange}`)
       return
-    }
+    } 
+    this.options.log(`reorderParamsPlugin applyImpl calling reorderParameters with reorder: [${reorder.join(', ')}]`)
     reorderParameters(funcDecl, reorder, this.options.log);
     sourceFile.saveSync()
   }
 
   apply(arg: CodeFixOptions): void | ts.ApplicableRefactorInfo[] {
-    if (!this.selectedAction && this.thirdPartyInputProvider.supports.inputText) {
-      this.thirdPartyInputProvider.inputText({prompt: 'Enter reorderParam definition', placeHolder: '[1]'}, (def) => {
-        this.applyImpl(arg, JSON.parse(def))
+    if (!this.selectedAction && this.inputConsumer.hasSupport(INPUT_ACTIONS.inputText)) {
+      // this.options.log('this.inputConsumer.inputText before')
+
+      this.inputConsumer.inputText({prompt: 'Enter reorderParam definition', placeHolder: '[1]'}
+      // , response=>{
+      //   this.options.log('this.inputConsumer.inputText cb !!! ')
+      //   // this.applyImpl(arg, JSON.parse(response.answer))
+      // }
+    )
+      .then(response=>{
+        // this.options.log('this.inputConsumer.inputText then !!! 2 '+response)
+        // this.options.log('this.inputConsumer.inputText then !!! ' +((response && response.answer) ? response.answer : 'undefinennen' ))
+        this.applyImpl(arg, JSON.parse(response.answer))
+      }).catch(ex=>{
+        this.options.log('this.inputConsumer.inputText catch '+ ex)
       })
+      // this.options.log('this.inputConsumer.inputText affter')
     }
     else {
       this.applyImpl(arg, this.selectedAction.args.reorder)
@@ -218,42 +233,6 @@ export class ReorderParamsCodeFixImpl implements SignatureRefactorsCodeFix {
       return
     }
     return e as any
-  }
-}
-
-
-
-
-// EXPERIMENT TO COMMUNICATE WITH THIRD api ui PROVIDER
-interface InputTextOptions {
-  prompt?: string, 
-  placeHolder?: string
-}
-class InputProviderManager {
-  supports: { inputText: boolean; } = { inputText: false }
-  sock: any;
-  constructor(private log: (msg) => void) {
-    this.setup()
-  }
-  setup() {
-    var axon = require('axon');
-    this.sock = axon.socket('req');
-    this.sock.bind(3000);
-    this.askSupported()
-  }
-  askSupported(){
-    this.sock.send('askSupported', {}, (res) => {
-      this.supports = res
-      // this.log('ThirdPartyInputProviderManager askSupported listened in plugin: ' + JSON.stringify(res))
-    });
-  }
-  inputText(options: InputTextOptions, response: (value: string) => void): string | undefined {
-    if (this.supports.inputText) {
-      this.sock.send('inputText',options, (res) => {
-        response(res.answer)
-      });
-    }
-    return undefined
   }
 }
 

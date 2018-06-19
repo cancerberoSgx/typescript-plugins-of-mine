@@ -8,11 +8,11 @@ export interface InputTextOptions {
   placeHolder?: string
 }
 
-export enum ACTION_NAME{
+export enum INPUT_ACTIONS{
   askSupported= 'askSupported',
   inputText= 'inputText'
 }
 
 export type InputSupport = {
-  [feature in ACTION_NAME]: boolean
+  [feature in INPUT_ACTIONS]: boolean
 }

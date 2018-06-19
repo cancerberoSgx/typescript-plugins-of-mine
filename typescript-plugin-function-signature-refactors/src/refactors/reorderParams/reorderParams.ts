@@ -55,7 +55,7 @@ export function reorderParameters(node: Node, reorder: number[], log: (msg: stri
     })
   }
   else {// if(TypeGuards.isConstructorDeclaration(node)) {
-    console.log('!TypeGuards.isReferenceFindableNode(node) ' + node.getText());
+    log('!TypeGuards.isReferenceFindableNode(node) ' + node.getText());
 
     //TODO: find interface constructor implememted by this one and rename that one and then run this function calling it with node.getAncestors().find(TypeGuards.isReferenceFindableNode) to rename new A calls
     return []
