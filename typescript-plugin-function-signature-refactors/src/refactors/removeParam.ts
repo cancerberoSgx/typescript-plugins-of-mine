@@ -23,6 +23,7 @@ export class removeParamsCodeFixImpl extends SignatureAbstractCodeFix {
   name: string = PLUGIN_NAME + '-removeParam'
 
   config: any = {
+    help: false
   }
 
   private getTargetNameAndremove(fileName: string, position: number): TargetInfo & { remove: number[] } | undefined {
@@ -44,34 +45,46 @@ export class removeParamsCodeFixImpl extends SignatureAbstractCodeFix {
   }
 
   getTextUIToolConfig(): ToolConfig {
-    return {
-      prefix: '&%&%',
-      log: this.options.log,
-      actions: [
-        {
-          name: 'removeParams',
-          args: ['name', 'remove'],
-          commentType: 'block',
-
-          print: action => this.printRefactorSuggestionMessage(Object.assign({}, this.targetInfo, {name: action && action.args && action.args.name ||this.targetInfo && this.targetInfo.name || 'unknown'})),
-
-          snippet: (fileName: string, position: number): string | undefined => {
-            const result = this.getTargetNameAndremove(fileName, position)
-            if (!result) { return }
-            this.targetInfo = result
-            return `removeParams("${this.targetInfo.name}", [0])`
-          },
-
-          nameExtra: (fileName: string, position: number) => {
-            if (!this.targetInfo) { 
-              return '' 
-            }
-            return `of ${this.targetInfo.name}`
-          }
-        }
-      ]
-    }
+    return this.textUIToolConfigFactory({
+      name: 'reorderParams',
+      args: ['name', 'remove'],
+      // snippet: (fileName: string, position: number): string | undefined => {
+      //   const result = this.getTargetNameAndReorder(fileName, position)
+      //   if (!result) { return }
+      //   const help = this.config.helpComment ? this.helpComment() : ''
+      //   return `reorderParams("${this.targetInfo.name}", [${this.reorder.join(', ')}])${help}`
+      // },
+    })
   }
+  // getTextUIToolConfig(): ToolConfig {
+  //   return {
+  //     prefix: '&%&%',
+  //     log: this.options.log,
+  //     actions: [
+  //       {
+  //         name: 'removeParams',
+  //         args: ['name', 'remove'],
+  //         commentType: 'block',
+
+  //         print: action => this.printRefactorSuggestionMessage(Object.assign({}, this.targetInfo, {name: action && action.args && action.args.name ||this.targetInfo && this.targetInfo.name || 'unknown'})),
+
+          // snippet: (fileName: string, position: number): string | undefined => {
+          //   const result = this.getTargetNameAndremove(fileName, position)
+          //   if (!result) { return }
+          //   this.targetInfo = result
+          //   return `removeParams("${this.targetInfo.name}", [0])`
+          // },
+
+  //         nameExtra: (fileName: string, position: number) => {
+  //           if (!this.targetInfo) { 
+  //             return '' 
+  //           }
+  //           return `of ${this.targetInfo.name}`
+  //         }
+  //       }
+  //     ]
+  //   }
+  // }
 
   getTargetInfo(sourceFile: ts.SourceFile, position: number): TargetInfo | undefined {
     const targetInfoPredicate = (targetNode: any) => !(!targetNode || targetNode.parameters && !targetNode.parameters.length) && 
@@ -96,6 +109,11 @@ export class removeParamsCodeFixImpl extends SignatureAbstractCodeFix {
     }
   }
 
+  helpComment(): string {
+    return `
+    
+  /* Help: [1] means remove second argument/parameter, [0, 2] means remove first and third, etc */`
+  }
 
   removeParameters(node:   Node<ts.Node>, remove: number[], log: (msg:string)=>void): any {
     throw new Error('Method not implemented.');

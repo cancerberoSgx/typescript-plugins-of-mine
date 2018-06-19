@@ -3,7 +3,7 @@ import { NamedNode, Node, SignaturedDeclaration, SourceFile, TypeGuards } from '
 import * as ts from 'typescript';
 import { positionOrRangeToNumber } from "typescript-ast-util";
 import { CodeFixOptions } from 'typescript-plugin-util';
-import { Action, create, Tool, ToolConfig } from "typescript-plugins-text-based-user-interaction";
+import { Action, create, Tool, ToolConfig, ActionConfig } from "typescript-plugins-text-based-user-interaction";
 import * as ts_module from 'typescript/lib/tsserverlibrary';
 // import { getInputConsumer, setLogger } from './inputConsumer';
 import { SignatureRefactorArgs, SignatureRefactorsCodeFix } from './refactors';
@@ -89,7 +89,6 @@ export abstract class SignatureAbstractCodeFix implements SignatureRefactorsCode
     return applicableRefactors
   }
 
-
   protected applyImpl(arg: CodeFixOptions, fn: (n: Node) => void): void {
     const sourceFile = arg.simpleNode.getSourceFile()
     const funcDecl = this.getSimpleTargetNode(sourceFile, positionOrRangeToNumber(arg.positionOrRange), this.targetInfo.name, this.options.log)
@@ -101,6 +100,34 @@ export abstract class SignatureAbstractCodeFix implements SignatureRefactorsCode
     sourceFile.saveSync()
   }
 
+  abstract helpComment(): string
 
+  /** heads up ! this is very generic - you must override it as reoderParams does */
+  textUIToolConfigFactory(config: Partial<ActionConfig>) {
+    const defaultConfig = {
+      name: 'generic',
+      args: ['name'],
+      commentType: 'block',
+      print: action => this.printRefactorSuggestionMessage(Object.assign({}, this.targetInfo, { name: action && action.args && action.args.name || this.targetInfo && this.targetInfo.name || this.name })),
+      snippet: (fileName: string, position: number): string | undefined => {
+        const sourceFile = this.options.info.languageService.getProgram().getSourceFile(fileName)
+        this.targetInfo = this.getTargetInfo(sourceFile, position)
+        if (!this.targetInfo) { return }
+        const help = this.config.helpComment ? this.helpComment() : ''
+        return `${this.name}("${this.targetInfo.name}")${help}`
+      },
+      nameExtra: (fileName: string, position: number) => {
+        if (!this.targetInfo) {
+          return ''
+        }
+        return `of ${this.targetInfo.name}`
+      }
+    }
+    return {
+      prefix: '&%&%',
+      log: this.options.log,
+      actions: [Object.assign({}, defaultConfig, config)]
+    }
+  }
 }
 

@@ -1,6 +1,9 @@
 // import { InputProviderImpl, InputSupport, InputTextResponse, InputTextOptions, MessageBoxOptions, MessageBoxResponse, SelectTextOptions, SelectTextResponse } from 'input-ui-ipc-provider'
 // import * as vscode from 'vscode';
 
+// /**
+//  * Probably with time if this grows and we want to reuse it we want to move it to its own project
+//  */
 // export class VsCodeInputProvider extends InputProviderImpl {
 //   private supports: InputSupport = {
 //     inputText: true,
@@ -28,8 +31,8 @@
 //       }
 //       else if (options.type === 'warning') {
 //         promise = vscode.window.showWarningMessage(options.message, opts)
-//       } 
-//       else{
+//       }
+//       else {
 //         promise = vscode.window.showInformationMessage(options.message, opts)
 //       }
 //       promise.then(result => {
@@ -37,17 +40,15 @@
 //       })
 //     })
 //   }
-  
+
 //   selectText(options: SelectTextOptions): Promise<SelectTextResponse> {
 //     return new Promise((resolve, reject) => {
-//       if(!vscode.window.activeTextEditor){
-//         console.log('selectText no active text editor');
-        
+//       if (!vscode.window.activeTextEditor) {
 //         return reject('no active text editor')
 //       }
 //       const start = vscode.window.activeTextEditor.document.positionAt(options.from)
-//       const end =vscode.window.activeTextEditor.document.positionAt(options.to||options.from)
-//       vscode.window.activeTextEditor.selection =  new vscode.Selection(start, end);
+//       const end = vscode.window.activeTextEditor.document.positionAt(options.to || options.from)
+//       vscode.window.activeTextEditor.selection = new vscode.Selection(start, end);
 //       resolve()
 //     })
 //   }

@@ -1,7 +1,7 @@
 {
-  "name": "vscode-typescript-refactors",
-  "description": "Contributes with several TypeScript Language Service Plugins that add refactors for agile source code development. [See details and demos here](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-proactive-code-fixes).",
-  "version": "0.0.14",
+  "name": "input-ui-ipc-provider-test-vscode-extension",
+  "description": "Atom Editor support for generic GUI data inquire through https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/input-ui-ipc-provider",
+  "version": "0.0.1",
   "scripts": {
     "postinstall": "node ./node_modules/vscode/bin/install",
     "vscode:prepublish": "npm run build",
@@ -11,8 +11,7 @@
   },
   "dependencies": {
     "input-ui-ipc-provider-vscode": "file:../input-ui-ipc-provider-vscode",
-    "typescript-plugin-function-signature-refactors": "file:../typescript-plugin-function-signature-refactors",
-    "typescript-plugin-proactive-code-fixes": "file:../typescript-plugin-proactive-code-fixes"
+    "input-ui-ipc-provider-test-typescript-plugin": "file:../input-ui-ipc-provider-test-typescript-plugin"
   },
   "devDependencies": {
     "@types/mocha": "^5.2.2",
@@ -43,10 +42,7 @@
   "contributes": {
     "typescriptServerPlugins": [
       {
-        "name": "typescript-plugin-proactive-code-fixes"
-      },
-      {
-        "name": "typescript-plugin-function-signature-refactors"
+        "name": "input-ui-ipc-provider-test-typescript-plugin"
       }
     ]
   }
