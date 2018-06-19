@@ -10,9 +10,9 @@
     "test-vscode": "npm run build && node ./node_modules/vscode/bin/test"
   },
   "dependencies": {
-    "input-ui-ipc-provider": "0.0.2",
-    "typescript-plugin-function-signature-refactors": "0.0.5",
-    "typescript-plugin-proactive-code-fixes": "0.0.10"
+    "input-ui-ipc-provider": "file:../input-ui-ipc-provider",
+    "typescript-plugin-function-signature-refactors": "file:../typescript-plugin-function-signature-refactors",
+    "typescript-plugin-proactive-code-fixes": "file:../typescript-plugin-proactive-code-fixes"
   },
   "devDependencies": {
     "@types/mocha": "^5.2.2",

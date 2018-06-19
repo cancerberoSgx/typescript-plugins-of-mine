@@ -25,13 +25,13 @@
   "author": "Sebastian Gurin",
   "license": "MIT",
   "dependencies": {
-    "input-ui-ipc-provider": "0.0.2",
+    "input-ui-ipc-provider": "file:../input-ui-ipc-provider",
     "hrtime-now": "^1.0.5",
     "ts-simple-ast": "^12.4.0",
     "typescript": "2.9.1",
-    "typescript-ast-util": "1.0.13",
-    "typescript-plugin-util": "1.0.8",
-    "typescript-plugins-text-based-user-interaction": "0.0.9"
+    "typescript-ast-util": "file:../typescript-ast-util",
+    "typescript-plugin-util": "file:../typescript-plugin-util",
+    "typescript-plugins-text-based-user-interaction": "file:../typescript-plugins-text-based-user-interaction"
   },
   "devDependencies": {
     "@types/jasmine": "^2.8.8",
