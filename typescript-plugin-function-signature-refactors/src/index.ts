@@ -70,7 +70,8 @@ function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSetti
       opts.simpleProject = createSimpleASTProject(info.project)
       const sourceFile = opts.simpleProject.getSourceFileOrThrow(fileName)
       if (sourceFile.getFullText() !== opts.sourceFile.getFullText()) {
-        sourceFile.replaceWithText(opts.sourceFile.getFullText()) // update tsa sourcefile with buffer contents
+        // update tsa sourcefile with buffer contents
+        sourceFile.replaceWithText(opts.sourceFile.getFullText()) 
       }
       opts.simpleNode = sourceFile.getDescendantAtPos(positionOrRangeToNumber(positionOrRange)) || sourceFile
       refactor.apply(opts)

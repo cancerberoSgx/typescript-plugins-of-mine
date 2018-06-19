@@ -68,9 +68,7 @@ export class removeParamsCodeFixImpl extends SignatureAbstractCodeFix {
   }
 
   helpComment(): string {
-    return `
-    
-  /* Help: [1] means remove second argument/parameter, [0, 2] means remove first and third, etc */`
+    return `/* Help: [1] means remove second argument/parameter, [0, 2] means remove first and third, etc */`
   }
 
 }

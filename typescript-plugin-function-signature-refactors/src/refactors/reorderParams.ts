@@ -16,12 +16,9 @@ import { applyToSignature, getTargetInfo, TargetInfo } from '../util';
  *  * refactor a implementation method wont change its interface signature - super 
  *  * constructors not supported
     * we could give a more intuitive text-based API by letting the user provide the new signature. Then we create a new function with that signature in order to parse it correctly. 
+    * visual feedback select the arguments after refactor and put the cursor where in the middle
  */
 export class ReorderParamsCodeFixImpl extends SignatureAbstractCodeFix {
-
-  private reorder: number[];
-
-
 
   name: string = PLUGIN_NAME + '-reorderParams'
 
@@ -35,24 +32,6 @@ export class ReorderParamsCodeFixImpl extends SignatureAbstractCodeFix {
     return getTargetInfo(sourceFile, position, targetInfoPredicate)
   }
 
-  private getTargetNameAndReorder(fileName: string, position: number): TargetInfo & { reorder: number[] } | undefined {
-    const sourceFile = this.options.info.languageService.getProgram().getSourceFile(fileName)
-    let targetInfo = this.getTargetInfo(sourceFile, position)
-    if (!targetInfo) {
-      return
-    }
-    let reorder = []
-    const L = targetInfo.argumentCount || targetInfo.parameterCount
-    for (let i = 0; i < L; i++) {
-      reorder.push(L - i - 1)
-    }
-    const result = Object.assign({}, targetInfo, { reorder })
-
-    this.targetInfo = result
-    this.reorder = result.reorder
-    return result
-  }
-
   printRefactorSuggestionMessage(targetInfo: TargetInfo): string {
     return `Reorder parameters of "${targetInfo ? targetInfo.name : this.targetInfo.name}"`
   }
@@ -62,57 +41,43 @@ export class ReorderParamsCodeFixImpl extends SignatureAbstractCodeFix {
       name: 'reorderParams',
       args: ['name', 'reorder'],
       snippet: (fileName: string, position: number): string | undefined => {
-        const result = this.getTargetNameAndReorder(fileName, position)
-        if (!result) { return }
+        const sourceFile = this.options.info.languageService.getProgram().getSourceFile(fileName)
+        this.targetInfo = this.getTargetInfo(sourceFile, position)
+        
+        if (!this.targetInfo) { return }
         const help = this.config.helpComment ? this.helpComment() : ''
-        return `reorderParams("${this.targetInfo.name}", [${this.reorder.join(', ')}])${help}`
+        return `reorderParams("${this.targetInfo.name}", ${this.printReorderExample()})${help}`
       },
     })
   }
 
-  textUIToolConfigFactory(config: Partial<ActionConfig>) {
-    const defaultConfig = {
-      name: 'generic',
-      args: ['name'],
-      commentType: 'block',
-      print: action => this.printRefactorSuggestionMessage(Object.assign({}, this.targetInfo, { name: action && action.args && action.args.name || this.targetInfo && this.targetInfo.name || 'unknown' })),
-      snippet: (fileName: string, position: number): string | undefined => {
-        const result = this.getTargetNameAndReorder(fileName, position)
-        if (!result) { return }
-        const help = this.config.helpComment ? this.helpComment() : ''
-        return `reorderParams("${this.targetInfo.name}")${help}`
-      },
-      nameExtra: (fileName: string, position: number) => {
-        if (!this.targetInfo) {
-          return ''
-        }
-        return `of ${this.targetInfo.name}`
-      }
-    }
-    return {
-      prefix: '&%&%',
-      log: this.options.log,
-      actions: [Object.assign({}, defaultConfig, config)]
-    }
+  private printReorderExample(): string{
+    return '['+ new Array(this.targetInfo.parameterCount||1).fill(0).map((v, i, arr)=>arr.length-i-1).join(', ') + ']'
   }
 
+  helpText: string = `Help: The second argument is the new order of parameters. Number N in index M means move the M-th argument to index N. Examples: * [1] means switch between first and second  * [3, 2] means move the first parameter to fourth position and move the second parameter to the third. (the rest of the parameters, (third and fourth) will move left to accommodate this requirements)`
   helpComment(): string {
     return `
     
-  /* Help: The second argument is the new order of parameters. Number N in index M means move the M-th 
-      argument to index N. Examples: 
-   * [1] means switch between first and second
-   * [3, 2] means move the first parameter to fourth position and move the second parameter to the third. 
-   *   (the rest of the parameters, (third and fourth) will move left to accommodate this requirements) */`
+  /* ${this.helpText} */`
   }
 
   apply(arg: CodeFixOptions): void | ts.ApplicableRefactorInfo[] {
     if (!this.selectedAction && this.inputConsumer.hasSupport(INPUT_ACTIONS.inputText)) {
-      this.inputConsumer.inputText({ prompt: 'Enter reorderParam definition', placeHolder: '[1]' })
+      const defaultValue = this.printReorderExample()
+      const options = { 
+        prompt: 'Enter reorderParam definition', 
+        placeHolder: defaultValue,
+        value: defaultValue,
+        description: this.helpText,
+        validateInput: (function validateInput(s){try{JSON.parse(s); return Promise.resolve()}catch(ex){return Promise.resolve('JSON is invalid, fix it please')}}).toString()
+      }
+      this.inputConsumer.inputText(options)
         .then(response => {
           const reorder = JSON.parse(response.answer)
           this.applyImpl(arg, (n: Node) => { reorderParameters(n, reorder, this.options.log); })
-        }).catch(ex => {
+        })
+        .catch(ex => {
           this.options.log('this.inputConsumer.inputText catch ' + ex)
         })
     }

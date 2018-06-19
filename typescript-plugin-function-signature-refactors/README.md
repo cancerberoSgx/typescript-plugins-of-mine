@@ -76,7 +76,8 @@ Also notice that parameters not referenced in this array will shift to the left 
 
 # TODO
 
-  * perhaps proactive toNamedParams should be moved here
+  * proactive toNamedParams should be moved here
+  * when large refactors are done, perhaps is good idea to print report to the user saying how many nodes and files were changed ?
   * dont forget about constructors, setters/getters
   * dont forget about object literal expressions
   * and simple properties (non callables) - these have signatures too

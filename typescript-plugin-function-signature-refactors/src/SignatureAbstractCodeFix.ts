@@ -75,8 +75,6 @@ export abstract class SignatureAbstractCodeFix implements SignatureRefactorsCode
     const applicableRefactors = this.interactionTool.getApplicableRefactors(info, refactorName, refactorActionName, fileName, positionOrRange, userPreferences)
     this.selectedAction = applicableRefactors.selectedAction
 
-    // this.options.log('if there is no textUITool special comment it could be still a third party in' + !applicableRefactors.selectedAction + ' ' + this.targetNameAndReorder + ' ' + this.inputConsumer.hasSupport(INPUT_ACTIONS.inputText))
-
     // if there is no textUITool special comment it could be still a third party input provider ?
     if (!applicableRefactors.selectedAction && this.targetInfo && this.inputConsumer.hasSupport(INPUT_ACTIONS.inputText)) {
       applicableRefactors.refactors.push({
@@ -101,7 +99,7 @@ export abstract class SignatureAbstractCodeFix implements SignatureRefactorsCode
 
   abstract helpComment(): string
 
-  /** heads up ! this is very generic - you must override it as reoderParams does */
+  /** heads up ! this is very generic - you must override it as reorderParams does */
   textUIToolConfigFactory(config: Partial<ActionConfig>) {
     const defaultConfig = {
       name: 'generic',

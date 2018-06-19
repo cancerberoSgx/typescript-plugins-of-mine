@@ -1,4 +1,4 @@
-import { InputSupport, InputTextOptions, InputTextResponse, INPUT_ACTIONS, MessageBoxOptions, MessageBoxResponse, SelectTextOptions, SelectTextResponse } from './types'
+import { InputSupport, InputTextOptions, InputTextResponse, INPUT_ACTIONS, MessageBoxOptions, MessageBoxResponse, SelectTextOptions, SelectTextResponse, MessageBoxType } from './types'
 import axon = require('axon')
 
 export interface InputProviderConfig {
@@ -22,6 +22,7 @@ export abstract class InputProviderImpl implements InputProvider {
   private sock: any;
   
   constructor(private config: InputProviderConfig) {
+
     this.config.log = this.config.log || console.log
     this.sock = axon.socket('rep')
     this.sock.on('error', (e: any) => {
@@ -37,18 +38,23 @@ export abstract class InputProviderImpl implements InputProvider {
       this.config.log(`provider socket event * ${e}`)
     })
     this.sock.connect(this.config.port, '127.0.0.1')
+
     this.sock.on('message', (action: string, options: any, reply: (response: any) => void) => {
+
       options = options || {}
       this.config.log('input provider message ' + action + ' - options: ' + JSON.stringify(options))
       if (action === INPUT_ACTIONS.askSupported) {
         this.askSupported().then(reply)
       }
       else if (action === INPUT_ACTIONS.inputText) {
-        options.prompt = options.prompt || 'Enter value'
-        options.placeHolder = options.placeHolder || 'ValueExample'
+        options.prompt = options.prompt || 'Enter the value value'
+        options.value = options.value || ''
+        this.config.log('input provider options.validateInput  == '+options.validateInput +' - '+ typeof options.validateInput )
+        options.validateInput = typeof options.validateInput === 'string' ? (function(){try{ return eval('('+options.validateInput+')')}catch(ex){return undefined}})() : undefined // TODO: IMPORTANT - SECURITY !!! we are in another process
         this.inputText(options).then(reply)
       }
       else if (action === INPUT_ACTIONS.messageBox) {
+        options.type = options.type || MessageBoxType.information
         options.message = options.message || 'Generic message'
         this.messageBox(options).then(reply)
       }
