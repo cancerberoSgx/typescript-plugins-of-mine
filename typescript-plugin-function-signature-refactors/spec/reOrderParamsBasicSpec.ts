@@ -1,7 +1,6 @@
-import { Node, ReferenceFindableNode } from 'ts-simple-ast';
+import { Node, ReferenceFindableNode, ts } from 'ts-simple-ast';
 import { createProjectFiles, modifyAndAssert } from "typescript-plugin-util";
 import { reorderParameters } from '../src/refactors/reorderParams/reorderParams';
-import * as ts from 'typescript'
 
 export function reorderParamOperation(reorder: number[]) {
   return function (node: ReferenceFindableNode & Node) {

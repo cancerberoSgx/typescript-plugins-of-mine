@@ -45,10 +45,10 @@ describe('tests', () => {
     if (!fixes || !fixes.length) {
       return fail('no fixes for knowndiagnostic');
     }
-    expect(shell.cat(`${projectPath}/src/index.ts`).toString()).not.toContain(`public constructor(aString: String) {`)
+    expect(shell.cat(`${projectPath}/src/index.ts`).toString()).not.toContain(`public constructor(aString0: String) {`)
     fixes[0].apply(arg);
     simpleProject.saveSync();
-    expect(shell.cat(`${projectPath}/src/index.ts`).toString()).toContain(`public constructor(aString: String) {`)
+    expect(shell.cat(`${projectPath}/src/index.ts`).toString()).toContain(`public constructor(aString0: String) {`)
   })
 
 });

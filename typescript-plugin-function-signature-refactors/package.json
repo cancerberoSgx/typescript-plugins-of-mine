@@ -25,12 +25,13 @@
   "author": "Sebastian Gurin",
   "license": "MIT",
   "dependencies": {
+    "axon": "^2.0.3",
     "hrtime-now": "^1.0.5",
     "ts-simple-ast": "^12.4.0",
     "typescript": "2.9.1",
-    "typescript-ast-util": "1.0.12",
-    "typescript-plugin-util": "1.0.7",
-    "typescript-plugins-text-based-user-interaction": "0.0.8"
+    "typescript-ast-util": "file:../typescript-ast-util",
+    "typescript-plugin-util": "file:../typescript-plugin-util",
+    "typescript-plugins-text-based-user-interaction": "file:../typescript-plugins-text-based-user-interaction"
   },
   "devDependencies": {
     "@types/jasmine": "^2.8.8",

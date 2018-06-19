@@ -34,6 +34,8 @@ declare const c: EvalContext;
 function eval1(){
   const position = 151
   const sourceFile = c.info.languageService.getProgram().getSourceFile(c.fileName)
+
+  // c.project.createSource
   // const target = findChildContainingRangeLight(sourceFile, positionOrRangeToRange(position))
   const target = findChildContainingRangeGetChildren(sourceFile, positionOrRangeToRange(position))
   c.print(getKindName(target)+ target.getFullText() + target.getLeadingTriviaWidth() + ' - ' + getLeadingTrivia(target)+' - '+

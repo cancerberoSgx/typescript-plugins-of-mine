@@ -6,8 +6,7 @@ function bar15(helpers: Interface17[] | undefined, air: Wind41, n: RegExp,
   return Promise.resolve(true)
 }
 interface Interface17 {
-  method2: (b: Date[], a: number, c: boolean) => 
-   string // autocomplete needs to be INSIDE 
+  method2: (b: Date[], a: number, c: boolean) =>  string // autocomplete needs to be INSIDE 
 }
 const obj45: Interface17 = {
   method2(b: Date[], a: number, c: boolean): string {
@@ -15,9 +14,7 @@ const obj45: Interface17 = {
   }
 }
 class Wind41 {
-  blow(a: number, b: boolean[][], d: Date): number[] {
-  /* &%&% reorderParams("blow", [2, 1, 0]) */
-  
+  blow(a: number, b: boolean[][], d: Date): number[] { 
     return []
   }
 }
