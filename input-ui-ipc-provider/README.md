@@ -38,3 +38,8 @@ class VsCodeInputProvider extends InputProviderImpl {
 }
 const provider = new VsCodeInputProvider({port: 3000})
 ```
+
+
+# TODO
+
+destroy() the socket
