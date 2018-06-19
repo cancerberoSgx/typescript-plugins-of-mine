@@ -21,8 +21,8 @@ export type InputSupport = {
 export interface MessageBoxOptions {
   message: string
   type?: 'information'|'warning'|'error'
-  // /** if true the promise won't be resolved until user somehow closes the modal or dialog */
-  // waitForConfirmation: boolean
+  /** if true the promise won't be resolved until user somehow closes the modal or dialog. If false is just a message user can ignore and so promise is resolved immediately */
+  modal: boolean
 }
 
 export interface MessageBoxResponse{

@@ -59,6 +59,7 @@ class InputConsumerImpl implements InputConsumer {
   hasSupport(feature: INPUT_ACTIONS): boolean {
     return this.supports[feature]
   }
+  
   setLogger(log: (msg: string) => void): void {
     this.config.log = log
   }
@@ -80,7 +81,7 @@ class InputConsumerImpl implements InputConsumer {
 
   inputText(options: InputTextOptions): Promise<InputTextResponse> {
     this.config.log(`consumer requesting ${INPUT_ACTIONS.inputText}`)
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
       if (this.supports.inputText) {
         this.sock.send(INPUT_ACTIONS.inputText, options, (res: InputTextResponse) => {
           this.config.log(`consumer got ${INPUT_ACTIONS.inputText} response ${JSON.stringify(res)}`)
@@ -88,23 +89,23 @@ class InputConsumerImpl implements InputConsumer {
         })
       }
       else {
-        resolve({ answer: undefined })
+        reject()
       }
     })
   }
 
   messageBox(options: MessageBoxOptions): Promise<MessageBoxResponse> {
     this.config.log(`consumer requesting ${INPUT_ACTIONS.messageBox}`)
-    return new Promise(resolve => {
-      // if (this.supports.messageBox) {
+    return new Promise((resolve, reject) => {
+      if (this.supports.messageBox) {
         this.sock.send(INPUT_ACTIONS.messageBox, options, (res: MessageBoxResponse) => {
           this.config.log(`consumer got ${INPUT_ACTIONS.messageBox} response ${JSON.stringify(res)}`)
           resolve(res)
         })
-      // }
-      // else {
-      //   resolve({ answer: undefined })
-      // }
+      }
+      else {
+        reject()
+      }
     })
   }
   
