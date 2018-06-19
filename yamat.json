@@ -28,6 +28,10 @@
     "path": "typescript-plugin-function-signature-refactors"
   },
   {
+    "name": "input-ui-ipc-provider-vscode",
+    "path": "input-ui-ipc-provider-vscode"
+  },
+  {
     "name": "vscode-typescript-refactors",
     "path": "vscode-typescript-refactors"
   },
