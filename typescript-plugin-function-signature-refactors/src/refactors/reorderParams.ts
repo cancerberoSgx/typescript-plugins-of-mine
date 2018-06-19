@@ -1,5 +1,5 @@
 import { INPUT_ACTIONS } from 'input-ui-ipc-provider';
-import { Node } from "ts-simple-ast";
+import { Node, CallExpression, SignaturedDeclaration } from "ts-simple-ast";
 import * as ts from 'typescript';
 import { CodeFixOptions, getName } from 'typescript-plugin-util';
 import { ActionConfig, ToolConfig } from "typescript-plugins-text-based-user-interaction";
@@ -117,7 +117,6 @@ export class ReorderParamsCodeFixImpl extends SignatureAbstractCodeFix {
         })
     }
     else {
-
       this.applyImpl(arg, (n: Node) => { reorderParameters(n, this.selectedAction.args.reorder, this.options.log); })
     }
   }
@@ -127,20 +126,17 @@ export class ReorderParamsCodeFixImpl extends SignatureAbstractCodeFix {
 // the following code isolates the AST manipulation for this plugin apply()
 
 /**
- * For all references that must be refactored calls changeCallArgs.
+ * For all references that must be refactored calls reorderArgsOrParams.
  * 
- * TODO: check that user is not removing parameters. For example, this is invalid in a three 
- * parameter function : [1, 2] 
- * because the first parameter will be removed. Or throw exception or touch the reorder argument so it contains them all 
  * @param targetDeclaration the function-like declaration to reorder its parameters
  * @param reorder [1,0] means switching the positions between first and second params
  */
 export function reorderParameters(node: Node, reorder: number[], log: (msg: string) => void): void {
   log(`reorderParameters called with reorder: [${reorder.join(', ')}]`)
-  applyToSignature(node, (argsOrParams: ReadonlyArray<Node>) => changeCallArgs(reorder, argsOrParams, log), log)
-}
+  applyToSignature(node, ( argsOrParams, parent, returnValue) => reorderArgsOrParams(reorder, argsOrParams, log), log)
+} 
 
-function changeCallArgs(reorder: ReadonlyArray<number>, args: ReadonlyArray<Node>, log: (msg: string) => void) {
+function reorderArgsOrParams(reorder: ReadonlyArray<number>, args: ReadonlyArray<Node>, log: (msg: string) => void) {
   type T = { index: number, arg: string, name: string, remove?: boolean, originalIndex: number }
 
   // will use indexOccupied to reassign new positions to those nodes that must move implicitly

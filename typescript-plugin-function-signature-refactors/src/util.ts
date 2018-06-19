@@ -87,15 +87,15 @@ export function getAllCallsExpressions(targetDeclaration: Node & ReferenceFindab
 }
 
 
-
-export function applyToSignature(node: Node, fn: (argsOrParams: ReadonlyArray<Node>, returnValueOrType:Node)=>void, log: (msg: string) => void = console.log) {
+export type SignatureParentType = CallExpression&Node|SignaturedDeclaration&Node
+export function applyToSignature(node: Node, fn: (argsOrParams: ReadonlyArray<Node>, parent :SignatureParentType, returnValueOrType:Node)=>void, log: (msg: string) => void = console.log) {
   if (TypeGuards.isReferenceFindableNode(node)) {
     getAllCallsExpressions(node, log).forEach(call => {
       if (TypeGuards.isCallExpression(call)) {
-        fn(call.getArguments(), null)
+        fn(call.getArguments(),  call, null)
       }
       else {
-        fn(call.getParameters(), null)
+        fn(call.getParameters(), call, null)
       }
     })
   }
