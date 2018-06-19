@@ -18,6 +18,7 @@ export interface InputConsumer {
 
   /** emits action `inputText` so provider execute its implementation (showing an input box). Returns a promise that it will be resolved with the user's input or undefined if user cancelled the operation. */
   inputText(options: InputTextOptions): Promise<InputTextResponse>
+  setLogger(log: (msg: string) => void): void
 }
 
 class InputConsumerImpl implements InputConsumer {
@@ -26,12 +27,13 @@ class InputConsumerImpl implements InputConsumer {
     inputText: false,
     askSupported: false
   }
-  private supportsSetted:boolean=false
+  private supportsSetted: boolean = false
 
   private sock: any
 
   constructor(private config: InputConsumerConfig) {
     this.config.log = this.config.log || console.log
+
     this.sock = axon.socket('req')
 
     this.sock.on('error', (e) => {
@@ -48,10 +50,11 @@ class InputConsumerImpl implements InputConsumer {
     })
 
     this.sock.bind(this.config.port, '127.0.0.1')
+    this.config.log(`consumer sock.bind finish at ${this.config.port}`)
   }
 
   askSupported(): Promise<InputSupport> {
-    if(this.supportsSetted){
+    if (this.supportsSetted) {
       return Promise.resolve(this.supports)
     }
     return new Promise(resolve => {
@@ -63,6 +66,10 @@ class InputConsumerImpl implements InputConsumer {
         resolve(this.supports)
       })
     })
+  }
+
+  setLogger(log: (msg: string) => void): void {
+    this.config.log = log
   }
 
   inputText(options: InputTextOptions): Promise<InputTextResponse> {

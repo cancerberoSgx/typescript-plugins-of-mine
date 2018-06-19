@@ -1,7 +1,6 @@
 import {InputProviderImpl, InputSupport, InputTextResponse, InputTextOptions} from 'input-ui-ipc-provider'
 import * as vscode from 'vscode';
 
-
 export class VsCodeInputProvider extends InputProviderImpl {
   private supports: InputSupport = { 
     inputText: true,

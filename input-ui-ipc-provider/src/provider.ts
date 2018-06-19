@@ -11,6 +11,7 @@ export interface InputProvider {
   inputText(options: InputTextOptions): Promise<InputTextResponse>
   /** implementors return which features are supported by this input provider */
   askSupported(): Promise<InputSupport>
+  setLogger(log: (msg: string) => void): void
 }
 
 /**
@@ -55,4 +56,7 @@ export abstract class InputProviderImpl implements InputProvider {
 
   abstract askSupported(): Promise<InputSupport>
 
+  setLogger(log: (msg: string) => void):void{
+    this.config.log = log
+  }
 }

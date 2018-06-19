@@ -7,6 +7,7 @@
 // import { PLUGIN_NAME, SignatureRefactorArgs, SignatureRefactorsCodeFix } from '../../refactors';
 // import { reorderParameters } from './reorderParams';
 // import {createConsumer, InputConsumer, INPUT_ACTIONS} from 'input-ui-ipc-provider'
+// import { getTargetInfo } from '../util';
 // /**
 //  * # Description
 //  * 
@@ -42,6 +43,8 @@
 
 //   predicate(arg: CodeFixOptions): boolean {
 //     this.inputConsumer.askSupported()
+//     const targetInfo = getTargetInfo(sourceFile, positionOrRangeToNumber(arg.positionOrRange))
+
 //     this.targetNameAndReorder = this.getTargetNameAndReorder(arg.sourceFile.fileName, positionOrRangeToNumber(arg.positionOrRange))
 //     if (!this.targetNameAndReorder) {
 //       arg.log('predicate false because getTargetNameAndReorder did not found anything')
@@ -76,3 +79,4 @@
 //     }
 //     return applicableRefactors
 //   }
+// }
