@@ -9,3 +9,32 @@ This project is about easily providing Input UI from external editor extensions 
 Heads up : Input UI APi is async while TypesScript language service API is sync - but since I'm implementing them with ts-simple-ast it doesn't matter.
 
 Perform IPC comunication!
+
+## Consumer
+
+```ts
+const consumer = createConsumer({port: 3000})
+await consumer.askSupport()
+if(consumer.hasSupport(ACTION.inputText)){
+  const name = await consumer.inputText({prompt: 'Enter you name', placeHolder: 'John Doe'})
+}
+```
+
+## Provider
+
+```ts
+class VsCodeInputProvider extends InputProviderImpl {
+  private supports: InputSupport = { 
+    inputText: true,
+    askSupported: true
+  }
+  async inputText(options: InputTextOptions): Promise<InputTextResponse>{
+    const answer = await vscode.window.showInputBox(options)
+    return {answer}
+  }
+  askSupported(): Promise<InputSupport>{
+    return Promise.resolve(this.supports)
+  }
+}
+const provider = new VsCodeInputProvider({port: 3000})
+```
