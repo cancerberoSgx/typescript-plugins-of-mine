@@ -5,9 +5,10 @@ import { positionOrRangeToNumber } from "typescript-ast-util";
 import { CodeFixOptions } from 'typescript-plugin-util';
 import { Action, create, Tool, ToolConfig } from "typescript-plugins-text-based-user-interaction";
 import * as ts_module from 'typescript/lib/tsserverlibrary';
-import { getInputConsumer, setLogger } from './inputConsumer';
+// import { getInputConsumer, setLogger } from './inputConsumer';
 import { SignatureRefactorArgs, SignatureRefactorsCodeFix } from './refactors';
 import { getTargetInfo, TargetInfo } from './util';
+import { getInputConsumer, setLogger } from 'input-ui-ipc-provider';
 
 export abstract class SignatureAbstractCodeFix implements SignatureRefactorsCodeFix {
 

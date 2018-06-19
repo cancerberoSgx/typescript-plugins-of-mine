@@ -46,7 +46,8 @@ const provider = new VsCodeInputProvider({port: 3000})
  * tests
  * showmessage, error, warning
  * select (multiple)
- * selectText and move cursor (change feedback) -  so we can selectthe text changed after the refactor and also control the cursor just in case. 
+ * selectText and move cursor (change feedback) -  so we can selectthe text changed after the refactor and also control the cursor just in case.  
+ * right now consumers are server and providers are clients - so we can only instantiate one consumer. since we we have only one provider (in the editor) - probably we want to have the server in the editor (provider) so one or more plugins can consume
 
 
 # Dones

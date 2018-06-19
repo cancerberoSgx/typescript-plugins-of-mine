@@ -1,4 +1,4 @@
-import { InputSupport, InputTextOptions, InputTextResponse, INPUT_ACTIONS } from './types';
+import { InputSupport, InputTextOptions, InputTextResponse, INPUT_ACTIONS, MessageBoxResponse, MessageBoxOptions } from './types';
 
 import axon = require('axon')
 
@@ -12,21 +12,23 @@ export interface InputConsumerConfig {
 }
 
 export interface InputConsumer {
+  setLogger(log: (msg: string) => void): void
+
+  hasSupport(feature: INPUT_ACTIONS): boolean
   /** emits action `askSupported` so provider can tell which kind of input request it support  */
   askSupported(): Promise<InputSupport>
 
-  hasSupport(feature: INPUT_ACTIONS): boolean
-
   /** emits action `inputText` so provider execute its implementation (showing an input box). Returns a promise that it will be resolved with the user's input or undefined if user cancelled the operation. */
   inputText(options: InputTextOptions): Promise<InputTextResponse>
-  setLogger(log: (msg: string) => void): void
+  messageBox(options: MessageBoxOptions): Promise<MessageBoxResponse> 
 }
 
 class InputConsumerImpl implements InputConsumer {
 
   private supports: InputSupport = {
     inputText: false,
-    askSupported: false
+    askSupported: false,
+    messageBox: false
   }
   private supportsSetted: boolean = false
 
@@ -54,6 +56,13 @@ class InputConsumerImpl implements InputConsumer {
     this.config.log(`consumer sock.bind finish at ${this.config.port}`)
   }
 
+  hasSupport(feature: INPUT_ACTIONS): boolean {
+    return this.supports[feature]
+  }
+  setLogger(log: (msg: string) => void): void {
+    this.config.log = log
+  }
+
   askSupported(): Promise<InputSupport> {
     if (this.supportsSetted) {
       return Promise.resolve(this.supports)
@@ -67,10 +76,6 @@ class InputConsumerImpl implements InputConsumer {
         resolve(this.supports)
       })
     })
-  }
-
-  setLogger(log: (msg: string) => void): void {
-    this.config.log = log
   }
 
   inputText(options: InputTextOptions): Promise<InputTextResponse> {
@@ -88,7 +93,19 @@ class InputConsumerImpl implements InputConsumer {
     })
   }
 
-  hasSupport(feature: INPUT_ACTIONS): boolean {
-    return this.supports[feature]
+  messageBox(options: MessageBoxOptions): Promise<MessageBoxResponse> {
+    this.config.log(`consumer requesting ${INPUT_ACTIONS.messageBox}`)
+    return new Promise(resolve => {
+      // if (this.supports.messageBox) {
+        this.sock.send(INPUT_ACTIONS.messageBox, options, (res: MessageBoxResponse) => {
+          this.config.log(`consumer got ${INPUT_ACTIONS.messageBox} response ${JSON.stringify(res)}`)
+          resolve(res)
+        })
+      // }
+      // else {
+      //   resolve({ answer: undefined })
+      // }
+    })
   }
+  
 }

@@ -1,4 +1,4 @@
-import { InputSupport, InputTextOptions, InputTextResponse, INPUT_ACTIONS } from './types'
+import { InputSupport, InputTextOptions, InputTextResponse, INPUT_ACTIONS, MessageBoxOptions, MessageBoxResponse } from './types'
 import axon = require('axon')
 
 export interface InputProviderConfig {
@@ -48,11 +48,18 @@ export abstract class InputProviderImpl implements InputProvider {
         options.placeHolder = options.placeHolder || 'ValueExample'
         this.inputText(options).then(reply)
       }
+      else if (action === INPUT_ACTIONS.messageBox) {
+        options = options || {}
+        options.message = options.message || 'Generic message'
+        this.messageBox(options).then(reply)
+      }
     })
     this.config.log('input provider connect ' + this.config.port)
   }
 
   abstract inputText(options: InputTextOptions): Promise<InputTextResponse>
+
+  abstract messageBox(options: MessageBoxOptions): Promise<MessageBoxResponse>
 
   abstract askSupported(): Promise<InputSupport>
 
