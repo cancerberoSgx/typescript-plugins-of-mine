@@ -26,6 +26,7 @@ class InputConsumerImpl implements InputConsumer {
     inputText: false,
     askSupported: false
   }
+  private supportsSetted:boolean=false
 
   private sock: any
 
@@ -50,11 +51,15 @@ class InputConsumerImpl implements InputConsumer {
   }
 
   askSupported(): Promise<InputSupport> {
+    if(this.supportsSetted){
+      return Promise.resolve(this.supports)
+    }
     return new Promise(resolve => {
       this.config.log(`consumer requesting ${INPUT_ACTIONS.askSupported}`)
       this.sock.send(INPUT_ACTIONS.askSupported, {}, (res: InputSupport) => {
         this.config.log(`consumer got ${INPUT_ACTIONS.askSupported} response ${JSON.stringify(res)}`)
         this.supports = Object.assign({}, this.supports, res)
+        this.supportsSetted = true
         resolve(this.supports)
       })
     })

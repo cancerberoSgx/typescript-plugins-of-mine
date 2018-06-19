@@ -42,4 +42,10 @@ const provider = new VsCodeInputProvider({port: 3000})
 
 # TODO
 
-destroy() the socket
+ * destroy() the socket
+ * tests
+
+
+# Dones
+
+ * askSupported not to send if this support already was setted

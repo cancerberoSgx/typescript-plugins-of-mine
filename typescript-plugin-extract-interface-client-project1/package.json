@@ -19,15 +19,15 @@
     "@types/node": "^10.0.4",
     "ts-simple-ast": "^12.4.0",
     "typescript": "2.9.1",
-    "typescript-ast-util": "file:../typescript-ast-util",
-    "typescript-plugin-ast-inspector": "file:../typescript-plugin-ast-inspector",
-    "typescript-plugin-proactive-code-fixes": "file:../typescript-plugin-proactive-code-fixes"
+    "typescript-ast-util": "1.0.13",
+    "typescript-plugin-ast-inspector": "1.0.8",
+    "typescript-plugin-proactive-code-fixes": "0.0.10"
   },
   "devDependencies": {
     "typescript-plugin-add-type": "file:../typescript-plugin-add-type",
     "typescript-plugin-move-declaration": "file:../typescript-plugin-move-declaration",
     "typescript-plugin-move-file": "file:../typescript-plugin-move-file",
     "typescript-plugin-postfix": "file:../typescript-plugin-postfix",
-    "typescript-plugin-function-signature-refactors": "file:../typescript-plugin-function-signature-refactors"
+    "typescript-plugin-function-signature-refactors": "0.0.5"
   }
 }
