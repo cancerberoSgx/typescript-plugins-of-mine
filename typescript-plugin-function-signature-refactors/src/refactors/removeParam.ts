@@ -79,35 +79,25 @@ export class removeParamsCodeFixImpl extends SignatureAbstractCodeFix {
     return getTargetInfo(sourceFile, position, targetInfoPredicate)
   }
   
-  private applyImpl(arg: CodeFixOptions, remove: number[]) {
-    const sourceFile = arg.simpleNode.getSourceFile()
-    const funcDecl = this.getSimpleTargetNode(sourceFile, positionOrRangeToNumber(arg.positionOrRange), this.targetInfo.name, this.options.log)
-    if (!funcDecl) {
-      this.options.log(`removeParamsPlugin applyImpl aborted because function ${this.targetInfo.name} cannot be found at ${arg.positionOrRange}`)
-      return
-    }
-    this.options.log(`removeParamsPlugin applyImpl calling removeParameters with remove: [${remove.join(', ')}]`)
-    this.removeParameters(funcDecl, remove, this.options.log)
-    sourceFile.saveSync()
-  }
 
   apply(arg: CodeFixOptions): void | ts.ApplicableRefactorInfo[] {
     if (!this.selectedAction && this.inputConsumer.hasSupport(INPUT_ACTIONS.inputText)) {
       this.inputConsumer.inputText({ prompt: 'Enter removeParam definition', placeHolder: '[1]' })
         .then(response => {
           const remove = JSON.parse(response.answer)
-          this.applyImpl(arg, remove)
+          this.applyImpl(arg, (n:Node)=>{this.removeParameters(n,  remove, this.options.log);})
         }).catch(ex => {
           this.options.log('this.inputConsumer.inputText catch ' + ex)
         })
     }
     else {
-      this.applyImpl(arg, this.selectedAction.args.remove)
+      this.applyImpl(arg, (n:Node)=>{this.removeParameters(n, this.selectedAction.args.remove, this.options.log);})
+      // this.applyImpl(arg, this.selectedAction.args.remove)
     }
   }
 
 
-  removeParameters(node: SignaturedDeclaration & NamedNode & Node<ts.Node>, remove: number[], log: (msg:string)=>void): any {
+  removeParameters(node:   Node<ts.Node>, remove: number[], log: (msg:string)=>void): any {
     throw new Error('Method not implemented.');
   }
 }

@@ -7,7 +7,7 @@
     ],
     "outDir": "./dist",
     "rootDir": ".",
-    "strict": true,
+    "strict": false,
     "strictNullChecks": false,
     "esModuleInterop": true,
     "declaration": true,

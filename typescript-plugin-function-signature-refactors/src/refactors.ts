@@ -1,7 +1,7 @@
 import { CodeFix } from "typescript-plugin-util";
 import { Action } from "typescript-plugins-text-based-user-interaction";
 import * as ts_module from 'typescript/lib/tsserverlibrary';
-import { ReorderParamsCodeFixImpl } from "./refactors/reorderParams/reorderParamsPlugin";
+import { ReorderParamsCodeFixImpl } from "./refactors/reorderParams";
 import { removeParamsCodeFixImpl } from './refactors/removeParam';
 
 export const PLUGIN_NAME = 'typescript-plugin-function-signature-refactors'

@@ -44,6 +44,9 @@ const provider = new VsCodeInputProvider({port: 3000})
 
  * destroy() the socket
  * tests
+ * showmessage, error, warning
+ * select (multiple)
+ * selectText and move cursor (change feedback) -  so we can selectthe text changed after the refactor and also control the cursor just in case. 
 
 
 # Dones

@@ -88,5 +88,18 @@ export abstract class SignatureAbstractCodeFix implements SignatureRefactorsCode
     return applicableRefactors
   }
 
+
+  protected applyImpl(arg: CodeFixOptions, fn: (n: Node) => void): void {
+    const sourceFile = arg.simpleNode.getSourceFile()
+    const funcDecl = this.getSimpleTargetNode(sourceFile, positionOrRangeToNumber(arg.positionOrRange), this.targetInfo.name, this.options.log)
+    if (!funcDecl) {
+      this.options.log(`${this.name} applyImpl aborted because function ${this.targetInfo.name} cannot be found at ${arg.positionOrRange}`)
+      return
+    }
+    fn(funcDecl)
+    sourceFile.saveSync()
+  }
+
+
 }
 
