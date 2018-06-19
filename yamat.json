@@ -4,6 +4,10 @@
     "path": "typescript-ast-util"
   },
   {
+    "name": "input-ui-ipc-provider",
+    "path": "input-ui-ipc-provider"
+  },
+  {
     "name": "typescript-plugin-util",
     "path": "typescript-plugin-util"
   },
