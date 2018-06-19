@@ -12,9 +12,9 @@
     "removeComments": false,
     "noImplicitAny": false,
     "plugins": [
-      {
-       "name": "typescript-plugin-ast-inspector"
-      },
+      // {
+      //  "name": "typescript-plugin-ast-inspector"
+      // },
       // {
       //   "name": "typescript-plugin-extract-interface"
       // },

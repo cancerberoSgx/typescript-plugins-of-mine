@@ -8,6 +8,10 @@ import { PLUGIN_NAME, SignatureRefactorArgs, SignatureRefactorsCodeFix } from '.
 import { reorderParameters } from './reorderParams';
 
 /**
+ * # Description
+ * 
+ *  Allows users to change a signature parameter order. 
+ * 
  * # TODO
  *  * refactor a nimplementation method wont change its interface signature - super 
  *  * constructors not supported

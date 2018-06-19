@@ -1,9 +1,9 @@
 
-function fofofofo1(date1: Date[][], n: number): Promise<Boolean>{ 
+function foo(n: number, date1: Date[][]): Promise<Boolean>{ 
   return Promise.resolve(true)
 }
 
-function fofofofo(date1: Date[][], n: number ): Promise<Boolean>{
+function bar(a: number[], n: RegExp ): Promise<Boolean>{
   return Promise.resolve(true)
 }
 
@@ -11,20 +11,18 @@ interface Interface1 {
   method2:  (a: number, b: Date[], c: boolean )  => string   
 }
 const obj: Interface1 = {
-  method2(c: boolean, b: Date[], a: number): string { 
-  /* &%&% reorderParams("method2", [2, 1, 0]) */
-     
+  method2  (a: number, b: Date[], c: boolean ) : string {      
     return ''
   }
 }
 
-class C123 {
-  method1(a: number, b: boolean[][], d: Date): number[] {
+class Air {
+  blow(a: number, b: boolean[][], d: Date): number[] {
     return []
   }
 }
 
-
+const result = new Air().blow(3.14, [[true]], new Date())
 
 
 import { TypeGuards, QuoteKind } from 'ts-simple-ast';

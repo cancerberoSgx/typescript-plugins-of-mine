@@ -2,42 +2,48 @@ TypeScript Language Service Plugin plugin with several refactors related to func
 
 **WIP* - **very new** 
 
-
-# Refactors 
-
-## change parameter order (reorderParams). 
-
-How to use it: Imagine you have a function declaration like the following. Then just start writing "refactor" and autocomplete with the text "reorder parameters of prettyFunction" will be suggested: 
-
-```
-function prettyFunction(a: string, b: number, c: Date[], d: Promise<Number>): boolean { return null }
-```
-
-It could be any function-like declaration, call, method, signature, etc . It could be before or after the cursor. Selecting that autocomplete suggestion will it will prompt the user to enter which parameters / arguments should be moved and where:
-
-```
-// &%&% reorderParams("prettyFunction", [3, 2])
-function prettyFunction(a: string, b: number, c: Date[], d: Promise<Number>): boolean { return null }
-```
-In that example the result will be the following: 
-
-```function prettyFunction( c: Date[], d: Promise<Number>,  b: number, a: string): boolean { return null }```
-
-`[3, 2]` means: move 0th argument to the 3rd place and 1th argument to the 2nd place
-
-Alternatively user could copy and paste the arguments literals and do it using their text but in this case they will be responsible of not introducing errors on this manual task: 
-
-```
-// &%&% reorderParams("prettyFunction", `b: number, c: Date[], a: string, d: Promise<Number>`)
-```
-
-TODO: This last part is not impl yet
-
 # About the project
 
  * use typescript-plugins-text-based-user-interaction
  * expose API so concrete editor extensions can use it, probably mine TypeScript refactors asking input with a nice UI instead of TextUITool
  * based on ts-simple-ast
+
+
+# Refactors 
+
+## change parameter order (reorderParams). 
+
+ * Demo: 
+
+![Reorder parameters demo:](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/master/typescript-plugin-function-signature-refactors/doc-assets/reorderParamsVsCode.gif?raw=true?p=.gif)
+
+How to use it: Imagine you have a function declaration like the following. 
+
+```ts
+function prettyFunction(a: string, b: number, c: Date[], d: Promise<Number>): boolean { return null }
+```
+
+Then just start writing "refactor" in some place **inside** that function declaration or call and autocomplete with the text "reorder parameters of prettyFunction" will be suggested: 
+
+```
+function prettyFunction(a: string, b: number, c: Date[], d: Promise<Number>): boolean { 
+  /* &%&% reorderParams("prettyFunction", [3, 2]) */
+  return null }
+```
+
+A comment will be created when you accept that autocomplete. If you ask for refactors at that comment you will be suggested with "Reordered parameters of 'blow'" and if you accept the function/signature/call parameters order will be changed accordingly and all its references in the project.
+
+## Reorder syntax
+
+The second parameter in `reorderParams()` call defines how parameters will be reordered. 
+
+In our previous example it was `[3, 2]` and it means: move first parameter to the 3rd place and the second parameter to the 2nd place so for example `(a, b, c, d)` will end up in `(c, d, b, a)`
+
+The rule is this one: **Number N in index M means move the M-th argument to index N.**
+
+Also notice that parameters not referenced in this array will shift to the left in order to comply with the new order. For example, if we reorder `(a, b, c)` using `[2]` this will move a to the third place so `b` and `c` automatically will shift one place to the right, resulting in `(b, c, a)` 
+
+
 
 # Ideas 
 
