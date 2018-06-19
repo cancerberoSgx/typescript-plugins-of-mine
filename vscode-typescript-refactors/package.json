@@ -32,7 +32,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://cancerberosgx.visualstudio.com/typescript-refactors/_git/typescript-refactors"
+    "url": "https://github.com/cancerberoSgx/typescript-plugins-of-mine.git"
   },
   "activationEvents": [
     "onCommand:typescriptRefactors.genericEvent"
