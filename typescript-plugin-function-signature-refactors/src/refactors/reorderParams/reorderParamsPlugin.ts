@@ -37,10 +37,14 @@ export class ReorderParamsCodeFixImpl extends SignatureAbstractCodeFix {
     help: false
   }
 
-
+  getTargetInfo(sourceFile: ts.SourceFile, position: number): TargetInfo | undefined {
+    const targetInfoPredicate = (targetNode: any) => !(!targetNode || targetNode.parameters && targetNode.parameters.length <= 1) && !(!targetNode || targetNode.arguments && targetNode.arguments.length <= 1)
+    return getTargetInfo(sourceFile, position, targetInfoPredicate)
+  }
+  
   private getTargetNameAndReorder(fileName: string, position: number): TargetInfo & { reorder: number[] } | undefined {
     const sourceFile = this.options.info.languageService.getProgram().getSourceFile(fileName)
-    let targetInfo = getTargetInfo(sourceFile, position)
+    let targetInfo = this.getTargetInfo(sourceFile, position)
     if (!targetInfo) {
       return
     }
@@ -66,7 +70,7 @@ export class ReorderParamsCodeFixImpl extends SignatureAbstractCodeFix {
           args: ['name', 'reorder'],
           commentType: 'block',
 
-          print: action => this.printRefactorSuggestionMessage(Object.assign({}, this.targetInfo, {name: action && action.args && action.args.name ||this.targetInfo && this.targetInfo.name || 'unknown'})),
+          print: action => this.printRefactorSuggestionMessage(Object.assign({}, this.targetInfo, { name: action && action.args && action.args.name || this.targetInfo && this.targetInfo.name || 'unknown' })),
 
           snippet: (fileName: string, position: number): string | undefined => {
             const result = this.getTargetNameAndReorder(fileName, position)
@@ -78,8 +82,8 @@ export class ReorderParamsCodeFixImpl extends SignatureAbstractCodeFix {
           },
 
           nameExtra: (fileName: string, position: number) => {
-            if (!this.targetInfo) { 
-              return '' 
+            if (!this.targetInfo) {
+              return ''
             }
             return `of ${this.targetInfo.name}`
           }

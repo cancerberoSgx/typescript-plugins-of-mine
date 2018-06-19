@@ -34,7 +34,7 @@ export abstract class SignatureAbstractCodeFix implements SignatureRefactorsCode
 
   predicate(arg: CodeFixOptions): boolean {
     this.inputConsumer.askSupported()
-    this.targetInfo = getTargetInfo(arg.sourceFile, positionOrRangeToNumber(arg.positionOrRange))
+    this.targetInfo = this.getTargetInfo(arg.sourceFile, positionOrRangeToNumber(arg.positionOrRange))
     if (!this.targetInfo) {
       arg.log('predicate false because getTargetNameAndReorder did not found anything')
       return false
@@ -49,13 +49,9 @@ export abstract class SignatureAbstractCodeFix implements SignatureRefactorsCode
   getCompletionsAtPosition(fileName: string, position: number, options: ts.GetCompletionsAtPositionOptions): ts.CompletionEntry[] {
     return this.interactionTool.getCompletionsAtPosition(fileName, position, options)
   }
-
-  // protected getTextUITool(): Tool {
-  //   if (!this.interactionTool) {
-  //     this.interactionTool = create(this.getTextUIToolConfig())
-  //   }
-  //   return this.interactionTool
-  // }
+  getTargetInfo(sourceFile: ts.SourceFile, position: number): TargetInfo | undefined {
+    return getTargetInfo(sourceFile, position, (targetNode: any) => !!targetNode)
+  }
 
   protected getSimpleTargetNode(file: SourceFile, position: number, name: string, log: (msg: string) => void): SignaturedDeclaration & NamedNode & Node | undefined {
     let expr = file.getDescendantAtPos(position)

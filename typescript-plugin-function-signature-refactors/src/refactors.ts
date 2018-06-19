@@ -2,6 +2,7 @@ import { CodeFix } from "typescript-plugin-util";
 import { Action } from "typescript-plugins-text-based-user-interaction";
 import * as ts_module from 'typescript/lib/tsserverlibrary';
 import { ReorderParamsCodeFixImpl } from "./refactors/reorderParams/reorderParamsPlugin";
+import { removeParamsCodeFixImpl } from './refactors/removeParam';
 
 export const PLUGIN_NAME = 'typescript-plugin-function-signature-refactors'
 
@@ -12,7 +13,7 @@ export interface SignatureRefactorArgs {
 
 export function getRefactors(options: SignatureRefactorArgs): SignatureRefactorsCodeFix[] {
   if (!refactors) {
-    refactors = [new ReorderParamsCodeFixImpl(options)]
+    refactors = [new ReorderParamsCodeFixImpl(options), new removeParamsCodeFixImpl(options)]
   }
   return refactors
 }
