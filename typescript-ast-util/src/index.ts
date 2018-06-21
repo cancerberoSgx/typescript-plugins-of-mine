@@ -23,8 +23,6 @@ export function positionOrRangeToNumber(positionOrRange: number | ts.TextRange):
     (positionOrRange as ts.TextRange).pos
 }
 
-
-
 // node accessors and guards
 
 

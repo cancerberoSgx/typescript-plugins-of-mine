@@ -25,6 +25,8 @@ Each project has its own TODO but here are some general ones:
 
 ## plugin ideas - (refactor - code fix)
 
+ * babel supports typescript and also has lots of transformation plugins : https://babeljs.io/docs/en/next/plugins - if these work with typescript 
+
  * (Difficulty: medium - Usefulness: medium-low) add super() call on constructors that lack it
 
  * (Difficulty: low - Usefulness: medium-low) accessing non public members should suggest changing the member signature / decl to public. 
