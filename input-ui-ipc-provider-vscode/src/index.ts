@@ -5,10 +5,13 @@ import * as vscode from 'vscode';
  * Probably with time if this grows and we want to reuse it we want to move it to its own project
  */
 export class VsCodeInputProvider extends InputProviderImpl {
-  private toVsInputBoxOptions(options: InputTextOptions): any {
+  
+  private toVsInputBoxOptions(options: InputTextOptions): vscode.InputBoxOptions {
     const vsCodeOptions: vscode.InputBoxOptions = Object.assign({}, options, {validateInput: undefined}) 
     try {
-      if(typeof options.validateInput ==='string'){
+      if(typeof options.validateInput !=='string'){
+        vsCodeOptions.validateInput= options.validateInput
+      }else{ // this never happens - but we do it anyway just in case
         vsCodeOptions.validateInput = eval ('('+options.validateInput+')')
       }
     } catch (error) {

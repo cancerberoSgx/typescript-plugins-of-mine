@@ -20,7 +20,7 @@ export interface InputProvider {
 export abstract class InputProviderImpl implements InputProvider {
 
   private sock: any;
-  
+
   constructor(private config: InputProviderConfig) {
 
     this.config.log = this.config.log || console.log
@@ -49,16 +49,16 @@ export abstract class InputProviderImpl implements InputProvider {
       else if (action === INPUT_ACTIONS.inputText) {
         options.prompt = options.prompt || 'Enter the value value'
         options.value = options.value || ''
-        this.config.log('input provider options.validateInput  == '+options.validateInput +' - '+ typeof options.validateInput )
-        options.validateInput = typeof options.validateInput === 'string' ? 
-          (function(){
-            try{ 
-              return eval('('+options.validateInput+')') // TODO: IMPORTANT - SECURITY !!! we are in another process
-            }catch(ex){
+        this.config.log('input provider options.validateInput  == ' + options.validateInput + ' - ' + typeof options.validateInput)
+        options.validateInput = typeof options.validateInput === 'string' ?
+          (function () {
+            try {
+              return eval('(' + options.validateInput + ')') // TODO: IMPORTANT - SECURITY !!! we are in another process
+            } catch (ex) {
               console.log('Provider could not eval inputText options.validateInput', ex)
               return undefined
             }
-          })() : undefined 
+          })() : undefined
         this.inputText(options).then(reply)
       }
       else if (action === INPUT_ACTIONS.messageBox) {
@@ -75,7 +75,7 @@ export abstract class InputProviderImpl implements InputProvider {
     this.config.log('input provider connect ' + this.config.port)
   }
 
-  setLogger(log: (msg: string) => void):void{
+  setLogger(log: (msg: string) => void): void {
     this.config.log = log
   }
 
@@ -84,9 +84,9 @@ export abstract class InputProviderImpl implements InputProvider {
   abstract inputText(options: InputTextOptions): Promise<InputTextResponse>
 
   abstract messageBox(options: MessageBoxOptions): Promise<MessageBoxResponse>
-  
+
   abstract selectText(options: SelectTextOptions): Promise<SelectTextResponse>
-  
-  
+
+
 
 }

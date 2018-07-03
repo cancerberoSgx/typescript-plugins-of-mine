@@ -85,6 +85,9 @@ class InputConsumerImpl implements InputConsumer {
     this.config.log(`consumer requesting ${INPUT_ACTIONS.inputText}`)
     return new Promise((resolve, reject) => {
       if (this.supports.inputText) {
+        if(typeof options.validateInput !== 'string'){
+          options.validateInput = options.validateInput.toString()
+        }
         this.sock.send(INPUT_ACTIONS.inputText, options, (res: InputTextResponse) => {
           this.config.log(`consumer got ${INPUT_ACTIONS.inputText} response ${JSON.stringify(res)}`)
           resolve(res)
