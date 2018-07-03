@@ -1,11 +1,12 @@
 {
   "name": "input-ui-ipc-provider-test-vscode-extension",
-  "description": "Atom Editor support for generic GUI data inquire through https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/input-ui-ipc-provider",
+  "description": "vscode support for generic GUI data inquire through https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/input-ui-ipc-provider",
   "version": "0.0.1",
   "scripts": {
     "postinstall": "node ./node_modules/vscode/bin/install",
     "vscode:prepublish": "npm run build",
     "build": "tsc -p ./",
+    "doc": "exit 0",
     "watch": "tsc -watch -p ./",
     "test-vscode": "npm run build && node ./node_modules/vscode/bin/test"
   },

@@ -15,8 +15,7 @@
     "clean": "rm -rf node_modules package-lock.json dist",
     "all": "npm run clean && npm i && npm run build && npm test"
   },
-  "keywords": [
-  ],
+  "keywords": [],
   "author": "Sebastian Gurin",
   "license": "MIT",
   "dependencies": {

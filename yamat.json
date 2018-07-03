@@ -36,7 +36,23 @@
     "path": "vscode-typescript-refactors"
   },
   {
+    "name": "input-ui-ipc-provider-test-typescript-plugin",
+    "path": "input-ui-ipc-provider-test-typescript-plugin"
+  },
+  
+
+  {
     "name": "typescript-plugin-extract-interface-client-project1",
     "path": "typescript-plugin-extract-interface-client-project1"
+  },
+  {
+    "name": "input-ui-ipc-provider-test-vscode-extension",
+    "path": "input-ui-ipc-provider-test-vscode-extension"
+  },
+  {
+    "name": "sample-ts-plugin1",
+    "path": "sample-ts-plugin1"
   }
+  
+
 ]

@@ -31,22 +31,34 @@ function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSetti
   }
   if (actionName === `${PLUGIN_NAME}-action-inputText`) {
     inputConsumer.inputText({ prompt: 'Please enter your name', placeHolder: 'John Doe' })
-      .then(response=>{
+      .then(response => {
         printInFile(fileName, positionOrRange, `Thank you, ${response.answer}, have a nice day`)
       })
   }
   else if (actionName === `${PLUGIN_NAME}-action-messageBox`) {
     inputConsumer.messageBox({ message: 'Welcome to refactors' })
-      .then(response=>{
+      .then(response => {
         printInFile(fileName, positionOrRange, response.answer ? 'user clicked OK' : 'user dismissed the dialog')
       })
   }
   else if (actionName === `${PLUGIN_NAME}-action-selectText`) {
     inputConsumer
-    .inputText({ prompt: 'Please enter [from, to] to select', placeHolder: '{"from": 2, "to": 23}' })
-    .then(response=> inputConsumer.selectText(JSON.parse(response.answer)))
-    .then(response=> printInFile(fileName, positionOrRange, `Text selected, can you see it ? `))
-    .catch(ex=> printInFile(fileName, positionOrRange, `ERROR parsing input json text ${ex}`))
+      .inputText({
+        prompt: 'Please enter [from, to] to select',
+        placeHolder: '{"from": 2, "to": 23}',
+        value: '{"from": 2, "to": 23}',
+        validateInput: (input: string) => {
+          try {
+            JSON.parse(input)
+            return Promise.resolve(undefined)
+          } catch (error) {
+            return Promise.resolve('Please enter valid JSON')
+          }
+        }
+      })
+      .then(response => inputConsumer.selectText(JSON.parse(response.answer)))
+      .then(response => printInFile(fileName, positionOrRange, `Text selected, can you see it ? `))
+      .catch(ex => printInFile(fileName, positionOrRange, `ERROR parsing input json text ${ex}`))
   }
   return refactors
 }
@@ -55,7 +67,7 @@ function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSetti
 function printInFile(fileName: string, positionOrRange: number | ts_module.TextRange, s: string) {
   const project = createSimpleASTProject(info.project)
   const sourceFile = project.getSourceFile(fileName)
-  sourceFile.insertText(positionOrRangeToNumber(positionOrRange), `/* ${s} */` )
+  sourceFile.insertText(positionOrRangeToNumber(positionOrRange), `/* ${s} */`)
   sourceFile.saveSync()
 }
 
@@ -70,10 +82,10 @@ export = getPluginCreate(pluginDefinition, (modules, anInfo) => {
   log(`created`)
   initInputConsumer()
 })
-let log: (msg: string)=>void
+let log: (msg: string) => void
 let inputConsumerReady = false
 let inputConsumer: InputConsumer
-function initInputConsumer(){
+function initInputConsumer() {
   setLogger(log)
   inputConsumer = getInputConsumer()
   inputConsumer.askSupported().then(() => inputConsumerReady = true)

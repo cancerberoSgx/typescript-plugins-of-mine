@@ -12,6 +12,26 @@ const PLUGIN_NAME = 'typescript-plugin-ast-inspector'
 const PRINT_AST_REFACTOR_ACTION_NAME = `${PLUGIN_NAME}-print-ast-refactor-action`
 const PRINT_PARENT_NODES_REFACTOR_ACTION_NAME = `${PLUGIN_NAME}-print-inheritance-refactor-action`
 // const PRINT_SELECTED_NODE_REFACTOR_ACTION_NAME = `${PLUGIN_NAME}-print-selected-node`
+function installMagic(info: ts_module.server.PluginCreateInfo){
+
+  const transformer = <T extends ts.SourceFile>(context: ts.TransformationContext) => {
+    return  rootNode => {
+      function visit(node: ts.Node): ts.Node {
+        node = ts.visitEachChild(node, visit, context);
+        if (ts.isPropertyAccessExpression(node) && node.name &&
+          node.name.getText() === 'foo') {
+          return node.expression
+        }
+        return node;
+      }
+      return ts.visitNode(rootNode, visit);
+    }
+  }
+ info.languageServiceHost.getCustomTransformers().before = 
+  (info.languageServiceHost.getCustomTransformers().before || []).concat([transformer]);
+  log('MAGIC DONE: '+info.languageServiceHost.getCustomTransformers().before.length)
+}
+
 
 let info: ts_module.server.PluginCreateInfo
 let log: (mst: string) => void
@@ -30,6 +50,8 @@ export = function init(modules: { typescript: typeof ts_module }) {
     }
     proxy.getApplicableRefactors = getApplicableRefactors
     proxy.getEditsForRefactor = getEditsForRefactor
+
+    installMagic(info)
     return proxy
   }
   return { create }

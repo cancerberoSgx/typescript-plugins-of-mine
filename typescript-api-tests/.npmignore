@@ -1,6 +1,0 @@
-node_modules
-package-deps.json
-*.log
-doc-assets
-tmp
-spec

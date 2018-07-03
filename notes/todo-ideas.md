@@ -9,7 +9,6 @@ Each project has its own TODO but here are some general ones:
 
  * unit tests for all!!!
 
- * currently all refactors need to select a range in order to suggest - they should also be able to suggest witnout selecting anything - jsut the cursor...
   
  * enable strict==true in tsconfig
 
@@ -24,6 +23,11 @@ Each project has its own TODO but here are some general ones:
  
 
 ## plugin ideas - (refactor - code fix)
+
+ * check this: https://github.com/Microsoft/TypeScript/pull/13940 and if its possible to add custom transforms fromplugins add one that let user embedd raw text from fs at compile time.
+
+ * reorder members alphabetically , by type(constructors first) or by modifiers (public first). Let the user stablish these rules. 
+
 
  * babel supports typescript and also has lots of transformation plugins : https://babeljs.io/docs/en/next/plugins - if these work with typescript 
 
@@ -124,13 +128,14 @@ Type '{ diagnostics: Diagnostic[]; containingTarget: Identifier; log: { (message
 
 d===l only if we add the new property as any or ugly casting. i think is OK if we give hints, like {..., speed: "aMeasurement FIXME" as any}
 
+ * generate index.ts with all the exports - have a nice name in ts-simple-ast dont know...
+ 
  * (difficulty medium, usefulness: high) string-concat replace with string template
 
 
  * independent extension : copy& paste with imports - organize imports, formatting, and in the right order (pste each decl before dependencies - after dependants) etc
 
-
- * idea for gui-no-more (text-based-user-interactoin): example for move member . user select a method, a refactor is suggested "cut method foo()". user goes to other file and select a class identifier. a refactor is suggested "paste method foo()". result. method decl is movesd from first class oththe second one (and all its references are updated across the project.)
+ * (done) idea for gui-no-more (text-based-user-interactoin): example for move member . user select a method, a refactor is suggested "cut method foo()". user goes to other file and select a class identifier. a refactor is suggested "paste method foo()". result. method decl is movesd from first class oththe second one (and all its references are updated across the project.)
 
  * (d: l, u: m) (done) variable redefinition - suggest other name and try to apply rename . example: 
 let a = 1
@@ -170,7 +175,7 @@ that alone wont generate an error but you start calling it "eval result" and ref
  function prettyPrintEvalResult(evalResult){...
   ```
  so you want to create this type, you just put it a name  expliciting the doEval return type: 
- 
+
   ```function doEval(string, context: EvalContext): EvalResult {
   const result = eval(string)
   return { result, output: context._printed.join('\n') }
@@ -194,7 +199,19 @@ and that will generate an error "code": "2304","message": "Cannot find name 'Eva
  
 ##  other ideas
 
+### programatically / APIs to load ts plugins : 
+  * programatically enable a plugin - it seems is possible from another plugin :     protected enablePlugin(pluginConfigEntry: PluginImport, searchPaths: string[]): void;
+            /** Starts a new check for diagnostics. Call this if some file has updated that would cause diagnostics to be changed. */ - this is on Project on tsserverlibrary.ts
+and also this one:  protected enableGlobalPlugins(): void;
+
+
  * vscode extension that allows me to load typescript plugins installed in current project tsconfig and package.json so I dont have to maintain a vscode pugin for eac o fmy tspugins. I install this tlspluginmaster vscode extension and via settings I choose which plugins are active for which workspace / user, etc - workspaces are responsible of installing the plugins dependencies or user install it globally. TODO: investigate if its possible to add contributions programatically instead vis .package.json.
+ ts.server.ProjectService.reloadProjects(): void
+This function rebuilds the project for every file opened by the client This does not reload contents of open files from disk. But we could do that if needed
+  * load a plugin form unpkg ? 
+
+  * typescript plugin master -that aloww you to control and query which plugins are loaded and load /unload quickly?
+
 
  * "get absolute location" for ast-inspector - where-am'i - I want to know the absolute value of something, like a method, or member . for example module m{class A{prop: {name:string,val: {foo:number}}}} - for foo it should prnt something l ike m.A.prop.val.foo  or more friendly, module m, class A , property prop, prop val
 
@@ -204,6 +221,7 @@ and that will generate an error "code": "2304","message": "Cannot find name 'Eva
  * views that shows the content of large. hierarchynode.d.ts, tsserverlibrary.d.ts, etc a more tree-view like for examine the structure and search
  * yeoman generator for ts plugins ? 
 
+ * at certain point, in a signature helper I would like to be suggested wiht the "closest" values that comply with the current parameter, closest in the sens both in the ASST and in the type 
 
 
 

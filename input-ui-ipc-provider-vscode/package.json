@@ -8,6 +8,7 @@
     "postinstall": "node ./node_modules/vscode/bin/install",
     "vscode:prepublish": "npm run build",
     "build": "tsc -p ./",
+    "doc": "exit 0",
     "watch": "tsc -watch -p ./",
     "test-vscode": "npm run build && node ./node_modules/vscode/bin/test"
   },

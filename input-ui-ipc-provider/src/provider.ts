@@ -50,7 +50,15 @@ export abstract class InputProviderImpl implements InputProvider {
         options.prompt = options.prompt || 'Enter the value value'
         options.value = options.value || ''
         this.config.log('input provider options.validateInput  == '+options.validateInput +' - '+ typeof options.validateInput )
-        options.validateInput = typeof options.validateInput === 'string' ? (function(){try{ return eval('('+options.validateInput+')')}catch(ex){return undefined}})() : undefined // TODO: IMPORTANT - SECURITY !!! we are in another process
+        options.validateInput = typeof options.validateInput === 'string' ? 
+          (function(){
+            try{ 
+              return eval('('+options.validateInput+')') // TODO: IMPORTANT - SECURITY !!! we are in another process
+            }catch(ex){
+              console.log('Provider could not eval inputText options.validateInput', ex)
+              return undefined
+            }
+          })() : undefined 
         this.inputText(options).then(reply)
       }
       else if (action === INPUT_ACTIONS.messageBox) {

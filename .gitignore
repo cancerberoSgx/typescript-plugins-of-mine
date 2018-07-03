@@ -8,3 +8,4 @@ separate-project-test1
 evaluated_*
 .idea
 atom-input-ui-provider
+typescript-plugin-jscodeshift-eslint
