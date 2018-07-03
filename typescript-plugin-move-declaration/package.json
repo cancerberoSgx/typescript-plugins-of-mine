@@ -20,6 +20,7 @@
   "author": "Sebastian Gurin",
   "license": "MIT",
   "dependencies": {
+    "input-ui-ipc-provider": "file:../input-ui-ipc-provider",
     "hrtime-now": "^1.0.5",
     "ts-simple-ast": "^12.4.0",
     "typescript": "2.9.1",

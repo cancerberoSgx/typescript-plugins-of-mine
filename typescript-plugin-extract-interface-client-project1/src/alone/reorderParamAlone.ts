@@ -14,8 +14,10 @@ const obj45: Interface17 = {
   }
 }
 class Wind41 {
-  blow(a: number, b: boolean[][], d: Date): number[] { 
+  blow(d: Date, b: boolean[][], a: number): number[] { 
+  /* &%&% reorderParams("blow", [2, 1, 0]) */
+  
     return []
   }
 }
-const result78 = new Wind41().blow(3.14, [[true]], new Date())
+const result78 = new Wind41().blow(new Date(), [[true]], 3.14)

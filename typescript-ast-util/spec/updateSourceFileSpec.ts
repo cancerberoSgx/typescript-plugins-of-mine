@@ -1,29 +1,39 @@
 import { compileSource, findChild, addTextToSourceFile } from "../src";
 import * as ts from 'typescript'
+import { updateSourceFile } from '../src/sourceFileManipulation';
 
 
-describe('compileSource, findChildren and getJsDoc', () => {
-  it('addTextTo sourcefile  should b easy to use', () => {
-    const code1 = `const b = 'mark123';
-function f() {return [1,2, n, n*n]}
-class A{}
-const a=1; 
-`
-    const { program, fileName, tsconfigPath } = compileSource(code1)
-    const sourceFile = program.getSourceFile(fileName)
+describe('updateSourceFile ,addTextToSourceFile', () => {
+
+  let code1 = `const b = 'mark123';
+  function f() {return [1,2, n, n*n]}
+  class A{}
+  const a=1; 
+  `
+  let sourceFile: ts.SourceFile, program: ts.Program, fileName: string, tsconfigPath: string
+  beforeEach(() => {
+    const result = compileSource(code1)
+    program = result.program
+    sourceFile = program.getSourceFile(result.fileName)
     if (!sourceFile) {
       return fail()
     }
+  })
 
-    let a = findChild(sourceFile, c => c.kind == ts.SyntaxKind.FunctionDeclaration && ((c as ts.FunctionDeclaration).name as ts.Identifier).escapedText == 'a')
-
-    let f = findChild(sourceFile, c => c.kind == ts.SyntaxKind.VariableDeclaration && ((c as ts.VariableDeclaration).name as ts.Identifier).escapedText == 'f')
-    const newSourceFile = addTextToSourceFile(sourceFile, sourceFile.text.indexOf('mark123'), 'holalalala')
-    expect(newSourceFile.getText()).toContain('holalalala')
+  it('updateSourceFile', () => {
+    let f = findChild(sourceFile, c => ts.isFunctionDeclaration(c) && c.name.getText() === 'f') as ts.FunctionDeclaration
+    const newSourceFile = updateSourceFile(sourceFile, { start:f.body.statements[0].getStart(), end:f.body.statements[0].getEnd(), newText: `return 'changed!';` })
+    expect(newSourceFile.getText()).toContain(`function f() {return 'changed!';}`)
+    // console.log(newSourceFile.getText());
   })
 
 
-it('by hand learning how to use this undocumented TextEditRange thingy', () => {
+  it('addTextTo sourcefile  should b easy to use', () => {
+    expect(addTextToSourceFile(sourceFile, sourceFile.text.indexOf('mark123'), 'holalalala').getText()).toContain('const b = \'holalalalamark123\'')
+  })
+
+
+  it('by hand learning how to use this undocumented TextEditRange thingy', () => {
     const code1 = `
 /**
  * description of something classy
@@ -44,11 +54,6 @@ class A {
 /* non jsdoc comment */
 class B{}
 `
-    const { program, fileName, tsconfigPath } = compileSource(code1)
-    const sourceFile = program.getSourceFile(fileName)
-    if (!sourceFile) {
-      return fail()
-    }
     const newFragment = `\nclass Between{}\n`
     const newText =
       `${newFragment}
@@ -77,6 +82,7 @@ class B{}
     const newLength = 0 + newText.length - oldTextLength
     const sf = sourceFile.update(newText, { span: { start: spanStart, length: spanLength }, newLength: newLength })
     expect(sf.getText()).toContain('class Between{}')
+
   })
 
 

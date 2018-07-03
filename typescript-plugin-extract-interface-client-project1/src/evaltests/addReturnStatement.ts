@@ -22,7 +22,7 @@ const other = (a:string):number=>{
   var c = a+5
 }
 `)
-print(c.info.project.getProjectVersion()+' - version')
+// print(c.info.project.getProjectVersion()+' - version')
 // print(' - version'+c.info.project.getScriptSnapshot(c.fileName).getChangeRange())
   const node = sourceFile.getDescendantAtPos(position)
   const funcDecl = node.getFirstAncestorByKind(ts.SyntaxKind.FunctionDeclaration)

@@ -12,7 +12,8 @@
   },
   "dependencies": {
     "input-ui-ipc-provider-vscode": "file:../input-ui-ipc-provider-vscode",
-    "input-ui-ipc-provider-test-typescript-plugin": "file:../input-ui-ipc-provider-test-typescript-plugin"
+    "input-ui-ipc-provider-test-typescript-plugin": "file:../input-ui-ipc-provider-test-typescript-plugin",
+    "typescript-plugin-move-declaration": "file:../typescript-plugin-move-declaration"
   },
   "devDependencies": {
     "@types/mocha": "^5.2.2",
@@ -44,6 +45,9 @@
     "typescriptServerPlugins": [
       {
         "name": "input-ui-ipc-provider-test-typescript-plugin"
+      },
+      {
+        "name": "typescript-plugin-move-declaration"
       }
     ]
   }
