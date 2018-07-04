@@ -1,8 +1,8 @@
-import { compileSource, findChild, findAscendant, getKindName, filterChildren, getAscendants, createProgram } from "../src";
-import { SyntaxKind, FunctionDeclaration, Node } from "typescript";
+import { SyntaxKind } from "typescript";
+import { createProgram, findChild } from "../src";
 
 describe('createProgram', () => {
-  it('should create parent nodes so findChild doesnt fail', () => {
+  it('should create parent nodes so findChild doesn\'t fail', () => {
     const program = createProgram([
       { fileName: 'one.ts', content: 'const a:number = 1' },
       { fileName: 'two.ts', content: 'class A{color: string="red"}' }

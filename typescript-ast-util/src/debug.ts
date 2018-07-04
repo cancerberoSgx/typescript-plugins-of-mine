@@ -4,7 +4,7 @@ import { dirname, join } from 'path';
 import * as shell from 'shelljs';
 import * as ts from 'typescript';
 import { visitChildrenRecursiveDeepFirst, getKindName } from '.';
-import { compileFile } from './compilation';
+import { compileFile } from './compiler';
 
 
 

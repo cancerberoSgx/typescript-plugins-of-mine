@@ -1,4 +1,5 @@
 import * as ts from 'typescript';
+// source file manipulation
 
 export interface Position {
   readonly line: number;
@@ -28,9 +29,6 @@ export function updateSourceFile(sourceFile: ts.SourceFile, textChange: TextChan
   return sourceFile.update(newSource, textChangeRange);
 }
 
-
-
-// source file manipulation
 
 /**
  * @param sourceFile 

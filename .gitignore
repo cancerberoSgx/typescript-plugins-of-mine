@@ -9,3 +9,4 @@ evaluated_*
 .idea
 atom-input-ui-provider
 typescript-plugin-jscodeshift-eslint
+ts-simple-ast-extra

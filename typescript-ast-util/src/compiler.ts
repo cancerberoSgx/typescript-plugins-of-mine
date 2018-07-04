@@ -1,10 +1,6 @@
-import { appendFileSync, readFileSync } from 'fs';
-import { homedir } from 'os';
+import { readFileSync } from 'fs';
 import { dirname, join } from 'path';
-/// testing 
-import * as shell from 'shelljs';
 import * as ts from 'typescript';
-// import * as ts_module from 'typescript/lib/tsserverlibrary';
 
 
 // compilation
@@ -23,16 +19,10 @@ export function compileFile(fileName: string = '', tsconfigPath: string = join(_
     getSourceFile: (fileName, languageVersion) => ts.createSourceFile(fileName, readFileSync(fileName).toString(), ts.ScriptTarget.Latest, true)
   }
   const program = ts.createProgram([fileName], options, compilerHost);
-  // const diagnotics =   program.getSyntacticDiagnostics()
   ts.formatDiagnosticsWithColorAndContext(program.getSyntacticDiagnostics(), compilerHost)
   ts.formatDiagnosticsWithColorAndContext(program.getDeclarationDiagnostics(), compilerHost)
   ts.formatDiagnosticsWithColorAndContext(program.getGlobalDiagnostics(), compilerHost)
   ts.formatDiagnosticsWithColorAndContext(program.getSemanticDiagnostics(), compilerHost)
-  //
-  // .forEach(d => {
-
-  //   program.getSyntacticDiagnostics().forEach(d => console.log(printDiagnostic(d)))
-  // })
   return program
 }
 
@@ -55,7 +45,6 @@ export function compileProject(projectFolder: string, rootFiles: Array<string> =
   ts.formatDiagnosticsWithColorAndContext(program.getDeclarationDiagnostics(), compilerHost)
   ts.formatDiagnosticsWithColorAndContext(program.getGlobalDiagnostics(), compilerHost)
   ts.formatDiagnosticsWithColorAndContext(program.getSemanticDiagnostics(), compilerHost)
-  // program.getSyntacticDiagnostics().forEach(d => console.log(printDiagnostic(d)))
   return program
 
 }
@@ -83,7 +72,7 @@ export function createProgram(files: { fileName: string, content: string, source
   const compilerHost = ts.createCompilerHost(options)
   compilerHost.getSourceFile = function (fileName: string, languageVersion: ts.ScriptTarget, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): ts.SourceFile | undefined {
     const file = files.find(f => f.fileName === fileName)
-    if (!file) return undefined
+    if (!file) {return undefined}
     file.sourceFile = file.sourceFile || ts.createSourceFile(fileName, file.content, ts.ScriptTarget.ES2015, true)
     return file.sourceFile
   }
