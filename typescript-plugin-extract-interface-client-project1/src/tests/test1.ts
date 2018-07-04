@@ -56,10 +56,10 @@
 //   }
 // }
 
-interface Int65<T> {
-  predicate: (n:string, yy: number[], dd: Date)=>{re: string[]}
-}
+// interface Int65<T> {
+//   predicate: (n:string, yy: number[], dd: Date)=>{re: string[]}
+// }
 
-const instance53:Int65<string> = {
+// const instance53:Int65<string> = {
 
-}
+// }

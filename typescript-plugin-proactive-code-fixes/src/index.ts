@@ -147,7 +147,7 @@ let log
 const pluginDefinition: LanguageServiceOptionals = { getApplicableRefactors, getEditsForRefactor }
 export = getPluginCreate(pluginDefinition, (modules, anInfo) => {
   ts = modules.typescript
-  info = anInfo
+  info = anInfo as any as ts_module.server.PluginCreateInfo
   log = function (msg) {
     info.project.projectService.logger.info(`Plugin ${PLUGIN_NAME}, Fix: ${currentFix && currentFix.name}, Message: ${msg}`)
   }

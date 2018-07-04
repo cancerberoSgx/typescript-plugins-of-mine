@@ -1,24 +1,24 @@
-myCustomPi = 3.14;
+// myCustomPi = 3.14;
 
-const simpleVariable4 = 'lorem ipsum';
-simpleVariable4 = 'hello world';
+// const simpleVariable4 = 'lorem ipsum';
+// simpleVariable4 = 'hello world';
 
-let treeMagic = 1;
-let treeMagic = 's';
+// let treeMagic = 1;
+// let treeMagic = 's';
 
-function(n) {
-  return [...Array(n + 1).keys()]
-    .slice(1).reduce((acc, cur) => acc * cur, 1);
-}
+// function(n) {
+//   return [...Array(n + 1).keys()]
+//     .slice(1).reduce((acc, cur) => acc * cur, 1);
+// }
 
-const underscore = require('underscore'), moment = require('moment'),
-  handlebars = require('handlebars'), gulp = require('gulp');
+// const underscore = require('underscore'), moment = require('moment'),
+//   handlebars = require('handlebars'), gulp = require('gulp');
 
-const root1: { n: number }
-const tree = buildTree(root1, { leaveCount: 50, depth: [98] })
+// const root1: { n: number }
+// const tree = buildTree(root1, { leaveCount: 50, depth: [98] })
 
-class Something12{
-  readonly prop: number = 1
-}
-const s55 = new Something12()
-s55.prop = 1;
+// class Something12{
+//   readonly prop: number = 1
+// }
+// const s55 = new Something12()
+// s55.prop = 1;
