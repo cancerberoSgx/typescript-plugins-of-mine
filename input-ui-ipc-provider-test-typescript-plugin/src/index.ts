@@ -1,9 +1,9 @@
 import * as ts from 'typescript';
-import { getPluginCreate, LanguageServiceOptionals, createSimpleASTProject } from 'typescript-plugin-util';
+import { getPluginCreate, LanguageServiceOptionals } from 'typescript-plugin-util';
+import {createSimpleASTProject} from 'ts-simple-ast-extra'
 import { positionOrRangeToNumber } from 'typescript-ast-util';
 import * as ts_module from 'typescript/lib/tsserverlibrary';
-// import { getInputConsumer, setLogger } from './inputConsumer';
-import { InputConsumer, InputTextResponse, getInputConsumer, setLogger } from 'input-ui-ipc-provider';
+import { InputConsumer, getInputConsumer, setLogger } from 'input-ui-ipc-provider';
 
 const PLUGIN_NAME = 'input-ui-ipc-provider-test-typescript-plugin'
 

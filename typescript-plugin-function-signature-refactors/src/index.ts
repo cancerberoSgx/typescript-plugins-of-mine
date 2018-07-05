@@ -1,7 +1,8 @@
 import { now, timeFrom } from 'hrtime-now';
 import * as ts from 'typescript';
 import { findChildContainedRange, findChildContainingRange, findChildContainingRangeLight, positionOrRangeToNumber, positionOrRangeToRange } from 'typescript-ast-util';
-import { CodeFixOptions, createSimpleASTProject, getPluginCreate, LanguageServiceOptionals } from 'typescript-plugin-util';
+import {  getPluginCreate, LanguageServiceOptionals } from 'typescript-plugin-util';
+import {createSimpleASTProject, CodeFixOptions} from 'ts-simple-ast-extra'
 import * as ts_module from 'typescript/lib/tsserverlibrary';
 import { getRefactors, PLUGIN_NAME, SignatureRefactorArgs, SignatureRefactorsCodeFix } from './refactors';
 

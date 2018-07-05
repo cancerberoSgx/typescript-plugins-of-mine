@@ -1,6 +1,6 @@
 import { INPUT_ACTIONS } from 'input-ui-ipc-provider';
 import { Node, ts, TypeGuards } from 'ts-simple-ast';
-import { CodeFixOptions } from 'typescript-plugin-util';
+import { CodeFixOptions } from 'ts-simple-ast-extra';
 import { ToolConfig } from "typescript-plugins-text-based-user-interaction";
 import { PLUGIN_NAME } from '../refactors';
 import { SignatureAbstractCodeFix } from '../SignatureAbstractCodeFix';

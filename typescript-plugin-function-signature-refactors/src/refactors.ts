@@ -1,4 +1,4 @@
-import { CodeFix } from "typescript-plugin-util";
+import { CodeFix } from "ts-simple-ast-extra";
 import { Action } from "typescript-plugins-text-based-user-interaction";
 import * as ts_module from 'typescript/lib/tsserverlibrary';
 import { ReorderParamsCodeFixImpl } from "./refactors/reorderParams";

@@ -2,7 +2,7 @@ import { InputConsumer, INPUT_ACTIONS } from 'input-ui-ipc-provider';
 import { NamedNode, Node, SignaturedDeclaration, SourceFile, TypeGuards } from 'ts-simple-ast';
 import * as ts from 'typescript';
 import { positionOrRangeToNumber } from "typescript-ast-util";
-import { CodeFixOptions } from 'typescript-plugin-util';
+import { CodeFixOptions } from 'ts-simple-ast-extra';
 import { Action, create, Tool, ToolConfig, ActionConfig } from "typescript-plugins-text-based-user-interaction";
 import * as ts_module from 'typescript/lib/tsserverlibrary';
 import { SignatureRefactorArgs, SignatureRefactorsCodeFix } from './refactors';

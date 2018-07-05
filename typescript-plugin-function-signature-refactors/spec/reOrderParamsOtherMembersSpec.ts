@@ -1,4 +1,4 @@
-import { createProjectFiles, modifyAndAssert } from "typescript-plugin-util";
+import { createProjectFiles, modifyAndAssert } from "ts-simple-ast-extra";
 import { reorderParamOperation } from './reOrderParamsBasicSpec';
 
 

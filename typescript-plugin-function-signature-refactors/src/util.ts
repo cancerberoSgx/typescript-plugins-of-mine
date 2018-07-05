@@ -1,7 +1,7 @@
 import * as ts from 'typescript';
 import { findAscendant, findChildContainingRangeLight, positionOrRangeToRange } from 'typescript-ast-util';
 import { CallExpression, Node, ReferenceFindableNode, SignaturedDeclaration, TypeGuards } from "ts-simple-ast";
-import { getChildrenForEachChild, getName } from "typescript-plugin-util";
+import { getChildrenForEachChild, getName } from "ts-simple-ast-extra";
 
 export interface TargetInfo {
   name: string,

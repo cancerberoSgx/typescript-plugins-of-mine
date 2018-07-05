@@ -1,9 +1,11 @@
 import { now, timeFrom } from 'hrtime-now';
 import { Project, SourceFile } from 'ts-simple-ast';
-import { findChildContainedRange, findChildContainingRange, getKindName, positionOrRangeToNumber, positionOrRangeToRange, findChildContainingRangeLight } from 'typescript-ast-util';
-import { getPluginCreate, LanguageServiceOptionals, getSimpleProject } from 'typescript-plugin-util';
+import { CodeFix, CodeFixOptions, getSimpleProject } from 'ts-simple-ast-extra';
+import { findChildContainedRange, findChildContainingRange, findChildContainingRangeLight, getKindName, positionOrRangeToNumber, positionOrRangeToRange } from 'typescript-ast-util';
+import { getPluginCreate, LanguageServiceOptionals } from 'typescript-plugin-util';
 import * as ts_module from 'typescript/lib/tsserverlibrary';
-import { CodeFixOptions, codeFixes, CodeFix } from './codeFixes';
+import { codeFixes } from './codeFixes';
+
 
 const PLUGIN_NAME = 'typescript-plugin-proactive-code-fixes'
 const REFACTOR_ACTION_NAME = `${PLUGIN_NAME}-refactor-action`
@@ -30,7 +32,7 @@ function getApplicableRefactors(fileName: string, positionOrRange: number | ts.T
 }
 
 
-function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSettings, positionOrRange: number | ts.TextRange, refactorName: string,   actionName: string, userPreferences: ts_module.UserPreferences): ts.RefactorEditInfo | undefined {
+function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSettings, positionOrRange: number | ts.TextRange, refactorName: string, actionName: string, userPreferences: ts_module.UserPreferences): ts.RefactorEditInfo | undefined {
   const t0 = now()
   log(`getEditsForRefactor ${positionOrRange} ${refactorName} ${actionName}`)
   const refactors = info.languageService.getEditsForRefactor(fileName, formatOptions, positionOrRange, refactorName, actionName, userPreferences)
@@ -77,9 +79,9 @@ function getCodeFix(fileName: string, positionOrRange: number | ts.TextRange, en
     diagnostics = ts.getPreEmitDiagnostics(program, sourceFile)
   }
   log(`getPreEmitDiagnostics took ${timeFrom(getDiagnosticT0)}`)
-  const range = positionOrRangeToRange(start+1)
-  const containingTarget = findChildContainingRange(sourceFile, range)|| sourceFile
-  const containingTargetLight = findChildContainingRangeLight(sourceFile, range)|| sourceFile
+  const range = positionOrRangeToRange(start + 1)
+  const containingTarget = findChildContainingRange(sourceFile, range) || sourceFile
+  const containingTargetLight = findChildContainingRangeLight(sourceFile, range) || sourceFile
   const containedTarget = findChildContainedRange(sourceFile, range) || sourceFile
   const codeFixesFilterT0 = now()
   const target = { diagnostics, containingTarget, containingTargetLight, containedTarget, log, program, sourceFile, positionOrRange }
@@ -102,7 +104,7 @@ function getCodeFix(fileName: string, positionOrRange: number | ts.TextRange, en
 
 
 let currentFix: CodeFix
-function applyCodeFix(fix: CodeFix,  options: CodeFixOptions,   formatOptions, positionOrRange: number | ts.TextRange) {
+function applyCodeFix(fix: CodeFix, options: CodeFixOptions, formatOptions, positionOrRange: number | ts.TextRange) {
   let simpleProject: Project
   let sourceFile: SourceFile
   const fileName = options.sourceFile.fileName

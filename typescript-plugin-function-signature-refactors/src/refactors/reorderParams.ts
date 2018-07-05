@@ -1,7 +1,7 @@
 import { INPUT_ACTIONS } from 'input-ui-ipc-provider';
 import { Node, CallExpression, SignaturedDeclaration } from "ts-simple-ast";
 import * as ts from 'typescript';
-import { CodeFixOptions, getName } from 'typescript-plugin-util';
+import { CodeFixOptions, getName } from 'ts-simple-ast-extra';
 import { ActionConfig, ToolConfig } from "typescript-plugins-text-based-user-interaction";
 import { PLUGIN_NAME } from '../refactors';
 import { SignatureAbstractCodeFix } from '../SignatureAbstractCodeFix';

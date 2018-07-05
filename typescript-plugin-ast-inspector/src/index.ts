@@ -1,6 +1,6 @@
 import { now, timeFrom } from 'hrtime-now';
 import { dumpAst, findChildContainingPosition, findChildContainingRange, getKindName, positionOrRangeToNumber, positionOrRangeToRange, printNode, findChildContainingRangeLight, findAscendant } from 'typescript-ast-util';
-import { createSimpleASTProject } from 'typescript-plugin-util';
+import {createSimpleASTProject} from 'ts-simple-ast-extra'
 import * as ts_module from 'typescript/lib/tsserverlibrary';
 import { 
   // EVAL_CODE_IN_COMMENTS_REFACTOR_ACTION_NAME, 

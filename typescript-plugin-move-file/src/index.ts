@@ -1,6 +1,7 @@
 import { now, timeFrom } from 'hrtime-now';
 import { basename, dirname, isAbsolute, join } from 'path';
-import { LanguageServiceOptionals, createSimpleASTProject, getPluginCreate } from 'typescript-plugin-util';
+import { LanguageServiceOptionals,  getPluginCreate } from 'typescript-plugin-util';
+import { createSimpleASTProject } from 'ts-simple-ast-extra';
 import { Action, create } from 'typescript-plugins-text-based-user-interaction';
 import * as ts_module from 'typescript/lib/tsserverlibrary';
 

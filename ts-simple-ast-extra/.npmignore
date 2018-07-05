@@ -1,0 +1,12 @@
+/node_modules
+*.log
+/doc-assets
+/tmp
+/spec
+/src
+/.gitignore
+/.npmignore
+/dist/spec
+/tsconfig.json
+/declarations.d.ts
+*.tgz

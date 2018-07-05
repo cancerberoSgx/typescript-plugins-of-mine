@@ -1,7 +1,10 @@
 import { now } from 'hrtime-now';
 import { basename, dirname, isAbsolute, join } from 'path';
 import Project, { RegularExpressionLiteral } from 'ts-simple-ast';
-import { LanguageServiceOptionals, getPluginCreate, createSimpleASTProject } from 'typescript-plugin-util';
+import { LanguageServiceOptionals, getPluginCreate } from 'typescript-plugin-util';
+import { createSimpleASTProject } from 'ts-simple-ast-extra';
+
+
 import { Action, create } from 'typescript-plugins-text-based-user-interaction';
 import * as ts_module from 'typescript/lib/tsserverlibrary';
 import { moveDeclarationNamed } from './moveDeclaration';
