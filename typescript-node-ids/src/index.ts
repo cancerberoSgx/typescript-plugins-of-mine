@@ -1,5 +1,5 @@
-import { Node, SourceFile, isSourceFile } from 'typescript'
-import { getKindName, getChildren, findChild, visitChildrenRecursiveDeepFirst } from 'typescript-ast-util'
+import { isSourceFile, Node } from 'typescript'
+import { findChild, getKindName, visitChildrenRecursiveDeepFirst } from 'typescript-ast-util'
 
 /**
  * Installs ids on each node recursively starting on given node. Use `getId` on any node to obtain ids id and
@@ -32,14 +32,56 @@ export function install(node: Node): Node {
 }
 
 /**
+ * User could choose to put ids only to certain nodes and don't use install at all which name all AST's nodes
+ */
+export function setId(node: Node, id: Id): void {
+  (node as any).__$node$_$id$__ = id
+}
+
+/**
+ * Returns given node's id or throws exception if node has't one
+ */
+export function getIdOrThrow(node: Node): Id {
+  if (!getId(node)) {
+    throw new Error(`Expected node ${getKindName(node)} to have an Id`)
+  }
+  return getId(node)!
+}
+
+/**
+ * Returns given node's id or undefined if it hasn't one
+ */
+export function getId(node: Node): Id | undefined {
+  return (node as any).__$node$_$id$__
+}
+
+/**
+ * removes given node's id and returns it.
+ */
+export function deleteId(node: Node): Id | undefined {
+  const id = (node as any).__$node$_$id$__
+  delete (node as any).__$node$_$id$__
+  return id
+}
+
+/**
+ * Remove given node and all its descendants ids. 
+ * 
+ * This could be useful when user modify the ast and wants to invalidate that AST so further getNodeById calls won't find anything
+ */
+export function uninstall(node: Node) {
+  visitChildrenRecursiveDeepFirst(node, c => (deleteId(c), undefined))
+  // throw new Error('Not implemented')
+}
+
+export type Id = string
+
+/**
  * Return the first descendant of given parent node with given id or undefined if none is found
  */
 export function getNodeById(parent: Node, id: Id): Node | undefined {
   // TODO very very slow implementation we should use next getChildMatchingId declaration or similar - get indexes and kinds from ids, never iterate1
   return findChild(parent, child => getId(child) === id)
-  // const child = getChildMatchingId(parent, id)
-  // const children = getChildren(parent)
-  // throw new Error('Not implemented')
 }
 
 // function getChildMatchingId(parent: Node, id: Id): Node | undefined {
@@ -57,41 +99,3 @@ export function getNodeById(parent: Node, id: Id): Node | undefined {
 //   // TODO: parse id get index / kind and go directly to the right child instead of iterate 
 //   return findChild(parent, child => !!(childId = getId(child)) && descendantId.startsWith(childId))
 // }
-
-
-/**
- * User could choose to put ids only to certain nodes and don't use install at all which name all AST's nodes
- */
-export function setId(node: Node, id: Id): void {
-  (node as any).__$node$_$id$__ = id
-}
-
-/**
- * Returns given node's id or throws exception if node has't one
- */
-export function getIdOrThrow(node: Node): Id {
-  if (!getId(node)) {
-    throw new Error(`Expected node ${getKindName(node)} to have an Id`)
-  }
-  return getId(node)!
-}
-/**
- * Returns given node's id or undefined if it hasn't one
- */
-export function getId(node: Node): Id | undefined {
-  return (node as any).__$node$_$id$__
-}
-
-/**
- * Remove given node and all its descendants ids. 
- * 
- * This could be useful when user modify the ast and wants to invalidate that AST so further getNodeById calls won't find anything
- */
-export function uninstall(node: Node) {
-  throw new Error('Not implemented')
-}
-
-export type Id = string
-
-
-

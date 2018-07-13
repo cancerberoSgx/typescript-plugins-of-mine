@@ -1,4 +1,4 @@
-import Project, { ModuleKind, Node, ScriptTarget, SourceFile } from "ts-simple-ast";
+import Project, { ModuleKind, Node, ScriptTarget, SourceFile, NamedNode } from "ts-simple-ast";
 
 export interface TestConfig {
   files: { name: string, text: string, path: string }[]
@@ -65,18 +65,18 @@ export function printDiagnostics(project: Project) {
 }
 
 
-// export function printReferences(helperFunction: NamedNode) {
-//   const referencedSymbols = helperFunction.findReferences()
-//   for (const referencedSymbol of referencedSymbols) {
-//     for (const reference of referencedSymbol.getReferences()) {
-//       console.log("---------")
-//       console.log("REFERENCE")
-//       console.log("---------")
-//       console.log("File path: " + reference.getSourceFile().getFilePath());
-//       console.log("Start: " + reference.getTextSpan().getStart());
-//       console.log("Length: " + reference.getTextSpan().getLength());
-//       console.log("Parent kind: " + reference.getNode().getParentOrThrow().getKindName());
-//       console.log("\n");
-//     }
-//   }
-// }
+export function printReferences(helperFunction: NamedNode) {
+  const referencedSymbols = helperFunction.findReferences()
+  for (const referencedSymbol of referencedSymbols) {
+    for (const reference of referencedSymbol.getReferences()) {
+      console.log("---------")
+      console.log("REFERENCE")
+      console.log("---------")
+      console.log("File path: " + reference.getSourceFile().getFilePath());
+      console.log("Start: " + reference.getTextSpan().getStart());
+      console.log("Length: " + reference.getTextSpan().getLength());
+      console.log("Parent kind: " + reference.getNode().getParentOrThrow().getKindName());
+      console.log("\n");
+    }
+  }
+}

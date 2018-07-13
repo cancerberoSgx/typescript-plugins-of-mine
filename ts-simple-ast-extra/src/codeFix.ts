@@ -1,13 +1,14 @@
-import Project, { Node } from "ts-simple-ast";
-import * as ts from 'typescript'
+// general interfaces used by some of my plugins that contains several refactors and are based on ts-simple-ast 
 
+import Project, { Node } from 'ts-simple-ast'
+import * as ts from 'typescript'
 
 export interface CodeFix {
   name: string,
 
   config: any,
 
-  /** if needSimpleAst === false simple ast project won't be created (faster) and CodeFixOptions.simpleNode will be null. apply() will be 100 % responsible of impacting the changes using native mechanism like emit() or writeFileSync() sourceFile.update(), printer, etc */
+  /** TODO: remove this. if needSimpleAst === false simple ast project won't be created (faster) and CodeFixOptions.simpleNode will be null. apply() will be 100 % responsible of impacting the changes using native mechanism like emit() or writeFileSync() sourceFile.update(), printer, etc */
   needSimpleAst?: boolean
 
   /** the predicate for getApplicableRefactors */
@@ -21,6 +22,7 @@ export interface CodeFix {
   
 }
 
+/** contains lots of data used by code fix to build the predicate, description and apply the refactor. Is provided by plugin implementation */
 export interface CodeFixOptions {
   diagnostics: ts.Diagnostic[]
   containedTarget?: ts.Node|undefined

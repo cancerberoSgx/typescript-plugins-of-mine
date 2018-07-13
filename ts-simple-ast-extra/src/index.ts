@@ -1,3 +1,3 @@
-export * from "./ts-simple-ast-util"
+export * from "./project"
 export * from './codeFix'
-export * from './ts-simple-ast-test-util'
+export * from './test'
