@@ -1,9 +1,14 @@
 
-import * as ts from 'typescript';
+import * as ts from 'typescript'
 // children helpers
 
 /**
- * Iterates recursively over all children of given node and apply visitor on each of them. If visitor returns non falsy value then it stops visiting and that value is returned to the caller. See https://en.wikipedia.org/wiki/Tree_traversal for the meaning of "DeepFirst". 
+ * Iterates recursively over all children of given node and apply visitor on each of them. If visitor returns
+ * non falsy value then it stops visiting and that value is returned to the caller. See
+ * https://en.wikipedia.org/wiki/Tree_traversal for the meaning of "DeepFirst". 
+ * 
+ * @param getChildrenMode if true it will use `node.getChildren()` o obtain children instead of default
+ * behavior that is using `node.forEachChild`
  */
 export function visitChildrenRecursiveDeepFirst(
   node: ts.Node,
@@ -16,7 +21,7 @@ export function visitChildrenRecursiveDeepFirst(
   if (!node) {
     return
   }
-  const result = visitor(node, index, level);
+  const result = visitor(node, index, level)
   if (stopOnTruthy && result) {
     return result
   }
@@ -107,7 +112,10 @@ export function findChild2(
   return found
 }
 
-
+/**
+ * Return immediate children of given node. 
+ * @param getChildrenMode if true it will use `node.getChildren()` o obtain children instead of default behavior that is using `node.forEachChild`
+ */
 export function getChildren(node: ts.Node | undefined, getChildrenMode: boolean = false): ts.Node[] {
   if (!node) {
     return []
@@ -121,7 +129,9 @@ export function getChildren(node: ts.Node | undefined, getChildrenMode: boolean 
   })
   return result
 }
+
 /**
+ * @param getChildrenMode if true it will use `node.getChildren()` o obtain children instead of default behavior that is using `node.forEachChild`
  * @param children if caller already have called getChildren he can pass it here so this call is faster
  */
 export function getChildIndex(node: ts.Node, getChildrenMode: boolean = false, children: ts.Node[] | undefined = undefined): number {
@@ -134,11 +144,17 @@ export function getChildIndex(node: ts.Node, getChildrenMode: boolean = false, c
   })
   return result
 }
+/**
+ * @param getChildrenMode if true it will use `node.getChildren()` o obtain children instead of default behavior that is using `node.forEachChild`
+ */
 export function getNextSibling(node: ts.Node, getChildrenMode: boolean = false): ts.Node | undefined {
   const children = getChildren(node.parent, getChildrenMode)
   const index = getChildIndex(node, getChildrenMode, children)
   return node.parent && index < children.length - 1 ? children[index + 1] : undefined
 }
+/**
+ * @param getChildrenMode if true it will use `node.getChildren()` o obtain children instead of default behavior that is using `node.forEachChild`
+ */
 export function getPreviousSibling(node: ts.Node, getChildrenMode: boolean = false): ts.Node | undefined {
   const children = getChildren(node.parent, getChildrenMode)
   const index = getChildIndex(node, getChildrenMode, children)

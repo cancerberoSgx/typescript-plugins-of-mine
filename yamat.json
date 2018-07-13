@@ -2,6 +2,10 @@
   {
     "name": "typescript-ast-util",
     "path": "typescript-ast-util"
+  },  
+  {
+    "name": "typescript-node-ids",
+    "path": "typescript-node-ids"
   },
   {
     "name": "input-ui-ipc-provider",
@@ -47,7 +51,6 @@
     "name": "sample-ts-plugin1",
     "path": "sample-ts-plugin1"
   },
-  
   {
     "name": "vscode-typescript-refactors",
     "path": "vscode-typescript-refactors"
