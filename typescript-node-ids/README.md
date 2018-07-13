@@ -18,6 +18,10 @@ targets.forEach(id=>modifNodeSomeHow(getNodeById(sourceFile, id)))
 will iterate recursively through given file and add ids to all nodes in the format `${parentId}.${counter}` so they are unique and easy / cheap to query
 
 
+# Impl notes
+
+ * we cannot reuse typescript implementation for ts-simple-ast implementation since tsNode.compilerNode are changed all the time and we cannot be notified when this happens
+
 # TODO
 
 ## Automatically detect AST modifications
