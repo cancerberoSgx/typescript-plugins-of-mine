@@ -40,7 +40,7 @@ describe('format', () => {
     if (!file2) { return fail('cannot get source file ts.d.ts') }
     node2 = file2.getFirstDescendant(n => TypeGuards.isIdentifier(n) && n.getText() === 'emitOnlyDtsFiles') || null as any
     if (!node2) { return fail('cannot find node2') }
-    node2KnownId = '0.0.0.2.351.4.4.0'
+    node2KnownId = '0.0.0.2.350.4.4.0'
     expect(logTime(() => impl.install(file2))).toBe(file2)
   })
 

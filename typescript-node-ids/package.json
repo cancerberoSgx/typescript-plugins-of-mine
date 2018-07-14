@@ -6,7 +6,8 @@
   "typings": "dist/src/index.d.ts",
   "scripts": {
     "test": "ts-node node_modules/jasmine/bin/jasmine",
-    "build": "rm -rf dist && tsc"
+    "build": "rm -rf dist && tsc",
+    "doc": "exit 0"
   },
   "keywords": [
     "TypeScript",
@@ -18,7 +19,7 @@
   "license": "MIT",
   "dependencies": {
     "ts-simple-ast": "^12.5.3",
-    "typescript": "^2.9.2",
+    "typescript": "2.9.1",
     "typescript-ast-util": "../typescript-ast-util",
     "ts-simple-ast-extra": "../ts-simple-ast-extra"
   },
