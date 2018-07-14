@@ -20,3 +20,34 @@ export function getName(n: Node): string {
 } 
 
 
+
+/**
+ * Iterates recursively over all children of given node and apply visitor on each of them. If visitor returns
+ * non falsy value then it stops visiting and that value is returned to the caller. See
+ * https://en.wikipedia.org/wiki/Tree_traversal for the meaning of "DeepFirst". 
+ * 
+ * @param getChildrenMode if true it will use `node.getChildren()` o obtain children instead of default
+ * behavior that is using `node.forEachChild`
+ */
+export function visitChildrenRecursiveDeepFirst(
+  node: Node,
+  visitor: (node: Node, index?: number, level?: number) => Node | undefined | void,
+  index: number = 0,
+  level: number = 0,
+  stopOnTruthy: boolean = false,
+  getChildrenMode: boolean = false
+): Node | undefined {
+  if (!node) {
+    return
+  }
+  const result = visitor(node, index, level)
+  if (stopOnTruthy && result) {
+    return result
+  }
+  let i = 0
+  if (!getChildrenMode) {
+    node.forEachChild(child => visitChildrenRecursiveDeepFirst(child, visitor, i++, level + 1, stopOnTruthy, getChildrenMode))
+  } else {
+    node.getChildren().forEach(child => visitChildrenRecursiveDeepFirst(child, visitor, i++, level + 1, stopOnTruthy, getChildrenMode))
+  }
+}

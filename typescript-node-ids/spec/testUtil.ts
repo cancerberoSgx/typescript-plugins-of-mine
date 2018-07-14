@@ -1,10 +1,10 @@
 import * as ts from 'typescript'
-import { typeScriptImpl } from '../src/index'
+import { typeScriptImpl } from '../src'
 import { getKindName } from 'typescript-ast-util'
 import { fromNow } from 'hrtime-now'
 
 export function logTime<T>(fn: () => T) {
-  return fromNow(fn, (t, hint) => console.log(`Function ${hint} took ${t}`))
+  return fromNow(fn, (t, hint) => console.log(`Function ${fn.toString().replace(/\n+/, ' ')} took ${t}`))
 }
 
 export function printNode(n: ts.Node, level: number = 0, index: number, parentNode: ts.Node): string {

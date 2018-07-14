@@ -1,5 +1,5 @@
 export * from './typescriptImpl'
-
+export * from './tsSimpleAstImpl'
 export interface NodeIds<Node, Id>{
 /**
  * Installs ids on each descendants of given node. Use `getId` on any node to obtain a node's id or

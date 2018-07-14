@@ -1,4 +1,4 @@
-import {typeScriptImpl as impl, TypeScriptId} from '../src/index'
+import {typeScriptImpl as impl, TypeScriptId} from '../src'
 import { Program, isIdentifier, SourceFile, Node } from 'typescript'
 import { findChild, createProgram, visitChildrenRecursiveDeepFirst } from 'typescript-ast-util'
 import { logTime } from './testUtil';
