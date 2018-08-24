@@ -4,7 +4,6 @@ import { visitChildrenRecursiveDeepFirst } from 'ts-simple-ast-extra'
 import { logTime } from './testUtil';
 import { readFileSync } from 'fs';
 
-
 describe('tsSimpleAst.install', () => {
 
   let program: Program

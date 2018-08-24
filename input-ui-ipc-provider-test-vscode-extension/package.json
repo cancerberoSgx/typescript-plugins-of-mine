@@ -1,7 +1,7 @@
 {
   "name": "input-ui-ipc-provider-test-vscode-extension",
   "description": "vscode support for generic GUI data inquire through https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/input-ui-ipc-provider",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "scripts": {
     "postinstall": "node ./node_modules/vscode/bin/install",
     "vscode:prepublish": "npm run build",

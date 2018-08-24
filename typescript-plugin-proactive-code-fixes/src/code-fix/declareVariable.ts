@@ -27,6 +27,14 @@ const result = nonDeclared(1,2,{a: 'g})
 
 # TODO
 
+ * issue : this `visitClass(c, buffer)` is transformed into this: 
+  ```function visitClass(arg0: import("/home/sg/git/node-lucene/java2js/node_modules/javap/dist/types-ast").ClassDeclaration, arg1: string[]) {
+    throw new Error('Not Implemented');
+  }
+  visitClass(c, buffer)```
+  two issues there - the import and the args - use c and buffer instead of arg0 and arg1
+
+  
  * if (existingProp && hasWrongSignature(existingProp, method)) -- is doing strange things on suggestion at hasWrongSignature
 
  * test with jsdoc or a trailing comment

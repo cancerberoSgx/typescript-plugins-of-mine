@@ -1,8 +1,9 @@
 {
   "name": "input-ui-ipc-provider-test-typescript-plugin",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "input-ui-ipc-provider-test-typescript-plugin ",
   "main": "dist/src/index.js",
+  "private": true,
   "typings": "dist/src/typings.d.ts",
   "scripts": {
     "test": "ts-node node_modules/jasmine/bin/jasmine",

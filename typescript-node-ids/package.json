@@ -1,6 +1,6 @@
 {
   "name": "typescript-node-ids",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "TypeScript support for naming Nodes uniquely and query them per SourceFile. This really make sense in libraries like ts-simple-ast when modifying AST in a loop. Implementations for native typescript compiler API and ts-simple-ast library",
   "main": "dist/src/index.js",
   "typings": "dist/src/index.d.ts",
@@ -20,8 +20,8 @@
   "dependencies": {
     "ts-simple-ast": "^12.5.3",
     "typescript": "2.9.1",
-    "typescript-ast-util": "../typescript-ast-util",
-    "ts-simple-ast-extra": "../ts-simple-ast-extra"
+    "typescript-ast-util": "file:../typescript-ast-util",
+    "ts-simple-ast-extra": "file:../ts-simple-ast-extra"
   },
   "devDependencies": {
     "@types/jasmine": "^2.8.8",
