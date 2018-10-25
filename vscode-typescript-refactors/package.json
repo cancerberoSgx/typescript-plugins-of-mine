@@ -11,9 +11,9 @@
     "test-vscode": "npm run build && node ./node_modules/vscode/bin/test"
   },
   "dependencies": {
-    "input-ui-ipc-provider-vscode": "file:../input-ui-ipc-provider-vscode",
-    "typescript-plugin-function-signature-refactors": "file:../typescript-plugin-function-signature-refactors",
-    "typescript-plugin-proactive-code-fixes": "file:../typescript-plugin-proactive-code-fixes"
+    "input-ui-ipc-provider-vscode": "/home/sg/git/typescript-plugins-of-mine/.yamat/input-ui-ipc-provider-vscode-0.0.2.tgz",
+    "typescript-plugin-function-signature-refactors": "/home/sg/git/typescript-plugins-of-mine/.yamat/typescript-plugin-function-signature-refactors-0.0.7.tgz",
+    "typescript-plugin-proactive-code-fixes": "/home/sg/git/typescript-plugins-of-mine/.yamat/typescript-plugin-proactive-code-fixes-0.0.11.tgz"
   },
   "devDependencies": {
     "@types/mocha": "^5.2.5",
