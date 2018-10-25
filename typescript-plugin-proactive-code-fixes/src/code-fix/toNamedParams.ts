@@ -74,7 +74,7 @@ export const toNamedParameters: CodeFix = {
       docs: ['TODO: Document me'],//TODO: jsdoc if configured
       typeParameters: functionLikeDeclaration.getTypeParameters().map(tp=>({
         name: tp.getName(), 
-        constrain: tp.getConstraintNode() && tp.getConstraintNode().getText()
+        constrain: tp.getConstraint() && tp.getConstraint().getText()
       })),
       name: interfaceName,
       properties: functionLikeDeclaration.getParameters().filter(param => !param.getTypeNode() || param.getTypeNode().getKind() !== ts.SyntaxKind.FunctionType) // TODO: this will ignore/wrong-print parameters of type function that have an assignament

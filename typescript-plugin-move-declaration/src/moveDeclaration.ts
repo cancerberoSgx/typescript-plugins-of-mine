@@ -8,10 +8,10 @@ export type MovableDeclaration = ClassDeclaration | FunctionDeclaration | Interf
 
 export function moveDeclarationNamed(declarationName: string, file: SourceFile, project: Project, targetFile: SourceFile) {
   let found: MovableDeclaration
-  file.forEachDescendant((child, stop) => { // TODO: check is top-level
+  file.forEachDescendant((child, control) => { // TODO: check is top-level
     if (child.getKindName().endsWith('Declaration') && ((child as any).getName && (child as MovableDeclaration).getName()) === declarationName) {
       found = child as MovableDeclaration;
-      stop()
+      control.stop()
     }
   })
   if (!found) {
@@ -38,7 +38,7 @@ export function moveDeclarationNamed(declarationName: string, file: SourceFile, 
 export function moveDeclaration(c: MovableDeclaration, project: Project, targetFile: SourceFile) {
   const originalFile = c.getSourceFile()
 
-  // write declaration at the beggining of target file making sure it's exported
+  // write declaration at the begging of target file making sure it's exported
   let declarationText = c.getText()
   declarationText.trim().startsWith('export') ? declarationText : 'export ' + declarationText
   declarationText = declarationText + '\n'
@@ -181,4 +181,3 @@ function importDeclaration2Structure(importDecl: ImportDeclaration): ImportDecla
     moduleSpecifier: importDecl.getModuleSpecifier().getText()
   }
 }
-

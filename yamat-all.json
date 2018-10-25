@@ -4,6 +4,10 @@
     "path": "typescript-ast-util"
   },
   {
+    "name": "typescript-node-ids",
+    "path": "typescript-node-ids"
+  },
+  {
     "name": "typescript-plugin-util",
     "path": "typescript-plugin-util"
   },

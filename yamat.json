@@ -4,10 +4,6 @@
     "path": "typescript-ast-util"
   },  
   {
-    "name": "typescript-node-ids",
-    "path": "typescript-node-ids"
-  },
-  {
     "name": "input-ui-ipc-provider",
     "path": "input-ui-ipc-provider"
   },

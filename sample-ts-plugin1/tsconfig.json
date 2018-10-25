@@ -4,7 +4,8 @@
     "module": "commonjs", 
     "lib": ["es2018"],  
     "outDir": "./dist", 
-    "strict": true,           
+    "strict": true,
+    "strictNullChecks": false, 
     "esModuleInterop": true
   }
 }

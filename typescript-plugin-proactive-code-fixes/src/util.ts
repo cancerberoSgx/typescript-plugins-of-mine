@@ -23,7 +23,7 @@ export function fixSignature(decl: FunctionLikeDeclaration, signature: MethodSig
     } else {
       const memberParam = memberParams[i]
       if (!areTypesEqual(memberParam.getType(), signatureParam.getType())) {
-        memberParam.fill({ ...buildParameterStructure(signatureParam), name: memberParam.getName() })
+        memberParam.set({ ...buildParameterStructure(signatureParam), name: memberParam.getName() })
       }
     }
   }

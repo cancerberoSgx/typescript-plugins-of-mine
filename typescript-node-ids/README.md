@@ -1,3 +1,5 @@
+I think this project is deprecated in favor of ts-query library - not maintained
+
 TypeScript support for naming Nodes uniquely and query them. This is particularly useful when modifying the nodes in an iteration and quickly query them again in libraries like ts-simple-ast. In pure TypeScript API this is not so useful since ts APIs for modifications (transformation, replaceText, etc) always generate new SourceFile and nodes, but in other libraries like ts-simple-ast where you can modify the same AST when visiting its nodes, the AST get's deprecated with some modifications and having this feature is useful. 
 
 See https://github.com/dsherret/ts-simple-ast/issues/351

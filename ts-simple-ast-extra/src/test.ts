@@ -1,4 +1,4 @@
-import Project, { ModuleKind, Node, ScriptTarget, SourceFile, NamedNode } from "ts-simple-ast";
+import Project, {ts,  Node, ScriptTarget, SourceFile, NamedNode } from "ts-simple-ast";
 
 export interface TestConfig {
   files: { name: string, text: string, path: string }[]
@@ -13,7 +13,7 @@ export function createProjectFiles(config: TestConfig): TestResult {
   let project: Project = new Project({
     compilerOptions: {
       target: ScriptTarget.ES2018,
-      module: ModuleKind.CommonJS,
+      module: ts.ModuleKind.CommonJS,
       lib: [
         "es2018"
       ]
@@ -59,7 +59,7 @@ export function modifyAndAssert({ node, modification, asserts, verbose = false }
 }
 
 export function printDiagnostics(project: Project) {
-  console.log(project.getDiagnostics()
+  console.log(project.getPreEmitDiagnostics()
     .map(d => d.getMessageText().toString() + ' - ' + d.getSourceFile().getFilePath() + '#' + d.getLineNumber())
     .join('\n'))
 }

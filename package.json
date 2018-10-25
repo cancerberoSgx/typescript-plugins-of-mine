@@ -25,11 +25,13 @@
     "all-light": "find . -name \"dist\" -exec rm -rf '{}' + && npm i && npx yamat run npm i && npx yamat run npm run build && npx yamat run npm test",
     "yamat-link": "npx yamat link && npx yamat run \"rm -rf node_modules package-lock.json\" && npx yamat run \"npm i\" && npx yamat run \"npm run build\" && npx yamat run npm test",
     "yamat-unlink-pack": "npx yamat run \"rm -rf node_modules package-lock.json\" && npx yamat run npm i && npx yamat unlink --version pack && npx yamat run \"rm -rf node_modules package-lock.json\" && npx yamat run npm i && npx yamat run npm run build && npx yamat run npm run test",
-    "yamat-patch-publish": "npx yamat run \"npm version patch\" && npx yamat unlink && npx yamat --break-on-error no run npm publish"
+    "yamat-patch-publish": "npx yamat run \"npm version patch\" && npx yamat unlink && npx yamat --break-on-error no run npm publish",
+    "initial-install": "npx yamat run npm i --ignore-scripts && npx yamat run npm run build && npx yamat run npm i",
+    "all2": "npm run clean-no-doc && npm run initial-install"
   },
   "repository": "https://github.com/cancerberoSgx/typescript-plugins-of-mine",
-  "devDependencies": {},
-  "dependencies": {
-    "yamat": "0.0.14"
-  }
+  "devDependencies": {
+    "yamat": "^0.1.1"
+  },
+  "dependencies": {}
 }

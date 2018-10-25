@@ -1,6 +1,5 @@
-import { cat, cp, rm } from "shelljs";
-import Project, { ClassDeclaration, SourceFile, Directory } from "ts-simple-ast";
-import { moveDeclaration } from "../src/moveDeclaration";
+import { cp, rm } from "shelljs";
+import Project, { SourceFile } from "ts-simple-ast";
 
 describe('lets see how ts-simple-ast move file / folder to other location behaves without doing anything else', () => {
 
@@ -11,29 +10,27 @@ describe('lets see how ts-simple-ast move file / folder to other location behave
       tsConfigFilePath: "assets/sampleProject1_2_copy/tsconfig.json"
     });
     project.emit()
-    expect(project.getDiagnostics().length).toBe(0)
-    // console.log(project.getDiagnostics().forEach(d=>d.getMessageText()))
+    expect(project.getPreEmitDiagnostics().length).toBe(0)
     const fileToMove = project.getSourceFiles().find(sf => sf.getFilePath().includes('apple.ts'))
-    if(!fileToMove ){
+    if (!fileToMove) {
       return fail()
     }
     fileToMove.move('level2/pepito.ts')
     project.saveSync()
     project.emit()
-    expect(project.getDiagnostics().length).toBe(0)
+    expect(project.getPreEmitDiagnostics().length).toBe(0)
 
     const different = project.createDirectory('assets/sampleProject1_2_copy/src/model/different')
-    project.getDirectories().find(d=>d.getPath().includes('src/model/level2')).move(different.getPath())
+    project.getDirectories().find(d => d.getPath().includes('src/model/level2')).move(different.getPath())
 
     project.saveSync()
     project.emit()
-    expect(project.getDiagnostics().length).toBe(0)
+    expect(project.getPreEmitDiagnostics().length).toBe(0)
   })
 
 })
 
-function moveFileWithSimpleAst(project: Project ,file: SourceFile, newLocation:string ){
+function moveFileWithSimpleAst(project: Project, file: SourceFile, newLocation: string) {
   file.move(newLocation)
   project.saveSync()
 }
-

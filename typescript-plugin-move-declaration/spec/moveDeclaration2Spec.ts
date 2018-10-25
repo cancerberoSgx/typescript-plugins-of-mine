@@ -1,7 +1,7 @@
-import { cat, cp, rm } from "shelljs";
-import Project, { ClassDeclaration } from "ts-simple-ast";
-import { moveDeclaration, moveDeclarationNamed } from "../src/moveDeclaration";
 import { resolve } from "path";
+import { cat, cp, rm } from "shelljs";
+import Project from "ts-simple-ast";
+import { moveDeclarationNamed } from "../src/moveDeclaration";
 
 let project
 
@@ -41,8 +41,7 @@ function doAssert(projectPath: string) {
   it(`project should compile OK`, () => {
     project.saveSync()
     project.emit()
-    expect(project.getDiagnostics().length).toBe(0)
+    expect(project.getPreEmitDiagnostics().length).toBe(0)
   })
 
 }
-

@@ -40,8 +40,8 @@ function doAssert(projectPath: string) {
   it(`project should compile OK`, () => {
     project.saveSync()
     project.emit()
-    expect(project.getDiagnostics().length).toBe(0)
-    // console.log(project.getDiagnostics().map(d=>d.getMessageText()).join('\n'))
+    expect(project.getPreEmitDiagnostics().length).toBe(0)
+    // console.log(project.getPreEmitDiagnostics().map(d=>d.getMessageText()).join('\n'))
   })
 
 }

@@ -182,7 +182,7 @@ const inferReturnType = (decl: tsa.Node & tsa.SignaturedDeclaration, arg: CodeFi
           })),
           typeParameters: init.getTypeParameters().map(p => ({
             name: p.getName(),
-            constrain: p.getConstraintNode() && p.getConstraintNode().getText()
+            constrain: p.getConstraint() && p.getConstraint().getText()
           })),
         }
       })

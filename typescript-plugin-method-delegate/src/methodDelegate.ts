@@ -36,7 +36,7 @@ function getInterfaceMethodStructures(decl: InterfaceDeclaration): MethodSignatu
     docs: method.getJsDocs().map(d => ({ description: d.getInnerText().replace(/\r?\n/g, "\r\n") })),
     typeParameters: method.getTypeParameters().map(p => ({
       name: p.getName(),
-      constraint: p.getConstraintNode() == null ? undefined : p.getConstraintNode()!.getText()
+      constraint: p.getConstraint() == null ? undefined : p.getConstraint()!.getText()
     })),
     parameters: method.getParameters().map(p => ({
       name: p.getNameOrThrow(),
@@ -55,7 +55,7 @@ if(TypeGuards.isClassDeclaration(decl)){
     scope: method.hasScopeKeyword() ? method.getScope() : undefined,
     typeParameters: method.getTypeParameters().map(p => ({
       name: p.getName(),
-      constraint: p.getConstraintNode() == null ? undefined : p.getConstraintNode()!.getText()
+      constraint: p.getConstraint() == null ? undefined : p.getConstraint()!.getText()
     })),
     parameters: method.getParameters().map(p => ({
       name: p.getNameOrThrow(),
@@ -75,7 +75,7 @@ else if(TypeGuards.isInterfaceDeclaration(decl)){
     scope: Scope.Public,//   method.hasScopeKeyword() ? method.getScope() : undefined,
     typeParameters: method.getTypeParameters().map(p => ({
       name: p.getName(),
-      constraint: p.getConstraintNode() == null ? undefined : p.getConstraintNode()!.getText()
+      constraint: p.getConstraint() == null ? undefined : p.getConstraint()!.getText()
     })),
     parameters: method.getParameters().map(p => ({
       name: p.getNameOrThrow(),

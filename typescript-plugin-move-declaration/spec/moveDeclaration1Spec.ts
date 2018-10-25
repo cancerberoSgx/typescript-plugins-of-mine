@@ -62,7 +62,7 @@ function doAssert(projectPath: string) {
   it(`project should compile OK`, () => {
     project.saveSync()
     project.emit()
-    expect(project.getDiagnostics().length).toBe(0)
+    expect(project.getPreEmitDiagnostics().length).toBe(0)
   })
 
   it(`other files with references to class should change its imports accordingly`, () => {

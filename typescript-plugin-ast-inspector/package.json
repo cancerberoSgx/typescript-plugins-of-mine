@@ -18,21 +18,21 @@
   "author": "Sebastian Gurin",
   "license": "MIT",
   "dependencies": {
-    "@types/node": "^10.3.2",
+    "@types/node": "^10.12.0",
     "hrtime-now": "^1.0.5",
     "stack-trace": "0.0.10",
-    "ts-simple-ast": "^12.4.0",
-    "typescript": "2.9.1",
+    "ts-simple-ast": "^17.1.1",
+    "ts-simple-ast-extra": "file:../ts-simple-ast-extra",
+    "typescript": "^3.1.3",
     "typescript-ast-util": "file:../typescript-ast-util",
-    "typescript-plugin-util": "file:../typescript-plugin-util",
-    "ts-simple-ast-extra": "file:../ts-simple-ast-extra"
+    "typescript-plugin-util": "file:../typescript-plugin-util"
   },
   "devDependencies": {
-    "@types/jasmine": "^2.8.8",
-    "@types/shelljs": "^0.7.9",
-    "jasmine": "^3.1.0",
+    "@types/jasmine": "^2.8.9",
+    "@types/shelljs": "^0.8.0",
+    "jasmine": "^3.3.0",
     "shelljs": "^0.8.2",
-    "ts-node": "^6.1.0"
+    "ts-node": "^7.0.1"
   },
   "repository": "https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-ast-inspector"
 }
