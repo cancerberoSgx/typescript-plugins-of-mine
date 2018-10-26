@@ -11,7 +11,7 @@
     "test-vscode": "npm run build && node ./node_modules/vscode/bin/test"
   },
   "dependencies": {
-    "typescript-plugin-proactive-code-fixes": "0.0.12"
+    "typescript-plugin-proactive-code-fixes": "file:../typescript-plugin-proactive-code-fixes"
   },
   "devDependencies": {
     "@types/mocha": "^5.2.5",

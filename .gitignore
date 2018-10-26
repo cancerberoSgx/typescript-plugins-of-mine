@@ -4,9 +4,5 @@ dist
 tmp
 .yamat
 *.tgz
-separate-project-test1
 evaluated_*
 .idea
-atom-input-ui-provider
-typescript-plugin-jscodeshift-eslint
-plain-typescript-test-project

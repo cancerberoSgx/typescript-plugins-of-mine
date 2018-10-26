@@ -9,6 +9,9 @@ let targetNode: ts.Node
 /**
  
 # Description
+
+Change class member to public when user access a private member
+
 # Attacks
 ```
 "code": "2341",
@@ -32,7 +35,9 @@ const a = new A()
 new A().method(1) // suggestion
 a.method(2) // suggestion
 ```
+
 in both suggestions the resulting code will be 
+
 ```
 class A {
   public method(a: number):Date[]{
@@ -94,17 +99,17 @@ export const memberChangeScope: CodeFix = {
       options.log(`scope not changed because !declarations || declarations.length===0`)
       return
     }
-    declarations.map(d => {
-      if (TypeGuards.isClassDeclaration(d)) {
-        d.getConstructors()[0].setScope(Scope.Public) //TODO: select the one that matches the new expr call 
+    declarations.map(declaration => {
+      if (TypeGuards.isClassDeclaration(declaration)) {
+        declaration.getConstructors()[0].setScope(Scope.Public) //TODO: select the one that matches the new expr call 
         options.log(`constructor scope changed to public`)
       }
-      else if (TypeGuards.isScopedNode(d)) {
-        d.setScope(Scope.Public)
+      else if (TypeGuards.isScopedNode(declaration)) {
+        declaration.setScope(Scope.Public)
         options.log(`scope changed to public`)
       }
       else {
-        options.log(`scope not changed because ${d.getKindName()} not isScopedNode nor isClassDeclaration `)
+        options.log(`scope not changed because ${declaration.getKindName()} not isScopedNode nor isClassDeclaration `)
       }
     })
   }

@@ -12,7 +12,7 @@
             "runtimeExecutable": "${execPath}",
             "args": [
                 "--extensionDevelopmentPath=${workspaceFolder}",
-                "/home/sg/git/plain-typescript-test-project/"
+                "${workspaceFolder}/../plain-typescript-test-project"
             ],
             "outFiles": [
                 "${workspaceFolder}/out/**/*.js"

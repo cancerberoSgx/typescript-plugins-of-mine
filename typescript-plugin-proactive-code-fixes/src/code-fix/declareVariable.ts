@@ -43,6 +43,8 @@ const result = nonDeclared(1,2,{a: 'g})
     nonDeclared(config)
   })```
 
+ * non declared methods and properties ? 
+
 */
 export const codeFixCreateVariable: CodeFix = {
 
@@ -71,22 +73,31 @@ export const codeFixCreateVariable: CodeFix = {
   apply: (options: CodeFixOptions): ts.ApplicableRefactorInfo[] | void => {
     const parent = options.simpleNode.getParent()
     if (TypeGuards.isIdentifier(options.simpleNode) && TypeGuards.isCallExpression(parent)) {
+      // it's function call
       const expression = parent.getExpression()
       if (TypeGuards.isIdentifier(expression)) {
-        const container = parent.getFirstAncestorByKind(ts.SyntaxKind.Block) || parent.getSourceFile()//.sourceFile
+        const container = parent.getFirstAncestorByKind(ts.SyntaxKind.Block) || parent.getSourceFile()
         const statementAncestor = parent.getAncestors().find(a => a.getParent() === container)//TypeGuards.isStatement)
         if (statementAncestor && container) {
-          container.insertStatements(statementAncestor.getChildIndex(), `function ${options.simpleNode.getText()}(${parent.getArguments().map((a, index) => 'arg' + index + ': ' + a.getType().getText()).join(', ')}){
-            throw new Error('Not Implemented');
-          }`)
-        } // LOG else
-      }// LOG else
+          const functionName = options.simpleNode.getText()
+          const typeChecker = options.simpleProject.getTypeChecker()
+          const functionArguments= parent.getArguments().map((a, index) => {
+            return `arg${index}: ${typeChecker.getApparentType(a.getType()).getText()}`
+          })
+          const returnType = options.simpleProject.getTypeChecker().getContextualType(options.simpleNode.getFirstAncestorByKindOrThrow(ts.SyntaxKind.CallExpression)).getText()
+          container.insertStatements(statementAncestor.getChildIndex(), `
+function ${functionName}(${functionArguments.join(', ')}): ${returnType} {
+  throw new Error('Not Implemented');
+}
+`
+          )
+        } // TODO: LOG else
+      }// TODO: LOG else
     }
     else {
       // it's a variable declaration
       options.simpleNode.getSourceFile().insertText(options.simpleNode.getStart(), 'const ')
     }
-
   }
 }
 

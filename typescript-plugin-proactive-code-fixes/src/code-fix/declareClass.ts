@@ -24,7 +24,8 @@ class Onion extends NonExistent implements NonExistentInterface{}
  
  * issue: move scroll to end of file
  * issue - break  target class' jsdoc
- * TODO:  modify the file using  insertClass or insertInterface using Structures no text
+ * modify the file using  insertClass or insertInterface using Structures no text
+ * var a = nonexistentFunction(1) <--- is suggested here and should not
  * config
 
  */
