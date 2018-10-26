@@ -1,6 +1,6 @@
 {
   "name": "typescript-plugin-function-signature-refactors",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "TypeScript Language Service Plugin plugin with several refactors related to function-like signature. ",
   "main": "dist/src/index.js",
   "typings": "dist/src/typings.d.ts",
@@ -26,13 +26,13 @@
   "license": "MIT",
   "dependencies": {
     "hrtime-now": "^1.0.5",
-    "input-ui-ipc-provider": "/home/sg/git/typescript-plugins-of-mine/.yamat/input-ui-ipc-provider-0.0.4.tgz",
+    "input-ui-ipc-provider": "file:../input-ui-ipc-provider",
     "ts-simple-ast": "^17.1.1",
-    "ts-simple-ast-extra": "/home/sg/git/typescript-plugins-of-mine/.yamat/ts-simple-ast-extra-0.0.2.tgz",
+    "ts-simple-ast-extra": "file:../ts-simple-ast-extra",
     "typescript": "^3.1.3",
-    "typescript-ast-util": "/home/sg/git/typescript-plugins-of-mine/.yamat/typescript-ast-util-1.1.1.tgz",
-    "typescript-plugin-util": "/home/sg/git/typescript-plugins-of-mine/.yamat/typescript-plugin-util-1.0.9.tgz",
-    "typescript-plugins-text-based-user-interaction": "/home/sg/git/typescript-plugins-of-mine/.yamat/typescript-plugins-text-based-user-interaction-0.0.10.tgz"
+    "typescript-ast-util": "file:../typescript-ast-util",
+    "typescript-plugin-util": "file:../typescript-plugin-util",
+    "typescript-plugins-text-based-user-interaction": "file:../typescript-plugins-text-based-user-interaction"
   },
   "devDependencies": {
     "@types/jasmine": "^2.8.9",
