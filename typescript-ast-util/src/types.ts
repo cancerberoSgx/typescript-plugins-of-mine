@@ -55,8 +55,15 @@ export function getTypeStringFor(node: ts.Node, program: ts.Program): string | u
   if (!type) {
     return
   }
+  if(type.isNumberLiteral()){
+    return 'number'
+  }
+  if(type.isStringLiteral()){
+    return 'string'
+  }
   return program.getTypeChecker().typeToString(type, node, ts.TypeFormatFlags.None) || undefined
 }
+
 /**
  * because getTypeStringFor returns type strings not suitable for declarations, for example, for function like, returns "(args)=>Foo" where for declarations it should be (args):Foo
  */

@@ -1,9 +1,9 @@
 import * as shell from 'shelljs';
-import Project, {ts, Expression, TypeGuards} from 'ts-simple-ast';
+import Project from 'ts-simple-ast';
 import { getDiagnosticsInCurrentLocation } from 'typescript-ast-util';
+import { codeFixCreateVariable } from '../src/code-fix/declareVariable';
 import { codeFixes, CodeFixOptions } from '../src/codeFixes';
 import { defaultBeforeEach, defaultLog } from './testUtil';
-import { codeFixCreateVariable } from '../src/code-fix/declareVariable';
 
 describe('tests', () => {
   let simpleProject: Project
@@ -38,7 +38,7 @@ describe('tests', () => {
     expect(shell.cat(`${projectPath}/src/index.ts`).toString()).toContain('const i=f()')
   })
 
-  it('declare function fix should declare function with correct para types and return type', () => {
+  it('declare function fix should declare function with correct params types and return type', () => {
     const project = new Project({ useVirtualFileSystem: true })
     const sourceFile = project.createSourceFile('foo.ts', `const a: number = nonexistent(1.23, /[a-z]+/i, 'hello', [false])`)
     const cursorPosition = 20
@@ -48,10 +48,10 @@ describe('tests', () => {
     const arg: CodeFixOptions = {
       diagnostics,
       containingTarget: child.compilerNode,
-      containingTargetLight: child.compilerNode, 
+      containingTargetLight: child.compilerNode,
       log: defaultLog,
       simpleNode: child,
-      simpleProject, 
+      simpleProject,
       program: simpleProject.getProgram().compilerObject,
       sourceFile: sourceFile.compilerNode
     }
@@ -61,7 +61,13 @@ describe('tests', () => {
       return fail('fix predicate not working ' + codeFixCreateVariable.name);
     }
     fix.apply(arg)
-    expect(project.getSourceFile('foo.ts').getText()).toContain('function nonexistent(arg0: Number')
+    const text = project.getSourceFile('foo.ts').getText()
+    expect(text).toContain('function nonexistent(')
+    expect(text).toContain('): number {')
+    expect(text).toContain('arg0: number')
+    expect(text).toContain('arg1: RegExp')
+    expect(text).toContain('arg2: string')
+    expect(text).toContain('arg3: boolean[]')
   })
 })
 

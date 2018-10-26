@@ -1,6 +1,6 @@
 import { TypeGuards } from 'ts-simple-ast';
 import * as ts from 'typescript';
-import { getKindName } from 'typescript-ast-util';
+import { getKindName, getTypeStringFor } from 'typescript-ast-util';
 import { CodeFix, CodeFixOptions } from '../codeFixes';
 
 /**
@@ -82,7 +82,7 @@ export const codeFixCreateVariable: CodeFix = {
           const functionName = options.simpleNode.getText()
           const typeChecker = options.simpleProject.getTypeChecker()
           const functionArguments= parent.getArguments().map((a, index) => {
-            return `arg${index}: ${typeChecker.getApparentType(a.getType()).getText()}`
+            return `arg${index}: ${getTypeStringFor(a.compilerNode, options.program)}`
           })
           const returnType = options.simpleProject.getTypeChecker().getContextualType(options.simpleNode.getFirstAncestorByKindOrThrow(ts.SyntaxKind.CallExpression)).getText()
           container.insertStatements(statementAncestor.getChildIndex(), `

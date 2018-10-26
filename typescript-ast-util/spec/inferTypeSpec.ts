@@ -1,8 +1,9 @@
-import { compileSource, findChild, findIdentifierString, dumpAst, getKindName, getTypeStringFor, hasDeclaredType, findIdentifier, getTypeFor, syntaxKindToMap, typeFormatFlagsToMap } from "../src";
-import * as ts from 'typescript'
-describe('compileSource, findChildren and getJsDoc', () => {
-  it('1', () => {
+import * as ts from 'typescript';
+import { compileSource, findChild, getKindName, getTypeStringFor, hasDeclaredType } from "../src";
 
+describe('type inference', () => {
+  
+  it('getTypeStringFor', () => {
 
     const code1 = `
 const a=1
@@ -18,21 +19,23 @@ const typedConst: Array<Date> = []
 class CCC{ /* move-class /home/sg */
 
 }
+const numberVariable = 1
+const stringVariable = '1'
 `
     const { program, fileName, tsconfigPath } = compileSource(code1)
     const sourceFile = program.getSourceFile(fileName)
-    
+
     if (!sourceFile) {
       return fail()
     }
-    
+
     let a = findChild(sourceFile, c => c.kind == ts.SyntaxKind.VariableDeclaration && ((c as ts.VariableDeclaration).name as ts.Identifier).escapedText == 'a')
     if (!a) {
       return fail()
     }
     const at = program.getTypeChecker().getTypeAtLocation(a)
     expect(at.symbol).toBeUndefined()
-    expect(hasDeclaredType(a,  program)).toBe(false)
+    expect(hasDeclaredType(a, program)).toBe(false)
 
     getKindName(a.kind)
     let typedConst = findChild(sourceFile, c => c.kind == ts.SyntaxKind.VariableDeclaration && ((c as ts.VariableDeclaration).name as ts.Identifier).escapedText == 'typedConst')
@@ -41,62 +44,63 @@ class CCC{ /* move-class /home/sg */
     }
     const typedConstType = program.getTypeChecker().getTypeAtLocation(typedConst)
     expect(typedConstType.symbol.escapedName.toString()).toBe('Array')
-    
+
     let c = findChild(sourceFile, c => c.kind == ts.SyntaxKind.VariableDeclaration && ((c as ts.VariableDeclaration).name as ts.Identifier).escapedText == 'c')
     if (!c) {
       return fail()
     }
     expect(getTypeStringFor(c, program)).toBe('number')
-    
-    let b= findChild(sourceFile, c => c.kind == ts.SyntaxKind.VariableDeclaration && ((c as ts.VariableDeclaration).name as ts.Identifier).escapedText == 'b')
+
+    let b = findChild(sourceFile, c => c.kind == ts.SyntaxKind.VariableDeclaration && ((c as ts.VariableDeclaration).name as ts.Identifier).escapedText == 'b')
     if (!b) {
       return fail()
     }
     expect(getTypeStringFor(c, program)).toBe('number')
-    
-    let d= findChild(sourceFile, c => c.kind == ts.SyntaxKind.VariableDeclaration && ((c as ts.VariableDeclaration).name as ts.Identifier).escapedText == 'd')
+
+    let d = findChild(sourceFile, c => c.kind == ts.SyntaxKind.VariableDeclaration && ((c as ts.VariableDeclaration).name as ts.Identifier).escapedText == 'd')
     if (!d) {
       return fail()
     }
     expect(getTypeStringFor(d, program).replace(/\s+/g, '')).toBe('{a:number;b:string[];}')
-    
-    let f= findChild(sourceFile, c => c.kind == ts.SyntaxKind.FunctionDeclaration && ((c as ts.FunctionDeclaration).name as ts.Identifier).escapedText == 'f')
+
+    let f = findChild(sourceFile, c => c.kind == ts.SyntaxKind.FunctionDeclaration && ((c as ts.FunctionDeclaration).name as ts.Identifier).escapedText == 'f')
     if (!f) {
       return fail()
     }
     expect(getTypeStringFor(f, program).replace(/\s+/g, '')).toBe('()=>{a:number;b:string[];}')
-    
+
     let h = findChild(sourceFile, c => c.kind == ts.SyntaxKind.VariableDeclaration && ((c as ts.VariableDeclaration).name as ts.Identifier).escapedText == 'h')
     if (!h) {
       return fail()
     }
     expect(hasDeclaredType(h, program)).toBe(true)
 
-    let k= findChild(sourceFile, c => c.kind == ts.SyntaxKind.FunctionDeclaration && ((c as ts.FunctionDeclaration).name as ts.Identifier).escapedText == 'k') as ts.FunctionDeclaration
+    let k = findChild(sourceFile, c => c.kind == ts.SyntaxKind.FunctionDeclaration && ((c as ts.FunctionDeclaration).name as ts.Identifier).escapedText == 'k') as ts.FunctionDeclaration
     if (!k) {
       return fail()
     }
-
 
     let ccc = findChild(sourceFile, c => c.kind == ts.SyntaxKind.ClassDeclaration && ((c as ts.ClassDeclaration).name as ts.Identifier).escapedText == 'CCC')
     if (!ccc) {
       return fail()
     }
-    const fc = findChild
-    const slc =  ts.getSyntheticLeadingComments(ccc)
-    // c.getChildren().find(c=>c.c)
-const cmmm=    findChild(ccc, c=>c.kind===ts.SyntaxKind.SingleLineCommentTrivia)
-    debugger;
 
-//     const changes = getFileTextChanges(k, program)
+    let numberVariable = findChild(sourceFile, c => c.kind == ts.SyntaxKind.VariableDeclaration && ((c as ts.VariableDeclaration).name as ts.Identifier).escapedText == 'numberVariable')
+    if (!numberVariable) {
+      return fail()
+    }
+    expect(hasDeclaredType(numberVariable, program)).toBe(false)
+    expect(getTypeStringFor(numberVariable, program).replace(/\s+/g, '')).toBe('number')
 
-// var aaaa = 1
+    let stringVariable = findChild(sourceFile, c => c.kind == ts.SyntaxKind.VariableDeclaration && ((c as ts.VariableDeclaration).name as ts.Identifier).escapedText == 'stringVariable')
+    if (!stringVariable) {
+      return fail()
+    }
+    expect(hasDeclaredType(stringVariable, program)).toBe(false)
+    expect(getTypeStringFor(stringVariable, program).replace(/\s+/g, '')).toBe('string')
 
-// ts.createClassifier()
-// ts.format
-// ts. 
+  })
 })
-})  
 
 
 

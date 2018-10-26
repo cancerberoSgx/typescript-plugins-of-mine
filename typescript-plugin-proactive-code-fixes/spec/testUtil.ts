@@ -81,7 +81,14 @@ export function getCodeFixOptionsForPredicate (positionOrRange: number|number[],
   const diagnostics = getDiagnosticsInCurrentLocation(config.simpleProject.getProgram().compilerObject, config.newSourceFile.compilerNode, position)
   const arg: CodeFixOptions = {
     simpleProject: config.simpleProject,
-    diagnostics, containingTarget: child.compilerNode, containingTargetLight: child.compilerNode, log: defaultLog, simpleNode: child, program: config.simpleProject.getProgram().compilerObject, sourceFile: config.newSourceFile.compilerNode, positionOrRange: typeof positionOrRange === 'number' ? {pos: positionOrRange, end: positionOrRange} : {pos: positionOrRange[0], end: positionOrRange[1]}
+    diagnostics, 
+    containingTarget: child.compilerNode, 
+    containingTargetLight: child.compilerNode, 
+    log: defaultLog, 
+    simpleNode: child,
+    program: config.simpleProject.getProgram().compilerObject, 
+    sourceFile: config.newSourceFile.compilerNode, 
+    positionOrRange: typeof positionOrRange === 'number' ? {pos: positionOrRange, end: positionOrRange} : {pos: positionOrRange[0], end: positionOrRange[1]}
   }
   return arg
 }
@@ -98,6 +105,7 @@ export function getCodeFix(arg: CodeFixOptions, fixName: string, verbose: boolea
   }
   return expectToContainFixer(fixes, fixName)
 }
+
 export function basicTest(position: number, config: DefaultBeforeEachResult, fixName: string, assertBeforeNotContainCode: string[], assertAfterContainCode: string[] = assertBeforeNotContainCode, verbose: boolean = false, transformText: string | false = ' ') {
   const arg = getCodeFixOptionsForPredicate(position, config)
   const fix = getCodeFix(arg, fixName, verbose)
