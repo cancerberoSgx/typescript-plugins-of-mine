@@ -62,6 +62,7 @@ describe('tests', () => {
     }
     fix.apply(arg)
     const text = project.getSourceFile('foo.ts').getText()
+    // console.log(text);
     expect(text).toContain('function nonexistent(')
     expect(text).toContain('): number {')
     expect(text).toContain('arg0: number')
@@ -69,7 +70,5 @@ describe('tests', () => {
     expect(text).toContain('arg2: string')
     expect(text).toContain('arg3: boolean[]')
   })
+
 })
-
-
-

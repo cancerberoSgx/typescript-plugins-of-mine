@@ -1,7 +1,7 @@
 import { now, timeFrom } from 'hrtime-now';
 import { Project, SourceFile } from 'ts-simple-ast';
 import { CodeFix, CodeFixOptions, getSimpleProject } from 'ts-simple-ast-extra';
-import { findChildContainedRange, findChildContainingRange, findChildContainingRangeLight, getKindName, positionOrRangeToNumber, positionOrRangeToRange } from 'typescript-ast-util';
+import { findChildContainedRange, findChildContainingRange, findChildContainingRangeLight, getKindName, positionOrRangeToNumber, positionOrRangeToRange, updateSourceFile } from 'typescript-ast-util';
 import { getPluginCreate, LanguageServiceOptionals } from 'typescript-plugin-util';
 import * as ts_module from 'typescript/lib/tsserverlibrary';
 import { codeFixes } from './codeFixes';
@@ -114,6 +114,11 @@ function applyCodeFix(fix: CodeFix, options: CodeFixOptions, formatOptions, posi
     log(`applyCodeFix createSimpleASTProject took ${timeFrom(createSimpleASTProjectT0)}`)
     const simpleNodeT0 = now()
     sourceFile = simpleProject.getSourceFile(options.sourceFile.fileName)
+
+    // update sourceFile (read from FS) with current text in editor buffer (since it could have non saved changes)
+    const textInBuffer = info.languageService.getProgram().getSourceFile(sourceFile.getFilePath()).getText()
+    sourceFile.replaceWithText(textInBuffer)
+    
     options.simpleNode = sourceFile.getDescendantAtPos(positionOrRangeToNumber(positionOrRange)) || sourceFile
     options.simpleProject = simpleProject
     if (!options.simpleNode) {
@@ -134,7 +139,9 @@ function applyCodeFix(fix: CodeFix, options: CodeFixOptions, formatOptions, posi
   if (fix.needSimpleAst !== false) {
     const saveSyncT0 = now()
     sourceFile.formatText(formatOptions)
-    simpleProject.saveSync()
+    info.languageServiceHost.writeFile(sourceFile.getFilePath(), sourceFile.getText())
+    info.project.registerFileUpdate(sourceFile.getFilePath())
+    info.project.markAsDirty()
     log(`applyCodeFix saveSync took ${timeFrom(saveSyncT0)}`)
   }
   else {

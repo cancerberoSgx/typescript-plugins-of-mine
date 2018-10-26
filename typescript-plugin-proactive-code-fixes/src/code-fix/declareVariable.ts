@@ -72,28 +72,32 @@ export const codeFixCreateVariable: CodeFix = {
 
   apply: (options: CodeFixOptions): ts.ApplicableRefactorInfo[] | void => {
     const parent = options.simpleNode.getParent()
-    if (TypeGuards.isIdentifier(options.simpleNode) && TypeGuards.isCallExpression(parent)) {
-      // it's function call
-      const expression = parent.getExpression()
-      if (TypeGuards.isIdentifier(expression)) {
-        const container = parent.getFirstAncestorByKind(ts.SyntaxKind.Block) || parent.getSourceFile()
-        const statementAncestor = parent.getAncestors().find(a => a.getParent() === container)//TypeGuards.isStatement)
-        if (statementAncestor && container) {
-          const functionName = options.simpleNode.getText()
-          const typeChecker = options.simpleProject.getTypeChecker()
-          const functionArguments= parent.getArguments().map((a, index) => {
-            return `arg${index}: ${getTypeStringFor(a.compilerNode, options.program)}`
-          })
-          const returnType = options.simpleProject.getTypeChecker().getContextualType(options.simpleNode.getFirstAncestorByKindOrThrow(ts.SyntaxKind.CallExpression)).getText()
-          container.insertStatements(statementAncestor.getChildIndex(), `
+    if (TypeGuards.isIdentifier(options.simpleNode) && TypeGuards.isCallExpression(parent) && TypeGuards.isIdentifier(parent.getExpression())) {
+
+      const functionName = options.simpleNode.getText()
+      const functionArguments = parent.getArguments().map((a, index) => {
+        const type = options.simpleProject.getTypeChecker().getTypeAtLocation(a).getBaseTypeOfLiteralType().getText()
+        return `arg${index}: ${type}`
+      })
+      const returnType = options.simpleProject.getTypeChecker().getContextualType(options.simpleNode.getFirstAncestorByKindOrThrow(ts.SyntaxKind.CallExpression)).getText()
+      const functionText = `
 function ${functionName}(${functionArguments.join(', ')}): ${returnType} {
   throw new Error('Not Implemented');
 }
 `
-          )
-        } // TODO: LOG else
-      }// TODO: LOG else
-    }
+      if (!TypeGuards.isPropertyAccessExpression(parent.getChildAtIndex(0))) {
+        // it's function call and the function is not a member i.e bar()
+        const container = parent.getFirstAncestorByKind(ts.SyntaxKind.Block) || parent.getSourceFile()
+        const statementAncestor = parent.getAncestors().find(a => a.getParent() === container)
+        if (statementAncestor && container) {
+          container.insertStatements(statementAncestor.getChildIndex(), functionText)
+        }
+      }
+      else {
+        // it's a function call and the function is a member, i.e : foo.bar()
+        // TODO
+      }
+    } // TODO: LOG else
     else {
       // it's a variable declaration
       options.simpleNode.getSourceFile().insertText(options.simpleNode.getStart(), 'const ')

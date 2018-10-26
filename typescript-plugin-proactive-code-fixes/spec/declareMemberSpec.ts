@@ -26,13 +26,13 @@ describe('declareMember', () => {
     config = defaultBeforeEach({ createNewFile: code })
   })
   it('add missing method to object literal', async () => {
-    basicTest(70, config, 'declareMember', [`const o = { foo: () => { return 1 }, bar123123(arg0: number, arg1: string[], arg2: boolean): string[] { throw new Error('Not Implemented') }`])
+    basicTest(code.indexOf('o.bar123123(')+4, config, 'declareMember', [`const o = { foo: () => { return 1 }, bar123123(arg0: number, arg1: string[], arg2: boolean): string[] { throw new Error('Not Implemented') }`])
   })
   it('add missing method to object\'s interface', async () => {
-    basicTest(220, config, 'declareMember', [` interface Hello { world(arg0: number[][]): any; }`])
+    basicTest(code.indexOf('hello.world(')+6, config, 'declareMember', [`interface Hello { world(arg0: number[][]): any; }`])
   })
   it('add missing method to object\'s interface 2', async () => {
-    basicTest(329, config, 'declareMember', [`interface Hello { mama(arg0: number, arg1: number, arg2: number): string; }`])
+    basicTest(code.indexOf('hello.mama(')+6, config, 'declareMember', [`interface Hello { mama(arg0: number, arg1: number, arg2: number): string; }`])
   })
   // TODO: the rest of the cases
   afterEach(() => {

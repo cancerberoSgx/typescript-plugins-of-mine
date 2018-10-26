@@ -1,7 +1,7 @@
 import { now, timeFrom } from 'hrtime-now';
 import { ClassDeclaration, HeritageClause, InterfaceDeclaration, TypeGuards } from 'ts-simple-ast';
 import * as ts from 'typescript';
-import { getKindName } from 'typescript-ast-util';
+import { getKindName, findAscendant, findChild } from 'typescript-ast-util';
 import { CodeFix, CodeFixOptions } from '../codeFixes';
 
 
@@ -53,7 +53,10 @@ export const declareClass: CodeFix = {
   },
 
   description: (arg: CodeFixOptions): string => {
-    return `Declare type "${arg.containingTargetLight.getText()}"`
+    const h = findAscendant(arg.containingTargetLight, ts.isHeritageClause)
+    let decl = findAscendant(arg.containingTargetLight, n=>ts.isInterfaceDeclaration(n)||ts.isClassDeclaration(n))
+    const what = ts.isInterfaceDeclaration(decl) || h.getText().includes('implements') ? 'interface' :  'class'
+    return `Declare ${what||'type'} "${arg.containingTargetLight.getText()}"`
   },
 
   apply: (arg: CodeFixOptions) => {
@@ -65,17 +68,14 @@ export const declareClass: CodeFix = {
     if (!simpleClassDec) {
       arg.log('not applying cause cannot find any ancestor of kind ClassDeclaration|InterfaceDeclaration')
     }
-    let h: HeritageClause
+    let h: HeritageClause =  arg.simpleNode.getFirstAncestorByKind(ts.SyntaxKind.HeritageClause)
 
-    if (!TypeGuards.isHeritageClause(h = arg.simpleNode.getFirstAncestorByKind(ts.SyntaxKind.HeritageClause))) {
+    if (!TypeGuards.isHeritageClause(h)) {
       return
     }
     const what = simpleClassDec.getKind() === ts.SyntaxKind.InterfaceDeclaration ? 'interface' : h.getToken() === ts.SyntaxKind.ImplementsKeyword ? 'interface' : 'class'
     const code =
       `
-/**
- * TODO: document this ${what}.
- */
 ${simpleClassDec.isExported() ? 'export ' : ''}${what} ${arg.simpleNode.getText()} {
 
 }

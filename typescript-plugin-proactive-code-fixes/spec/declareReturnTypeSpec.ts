@@ -10,7 +10,7 @@ describe('declareReturnType', () => {
     config = defaultBeforeEach({ createNewFile: code })
   })
   it('basic', async () => {
-    basicTest(20, config, 'declareReturnType', [`interface FNResult<T> { /** * TODO: Document me */ a: number; /** * TODO: Document me */ b: string; /** * TODO: Document me */ log(msg: any): string; /** * TODO: Document me */ kill<T>(): number; }`])
+    basicTest(code.indexOf('FNResult<T>')+3, config, 'declareReturnType', [`interface FNResult<T> { /** * TODO: Document me */ a: number; /** * TODO: Document me */ b: string; /** * TODO: Document me */ log(msg: any): string; /** * TODO: Document me */ kill<T>(): number; }`])
   })
   //TODO: test other cases - there are some failing currently 
   afterEach(() => {
