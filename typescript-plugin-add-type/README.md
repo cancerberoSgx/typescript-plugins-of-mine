@@ -1,3 +1,5 @@
+this is currently kind of abandoned
+
 # typescript-plugin-add-type
 
 

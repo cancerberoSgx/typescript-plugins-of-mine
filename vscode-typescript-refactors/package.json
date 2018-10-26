@@ -11,9 +11,7 @@
     "test-vscode": "npm run build && node ./node_modules/vscode/bin/test"
   },
   "dependencies": {
-    "input-ui-ipc-provider-vscode": "file:../input-ui-ipc-provider-vscode",
-    "typescript-plugin-function-signature-refactors": "file:../typescript-plugin-function-signature-refactors",
-    "typescript-plugin-proactive-code-fixes": "file:../typescript-plugin-proactive-code-fixes"
+    "typescript-plugin-proactive-code-fixes": "0.0.12"
   },
   "devDependencies": {
     "@types/mocha": "^5.2.5",
@@ -46,9 +44,6 @@
     "typescriptServerPlugins": [
       {
         "name": "typescript-plugin-proactive-code-fixes"
-      },
-      {
-        "name": "typescript-plugin-function-signature-refactors"
       }
     ]
   }

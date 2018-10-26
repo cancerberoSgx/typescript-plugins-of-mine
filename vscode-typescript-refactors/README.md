@@ -1,10 +1,10 @@
 # typescript-refactors
 
 Has several TypeScript plugins for agile code development. Most refactors and fixes are maintained in other projects, so please go there for latest documentation and demo: 
- *  [typescript-plugin-proactive-code-fixes](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-proactive-code-fixes)
- * [typescript-plugin-function-signature-refactors](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-function-signature-refactors)
+ * [typescript-plugin-proactive-code-fixes](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-proactive-code-fixes)
+<!--  * [typescript-plugin-function-signature-refactors](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-function-signature-refactors)
 
-
+ -->
 # Fixes and Refactors
 
 A lot is still to be fixed and implemented but we have several helpful and stable fixes working already:

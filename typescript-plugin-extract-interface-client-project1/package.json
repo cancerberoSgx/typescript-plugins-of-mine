@@ -16,18 +16,18 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@types/node": "^10.0.4",
-    "ts-simple-ast": "^12.4.0",
-    "typescript": "2.9.1"
+    "@types/node": "^10.12.0",
+    "ts-simple-ast": "^17.1.1",
+    "typescript": "^3.1.3"
   },
   "devDependencies": {
-    "typescript-plugin-proactive-code-fixes": "file:../typescript-plugin-proactive-code-fixes",
     "typescript-ast-util": "file:../typescript-ast-util",
-    "typescript-plugin-ast-inspector": "file:../typescript-plugin-ast-inspector",
     "typescript-plugin-add-type": "file:../typescript-plugin-add-type",
+    "typescript-plugin-ast-inspector": "file:../typescript-plugin-ast-inspector",
+    "typescript-plugin-function-signature-refactors": "file:../typescript-plugin-function-signature-refactors",
     "typescript-plugin-move-declaration": "file:../typescript-plugin-move-declaration",
     "typescript-plugin-move-file": "file:../typescript-plugin-move-file",
     "typescript-plugin-postfix": "file:../typescript-plugin-postfix",
-    "typescript-plugin-function-signature-refactors": "file:../typescript-plugin-function-signature-refactors"
+    "typescript-plugin-proactive-code-fixes": "file:../typescript-plugin-proactive-code-fixes"
   }
 }
