@@ -1,6 +1,6 @@
 {
   "name": "typescript-plugin-ast-inspector",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "TypeScript Language Service plugin with tools oriented to TypeScript developers, most important is one that let evaluate code in the editor itself for faster understanding of AST and plugin prototyping. ",
   "main": "dist/index.js",
   "typings": "dist/typings.d.ts",
@@ -22,10 +22,10 @@
     "hrtime-now": "^1.0.5",
     "stack-trace": "0.0.10",
     "ts-simple-ast": "^17.1.1",
-    "ts-simple-ast-extra": "file:../ts-simple-ast-extra",
+    "ts-simple-ast-extra": "0.0.4",
     "typescript": "^3.1.3",
-    "typescript-ast-util": "file:../typescript-ast-util",
-    "typescript-plugin-util": "file:../typescript-plugin-util"
+    "typescript-ast-util": "1.1.3",
+    "typescript-plugin-util": "1.0.11"
   },
   "devDependencies": {
     "@types/jasmine": "^2.8.9",

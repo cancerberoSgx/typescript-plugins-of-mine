@@ -1,7 +1,7 @@
 {
   "name": "vscode-typescript-refactors",
   "description": "Contributes with several TypeScript Language Service Plugins that add refactors for agile source code development. [See details and demos here](https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-plugin-proactive-code-fixes).",
-  "version": "0.0.16",
+  "version": "0.0.17",
   "scripts": {
     "postinstall": "node ./node_modules/vscode/bin/install",
     "vscode:prepublish": "npm run build",
@@ -11,7 +11,7 @@
     "test-vscode": "npm run build && node ./node_modules/vscode/bin/test"
   },
   "dependencies": {
-    "typescript-plugin-proactive-code-fixes": "file:../typescript-plugin-proactive-code-fixes"
+    "typescript-plugin-proactive-code-fixes": "0.0.13"
   },
   "devDependencies": {
     "@types/mocha": "^5.2.5",
