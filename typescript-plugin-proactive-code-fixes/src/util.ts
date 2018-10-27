@@ -1,4 +1,4 @@
-import { ClassDeclaration, ExpressionWithTypeArguments, FunctionLikeDeclaration, InterfaceDeclaration, MethodSignature, Node, ParameterDeclaration, ParameterDeclarationStructure, SyntaxKind, Type, TypeGuards, StringLiteral, NoSubstitutionTemplateLiteral, SourceFile } from "ts-simple-ast";
+import { ClassDeclaration, ExpressionWithTypeArguments, FunctionLikeDeclaration, InterfaceDeclaration, MethodSignature, Node, ParameterDeclaration, ParameterDeclarationStructure, SyntaxKind, Type, TypeGuards, StringLiteral, NoSubstitutionTemplateLiteral, SourceFile, MethodDeclaration } from "ts-simple-ast";
 import * as ts from 'typescript'
 
 export const buildParameterStructure = (p: ParameterDeclaration): ParameterDeclarationStructure => ({
@@ -11,7 +11,7 @@ export const buildParameterStructure = (p: ParameterDeclaration): ParameterDecla
 
 
 /** fix given function-like declaration parameters and type to implement given signature */
-export function fixSignature(decl: FunctionLikeDeclaration, signature: MethodSignature): void {
+export function fixSignature(decl: FunctionLikeDeclaration, signature: MethodSignature|MethodDeclaration): void {
   decl.setReturnType(signature.getReturnType().getText())
   // add missing params and fix exiting param types
   let memberParams = decl.getParameters()

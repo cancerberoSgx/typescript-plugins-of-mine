@@ -110,6 +110,7 @@ export function basicTest(position: number, config: DefaultBeforeEachResult, fix
   const arg = getCodeFixOptionsForPredicate(position, config)
   const fix = getCodeFix(arg, fixName, verbose)
   expect(!!fix.predicate(arg)).toBe(true)
+  
   let text = transformText === false ? config.newSourceFile.getText() : removeWhiteSpaces(config.newSourceFile.getText(), transformText)
   assertBeforeNotContainCode.forEach(s => expect(text).not.toContain(s))
   if (verbose) {
@@ -117,6 +118,7 @@ export function basicTest(position: number, config: DefaultBeforeEachResult, fix
   }
   arg.log = verbose ? (msg)=>console.log('DEBUG log: '+msg) : defaultLog
   fix.apply(arg)
+  
   text = transformText === false ? config.newSourceFile.getText() : removeWhiteSpaces(config.newSourceFile.getText(), transformText)
   assertAfterContainCode.forEach(s => expect(text).toContain(s))
   if (verbose) {

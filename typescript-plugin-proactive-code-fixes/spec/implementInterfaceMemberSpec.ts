@@ -12,7 +12,7 @@ describe('implementInterfaceMember', () => {
     config = defaultBeforeEach({ createNewFile: code })
   })
   it('fix member', async () => {
-    basicTest(107, config, 'implementInterfaceMember', [`class Class2 implements SomeInterface { prop1: { s: string; n: Date; }[] }`])
+    basicTest(code.indexOf('prop1: boolean[]')+1, config, 'implementInterfaceMember', [`class Class2 implements SomeInterface { prop1: { s: string; n: Date; }[] }`])
   })
   afterEach(() => {
     defaultAfterEach(config)

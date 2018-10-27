@@ -14,10 +14,17 @@ describe('arrowFunctionBodyTransformations', () => {
     config = defaultBeforeEach({ createNewFile: code })
   })
   it('add body single arg no parenth', async () => {
-    basicTest(30, config, 'arrowFunctionTransformations', [`return 'hello' + o1`])
+    basicTest(code.indexOf(`=> 'hello'`)+1, config, 'arrowFunctionTransformations', [`return 'hello' + o1`])
   })
+
+  it('remove body ', async () => {
+    basicTest(code.indexOf(`a => { return a - 1 + 2`)+1, config, 'arrowFunctionTransformations', [`bodied: a => a - 1 + 2 / 6,`])
+  })  
+  it('add body returning object literal', async () => {
+    basicTest(code.indexOf(`=> ({ a, b: 'hi' })`)+1, config, 'arrowFunctionTransformations', [`=> { return { a, b: 'hi' }; }`])
+  }) 
+  
   afterEach(() => {
     defaultAfterEach(config)
   })
 })
-

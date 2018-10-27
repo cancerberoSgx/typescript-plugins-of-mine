@@ -26,18 +26,6 @@ const tree2: Living = {
 
 # TODO
 
-* arrows  - this doesn't work: 
-
-```
-interface Beta {
-  id: number
-  canSwim: boolean
-  method2: (a: string) => { created: Date, color: string }
-}
-const beta1:Beta = {
-  id: 1, 
-  canSwim: true
-}
 ```
 
  * big issue : TODO: we are removing good properties implementations - we always perform remove() without actually checking if the property is breaking the interface or not - this removes good implementation / work - right now we are removing but a comment with old code is generated. 
@@ -65,7 +53,7 @@ interface SomeInterface3 {
  * config
 */
 
-import { TypeGuards } from 'ts-simple-ast';
+import { TypeGuards, ClassDeclaration, PropertySignature, FunctionExpression, FunctionLikeDeclarationStructure } from 'ts-simple-ast';
 import * as ts from 'typescript';
 import { getKindName } from 'typescript-ast-util';
 import { CodeFix, CodeFixOptions } from '../codeFixes';
@@ -86,7 +74,8 @@ export const implementInterfaceObjectLiteral: CodeFix = {
 
   predicate: (arg: CodeFixOptions): boolean => {
     if (arg.containingTargetLight.kind === ts.SyntaxKind.Identifier &&
-      arg.diagnostics.find(d => d.code === 2322 && d.start === arg.containingTargetLight.getStart())) {
+      arg.diagnostics.find(d => d.code === 2322 && d.start === arg.containingTargetLight.getStart())
+    ) {
       return true
     }
     else {
@@ -107,24 +96,35 @@ export const implementInterfaceObjectLiteral: CodeFix = {
       return
     }
     declarations.forEach(decl => {
-      if (!TypeGuards.isInterfaceDeclaration(decl)) {
-        arg.log(`doing nothing for decl ${decl.getText()}`)
+      if (!TypeGuards.isInterfaceDeclaration(decl) && !TypeGuards.isClassDeclaration(decl)) {
+        arg.log(`doing nothing for decl kind ${decl.getKindName()} ${decl.getText()}`)
         return
       }
-      decl.getProperties().forEach(prop => {
+
+      (decl as ClassDeclaration).getProperties().forEach(prop => {
         const existingProp = init.getProperty(prop.getName())
         let oldText
-        if((existingProp && prop.getTypeNode().getText()!==existingProp.getType().getText())){ //TODO: poor's man typechecking. make a good one and put it in utils and test it !
-          if (existingProp) {
-            oldText = existingProp.getText()
-            existingProp.remove()
+        if (existingProp && prop.getTypeNode().getText() !== existingProp.getType().getText()) { //TODO: poor's man typechecking. make a good one and put it in utils and test it !
+          oldText = existingProp.getText()
+          existingProp.remove()
+        }
+        else if (!existingProp) {
+          if (prop.getChildrenOfKind(ts.SyntaxKind.FunctionType).length) {
+            const functionType = prop.getChildrenOfKind(ts.SyntaxKind.FunctionType)[0]
+            init.addMethod({
+              name: prop.getName(),
+              parameters: functionType.getParameters().map(buildParameterStructure),
+              returnType: functionType.getReturnType().getText(),
+              bodyText: 'throw new Error(\'Not Implemented\');' + (!oldText ? '' : '\n/* ORIGINAL IMPLEMENTATION: \n' + oldText + '\n*/')
+            })
+          }
+          else {
+            init.addPropertyAssignment({ name: prop.getName(), initializer: getDefaultValueForType(prop.getType()) + (!oldText ? '' : '\n/* ORIGINAL IMPLEMENTATION: \n' + oldText + '\n*/') })
           }
         }
-        else if(!existingProp){
-          init.addPropertyAssignment({ name: prop.getName(), initializer: getDefaultValueForType(prop.getType()) + (!oldText ? '' : '\n/* ORIGINAL IMPLEMENTATION: \n' + oldText + '\n*/') })
-        }
-      })
-      decl.getMethods().forEach(method => {
+      });
+
+      (decl as ClassDeclaration).getMethods().forEach(method => {
         const existingProp = init.getProperty(method.getName())
         if (existingProp && TypeGuards.isMethodDeclaration(existingProp)) {
           fixSignature(existingProp, method)
@@ -143,30 +143,31 @@ export const implementInterfaceObjectLiteral: CodeFix = {
         })
       })
 
-      
+
       // init = varDecl.getInitializerIfKind(ts.SyntaxKind.ObjectLiteralExpression)
       init.getProperties()
-      .forEach(prop => {
-        let name
-        if (TypeGuards.isPropertyAssignment(prop) || TypeGuards.isShorthandPropertyAssignment(prop)) {
-          name = prop.getName()
-        }
-        else if (TypeGuards.isSpreadAssignment(prop)) {
-          name = prop.getExpression().getText()
-        }
-        if (name && !decl.getProperty(name) && !decl.getMethod(name)) {
-          const oldText = prop.getText()
-          prop.remove();
-          const statement = init.getAncestors().find(TypeGuards.isStatement);
-          const container = statement ? statement.getFirstAncestorByKind(ts.SyntaxKind.Block) || init.getSourceFile() : init.getSourceFile()
-          const index = statement ? statement.getChildIndex() : 0
-          container.insertStatements(index, '/* Property removed: \n' + oldText + ' \n */')
-          arg.log('property removed ' + name)
-        }
-        else {
-          arg.log(`ignoring object assignment property ${prop.getText()}`)
-        }
-      })
+        .forEach(prop => {
+          let name
+          if (TypeGuards.isPropertyAssignment(prop) || TypeGuards.isShorthandPropertyAssignment(prop)) {
+            name = prop.getName()
+          }
+          else if (TypeGuards.isSpreadAssignment(prop)) {
+            name = prop.getExpression().getText()
+          }
+          // else if(TypeGuards.ism)
+          if (name && !decl.getProperty(name) && !decl.getMethod(name)) {
+            const oldText = prop.getText()
+            prop.remove();
+            const statement = init.getAncestors().find(TypeGuards.isStatement);
+            const container = statement ? statement.getFirstAncestorByKind(ts.SyntaxKind.Block) || init.getSourceFile() : init.getSourceFile()
+            const index = statement ? statement.getChildIndex() : 0
+            container.insertStatements(index, '/* Property removed: \n' + oldText + ' \n */')
+            arg.log('property removed ' + name)
+          }
+          else {
+            arg.log(`ignoring object assignment property ${prop.getText()}`)
+          }
+        })
     })
   }
 }
