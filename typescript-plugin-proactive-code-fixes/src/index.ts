@@ -45,8 +45,29 @@ function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSetti
     log(`no getEditsForRefactor because no fix was found for actionName == ${actionName}`)
     return refactors
   }
-  applyCodeFix(fix, target, formatOptions, positionOrRange)
+  const result = applyCodeFix(fix, target, formatOptions, positionOrRange)
   log(`getEditsForRefactor total time took ${timeFrom(t0)}`)
+
+  if (typeof (result) === 'string') {
+    return {
+      edits: [
+        {
+          fileName, textChanges: [
+            {
+              newText: result,
+              span: {
+                start: 0,
+                length: target.sourceFile.getText().length
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+  if (result && (result as any).edits) {
+    return result
+  }
   return refactors
 }
 
@@ -104,7 +125,7 @@ function getCodeFix(fileName: string, positionOrRange: number | ts.TextRange, en
 
 
 let currentFix: CodeFix
-function applyCodeFix(fix: CodeFix, options: CodeFixOptions, formatOptions, positionOrRange: number | ts.TextRange) {
+function applyCodeFix(fix: CodeFix, options: CodeFixOptions, formatOptions, positionOrRange: number | ts.TextRange): string {
   let simpleProject: Project
   let sourceFile: SourceFile
   const fileName = options.sourceFile.fileName
@@ -118,7 +139,7 @@ function applyCodeFix(fix: CodeFix, options: CodeFixOptions, formatOptions, posi
     // update sourceFile (read from FS) with current text in editor buffer (since it could have non saved changes)
     const textInBuffer = info.languageService.getProgram().getSourceFile(sourceFile.getFilePath()).getText()
     sourceFile.replaceWithText(textInBuffer)
-    
+
     options.simpleNode = sourceFile.getDescendantAtPos(positionOrRangeToNumber(positionOrRange)) || sourceFile
     options.simpleProject = simpleProject
     if (!options.simpleNode) {
@@ -130,23 +151,28 @@ function applyCodeFix(fix: CodeFix, options: CodeFixOptions, formatOptions, posi
   // we are ready, with or without ast-simple to perform the change
   const fixapplyT0 = now()
   currentFix = fix
-  try {
-    fix.apply(options)
-  } catch (error) {
-    log(`applyCodeFix fix.apply() Exception ${error} \n ${error.stack}`)
+  // try {
+  const result = fix.apply(options) as any
+  if (!result) {
+    return sourceFile.getText()
   }
-  log(`applyCodeFix fix.apply() took ${timeFrom(fixapplyT0)}`)
-  if (fix.needSimpleAst !== false) {
-    const saveSyncT0 = now()
-    sourceFile.formatText(formatOptions)
-    info.languageServiceHost.writeFile(sourceFile.getFilePath(), sourceFile.getText())
-    info.project.registerFileUpdate(sourceFile.getFilePath())
-    info.project.markAsDirty()
-    log(`applyCodeFix saveSync took ${timeFrom(saveSyncT0)}`)
-  }
-  else {
-    // do nothing - when needSimpleAst===false code fix implementation is responsible of save/emit/update the files / project 
-  }
+  return result
+  // } catch (error) {
+  //   log(`applyCodeFix fix.apply() Exception ${error} \n ${error.stack}`)
+  // }
+  // log(`applyCodeFix fix.apply() took ${timeFrom(fixapplyT0)}`)
+  // if (fix.needSimpleAst !== false) {
+  // const saveSyncT0 = now()
+  // sourceFile.formatText(formatOptions)
+  // info.languageServiceHost.writeFile(sourceFile.getFilePath(), sourceFile.getText())
+  // info.project.registerFileUpdate(sourceFile.getFilePath())
+  // info.project.markAsDirty()
+  // log(`applyCodeFix saveSync took ${timeFrom(saveSyncT0)}`)
+  // return sourceFile.getText()
+  // }
+  // else {
+  // do nothing - when needSimpleAst===false code fix implementation is responsible of save/emit/update the files / project 
+  // }
 }
 
 

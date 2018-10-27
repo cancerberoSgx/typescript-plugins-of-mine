@@ -97,7 +97,7 @@ export const implementInterfaceObjectLiteral: CodeFix = {
 
   description: (arg: CodeFixOptions): string => `Make object implement interface`,
 
-  apply: (arg: CodeFixOptions): ts.ApplicableRefactorInfo[] | void => {
+  apply: (arg: CodeFixOptions) => {
     const node = arg.simpleNode
     const varDecl = TypeGuards.isVariableDeclaration(node) ? node : node.getFirstAncestorByKind(ts.SyntaxKind.VariableDeclaration)
     const init = varDecl.getInitializerIfKind(ts.SyntaxKind.ObjectLiteralExpression)

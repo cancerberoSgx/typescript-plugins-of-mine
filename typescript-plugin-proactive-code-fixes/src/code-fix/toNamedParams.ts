@@ -57,7 +57,7 @@ export const toNamedParameters: CodeFix = {
 
   description: (arg: CodeFixOptions): string => `Convert to Named Parameters`,
 
-  apply: (arg: CodeFixOptions): ts.ApplicableRefactorInfo[] | void => {
+  apply: (arg: CodeFixOptions) => {
     const functionLikeDeclaration = arg.simpleNode.getAncestors().find(TypeGuards.isFunctionLikeDeclaration)
     if (!functionLikeDeclaration) {
       arg.log('not applied because FunctionLikeDeclaration ancestor not found')

@@ -18,7 +18,7 @@ export interface CodeFix {
   description(arg: CodeFixOptions): string
 
   /** when user accept the suggestion this is called and implementation changes source file(s)*/
-  apply(arg: CodeFixOptions): ts.ApplicableRefactorInfo[] | void
+  apply(arg: CodeFixOptions): ts.RefactorEditInfo | string | void
   
 }
 

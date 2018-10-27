@@ -81,7 +81,7 @@ export const memberChangeScope: CodeFix = {
     return `Make ${what} public`
   },
 
-  apply: (options: CodeFixOptions): ts.ApplicableRefactorInfo[] | void => {
+  apply: (options: CodeFixOptions) => {
     const parent = options.simpleNode.getParent()
     let name
     if (TypeGuards.isPropertyAccessExpression(parent)) {

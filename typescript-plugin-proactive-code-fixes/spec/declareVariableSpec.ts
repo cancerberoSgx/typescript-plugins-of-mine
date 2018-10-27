@@ -1,5 +1,5 @@
-import * as shell from 'shelljs';
 import Project from 'ts-simple-ast';
+import { RefactorEditInfo } from 'typescript';
 import { getDiagnosticsInCurrentLocation } from 'typescript-ast-util';
 import { codeFixCreateVariable } from '../src/code-fix/declareVariable';
 import { codeFixes, CodeFixOptions } from '../src/codeFixes';
@@ -32,16 +32,16 @@ describe('tests', () => {
     if (!fixes || !fixes.length) {
       return fail();
     }
-    fixes[0].apply(arg);
-    simpleProject.saveSync();
-    simpleProject.emit();
-    expect(shell.cat(`${projectPath}/src/index.ts`).toString()).toContain('const i=f()')
+    const result = fixes[0].apply(arg) as RefactorEditInfo
+    expect(result.edits[0].textChanges[0].newText.includes('const '))
+    expect(result.edits[0].textChanges[0].span.start).toBe(61)
   })
 
   it('declare function fix should declare function with correct params types and return type', () => {
     const project = new Project({ useVirtualFileSystem: true })
-    const sourceFile = project.createSourceFile('foo.ts', `const a: number = nonexistent(1.23, /[a-z]+/i, 'hello', [false])`)
-    const cursorPosition = 20
+    const code = `const a: number = nonexistent(1.23, /[a-z]+/i, 'hello', [false])`
+    const sourceFile = project.createSourceFile('foo.ts', code)
+    const cursorPosition = code.indexOf('nonexistent(') + 2
     const diagnostics = getDiagnosticsInCurrentLocation(project.getProgram().compilerObject, sourceFile.compilerNode, cursorPosition);
     expect(diagnostics.find(d => d.code === 2304 && d.messageText.toString().includes('nonexistent'))).toBeDefined()
     const child = sourceFile.getDescendantAtPos(cursorPosition);
@@ -60,15 +60,14 @@ describe('tests', () => {
     if (!fix) {
       return fail('fix predicate not working ' + codeFixCreateVariable.name);
     }
-    fix.apply(arg)
-    const text = project.getSourceFile('foo.ts').getText()
-    // console.log(text);
-    expect(text).toContain('function nonexistent(')
-    expect(text).toContain('): number {')
-    expect(text).toContain('arg0: number')
-    expect(text).toContain('arg1: RegExp')
-    expect(text).toContain('arg2: string')
-    expect(text).toContain('arg3: boolean[]')
+    const result = fix.apply(arg) as RefactorEditInfo
+
+    expect(result.edits[0].textChanges[0].newText.includes('function nonexistent('))
+    expect(result.edits[0].textChanges[0].newText.includes('): number {'))
+    expect(result.edits[0].textChanges[0].newText.includes('arg0: number'))
+    expect(result.edits[0].textChanges[0].newText.includes('arg1: RegExp'))
+    expect(result.edits[0].textChanges[0].newText.includes('arg2: string'))
+    expect(result.edits[0].textChanges[0].newText.includes('arg3: boolean[]'))
   })
 
 })

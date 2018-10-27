@@ -42,7 +42,7 @@ export const addReturnStatement: CodeFix = {
 
   description: (arg: CodeFixOptions): string => `Add return statement`,
 
-  apply: (arg: CodeFixOptions): ts.ApplicableRefactorInfo[] | void => {
+  apply: (arg: CodeFixOptions) => {
     const t0 = now()
     // try to get the type so we can return a nice object instead of just null
     const fn = arg.simpleNode.getAncestors().find(TypeGuards.isSignaturedDeclaration)

@@ -53,7 +53,7 @@ export const splitVariableDeclarationList: CodeFix = {
 
   description: (arg: CodeFixOptions): string => `Split variable declaration list`,
 
-  apply: (arg: CodeFixOptions): ts.ApplicableRefactorInfo[] | void => {
+  apply: (arg: CodeFixOptions) => {
     const varDeclList = arg.simpleNode.getFirstAncestorByKind(ts.SyntaxKind.VariableDeclarationList)
     if (!varDeclList || !TypeGuards.isVariableDeclarationList(varDeclList)) { 
       arg.log('not apply because no splitVariableDeclarationList ancestor was found')

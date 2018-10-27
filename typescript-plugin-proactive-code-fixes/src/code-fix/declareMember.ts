@@ -88,7 +88,7 @@ export const declareMember: CodeFix = {
 
   description: (arg: CodeFixOptions): string => `Declare missing member "${arg.containingTarget.getText()}"`,
 
-  apply: (opts: CodeFixOptions): ts.ApplicableRefactorInfo[] | void => {
+  apply: (opts: CodeFixOptions) => {
     const node = opts.simpleNode
     const print = (msg) => { opts.log('apply ' + msg) }
     const typeChecker = opts.simpleProject.getTypeChecker()

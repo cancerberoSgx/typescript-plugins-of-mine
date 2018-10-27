@@ -59,7 +59,7 @@ export const const2let: CodeFix = {
     return `Change "const ${arg.containingTarget.getText()}" to "let ${arg.containingTarget.getText()}"`
   },
 
-  apply: (arg: CodeFixOptions): ts.ApplicableRefactorInfo[] | void => {
+  apply: (arg: CodeFixOptions) => {
     const id = arg.simpleNode
     if (!id || id.getKind() !== ts.SyntaxKind.Identifier) {
       arg.log(`apply cannot exec because of this !id||id.getKind()!== ts.SyntaxKind.Identifier  `)

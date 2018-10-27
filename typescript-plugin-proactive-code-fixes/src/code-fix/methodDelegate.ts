@@ -74,7 +74,7 @@ export class MethodDelegate implements CodeFix {
     return `Delegate methods to property ${this.propertyDeclaration.name.getText()}`
   }
 
-  apply(arg: CodeFixOptions): ts.ApplicableRefactorInfo[] | void {
+  apply(arg: CodeFixOptions) {
     const propertyDeclaration = (TypeGuards.isPropertyDeclaration(arg.simpleNode) || TypeGuards.isPropertySignature(arg.simpleNode)) ? arg.simpleNode : arg.simpleNode.getAncestors().find(a => TypeGuards.isPropertyDeclaration(a) || TypeGuards.isPropertySignature(a))
     if (!propertyDeclaration) {
       arg.log(`apply aborted because no ancestor PropertyDeclaration can be found from  ${arg.simpleNode.getKindName()}`)

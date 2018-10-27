@@ -41,7 +41,7 @@ export class StringChangeQuoteChar implements CodeFix {
     return `Change string quotes to ${this.newQuotes}`
   }
 
-  apply(arg: CodeFixOptions): ts.ApplicableRefactorInfo[] | void {
+  apply(arg: CodeFixOptions) {
     const node = arg.simpleNode
     if (this.newQuotes && (TypeGuards.isStringLiteral(node) || TypeGuards.isNoSubstitutionTemplateLiteral(node))) {
       changeQuoteChar(node, this.newQuotes)

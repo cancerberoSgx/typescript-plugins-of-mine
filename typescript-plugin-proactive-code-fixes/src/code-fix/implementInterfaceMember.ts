@@ -77,7 +77,7 @@ export const implementInterfaceMember: CodeFix = {
 
   description: (arg: CodeFixOptions): string => `Implement interface`,
 
-  apply: (arg: CodeFixOptions): ts.ApplicableRefactorInfo[] | void => {
+  apply: (arg: CodeFixOptions) => {
     const id = arg.simpleNode
     const member = id.getParent()
     const decl = member.getParent()

@@ -45,7 +45,7 @@ export const nameFunction: CodeFix = {
 
   description: (arg: CodeFixOptions): string => `Name function`,
 
-  apply: (arg: CodeFixOptions): ts.ApplicableRefactorInfo[] | void => {
+  apply: (arg: CodeFixOptions) => {
     const f = TypeGuards.isFunctionDeclaration(arg.simpleNode) ? arg.simpleNode : arg.simpleNode.getFirstAncestorByKind(ts.SyntaxKind.FunctionDeclaration)
     if (!f || f.getName()) {
       arg.log(`apply cannot exec because ${f.getKindName()} is not FunctionDeclaration or has name`)

@@ -43,7 +43,7 @@ export const removeEmptyLines: CodeFix = {
 
   description: (options: CodeFixOptions): string => `Remove selection's empty lines`,
 
-  apply: (options: CodeFixOptions): ts.ApplicableRefactorInfo[] | void => {
+  apply: (options: CodeFixOptions) => {
     if (!options.positionOrRange || (options.positionOrRange as ts.TextRange).pos === undefined) {
       return
     }

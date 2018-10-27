@@ -50,7 +50,7 @@ export const arrowFunctionBodyTransformations: CodeFix = {
 
   description: (options: CodeFixOptions): string => description,
 
-  apply: (options: CodeFixOptions): ts.ApplicableRefactorInfo[] | void => {
+  apply: (options: CodeFixOptions) => {
     const simpleArrow: ArrowFunction | undefined = TypeGuards.isArrowFunction(options.simpleNode) ? options.simpleNode : options.simpleNode.getFirstAncestorByKind(ts.SyntaxKind.ArrowFunction)
     if (!simpleArrow) {
       options.log('apply aborted because no arrowFunction ancestor could be found')

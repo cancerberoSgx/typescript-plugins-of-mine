@@ -94,7 +94,7 @@ export const declareReturnType: CodeFix = {
 
   description: (arg: CodeFixOptions): string => `Declare interface "${arg.containingTargetLight.getText()}"`,
 
-  apply: (arg: CodeFixOptions): ts.ApplicableRefactorInfo[] | void => {
+  apply: (arg: CodeFixOptions) => {
     const decl: tsa.Node & tsa.SignaturedDeclaration = arg.simpleNode.getAncestors().find(TypeGuards.isSignaturedDeclaration)
     const interfaceStructure = fromNow(
       () => inferReturnType(decl, arg),

@@ -54,9 +54,9 @@ export const declareClass: CodeFix = {
 
   description: (arg: CodeFixOptions): string => {
     const h = findAscendant(arg.containingTargetLight, ts.isHeritageClause)
-    let decl = findAscendant(arg.containingTargetLight, n=>ts.isInterfaceDeclaration(n)||ts.isClassDeclaration(n))
-    const what = ts.isInterfaceDeclaration(decl) || h.getText().includes('implements') ? 'interface' :  'class'
-    return `Declare ${what||'type'} "${arg.containingTargetLight.getText()}"`
+    let decl = findAscendant(arg.containingTargetLight, n => ts.isInterfaceDeclaration(n) || ts.isClassDeclaration(n))
+    const what = h && decl && (ts.isInterfaceDeclaration(decl) || h.getText().includes('implements') ? 'interface' : 'class')
+    return `Declare ${what || 'type'} "${arg.containingTargetLight.getText()}"`
   },
 
   apply: (arg: CodeFixOptions) => {
@@ -68,7 +68,7 @@ export const declareClass: CodeFix = {
     if (!simpleClassDec) {
       arg.log('not applying cause cannot find any ancestor of kind ClassDeclaration|InterfaceDeclaration')
     }
-    let h: HeritageClause =  arg.simpleNode.getFirstAncestorByKind(ts.SyntaxKind.HeritageClause)
+    let h: HeritageClause = arg.simpleNode.getFirstAncestorByKind(ts.SyntaxKind.HeritageClause)
 
     if (!TypeGuards.isHeritageClause(h)) {
       return
@@ -80,9 +80,22 @@ ${simpleClassDec.isExported() ? 'export ' : ''}${what} ${arg.simpleNode.getText(
 
 }
 `
-    // TODO:  modify the file using  insertClass or insertInterface using Structures no text
-    arg.simpleNode.getSourceFile().insertText(simpleClassDec.getStart(), code)
-    arg.log('apply took ' + timeFrom(t0))
+    return {
+      edits: [
+        {
+          fileName: arg.sourceFile.fileName,
+          textChanges: [
+            {
+              newText: code,
+              span: {
+                start: 0,
+                length: 0
+              }
+            }
+          ]
+        }
+      ]
+    }
   }
 
 }

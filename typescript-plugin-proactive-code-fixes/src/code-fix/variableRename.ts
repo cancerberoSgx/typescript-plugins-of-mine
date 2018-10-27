@@ -51,7 +51,7 @@ export const renameVariable: CodeFix = {
 
   description: (options: CodeFixOptions): string => `Rename variable "${options.containingTarget.getText()}"`,
 
-  apply: (options: CodeFixOptions): ts.ApplicableRefactorInfo[] | void => {
+  apply: (options: CodeFixOptions) => {
     const id = options.simpleNode
     if (!TypeGuards.isIdentifier(id)) {
       options.log('apply false because  false because Identifier != ' + getKindName(options.containingTarget.kind))

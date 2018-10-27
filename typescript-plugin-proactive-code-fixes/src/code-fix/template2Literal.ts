@@ -62,7 +62,7 @@ export class Template2Literal implements CodeFix {
     return this.action === 'changeToLiteral' ? `Change to string literal` : this.action === 'changeToTemplate' ? `Change string to template` : `Change concatenation to template`
   }
 
-  apply(arg: CodeFixOptions): ts.ApplicableRefactorInfo[] | void {
+  apply(arg: CodeFixOptions) {
     const node = arg.simpleNode
     if (this.action === 'changeToLiteral') {
       const templateExpr = TypeGuards.isNoSubstitutionTemplateLiteral(node) || TypeGuards.isTemplateExpression(node) ? node : node.getFirstAncestorByKind(ts.SyntaxKind.TemplateExpression)

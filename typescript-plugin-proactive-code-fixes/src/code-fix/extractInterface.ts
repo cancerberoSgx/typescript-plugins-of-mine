@@ -95,7 +95,7 @@ export const extractInterface: CodeFix = {
 
   description: (options: CodeFixOptions): string => `Extract interface from outer ${getKindName(target)}`,
 
-  apply: (options: CodeFixOptions): ts.ApplicableRefactorInfo[] | void => {
+  apply: (options: CodeFixOptions) => {
     const source = options.simpleNode.getAncestors().find(a => TypeGuards.isClassDeclaration(a) || TypeGuards.isObjectLiteralExpression(a))
     if (!source) {
       options.log('not applying since cannot node.getAncestors().find(a => TypeGuards.isClassDeclaration(a) || TypeGuards.isObjectLiteralExpression(a))')

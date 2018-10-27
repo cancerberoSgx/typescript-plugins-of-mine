@@ -70,7 +70,7 @@ export const codeFixCreateVariable: CodeFix = {
 
   description: (options: CodeFixOptions) => `Declare "${options.containingTargetLight.getText()}"`,
 
-  apply: (options: CodeFixOptions): ts.ApplicableRefactorInfo[] | void => {
+  apply: (options: CodeFixOptions) => {
     const parent = options.simpleNode.getParent()
     if (TypeGuards.isIdentifier(options.simpleNode) && TypeGuards.isCallExpression(parent) && TypeGuards.isIdentifier(parent.getExpression())) {
 
@@ -89,18 +89,53 @@ function ${functionName}(${functionArguments.join(', ')}): ${returnType} {
         // it's function call and the function is not a member i.e bar()
         const container = parent.getFirstAncestorByKind(ts.SyntaxKind.Block) || parent.getSourceFile()
         const statementAncestor = parent.getAncestors().find(a => a.getParent() === container)
+
         if (statementAncestor && container) {
-          container.insertStatements(statementAncestor.getChildIndex(), functionText)
+          return {
+            edits: [
+              {
+                fileName: options.sourceFile.fileName,
+                textChanges: [
+                  {
+                    newText: functionText,
+                    span: {
+                      start: statementAncestor.getChildIndex(),
+                      length: 0
+                    }
+                  }
+                ]
+              }
+            ]
+          }
         }
+
+        // container.insertStatements(statementAncestor.getChildIndex(), functionText)
       }
+
       else {
-        // it's a function call and the function is a member, i.e : foo.bar()
+        // it's a function call and the function is a member, i.e : foo.bar() - this is tackled by another fix: declareMember
         // TODO
       }
     } // TODO: LOG else
     else {
       // it's a variable declaration
-      options.simpleNode.getSourceFile().insertText(options.simpleNode.getStart(), 'const ')
+      // options.simpleNode.getSourceFile().insertText(options.simpleNode.getStart(), 'const ')
+      return {
+        edits: [
+          {
+            fileName: options.sourceFile.fileName,
+            textChanges: [
+              {
+                newText: 'const ',
+                span: {
+                  start: options.simpleNode.getStart(),
+                  length: 0
+                }
+              }
+            ]
+          }
+        ]
+      }
     }
   }
 }
