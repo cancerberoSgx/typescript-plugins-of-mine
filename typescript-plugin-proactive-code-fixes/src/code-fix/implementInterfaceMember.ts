@@ -11,7 +11,7 @@ import { findInterfacesWithPropertyNamed, fixSignature } from '../util';
 
 # Description: 
 
-When implementation miss ot implement a member or is doing it incorrectly, select member name and accept suggestion "implement interface"
+When implementation miss to implement a member or is doing it incorrectly, select member name and accept suggestion "implement interface"
 
 # Diagnostic error attacked: 
 

@@ -94,5 +94,6 @@ export const arrowFunctionBodyTransformations: CodeFix = {
     }
   }
 }
+
 const DESCRIPTION_REMOVE_BODY = 'Remove body from arrow function'
 const DESCRIPTION_ADD_BODY = 'Add body to arrow function'
