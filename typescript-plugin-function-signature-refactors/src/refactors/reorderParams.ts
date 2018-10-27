@@ -62,7 +62,7 @@ export class ReorderParamsCodeFixImpl extends SignatureAbstractCodeFix {
   /* ${this.helpText} */`
   }
 
-  apply(arg: CodeFixOptions): void | ts.ApplicableRefactorInfo[] {
+  apply(arg: CodeFixOptions){
     if (!this.selectedAction && this.inputConsumer.hasSupport(INPUT_ACTIONS.inputText)) {
       const defaultValue = this.printReorderExample()
       const options = { 

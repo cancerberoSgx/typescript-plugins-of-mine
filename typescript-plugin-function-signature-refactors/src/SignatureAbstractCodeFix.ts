@@ -28,7 +28,7 @@ export abstract class SignatureAbstractCodeFix implements SignatureRefactorsCode
 
   abstract getTextUIToolConfig(): ToolConfig
 
-  abstract apply(arg: CodeFixOptions): void | ts.ApplicableRefactorInfo[]
+  abstract apply(arg: CodeFixOptions)
 
   abstract printRefactorSuggestionMessage(targetInfo: TargetInfo): string
 

@@ -52,7 +52,7 @@ export class removeParamsCodeFixImpl extends SignatureAbstractCodeFix {
   }
 
 
-  apply(arg: CodeFixOptions): void | ts.ApplicableRefactorInfo[] {
+  apply(arg: CodeFixOptions) {
     if (!this.selectedAction && this.inputConsumer.hasSupport(INPUT_ACTIONS.inputText)) {
       this.inputConsumer.inputText({ prompt: 'Enter removeParam definition', placeHolder: '[1]' })
         .then(response => {
