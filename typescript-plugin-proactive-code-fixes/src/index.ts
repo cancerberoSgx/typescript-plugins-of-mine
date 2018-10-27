@@ -45,7 +45,7 @@ function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSetti
     log(`no getEditsForRefactor because no fix was found for actionName == ${actionName}`)
     return refactors
   }
-  const result = applyCodeFix(fix, target, formatOptions, positionOrRange)
+  const result = applyCodeFix(fix, target, formatOptions, positionOrRange, userPreferences)
   log(`getEditsForRefactor total time took ${timeFrom(t0)}`)
 
   if (typeof (result) === 'string') {
@@ -54,7 +54,7 @@ function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSetti
         {
           fileName, textChanges: [
             {
-              newText: result,
+              newText: result ,
               span: {
                 start: 0,
                 length: target.sourceFile.getText().length
@@ -125,13 +125,13 @@ function getCodeFix(fileName: string, positionOrRange: number | ts.TextRange, en
 
 
 let currentFix: CodeFix
-function applyCodeFix(fix: CodeFix, options: CodeFixOptions, formatOptions, positionOrRange: number | ts.TextRange): string {
+function applyCodeFix(fix: CodeFix, options: CodeFixOptions, formatOptions:  ts.FormatCodeSettings, positionOrRange: number | ts.TextRange, userPreferences?: ts_module.UserPreferences): string {
   let simpleProject: Project
   let sourceFile: SourceFile
   const fileName = options.sourceFile.fileName
   if (fix && fix.needSimpleAst !== false) {
     const createSimpleASTProjectT0 = now()
-    simpleProject = getSimpleProject(info.project)
+    simpleProject = getSimpleProject(info.project, formatOptions, userPreferences)
     log(`applyCodeFix createSimpleASTProject took ${timeFrom(createSimpleASTProjectT0)}`)
     const simpleNodeT0 = now()
     sourceFile = simpleProject.getSourceFile(options.sourceFile.fileName)

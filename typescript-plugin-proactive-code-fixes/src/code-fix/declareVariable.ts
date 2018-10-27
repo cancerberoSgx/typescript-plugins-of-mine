@@ -50,17 +50,12 @@ const result = nonDeclared(1,2,{a: 'g})
 export const codeFixCreateVariable: CodeFix = {
 
   name: 'Declare variable or function',
-
+ 
   config: { variableType: 'const' },
 
   predicate: (options: CodeFixOptions): boolean => {
     if (
       ts.isIdentifier(options.containingTarget)
-      // (
-      //   acceptedParentKinds.includes(options.containingTarget.kind) ||
-      //   options.containingTarget.parent && acceptedParentKinds.includes(options.containingTarget.parent.kind) ||
-      //   options.containingTarget.parent && options.containingTarget.parent.parent && acceptedParentKinds.includes(options.containingTarget.parent.parent.kind)
-      // ) 
       &&
       options.diagnostics.find(d => (d.code === 2304 || d.code === 2552) && d.start === options.containingTargetLight.getStart())) {
       return true

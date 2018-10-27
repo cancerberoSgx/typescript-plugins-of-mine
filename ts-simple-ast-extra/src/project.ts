@@ -1,6 +1,7 @@
 import { basename } from 'path'
-import Project, { Node } from 'ts-simple-ast'
+import Project, { Node, Options, IndentationText, QuoteKind, ManipulationSettings, NewLineKind } from 'ts-simple-ast'
 import * as ts_module from 'typescript/lib/tsserverlibrary'
+import { writeFileSync } from 'fs';
 
 /** gets the config file of given ts project or undefined if given is not a ConfiguredProject or tsconfig
  * cannot be found */
@@ -20,21 +21,47 @@ export function getConfigFilePath(project: ts_module.server.Project): string | u
  * configured project (created with a tsconfig file. It will recreates the project from scratch so it can take
  * some time. Use it with discretion
  */
-export function createSimpleASTProject(nativeProjectOrPath: ts_module.server.Project | string): Project {
+export function createSimpleASTProject(nativeProjectOrPath: ts_module.server.Project | string, formatOptions?: ts.FormatCodeSettings, userPreferences?: ts_module.UserPreferences): Project {
   const tsConfigFilePath = typeof nativeProjectOrPath === 'string' ? nativeProjectOrPath : getConfigFilePath(nativeProjectOrPath)
-  const project = new Project({
-    tsConfigFilePath
-  })
+  const projectConfig: Options = {
+    tsConfigFilePath,
+    manipulationSettings: buildManipulationSettings(formatOptions, userPreferences)
+  }
+  const project = new Project(projectConfig)
   return project
+}
+
+
+export function buildManipulationSettings(formatOptions?: ts.FormatCodeSettings, userPreferences?: ts_module.UserPreferences): ManipulationSettings {
+  let indentationText: IndentationText = IndentationText.TwoSpaces
+  if (formatOptions) {
+    if (!formatOptions.convertTabsToSpaces) {
+      indentationText = IndentationText.Tab
+    }
+    else if (formatOptions.tabSize === 4) {
+      indentationText = IndentationText.FourSpaces
+    }
+    else if (formatOptions.tabSize === 8) {
+      indentationText = IndentationText.EightSpaces
+    }
+  }
+  const obj: ManipulationSettings = {
+    indentationText,
+    newLineKind: !formatOptions ? NewLineKind.LineFeed : formatOptions.newLineCharacter === '\n' ? NewLineKind.LineFeed : NewLineKind.CarriageReturnLineFeed,
+    quoteKind: (userPreferences && userPreferences.quotePreference === 'double') ? QuoteKind.Double : QuoteKind.Single,
+    insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces: formatOptions && formatOptions.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces
+  }
+  return obj
 }
 
 
 // TODO: encapsulate simple project creation here so we can start testing caching the project and refreshing
 // it instead of fully create it
-export function getSimpleProject(project: ts_module.server.Project) : Project {
+export function getSimpleProject(project: ts_module.server.Project, formatOptions?: ts.FormatCodeSettings, userPreferences?: ts_module.UserPreferences): Project {
+
   // TODO: try to cache and do unit test simulating TLS if(!simpleProject){
-    let tsConfigPath: string = getConfigFilePath(project)
-    let simpleProject: Project = createSimpleASTProject(tsConfigPath)
+  let tsConfigPath: string = getConfigFilePath(project)
+  let simpleProject: Project = createSimpleASTProject(tsConfigPath, formatOptions, userPreferences)
   // }
   return simpleProject
 }
