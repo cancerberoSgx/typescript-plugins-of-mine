@@ -1,5 +1,5 @@
-import { ClassDeclaration, ExpressionWithTypeArguments, FunctionLikeDeclaration, InterfaceDeclaration, MethodSignature, Node, ParameterDeclaration, ParameterDeclarationStructure, SyntaxKind, Type, TypeGuards, StringLiteral, NoSubstitutionTemplateLiteral } from "ts-simple-ast";
-
+import { ClassDeclaration, ExpressionWithTypeArguments, FunctionLikeDeclaration, InterfaceDeclaration, MethodSignature, Node, ParameterDeclaration, ParameterDeclarationStructure, SyntaxKind, Type, TypeGuards, StringLiteral, NoSubstitutionTemplateLiteral, SourceFile } from "ts-simple-ast";
+import * as ts from 'typescript'
 
 export const buildParameterStructure = (p: ParameterDeclaration): ParameterDeclarationStructure => ({
   name: p.getNameOrThrow(),
@@ -125,4 +125,23 @@ export function quote(s, q) {
 export function changeQuoteChar(node: StringLiteral | NoSubstitutionTemplateLiteral, newQuoteChar: string) {
   const newText = quote(node.getLiteralText(), newQuoteChar)
   node.replaceWithText(newText)
+}
+
+export function buildRefactorEditInfo(sourceFile: ts.SourceFile, newText: string, start: number=0): ts.RefactorEditInfo{
+  return {
+    edits: [
+      {
+        fileName: sourceFile.fileName,
+        textChanges: [
+          {
+            newText,
+            span: {
+              start,
+              length: 0
+            }
+          }
+        ]
+      }
+    ]
+  }
 }

@@ -123,3 +123,30 @@ export function basicTest(position: number, config: DefaultBeforeEachResult, fix
     console.log(text)
   }
 }
+
+
+
+export function testCodeFixRefactorEditInfo(code: string, cursorPosition: number, codeFixName: string): ts.RefactorEditInfo{
+  const project = new Project({ useVirtualFileSystem: true })
+  const sourceFile = project.createSourceFile('foo.ts', code)
+  const diagnostics = getDiagnosticsInCurrentLocation(project.getProgram().compilerObject, sourceFile.compilerNode, cursorPosition);
+  // expect(diagnostics.find(d => d.code === 2304 && d.messageText.toString().includes('nonexistent'))).toBeDefined()
+  const child = sourceFile.getDescendantAtPos(cursorPosition);
+  const arg: CodeFixOptions = {
+    diagnostics,
+    containingTarget: child.compilerNode,
+    containingTargetLight: child.compilerNode,
+    log: defaultLog,
+    simpleNode: child,
+    simpleProject: project,
+    program: project.getProgram().compilerObject,
+    sourceFile: sourceFile.compilerNode
+  }
+  const fixes = codeFixes.filter(fix => fix.predicate(arg))
+  const fix = fixes.find(f => f.name === codeFixName)
+  if (!fix) {
+    fail('fix predicate not working ' + codeFixName);
+  }
+  const result = fix.apply(arg) as ts.RefactorEditInfo
+  return result
+}

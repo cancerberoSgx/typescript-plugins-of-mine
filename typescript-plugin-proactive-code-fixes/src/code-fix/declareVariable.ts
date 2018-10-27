@@ -1,7 +1,8 @@
-import { TypeGuards } from 'ts-simple-ast';
+import { TypeGuards, Identifier } from 'ts-simple-ast';
 import * as ts from 'typescript';
 import { getKindName, getTypeStringFor } from 'typescript-ast-util';
 import { CodeFix, CodeFixOptions } from '../codeFixes';
+import { buildRefactorEditInfo } from '../util';
 
 /**
 
@@ -54,11 +55,13 @@ export const codeFixCreateVariable: CodeFix = {
 
   predicate: (options: CodeFixOptions): boolean => {
     if (
-      (
-        acceptedParentKinds.includes(options.containingTarget.kind) ||
-        options.containingTarget.parent && acceptedParentKinds.includes(options.containingTarget.parent.kind) ||
-        options.containingTarget.parent && options.containingTarget.parent.parent && acceptedParentKinds.includes(options.containingTarget.parent.parent.kind)
-      ) &&
+      ts.isIdentifier(options.containingTarget)
+      // (
+      //   acceptedParentKinds.includes(options.containingTarget.kind) ||
+      //   options.containingTarget.parent && acceptedParentKinds.includes(options.containingTarget.parent.kind) ||
+      //   options.containingTarget.parent && options.containingTarget.parent.parent && acceptedParentKinds.includes(options.containingTarget.parent.parent.kind)
+      // ) 
+      &&
       options.diagnostics.find(d => d.code === 2304 && d.start === options.containingTargetLight.getStart())) {
       return true
     }
@@ -72,69 +75,42 @@ export const codeFixCreateVariable: CodeFix = {
 
   apply: (options: CodeFixOptions) => {
     const parent = options.simpleNode.getParent()
-    if (TypeGuards.isIdentifier(options.simpleNode) && TypeGuards.isCallExpression(parent) && TypeGuards.isIdentifier(parent.getExpression())) {
+
+    const container = parent.getFirstAncestorByKind(ts.SyntaxKind.Block) || options.simpleNode.getSourceFile()
+    const statementAncestor = parent.getAncestors().find(a => a.getParent() === container)|| options.simpleNode.getSourceFile()
+
+    if (TypeGuards.isIdentifier(options.simpleNode) && TypeGuards.isCallExpression(parent) && TypeGuards.isIdentifier(parent.getExpression()) && parent.getExpression().getText()===options.simpleNode.getText()) {
 
       const functionName = options.simpleNode.getText()
       const functionArguments = parent.getArguments().map((a, index) => {
         const type = options.simpleProject.getTypeChecker().getTypeAtLocation(a).getBaseTypeOfLiteralType().getText()
         return `arg${index}: ${type}`
       })
-      const returnType = options.simpleProject.getTypeChecker().getContextualType(options.simpleNode.getFirstAncestorByKindOrThrow(ts.SyntaxKind.CallExpression)).getText()
+      const t = options.simpleProject.getTypeChecker().getContextualType(options.simpleNode.getFirstAncestorByKindOrThrow(ts.SyntaxKind.CallExpression))
+      const returnType = t ? t.getText() : 'any'
       const functionText = `
 function ${functionName}(${functionArguments.join(', ')}): ${returnType} {
   throw new Error('Not Implemented');
 }
 `
+
       if (!TypeGuards.isPropertyAccessExpression(parent.getChildAtIndex(0))) {
         // it's function call and the function is not a member i.e bar()
-        const container = parent.getFirstAncestorByKind(ts.SyntaxKind.Block) || parent.getSourceFile()
-        const statementAncestor = parent.getAncestors().find(a => a.getParent() === container)
-
-        if (statementAncestor && container) {
-          return {
-            edits: [
-              {
-                fileName: options.sourceFile.fileName,
-                textChanges: [
-                  {
-                    newText: functionText,
-                    span: {
-                      start: statementAncestor.getChildIndex(),
-                      length: 0
-                    }
-                  }
-                ]
-              }
-            ]
-          }
-        }
-
-        // container.insertStatements(statementAncestor.getChildIndex(), functionText)
+          return buildRefactorEditInfo(options.sourceFile, functionText, statementAncestor.getStart())
       }
-
       else {
         // it's a function call and the function is a member, i.e : foo.bar() - this is tackled by another fix: declareMember
-        // TODO
       }
     } // TODO: LOG else
     else {
-      // it's a variable declaration
-      // options.simpleNode.getSourceFile().insertText(options.simpleNode.getStart(), 'const ')
-      return {
-        edits: [
-          {
-            fileName: options.sourceFile.fileName,
-            textChanges: [
-              {
-                newText: 'const ',
-                span: {
-                  start: options.simpleNode.getStart(),
-                  length: 0
-                }
-              }
-            ]
-          }
-        ]
+      // its non function variable
+      if(TypeGuards.isBinaryExpression(options.simpleNode.getParentOrThrow()) && TypeGuards.isStatement(options.simpleNode.getParentOrThrow().getParentOrThrow())){
+        // is an expression like a=1 we only append 'let '
+        return buildRefactorEditInfo(options.sourceFile, `let `, statementAncestor.getStart())
+      }
+      else {
+        // otherwhise we create a new statement 'let a' at the top
+        return buildRefactorEditInfo(options.sourceFile, `let ${(options.simpleNode as Identifier).getText()};\n`, statementAncestor.getStart())
       }
     }
   }

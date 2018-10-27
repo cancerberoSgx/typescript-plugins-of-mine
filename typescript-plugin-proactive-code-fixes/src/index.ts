@@ -151,28 +151,17 @@ function applyCodeFix(fix: CodeFix, options: CodeFixOptions, formatOptions, posi
   // we are ready, with or without ast-simple to perform the change
   const fixapplyT0 = now()
   currentFix = fix
-  // try {
-  const result = fix.apply(options) as any
+  let result
+  try {
+    result = fix.apply(options) as any
+  } catch (error) {
+    log(`applyCodeFix fix.apply() Exception ${error} \n ${error.stack}`)
+  }
+  log(`applyCodeFix fix.apply() took ${timeFrom(fixapplyT0)}`)
   if (!result) {
     return sourceFile.getText()
   }
   return result
-  // } catch (error) {
-  //   log(`applyCodeFix fix.apply() Exception ${error} \n ${error.stack}`)
-  // }
-  // log(`applyCodeFix fix.apply() took ${timeFrom(fixapplyT0)}`)
-  // if (fix.needSimpleAst !== false) {
-  // const saveSyncT0 = now()
-  // sourceFile.formatText(formatOptions)
-  // info.languageServiceHost.writeFile(sourceFile.getFilePath(), sourceFile.getText())
-  // info.project.registerFileUpdate(sourceFile.getFilePath())
-  // info.project.markAsDirty()
-  // log(`applyCodeFix saveSync took ${timeFrom(saveSyncT0)}`)
-  // return sourceFile.getText()
-  // }
-  // else {
-  // do nothing - when needSimpleAst===false code fix implementation is responsible of save/emit/update the files / project 
-  // }
 }
 
 
