@@ -62,7 +62,7 @@ export const codeFixCreateVariable: CodeFix = {
       //   options.containingTarget.parent && options.containingTarget.parent.parent && acceptedParentKinds.includes(options.containingTarget.parent.parent.kind)
       // ) 
       &&
-      options.diagnostics.find(d => d.code === 2304 && d.start === options.containingTargetLight.getStart())) {
+      options.diagnostics.find(d => (d.code === 2304 || d.code === 2552) && d.start === options.containingTargetLight.getStart())) {
       return true
     }
     else {
@@ -101,12 +101,12 @@ function ${functionName}(${functionArguments.join(', ')}): ${returnType} {
       else {
         // it's a function call and the function is a member, i.e : foo.bar() - this is tackled by another fix: declareMember
       }
-    } // TODO: LOG else
+    } 
     else {
       // its non function variable
       if(TypeGuards.isBinaryExpression(options.simpleNode.getParentOrThrow()) && TypeGuards.isStatement(options.simpleNode.getParentOrThrow().getParentOrThrow())){
-        // is an expression like a=1 we only append 'let '
-        return buildRefactorEditInfo(options.sourceFile, `let `, statementAncestor.getStart())
+        // is an expression like a=1 we only preppend 'let '
+        return buildRefactorEditInfo(options.sourceFile, `let `, options.simpleNode.getStart())
       }
       else {
         // otherwhise we create a new statement 'let a' at the top

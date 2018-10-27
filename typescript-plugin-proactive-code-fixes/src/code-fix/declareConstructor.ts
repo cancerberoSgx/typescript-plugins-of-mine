@@ -45,7 +45,7 @@ export const codeFixCreateConstructor: CodeFix = {
     if (newExpr && arg.diagnostics.find(d => d.code === 2554 && d.start <= arg.containingTargetLight.getStart() && d.start + d.length >= arg.containingTargetLight.getEnd())) {
       return true
     } else {
-      arg.log(`predicate false because no NewExpression ascendant was found containingTarget.kind==${getKindName(arg.containingTarget.kind)}, containingTarget.parent.kind==${getKindName(arg.containingTarget.parent.kind)}`)
+      arg.log(`predicate false because no NewExpression ascendant was   und containingTarget.kind==${getKindName(arg.containingTarget.kind)}, containingTarget.parent.kind==${getKindName(arg.containingTarget.parent.kind)}`)
       return false
     }
   },
@@ -81,7 +81,6 @@ export const codeFixCreateConstructor: CodeFix = {
             hasQuestionToken: false,
             type,
             isRestParameter: false,
-            // scope: Scope.Public  TODO: configurable
           })),
           bodyText: `throw new Error('Not implemented');`
         }),

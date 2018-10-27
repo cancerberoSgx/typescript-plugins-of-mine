@@ -1,7 +1,7 @@
-import { now, timeFrom } from 'hrtime-now';
+import { now } from 'hrtime-now';
 import { ClassDeclaration, HeritageClause, InterfaceDeclaration, TypeGuards } from 'ts-simple-ast';
 import * as ts from 'typescript';
-import { getKindName, findAscendant, findChild } from 'typescript-ast-util';
+import { findAscendant, getKindName } from 'typescript-ast-util';
 import { CodeFix, CodeFixOptions } from '../codeFixes';
 
 
@@ -42,7 +42,11 @@ export const declareClass: CodeFix = {
 
   predicate: (arg: CodeFixOptions): boolean => {
     if (arg.containingTargetLight.kind === ts.SyntaxKind.Identifier &&
-      arg.diagnostics.find(d => d.code === 2304 && d.start === arg.containingTargetLight.getStart())
+      (
+        arg.diagnostics.find(d => d.code === 2304 && d.start === arg.containingTargetLight.getStart()) ||
+        (arg.containingTargetLight.parent.kind === ts.SyntaxKind.NewExpression && arg.diagnostics.find(d => d.code === 2552 && d.start === arg.containingTargetLight.getStart()))
+      )
+
     ) {
       return true
     }
@@ -55,7 +59,7 @@ export const declareClass: CodeFix = {
   description: (arg: CodeFixOptions): string => {
     const h = findAscendant(arg.containingTargetLight, ts.isHeritageClause)
     let decl = findAscendant(arg.containingTargetLight, n => ts.isInterfaceDeclaration(n) || ts.isClassDeclaration(n))
-    const what = h && decl && (ts.isInterfaceDeclaration(decl) || h.getText().includes('implements') ? 'interface' : 'class')
+    const what = h && decl && (ts.isInterfaceDeclaration(decl) || h.getText().includes('implements') ? 'interface' : 'class') || (arg.containingTargetLight.parent.kind === ts.SyntaxKind.NewExpression ? 'class' : undefined)
     return `Declare ${what || 'type'} "${arg.containingTargetLight.getText()}"`
   },
 
@@ -65,21 +69,36 @@ export const declareClass: CodeFix = {
     if (!simpleClassDec) {
       simpleClassDec = arg.simpleNode.getFirstAncestorByKind(ts.SyntaxKind.InterfaceDeclaration)
     }
-    if (!simpleClassDec) {
-      arg.log('not applying cause cannot find any ancestor of kind ClassDeclaration|InterfaceDeclaration')
-    }
-    let h: HeritageClause = arg.simpleNode.getFirstAncestorByKind(ts.SyntaxKind.HeritageClause)
+    let what: string
+    let code: string
+    if (simpleClassDec) {
+      let h: HeritageClause = arg.simpleNode.getFirstAncestorByKind(ts.SyntaxKind.HeritageClause)
+      if (!TypeGuards.isHeritageClause(h)) {
+        return
+      }
+      what = simpleClassDec.getKind() === ts.SyntaxKind.InterfaceDeclaration ? 'interface' : h.getToken() === ts.SyntaxKind.ImplementsKeyword ? 'interface' : 'class'
 
-    if (!TypeGuards.isHeritageClause(h)) {
-      return
-    }
-    const what = simpleClassDec.getKind() === ts.SyntaxKind.InterfaceDeclaration ? 'interface' : h.getToken() === ts.SyntaxKind.ImplementsKeyword ? 'interface' : 'class'
-    const code =
-      `
+      code =
+        `
 ${simpleClassDec.isExported() ? 'export ' : ''}${what} ${arg.simpleNode.getText()} {
 
 }
 `
+    }
+    else if (TypeGuards.isNewExpression(arg.simpleNode.getParent())) {
+      what = 'class'
+
+      code =
+        `${what} ${arg.simpleNode.getText()} {
+
+}
+`
+    }
+
+    else {
+      arg.log('not applying cause cannot find any ancestor of kind ClassDeclaration|InterfaceDeclaration nor its parent is a newexpression')
+    }
+
     return {
       edits: [
         {
