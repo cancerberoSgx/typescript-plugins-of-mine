@@ -41,12 +41,14 @@ export const declareClass: CodeFix = {
   },
 
   predicate: (arg: CodeFixOptions): boolean => {
-    if (arg.containingTargetLight.kind === ts.SyntaxKind.Identifier &&
+    if (
+      ts.isIdentifier(arg.containingTargetLight) &&
+      !ts.isTypeReferenceNode(arg.containingTargetLight.parent) &&
       (
         arg.diagnostics.find(d => d.code === 2304 && d.start === arg.containingTargetLight.getStart()) ||
-        (arg.containingTargetLight.parent.kind === ts.SyntaxKind.NewExpression && arg.diagnostics.find(d => d.code === 2552 && d.start === arg.containingTargetLight.getStart()))
+        (arg.containingTargetLight.parent.kind === ts.SyntaxKind.NewExpression &&
+          arg.diagnostics.find(d => d.code === 2552 && d.start === arg.containingTargetLight.getStart()))
       )
-
     ) {
       return true
     }
@@ -87,7 +89,6 @@ ${simpleClassDec.isExported() ? 'export ' : ''}${what} ${arg.simpleNode.getText(
     }
     else if (TypeGuards.isNewExpression(arg.simpleNode.getParent())) {
       what = 'class'
-
       code =
         `${what} ${arg.simpleNode.getText()} {
 

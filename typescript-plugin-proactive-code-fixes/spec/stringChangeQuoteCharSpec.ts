@@ -1,21 +1,17 @@
 const code = `
-const variableString1 = 'hello world'
-const variableString2 = "hello world"
+const variableString1 = 'hello world1'
+const variableString2 = "hello world2"
 `
-import { basicTest, defaultAfterEach, defaultBeforeEach, DefaultBeforeEachResult } from './testUtil'
+import { stringChangeQuoteChar } from '../src/code-fix/stringChangeQuoteChar';
+import { testCodeFixRefactorEditInfo } from './testUtil';
 describe('stringChangeQuoteChar', () => {
-  let config: DefaultBeforeEachResult
-  beforeEach(() => {
-    config = defaultBeforeEach({ createNewFile: code })
-  })
   it('simple2double', async () => {
-    basicTest(30, config, 'stringChangeQuoteChar', [`variableString1 = "hello world"`])
+    const result = testCodeFixRefactorEditInfo(code, code.indexOf(`'hello world1'`)+1, stringChangeQuoteChar.name)
+    expect(result.edits[0].textChanges[0].newText).toBe('"hello world1"')
   })
   it('double2simple', async () => {
-    basicTest(70, config, 'stringChangeQuoteChar', [`variableString2 = 'hello world'`])
-  })
-  afterEach(() => {
-    defaultAfterEach(config)
+    const result = testCodeFixRefactorEditInfo(code, code.indexOf(`"hello world2"`)+1, stringChangeQuoteChar.name)
+    expect(result.edits[0].textChanges[0].newText).toBe(`'hello world2'`)
   })
 })
 

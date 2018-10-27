@@ -11,7 +11,7 @@ export const buildParameterStructure = (p: ParameterDeclaration): ParameterDecla
 
 
 /** fix given function-like declaration parameters and type to implement given signature */
-export function fixSignature(decl: FunctionLikeDeclaration, signature: MethodSignature|MethodDeclaration): void {
+export function fixSignature(decl: FunctionLikeDeclaration, signature: MethodSignature | MethodDeclaration): void {
   decl.setReturnType(signature.getReturnType().getText())
   // add missing params and fix exiting param types
   let memberParams = decl.getParameters()
@@ -127,7 +127,7 @@ export function changeQuoteChar(node: StringLiteral | NoSubstitutionTemplateLite
   node.replaceWithText(newText)
 }
 
-export function buildRefactorEditInfo(sourceFile: ts.SourceFile, newText: string, start: number=0): ts.RefactorEditInfo{
+export function buildRefactorEditInfo(sourceFile: ts.SourceFile, newText: string, start: number = 0, length: number = 0): ts.RefactorEditInfo {
   return {
     edits: [
       {
@@ -135,10 +135,7 @@ export function buildRefactorEditInfo(sourceFile: ts.SourceFile, newText: string
         textChanges: [
           {
             newText,
-            span: {
-              start,
-              length: 0
-            }
+            span: { start, length }
           }
         ]
       }

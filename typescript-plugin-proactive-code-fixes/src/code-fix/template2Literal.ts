@@ -2,7 +2,7 @@ import { BinaryExpression, Expression, NoSubstitutionTemplateLiteral, TemplateEx
 import * as ts from 'typescript';
 import { findAscendant } from "typescript-ast-util";
 import { CodeFix, CodeFixOptions } from "../codeFixes";
-import { changeQuoteChar, quote } from "../util";
+import { changeQuoteChar, quote, buildRefactorEditInfo } from "../util";
 
 /**
 
@@ -68,6 +68,13 @@ export class Template2Literal implements CodeFix {
       const templateExpr = TypeGuards.isNoSubstitutionTemplateLiteral(node) || TypeGuards.isTemplateExpression(node) ? node : node.getFirstAncestorByKind(ts.SyntaxKind.TemplateExpression)
 
       if (templateExpr && TypeGuards.isTemplateExpression(templateExpr)) {
+        //TODO: cannot use buildRefactorEditInfo because of buildRefactorEditInfo:
+        // const start = templateExpr.getStart()
+        // const length = templateExpr.getWidth()
+        // this.templateExprToStringConcat(templateExpr, '"', arg.log)
+        // return buildRefactorEditInfo(arg.sourceFile, templateExpr.getText(), start, length)
+        // return templateExpr.getText()
+        
         this.templateExprToStringConcat(templateExpr, '"', arg.log)
       }
       else {
@@ -91,6 +98,10 @@ export class Template2Literal implements CodeFix {
         arg.log('changeConcatenationToTemplate aborted - no outerStringConcatExpression found')
         return
       }
+
+      // const start = innerStringConcatExpr.getStart()
+      // const length = innerStringConcatExpr.getWidth()
+      // return buildRefactorEditInfo(arg.sourceFile, innerStringConcatExpr.getText(), start, length)
       this.stringConcatExpr2TemplateRecursively(innerStringConcatExpr, tc)
     }
     else {

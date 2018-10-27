@@ -55,7 +55,8 @@ export const codeFixCreateVariable: CodeFix = {
 
   predicate: (options: CodeFixOptions): boolean => {
     if (
-      ts.isIdentifier(options.containingTarget)
+      ts.isIdentifier(options.containingTarget) && 
+      !ts.isTypeReferenceNode(options.containingTarget.parent)
       &&
       options.diagnostics.find(d => (d.code === 2304 || d.code === 2552) && d.start === options.containingTargetLight.getStart())) {
       return true

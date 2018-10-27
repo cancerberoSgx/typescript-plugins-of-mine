@@ -5,6 +5,7 @@ import { InterfaceDeclarationStructure, TypeGuards } from 'ts-simple-ast';
 import * as ts from 'typescript';
 import { getKindName } from 'typescript-ast-util';
 import { CodeFix, CodeFixOptions } from '../codeFixes';
+import { buildRefactorEditInfo } from '../util';
 /** 
 
 # Description
@@ -100,12 +101,14 @@ export const declareReturnType: CodeFix = {
       () => inferReturnType(decl, arg),
       t => arg.log('apply inferReturnType took ' + t)
     )
+
+    const tmpFile = arg.simpleProject.createSourceFile('tmp.ts')
+    tmpFile.insertInterface(0, interfaceStructure)
+    const code = tmpFile.getText()
+
     const siblingAncestor = arg.simpleNode.getAncestors().find(a => TypeGuards.isSourceFile(a.getParent()))
-    if (siblingAncestor) {
-      arg.simpleNode.getSourceFile().insertInterface(siblingAncestor.getChildIndex(), interfaceStructure)
-    } else {
-      arg.simpleNode.getSourceFile().addInterface(interfaceStructure)
-    }
+
+    return buildRefactorEditInfo(arg.sourceFile, code, siblingAncestor ? siblingAncestor.getStart() : 0)
   }
 }
 

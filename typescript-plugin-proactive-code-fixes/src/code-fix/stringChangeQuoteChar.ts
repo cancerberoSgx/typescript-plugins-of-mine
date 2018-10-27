@@ -1,7 +1,7 @@
 import { NoSubstitutionTemplateLiteral, StringLiteral, TypeGuards } from "ts-simple-ast";
 import * as ts from 'typescript';
 import { CodeFix, CodeFixOptions } from "../codeFixes";
-import { quote, changeQuoteChar } from "../util";
+import { quote, changeQuoteChar, buildRefactorEditInfo } from "../util";
 
 /**
 
@@ -44,8 +44,12 @@ export class StringChangeQuoteChar implements CodeFix {
   apply(arg: CodeFixOptions) {
     const node = arg.simpleNode
     if (this.newQuotes && (TypeGuards.isStringLiteral(node) || TypeGuards.isNoSubstitutionTemplateLiteral(node))) {
-      changeQuoteChar(node, this.newQuotes)
-      return
+      // changeQuoteChar(node, this.newQuotes)
+      const code = quote(node.getLiteralText(), this.newQuotes)
+
+      return buildRefactorEditInfo(arg.sourceFile, code, node.getStart(), node.getWidth())
+
+      // return
     }
   }
 }
