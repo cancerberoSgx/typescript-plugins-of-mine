@@ -7,8 +7,9 @@ import { createSimpleASTProject } from 'ts-simple-ast-extra';
 
 import { Action, create } from 'typescript-plugins-text-based-user-interaction';
 import * as ts_module from 'typescript/lib/tsserverlibrary';
-import { moveDeclarationNamed } from './moveDeclaration';
+// import { moveDeclarationNamed } from './moveDeclaration';
 import { getInputConsumer, setLogger, InputConsumer } from 'input-ui-ipc-provider';
+import { moveNode } from './moveDeclarationTest';
 
 const PLUGIN_NAME = 'typescript-plugin-move-declaration'
 const REFACTOR_ACTION_NAME = `${PLUGIN_NAME}-refactor-action`
@@ -74,11 +75,15 @@ function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSetti
       const sourceFile = simpleProject.getSourceFileOrThrow(fileName)
       let dest: string = isAbsolute(dest2) ? dest2 :
         join(dirname(fileName), dest2)
-      const targetFile = simpleProject.getSourceFile(dest)
+      const targetFile = simpleProject.getSourceFile(dest) || simpleProject.createSourceFile(dest, '')
       info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor moveDeclarationNamed ${selectedAction.args.declarationName}, ${sourceFile.getFilePath()}, ${targetFile.getFilePath()}`)
-      moveDeclarationNamed(selectedAction.args.declarationName, sourceFile, simpleProject, targetFile)
-      info.languageService.getEmitOutput(sourceFile.getFilePath())
-      info.languageService.getEmitOutput(targetFile.getFilePath())
+
+      const declarationToMove = sourceFile.getClass(selectedAction.args.declarationName)
+      moveNode(declarationToMove, targetFile)
+
+      // moveDeclarationNamed(selectedAction.args.declarationName, sourceFile, simpleProject, targetFile)
+      // info.languageService.getEmitOutput(sourceFile.getFilePath())
+      // info.languageService.getEmitOutput(targetFile.getFilePath())
       simpleProject.saveSync()
 
 

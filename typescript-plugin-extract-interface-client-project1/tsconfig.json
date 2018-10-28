@@ -30,9 +30,9 @@
       {
         "name": "typescript-plugin-proactive-code-fixes"
       },
-      // {
-      //   "name": "typescript-plugin-move-declaration"
-      // },
+      {
+        "name": "typescript-plugin-move-declaration"
+      },
       // {
       //   "name": "typescript-plugin-method-delegate"
       // },

@@ -9,16 +9,13 @@ interface FNResult<T> {
   b: string[];
 }
 
+
 function fn<T>(): FNResult<T> {
 return {a: 1, b: ''.split('')}
 }
 
-class CCC {
+// &%&% moveDeclarationNamed('CCC', '../other/file.ts')
 
-  f: 6
-
-
-}
 new CCC().fooo([1])
 
 const fffo = {bar: 1}
@@ -32,8 +29,9 @@ const variableString2 = "hello world2"
 
 const ii: Number = 0, c: String = 's', arr: boolean[] = []
 
-import {obj1} from './constToVar'; 
+import { obj1 } from './constToVar';
 obj1.foo(1)
 const obj2 = {}
 obj2.bar
+
 

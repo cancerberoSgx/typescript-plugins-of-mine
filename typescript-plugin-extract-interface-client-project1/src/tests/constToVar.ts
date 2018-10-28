@@ -8,7 +8,7 @@ foo3asas2(1,2,3)
 
 let uiu=new UY()
 
-let uuu: SSSSS = {}
+let uuu: SSSSS = {} 
 function AAS(){
   new IIJIIJ()
 }
