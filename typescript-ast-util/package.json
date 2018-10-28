@@ -1,6 +1,6 @@
 {
   "name": "typescript-ast-util",
-  "version": "1.1.3",
+  "version": "1.1.4",
   "description": "general utilities for traversing, selecting, manipulating TypeScript ast",
   "main": "dist/src/index.js",
   "typings": "dist/src/index.d.ts",

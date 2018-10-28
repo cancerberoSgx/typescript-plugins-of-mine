@@ -1,7 +1,7 @@
 {
   "name": "input-ui-ipc-provider-test-vscode-extension",
   "description": "vscode support for generic GUI data inquire through https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/input-ui-ipc-provider",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "scripts": {
     "postinstall": "node ./node_modules/vscode/bin/install",
     "vscode:prepublish": "npm run build",
@@ -11,9 +11,9 @@
     "test-vscode": "npm run build && node ./node_modules/vscode/bin/test"
   },
   "dependencies": {
-    "input-ui-ipc-provider-vscode": "file:../input-ui-ipc-provider-vscode",
-    "input-ui-ipc-provider-test-typescript-plugin": "file:../input-ui-ipc-provider-test-typescript-plugin",
-    "typescript-plugin-move-declaration": "file:../typescript-plugin-move-declaration"
+    "input-ui-ipc-provider-vscode": "0.0.5",
+    "input-ui-ipc-provider-test-typescript-plugin": "0.0.5",
+    "typescript-plugin-move-declaration": "0.0.9"
   },
   "devDependencies": {
     "@types/mocha": "^5.2.5",
