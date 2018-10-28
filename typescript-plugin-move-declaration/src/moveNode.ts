@@ -2,9 +2,7 @@ import { Node, SourceFile, ReferenceEntry, Project, ClassDeclaration, TypeGuards
 
 // Statement&ReferenceFindableNode
 export function moveNode(node: ClassDeclaration|InterfaceDeclaration|FunctionDeclaration, destFile: SourceFile) {
-
   const nodeFile = node.getSourceFile()
-
   const references = getReferences(node)
   const nodeFileImports = nodeFile.getImportDeclarations()
 
@@ -13,7 +11,7 @@ export function moveNode(node: ClassDeclaration|InterfaceDeclaration|FunctionDec
   destFile.addImportDeclarations(nodeFileImports.filter(i => i.getModuleSpecifierSourceFile() !== destFile).map(i => {
     return {
       ...i.getStructure(),
-      moduleSpecifier: i.getSourceFile().getRelativePathAsModuleSpecifierTo(i.getModuleSpecifierSourceFile())
+      moduleSpecifier: destFile.getRelativePathAsModuleSpecifierTo(i.getModuleSpecifierSourceFile())
     }
   })
   )
@@ -23,7 +21,7 @@ export function moveNode(node: ClassDeclaration|InterfaceDeclaration|FunctionDec
     const newImports = f.getImportDeclarations().filter(i => i.getModuleSpecifierSourceFile() === nodeFile).map(i =>
       ({
         ...i.getStructure(),
-        moduleSpecifier: i.getModuleSpecifierSourceFile().getRelativePathAsModuleSpecifierTo(destFile)
+        moduleSpecifier: f.getRelativePathAsModuleSpecifierTo(destFile)
       })
     )
     f.addImportDeclarations(newImports)
@@ -43,15 +41,6 @@ export function moveNode(node: ClassDeclaration|InterfaceDeclaration|FunctionDec
   node.remove()
   destFile.organizeImports()
   nodeFile.organizeImports()
-
-  // // call orgnizeImports for referenced sourceFiles - now that we moved the declaration - since we it must work now that they have the new fixed imports - will remove the old ones 
-  // referencedSourceFiles.forEach(f => {
-  //   // heads up - workaround for organizeImports issue
-  //   tmpFile.replaceWithText(f.getText())
-  //   tmpFile.organizeImports()
-  //   f.replaceWithText(tmpFile.getText())
-  // })
-
 }
 
 
