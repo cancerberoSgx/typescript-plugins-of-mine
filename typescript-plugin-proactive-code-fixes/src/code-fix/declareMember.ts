@@ -152,7 +152,9 @@ const fixTargetDecl = (targetNode: tsa.Node, newMemberName: string, newMemberTyp
             name: newMemberName,
             initializer: 'null'
           })
-          results.push(buildRefactorEditInfo(sourceFile.compilerNode, member.getFullText()+'\n', member.getFullStart()+1, 0))
+
+          const text = `${member.getPreviousSibling() ? ',' : ''}${member.getFullText()}\n`
+          results.push(buildRefactorEditInfo(sourceFile.compilerNode, text, member.getFullStart() + 1, 0))
         }
         else {
           const member = targetInit.addMethod({
@@ -167,17 +169,20 @@ const fixTargetDecl = (targetNode: tsa.Node, newMemberName: string, newMemberTyp
             }))
           })
 
-          results.push(buildRefactorEditInfo(sourceFile.compilerNode, member.getFullText()+'\n', member.getFullStart()+1, 0))
+          const text = `${member.getPreviousSibling() ? ',' : ''}${member.getFullText()}\n`
+          results.push(buildRefactorEditInfo(sourceFile.compilerNode, text, member.getFullStart() + 1, 0))
         }
     }
 
     else if (TypeGuards.isInterfaceDeclaration(d)) {
       if (!args) {
-        const member = d.addProperty({ 
-          name: newMemberName, 
-          type: newMemberType.getText() 
+        const member = d.addProperty({
+          name: newMemberName,
+          type: newMemberType.getText()
         })
-        results.push(buildRefactorEditInfo(sourceFile.compilerNode, member.getFullText()+'\n', member.getFullStart()+1, 0))
+
+        const text = `${member.getPreviousSibling() ? ',' : ''}${member.getFullText()}\n`
+        results.push(buildRefactorEditInfo(sourceFile.compilerNode, text, member.getFullStart() + 1, 0))
       } else {
         const member = d.addMethod({
           //TODO: use ast getstructure. we are not considering: jsdoc, hasquestion, modifiers, etc
@@ -189,7 +194,9 @@ const fixTargetDecl = (targetNode: tsa.Node, newMemberName: string, newMemberTyp
             type: a.type.getText()
           }))
         })
-        results.push(buildRefactorEditInfo(sourceFile.compilerNode, member.getFullText()+'\n', member.getFullStart()+1, 0))
+
+        const text = `${member.getPreviousSibling() ? ',' : ''}${member.getFullText()}\n`
+        results.push(buildRefactorEditInfo(sourceFile.compilerNode, text, member.getFullStart() + 1, 0))
       }
     }
 
@@ -199,7 +206,9 @@ const fixTargetDecl = (targetNode: tsa.Node, newMemberName: string, newMemberTyp
           name: newMemberName,
           type: newMemberType.getText()
         })
-        results.push(buildRefactorEditInfo(sourceFile.compilerNode, member.getFullText()+'\n', member.getFullStart()+1, 0))
+
+        const text = `${member.getPreviousSibling() ? ',' : ''}${member.getFullText()}\n`
+        results.push(buildRefactorEditInfo(sourceFile.compilerNode, text, member.getFullStart() + 1, 0))
       }
       else {
         const member = d.addMethod({
@@ -213,7 +222,9 @@ const fixTargetDecl = (targetNode: tsa.Node, newMemberName: string, newMemberTyp
           })),
           bodyText: `throw new Error('Not Implemented')`
         })
-        results.push(buildRefactorEditInfo(sourceFile.compilerNode, member.getFullText()+'\n', member.getFullStart()+1, 0))
+
+        const text = `${member.getPreviousSibling() ? ',' : ''}${member.getFullText()}\n`
+        results.push(buildRefactorEditInfo(sourceFile.compilerNode, text, member.getFullStart() + 1, 0))
       }
     }
 

@@ -1,15 +1,17 @@
 
 const o = {
-  foo: () => { return 1 },
-  bar(arg0: number, arg1: string[], arg2: boolean): string[] {
-    throw new Error('Not Implemented')
-  }
+  foo: () => { return 1 }
 }
+
 const val: string[] = o.bar(1, ['w'], true)
 
 interface Hello {
+  foo():void,
+  world(arg0: number[][]): any;
+
 }
 const hello: Hello = {
+  
 }
 let i: string[]
 i = hello.world([[1, 2, 3], [4, 5]])
