@@ -22,3 +22,9 @@ function fn<T>(): FNResult<T> {
 
 const variableString1 = 'hello world1'
 const variableString2 = "hello world2"
+
+
+class A{
+
+}
+const a = new A(1)

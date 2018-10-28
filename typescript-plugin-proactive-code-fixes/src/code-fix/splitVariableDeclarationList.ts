@@ -69,7 +69,6 @@ export const splitVariableDeclarationList: CodeFix = {
           name: d.getName(),
           type: d.getType().getText(),
           initializer: d.getInitializer().getText()
-  
         }]
       })
       ) as VariableStatementStructure[]
