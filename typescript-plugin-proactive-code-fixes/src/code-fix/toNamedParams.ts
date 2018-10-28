@@ -1,8 +1,9 @@
 
-import { FunctionTypeNode, InterfaceDeclarationStructure, ParameterDeclarationStructure, TypeGuards } from 'ts-simple-ast';
+import { FunctionTypeNode, InterfaceDeclarationStructure, ParameterDeclarationStructure, TypeGuards, Node, SyntaxList } from 'ts-simple-ast';
 import * as ts from 'typescript';
 import { findAscendant, getKindName } from 'typescript-ast-util';
 import { CodeFix, CodeFixOptions } from '../codeFixes';
+import { SyntaxKind } from 'typescript/lib/tsserverlibrary';
 
 /**
  
@@ -97,25 +98,39 @@ export const toNamedParameters: CodeFix = {
       })),
     } as InterfaceDeclarationStructure;
 
-    // const textChanges: ts.TextChange[] = []
+    const textChanges: ts.TextChange[] = []
+   
+    const dummySourceFile = arg.simpleProject.createSourceFile('tmp12.ts')
+    const intDecl = dummySourceFile.insertInterface(functionLikeDeclaration.getChildIndex(), interfaceStructure)
+    textChanges.push(buildTextChange(intDecl.getFullText()+'\n', functionLikeDeclaration.getChildIndex()))
 
-    container.insertInterface(functionLikeDeclaration.getChildIndex(), interfaceStructure)
     const parameterDeclarationStructure: ParameterDeclarationStructure = {
       name: '{' + functionLikeDeclaration.getParameters().map(param => param.getName() + (param.getInitializer() ? (' = ' + param.getInitializer().getText()) : '')).join(', ') + '}',
       type: interfaceName + (functionLikeDeclaration.getTypeParameters().length ? 
         `<${functionLikeDeclaration.getTypeParameters().map(tp=>tp.getText()).join(', ')}>` : ''),
     }
-    functionLikeDeclaration.getParameters().forEach(param => param.remove())
-    functionLikeDeclaration.addParameter(parameterDeclarationStructure)
 
-    // const refactor: ts.RefactorEditInfo = {
-    //   edits: [
-    //     {
-    //       fileName: container.getSourceFile().getFilePath(),
-    //       textChanges
-    //     }
-    //   ]
-    // }
-    // return refactor
+    const list = functionLikeDeclaration.getFirstChildByKind(SyntaxKind.SyntaxList)
+    const width = list.getFullWidth()
+    // textChanges.push(buildTextChange('', list.getFullStart()+1, list.getFullWidth()+1))
+
+    functionLikeDeclaration.getParameters().forEach(param => param.remove())
+    const param = functionLikeDeclaration.addParameter(parameterDeclarationStructure)
+    textChanges.push(buildTextChange(param.getText(), param.getFullStart(), width))
+    const refactor: ts.RefactorEditInfo = {
+      edits: [
+        {
+          fileName: container.getSourceFile().getFilePath(),
+          textChanges
+        }
+      ]
+    }
+    return refactor
+  }
+}
+export function buildTextChange(newText: string, start: number, length: number = 0): ts.TextChange{
+  return {
+    newText,
+    span: { start, length }
   }
 }

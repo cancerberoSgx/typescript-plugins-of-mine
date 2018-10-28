@@ -1,18 +1,37 @@
-const createNewFile = `
-function foo(a: string[][], b: {o: {u: Date[]}}, c: number=4) : FooOptions){}
-`
-import { basicTest, defaultAfterEach, defaultBeforeEach, DefaultBeforeEachResult } from './testUtil'
+
+import { toNamedParameters } from '../src/code-fix/toNamedParams';
+import { removeWhiteSpaces, testCodeFixRefactorEditInfo } from './testUtil';
 
 describe('toNamedParams', () => {
-  let config: DefaultBeforeEachResult
-  beforeEach(() => {
-    config = defaultBeforeEach({ createNewFile })
-  })
+
   it('basic', async () => {
-    basicTest(41, config, 'toNamedParameters', [`interface IFruit {`], [`interface Foo { a: string[][]; b: {o: {u: Date[]}}; c: number; } function foo({a, b, c = 4}: Foo) : FooOptions){}`])
+    const code = `
+function foo33(a: string[][], b: {o: {u: Date[]}}, c: number=4) : Date {
+  throw 'dummy'
+}
+`
+    const result = testCodeFixRefactorEditInfo(code, code.indexOf('ing[][], b'), toNamedParameters.name)
+    expect(removeWhiteSpaces(result.edits[0].textChanges[0].newText, ' ')).toContain(`interface Foo33 { a: string[][]; b: {o: {u: Date[]}}; c: number; }`)
+//  console.log(result.edits[0].textChanges.map(t=>t.newText));
+ 
+    expect(removeWhiteSpaces(result.edits[0].textChanges[1].newText, ' ')).toContain(`{a, b, c = 4}: Foo33`)
+ 
   })
-  afterEach(() => {
-    defaultAfterEach(config)
+
+  it('with previous statement', async () => {
+    const code = `
+var a = 1
+function foo33(a: string[][], b: {o: {u: Date[]}}, c: number=4) : Date {
+  throw 'dummy'
+}
+`
+    const result = testCodeFixRefactorEditInfo(code, code.indexOf('ing[][], b'), toNamedParameters.name)
+    expect(removeWhiteSpaces(result.edits[0].textChanges[0].newText, ' ')).toContain(`interface Foo33 { a: string[][]; b: {o: {u: Date[]}}; c: number; }`)
+//  console.log(result.edits[0].textChanges.map(t=>t.newText));
+ 
+    expect(removeWhiteSpaces(result.edits[0].textChanges[1].newText, ' ')).toContain(`{a, b, c = 4}: Foo33`)
+ 
   })
+
 })
 
