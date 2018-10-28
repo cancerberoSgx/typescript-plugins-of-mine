@@ -126,6 +126,21 @@ export function basicTest(position: number, config: DefaultBeforeEachResult, fix
   }
 }
 
+
+// export function testCodeFixRefactorEditInfo3(code: string, cursorPosition: number|ts.TextRange, codeFixName: string): {result: ts.RefactorEditInfo, sourceFile: SourceFile, project: Project} {
+
+//   const project = new Project({
+//     // useVirtualFileSystem: true
+//   // TODO : ts-simple-ast : useVirtualFileSystem: true : breaks typechecker
+//   })
+//   const sourceFile = project.createSourceFile('foo.ts', code)
+//   return   {
+//     result: testCodeFixRefactorEditInfo2(sourceFile, project, cursorPosition, codeFixName),
+//     sourceFile, 
+//     project
+//   }
+// }
+
 export function testCodeFixRefactorEditInfo(code: string, cursorPosition: number|ts.TextRange, codeFixName: string): ts.RefactorEditInfo{
   const project = new Project({
     // useVirtualFileSystem: true
