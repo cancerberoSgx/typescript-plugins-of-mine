@@ -1,6 +1,5 @@
-var a: number = 1;
-var c: number = 2;
-var y: number = 838383;
+
+const a = new A(1)
 
 
 const o = {
@@ -20,11 +19,13 @@ function fn<T>(): FNResult<T> {
 }
 
 
+const fffo = {
+  foo: () => { return 1 }
+}
+const val: string[] = fffo.bar123123(1, ['w'], true) 
+const f:boolean = fffo.bar
+
 const variableString1 = 'hello world1'
 const variableString2 = "hello world2"
+  
 
-
-class A{
-
-}
-const a = new A(1)

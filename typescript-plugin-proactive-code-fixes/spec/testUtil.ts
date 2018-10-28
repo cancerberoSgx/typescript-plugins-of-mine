@@ -126,10 +126,11 @@ export function basicTest(position: number, config: DefaultBeforeEachResult, fix
   }
 }
 
-
-
 export function testCodeFixRefactorEditInfo(code: string, cursorPosition: number, codeFixName: string): ts.RefactorEditInfo{
-  const project = new Project({ useVirtualFileSystem: true })
+  const project = new Project({
+    // useVirtualFileSystem: true
+  })
+  // TODO : ts-simple-ast : useVirtualFileSystem: true : breaks typechecker
   const sourceFile = project.createSourceFile('foo.ts', code)
   const diagnostics = getDiagnosticsInCurrentLocation(project.getProgram().compilerObject, sourceFile.compilerNode, cursorPosition);
   // expect(diagnostics.find(d => d.code === 2304 && d.messageText.toString().includes('nonexistent'))).toBeDefined()

@@ -119,7 +119,10 @@ export const implementInterfaceObjectLiteral: CodeFix = {
             })
           }
           else {
-            init.addPropertyAssignment({ name: prop.getName(), initializer: getDefaultValueForType(prop.getType()) + (!oldText ? '' : '\n/* ORIGINAL IMPLEMENTATION: \n' + oldText + '\n*/') })
+            init.addPropertyAssignment({ 
+              name: prop.getName(), 
+              initializer: getDefaultValueForType(prop.getType()) + (!oldText ? '' : '\n/* ORIGINAL IMPLEMENTATION: \n' + oldText + '\n*/') 
+            })
           }
         }
       });

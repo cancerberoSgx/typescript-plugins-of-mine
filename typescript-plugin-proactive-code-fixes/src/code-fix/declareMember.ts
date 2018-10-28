@@ -3,6 +3,7 @@ import { TypeGuards } from 'ts-simple-ast';
 import * as ts from 'typescript';
 import { getKindName } from 'typescript-ast-util';
 import { CodeFix, CodeFixOptions } from '../codeFixes';
+import { buildRefactorEditInfo } from '../util';
 
 
 /** 
@@ -110,13 +111,16 @@ export const declareMember: CodeFix = {
         type: typeChecker.getTypeAtLocation(a).getBaseTypeOfLiteralType()
       }))
     }
-    fixTargetDecl(accessExpr, newMemberName_, newMemberType_, args_, print)
+    const results: tsa.ts.RefactorEditInfo[] = []
+    fixTargetDecl(accessExpr, newMemberName_, newMemberType_, args_, print, results)
+    // console.log(JSON.stringify(results.find(r => !!r))); 
+    return results.find(r => !!r)
   }
 }
 
 
 // now we need to get the target declaration and add the member. It could be an object literal decl{}, an interface decl or a class decl
-const fixTargetDecl = (targetNode: tsa.Node, newMemberName: string, newMemberType: tsa.Type, args: { name: string, type: tsa.Type }[], print: (msg: string) => void) => {
+const fixTargetDecl = (targetNode: tsa.Node, newMemberName: string, newMemberType: tsa.Type, args: { name: string, type: tsa.Type }[], print: (msg: string) => void, results: tsa.ts.RefactorEditInfo[]): void => {
   let decls
   if (TypeGuards.isExpressionedNode(targetNode) || TypeGuards.isLeftHandSideExpressionedNode(targetNode)) {
     decls = targetNode.getExpression().getSymbol().getDeclarations()
@@ -125,6 +129,7 @@ const fixTargetDecl = (targetNode: tsa.Node, newMemberName: string, newMemberTyp
   } else {
     return print(`WARNING cannot recognized targetNode : ${targetNode && targetNode.getKindName()} ${targetNode && targetNode.getText()}`)
   }
+  const sourceFile = targetNode.getSourceFile()
   decls.forEach(d => {
     if (TypeGuards.isVariableDeclaration(d)) {
       const targetInit = d.getInitializer()
@@ -134,7 +139,7 @@ const fixTargetDecl = (targetNode: tsa.Node, newMemberName: string, newMemberTyp
         .find(dd => (TypeGuards.isInterfaceDeclaration(dd) || TypeGuards.isClassDeclaration(dd)) && dd.getSourceFile() === d.getSourceFile()
         )
       if (typeDeclInThisFile && (TypeGuards.isInterfaceDeclaration(typeDeclInThisFile) || TypeGuards.isClassDeclaration(typeDeclInThisFile))) {
-        return fixTargetDecl(typeDeclInThisFile, newMemberName, newMemberType, args, print)
+        return fixTargetDecl(typeDeclInThisFile, newMemberName, newMemberType, args, print, results)
       }
       else
         if (!TypeGuards.isObjectLiteralExpression(targetInit)) {
@@ -142,14 +147,15 @@ const fixTargetDecl = (targetNode: tsa.Node, newMemberName: string, newMemberTyp
           return print(`WARNING  !TypeGuards.isObjectLiteralExpression(targetInit) targetInit.getKindName() === ${targetInit && targetInit.getKindName()} targetInit.getText() === ${targetInit && targetInit.getText()}  d.getKindName() === ${d && d.getKindName()} d.getText() === ${d && d.getText()}`)
         }
         else if (!args) {
-          targetInit.addPropertyAssignment({
+          const member = targetInit.addPropertyAssignment({
             //TODO: use ast getstructure. we are not considering: jsdoc, hasquestion, modifiers, etc
             name: newMemberName,
             initializer: 'null'
           })
+          results.push(buildRefactorEditInfo(sourceFile.compilerNode, member.getFullText()+'\n', member.getFullStart()+1, 0))
         }
         else {
-          targetInit.addMethod({
+          const member = targetInit.addMethod({
             //TODO: use ast getstructure. we are not considering: jsdoc, hasquestion, modifiers, etc
             name: newMemberName,
             returnType: newMemberType.getText(),
@@ -160,31 +166,43 @@ const fixTargetDecl = (targetNode: tsa.Node, newMemberName: string, newMemberTyp
               type: a.type.getText()
             }))
           })
+
+          results.push(buildRefactorEditInfo(sourceFile.compilerNode, member.getFullText()+'\n', member.getFullStart()+1, 0))
         }
-    } else if (TypeGuards.isInterfaceDeclaration(d)) {
+    }
+
+    else if (TypeGuards.isInterfaceDeclaration(d)) {
       if (!args) {
-        d.addProperty({ name: newMemberName, type: newMemberType.getText() })
+        const member = d.addProperty({ 
+          name: newMemberName, 
+          type: newMemberType.getText() 
+        })
+        results.push(buildRefactorEditInfo(sourceFile.compilerNode, member.getFullText()+'\n', member.getFullStart()+1, 0))
       } else {
-        d.addMethod(
-          {
+        const member = d.addMethod({
+          //TODO: use ast getstructure. we are not considering: jsdoc, hasquestion, modifiers, etc
+          name: newMemberName,
+          returnType: newMemberType.getText(),
+          parameters: args.map(a => ({
             //TODO: use ast getstructure. we are not considering: jsdoc, hasquestion, modifiers, etc
-            name: newMemberName,
-            returnType: newMemberType.getText(),
-            parameters: args.map(a => ({
-              //TODO: use ast getstructure. we are not considering: jsdoc, hasquestion, modifiers, etc
-              name: a.name,
-              type: a.type.getText()
-            }))
-          })
+            name: a.name,
+            type: a.type.getText()
+          }))
+        })
+        results.push(buildRefactorEditInfo(sourceFile.compilerNode, member.getFullText()+'\n', member.getFullStart()+1, 0))
       }
-    } else if (TypeGuards.isClassDeclaration(d)) {
+    }
+
+    else if (TypeGuards.isClassDeclaration(d)) {
       if (!args) {
-        d.addProperty({
+        const member = d.addProperty({
           name: newMemberName,
           type: newMemberType.getText()
         })
-      } else {
-        d.addMethod({
+        results.push(buildRefactorEditInfo(sourceFile.compilerNode, member.getFullText()+'\n', member.getFullStart()+1, 0))
+      }
+      else {
+        const member = d.addMethod({
           //TODO: use ast getstructure. we are not considering: jsdoc, hasquestion, modifiers, etc
           name: newMemberName,
           returnType: newMemberType.getText(),
@@ -195,14 +213,18 @@ const fixTargetDecl = (targetNode: tsa.Node, newMemberName: string, newMemberTyp
           })),
           bodyText: `throw new Error('Not Implemented')`
         })
+        results.push(buildRefactorEditInfo(sourceFile.compilerNode, member.getFullText()+'\n', member.getFullStart()+1, 0))
       }
     }
+
     else if (TypeGuards.isParameterDeclaration(d) || TypeGuards.isPropertyDeclaration(d)) {
       // we are referencing a parameter or a property - not a variable - so we need to go to the declaration's declaration
       d.getType().getSymbol().getDeclarations().map(dd => {
-        fixTargetDecl(dd, newMemberName, newMemberType, args, print) // recursive!
+        fixTargetDecl(dd, newMemberName, newMemberType, args, print, results) // recursive!
       })
+      //TODO: support RefactorEditInfo ? 
     }
+
     else {
       //TODO - unknown situation - we should print in the file for discover new cases.
       print(`WARNING: is another thing isParameterDeclaration ${d.getKindName()}`)
