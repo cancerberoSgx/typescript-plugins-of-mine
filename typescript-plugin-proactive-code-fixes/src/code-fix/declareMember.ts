@@ -12,6 +12,8 @@ import { buildRefactorEditInfo } from '../util';
 
 declares missing member in a property access expression in some interface or class that the accessed reference implements/extends. 
 
+Note: TypeScript 3.0 has some declare method and declare property refactors, but it won't declare in object literals
+
 # attacks
 ```
 	"code": "2339", "message": "Property 'bar' does not exist on type '{ foo: () => number; }'.",
@@ -113,7 +115,6 @@ export const declareMember: CodeFix = {
     }
     const results: tsa.ts.RefactorEditInfo[] = []
     fixTargetDecl(accessExpr, newMemberName_, newMemberType_, args_, print, results)
-    // console.log(JSON.stringify(results.find(r => !!r))); 
     return results.find(r => !!r)
   }
 }
@@ -123,7 +124,11 @@ export const declareMember: CodeFix = {
 const fixTargetDecl = (targetNode: tsa.Node, newMemberName: string, newMemberType: tsa.Type, args: { name: string, type: tsa.Type }[], print: (msg: string) => void, results: tsa.ts.RefactorEditInfo[]): void => {
   let decls
   if (TypeGuards.isExpressionedNode(targetNode) || TypeGuards.isLeftHandSideExpressionedNode(targetNode)) {
-    decls = targetNode.getExpression().getSymbol().getDeclarations()
+    let expr = targetNode.getExpression()
+    if (TypeGuards.isNewExpression(expr)) {
+      expr = expr.getExpression()
+    }
+    decls = expr.getSymbol().getDeclarations()
   } else if (targetNode && targetNode.getKindName().endsWith('Declaration')) {
     decls = [targetNode]
   } else {
@@ -152,9 +157,7 @@ const fixTargetDecl = (targetNode: tsa.Node, newMemberName: string, newMemberTyp
             name: newMemberName,
             initializer: 'null'
           })
-
-          const text = `${member.getPreviousSibling() ? ',' : ''}${member.getFullText()}\n`
-          results.push(buildRefactorEditInfo(sourceFile.compilerNode, text, member.getFullStart() + 1, 0))
+          pushMember(member, sourceFile, results)
         }
         else {
           const member = targetInit.addMethod({
@@ -168,9 +171,7 @@ const fixTargetDecl = (targetNode: tsa.Node, newMemberName: string, newMemberTyp
               type: a.type.getText()
             }))
           })
-
-          const text = `${member.getPreviousSibling() ? ',' : ''}${member.getFullText()}\n`
-          results.push(buildRefactorEditInfo(sourceFile.compilerNode, text, member.getFullStart() + 1, 0))
+          pushMember(member, sourceFile, results)
         }
     }
 
@@ -180,9 +181,7 @@ const fixTargetDecl = (targetNode: tsa.Node, newMemberName: string, newMemberTyp
           name: newMemberName,
           type: newMemberType.getText()
         })
-
-        const text = `${member.getPreviousSibling() ? ',' : ''}${member.getFullText()}\n`
-        results.push(buildRefactorEditInfo(sourceFile.compilerNode, text, member.getFullStart() + 1, 0))
+        pushMember(member, sourceFile, results)
       } else {
         const member = d.addMethod({
           //TODO: use ast getstructure. we are not considering: jsdoc, hasquestion, modifiers, etc
@@ -194,9 +193,7 @@ const fixTargetDecl = (targetNode: tsa.Node, newMemberName: string, newMemberTyp
             type: a.type.getText()
           }))
         })
-
-        const text = `${member.getPreviousSibling() ? ',' : ''}${member.getFullText()}\n`
-        results.push(buildRefactorEditInfo(sourceFile.compilerNode, text, member.getFullStart() + 1, 0))
+        pushMember(member, sourceFile, results)
       }
     }
 
@@ -206,9 +203,7 @@ const fixTargetDecl = (targetNode: tsa.Node, newMemberName: string, newMemberTyp
           name: newMemberName,
           type: newMemberType.getText()
         })
-
-        const text = `${member.getPreviousSibling() ? ',' : ''}${member.getFullText()}\n`
-        results.push(buildRefactorEditInfo(sourceFile.compilerNode, text, member.getFullStart() + 1, 0))
+        pushMember(member, sourceFile, results)
       }
       else {
         const member = d.addMethod({
@@ -222,9 +217,7 @@ const fixTargetDecl = (targetNode: tsa.Node, newMemberName: string, newMemberTyp
           })),
           bodyText: `throw new Error('Not Implemented')`
         })
-
-        const text = `${member.getPreviousSibling() ? ',' : ''}${member.getFullText()}\n`
-        results.push(buildRefactorEditInfo(sourceFile.compilerNode, text, member.getFullStart() + 1, 0))
+        pushMember(member, sourceFile, results)
       }
     }
 
@@ -244,3 +237,17 @@ const fixTargetDecl = (targetNode: tsa.Node, newMemberName: string, newMemberTyp
 }
 
 
+
+function pushMember(member: tsa.Node, sourceFile: tsa.SourceFile, results: tsa.ts.RefactorEditInfo[]) {
+  let start: number
+  const previous = member.getPreviousSibling()
+  if (!previous) {
+    const openBrace = member.getParent().getChildren().find(c => c.getKind() === ts.SyntaxKind.OpenBraceToken) as tsa.Node
+    start = openBrace && openBrace.getEnd()// : member.getFullStart()
+  }
+  else {
+    start = previous.getEnd()
+  }
+  const text = `${TypeGuards.isObjectLiteralExpression(member.getParent()) && previous ? ',' : ''}${member.getFullText()}\n`
+  results.push(buildRefactorEditInfo(sourceFile.compilerNode, text, start, 0))
+}

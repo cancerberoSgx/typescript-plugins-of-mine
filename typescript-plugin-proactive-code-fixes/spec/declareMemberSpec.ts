@@ -2,7 +2,6 @@ import { declareMember } from '../src/code-fix/declareMember';
 import { removeWhiteSpaces, testCodeFixRefactorEditInfo } from './testUtil';
 
 describe('declareMember', () => {
-
   it('add missing method to object literal', () => {
 
     const code = `
@@ -61,4 +60,17 @@ const k = hello.mama(1, 2, 3) + ' how are you?'
   })
 
 
+  it('add missing method to new expression class', async () => {
+    const code = `  
+class CCC{
+
+}
+new CCC().fooo([1])
+    `
+    const result = testCodeFixRefactorEditInfo(code, code.indexOf('.fooo([1])') + 3, declareMember.name)
+    const s = removeWhiteSpaces(result.edits[0].textChanges[0].newText, ' ')
+    // console.log(result.edits[0].textChanges[0]);
+    // expect(s).not.toContain(`, mama(arg0: number, arg1: number, arg2: number): string`)
+    expect(s).toContain(`fooo(arg0: number[]): any { throw new Error('Not Implemented') }`)
+  })
 })

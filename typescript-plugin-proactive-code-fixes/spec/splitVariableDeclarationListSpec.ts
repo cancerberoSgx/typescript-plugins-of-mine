@@ -1,7 +1,7 @@
 import { splitVariableDeclarationList } from '../src/code-fix/splitVariableDeclarationList';
 import { removeWhiteSpaces, testCodeFixRefactorEditInfo } from './testUtil';
 
-fdescribe('splitVariableDeclarationList', () => {
+describe('splitVariableDeclarationList', () => {
   it('add types', async () => {
     const code = `let i = 0, c = 's', arr = []`
     const result = testCodeFixRefactorEditInfo(code, code.indexOf('i = 0'), splitVariableDeclarationList.name)
