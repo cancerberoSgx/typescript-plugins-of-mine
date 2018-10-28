@@ -5,3 +5,4 @@ dist
 *.log
 tmp
 *_copy
+# assets/sampleProject1_*
