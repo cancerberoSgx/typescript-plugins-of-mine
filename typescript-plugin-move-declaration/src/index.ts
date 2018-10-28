@@ -9,7 +9,7 @@ import { Action, create } from 'typescript-plugins-text-based-user-interaction';
 import * as ts_module from 'typescript/lib/tsserverlibrary';
 // import { moveDeclarationNamed } from './moveDeclaration';
 import { getInputConsumer, setLogger, InputConsumer } from 'input-ui-ipc-provider';
-import { moveNode } from './moveDeclarationTest';
+import { moveNode } from './moveNode';
 
 const PLUGIN_NAME = 'typescript-plugin-move-declaration'
 const REFACTOR_ACTION_NAME = `${PLUGIN_NAME}-refactor-action`
@@ -78,7 +78,7 @@ function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSetti
       const targetFile = simpleProject.getSourceFile(dest) || simpleProject.createSourceFile(dest, '')
       info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor moveDeclarationNamed ${selectedAction.args.declarationName}, ${sourceFile.getFilePath()}, ${targetFile.getFilePath()}`)
 
-      const declarationToMove = sourceFile.getClass(selectedAction.args.declarationName)
+      const declarationToMove = sourceFile.getClass(selectedAction.args.declarationName) || sourceFile.getInterface(selectedAction.args.declarationName) || sourceFile.getFunction(selectedAction.args.declarationName)
       moveNode(declarationToMove, targetFile)
 
       // moveDeclarationNamed(selectedAction.args.declarationName, sourceFile, simpleProject, targetFile)
