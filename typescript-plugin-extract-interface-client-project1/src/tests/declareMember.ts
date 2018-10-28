@@ -36,4 +36,4 @@ const o2: II = {
 }
 
 const ccc = new CC()
-ccc.a()
+ccc.a(  )

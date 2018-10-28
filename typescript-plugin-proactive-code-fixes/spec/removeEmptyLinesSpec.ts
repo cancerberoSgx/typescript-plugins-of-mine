@@ -17,8 +17,8 @@ describe('removeEmptyLines', () => {
   it('basic1', async () => {
     // const range = [1, 44]
     const text = `const a = 1
-function f (){}
-console.log(a+1)
+function f() { }
+console.log(a + 1)
 f()
 
 f()`
@@ -31,8 +31,8 @@ f()`
   })
   it('basic1', async () => {
     const text = `const a = 1
-function f (){}
-console.log(a+1)
+function f() { }
+console.log(a + 1)
 f()
 f()`
     const arg = getCodeFixOptionsForPredicate([1, 55], config)

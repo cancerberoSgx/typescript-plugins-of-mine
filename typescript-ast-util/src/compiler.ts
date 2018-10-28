@@ -72,7 +72,7 @@ export function createProgram(files: { fileName: string, content: string, source
   const compilerHost = ts.createCompilerHost(options)
   compilerHost.getSourceFile = function (fileName: string, languageVersion: ts.ScriptTarget, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): ts.SourceFile | undefined {
     const file = files.find(f => f.fileName === fileName)
-    if (!file) {return undefined}
+    if (!file) { return undefined }
     file.sourceFile = file.sourceFile || ts.createSourceFile(fileName, file.content, ts.ScriptTarget.ES2015, true)
     return file.sourceFile
   }
@@ -80,14 +80,14 @@ export function createProgram(files: { fileName: string, content: string, source
 }
 
 
-/** return the first diagnosis */
-export function getDiagnosticsInCurrentLocation(program: ts.Program, sourceFile: ts.SourceFile, position: number): ts.Diagnostic[] {
-  // const file = typeof sourceFile === 'string' ? program.getSourceFile(sourceFile) : sourceFile;
+/** return program diagnostics on given sourcefile that contain given position */
+export function getDiagnosticsInCurrentLocation(program: ts.Program, sourceFile: ts.SourceFile, position: number | ts.TextRange): ts.Diagnostic[] {
+  const range: ts.TextRange = (position as ts.TextRange).pos ? (position as ts.TextRange) : { pos: (position as number), end: (position as number) }
   const diagnostics = [
     ...program.getSyntacticDiagnostics(),
     ...program.getSemanticDiagnostics(),
     ...program.getDeclarationDiagnostics()
   ];
-  return position === -1 ? diagnostics : diagnostics.filter(d => d.start <= position && position <= d.start + d.length);
+  return position === -1 ? diagnostics : diagnostics.filter(d => d.start <= range.pos && range.end <= d.start + d.length && d.file.fileName === sourceFile.fileName);
 }
 

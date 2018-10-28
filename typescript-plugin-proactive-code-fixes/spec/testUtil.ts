@@ -126,7 +126,7 @@ export function basicTest(position: number, config: DefaultBeforeEachResult, fix
   }
 }
 
-export function testCodeFixRefactorEditInfo(code: string, cursorPosition: number, codeFixName: string): ts.RefactorEditInfo{
+export function testCodeFixRefactorEditInfo(code: string, cursorPosition: number|ts.TextRange, codeFixName: string): ts.RefactorEditInfo{
   const project = new Project({
     // useVirtualFileSystem: true
   // TODO : ts-simple-ast : useVirtualFileSystem: true : breaks typechecker
@@ -135,15 +135,17 @@ export function testCodeFixRefactorEditInfo(code: string, cursorPosition: number
   return testCodeFixRefactorEditInfo2(sourceFile, project, cursorPosition, codeFixName)
 }
 
-export function testCodeFixRefactorEditInfo2(sourceFile: SourceFile, project: Project, cursorPosition: number, codeFixName: string, verbose: boolean=false): ts.RefactorEditInfo{
+export function testCodeFixRefactorEditInfo2(sourceFile: SourceFile, project: Project, cursorPosition: number|ts.TextRange, codeFixName: string, verbose: boolean=false): ts.RefactorEditInfo{
   const diagnostics = getDiagnosticsInCurrentLocation(project.getProgram().compilerObject, sourceFile.compilerNode, cursorPosition);
-  const child = sourceFile.getDescendantAtPos(cursorPosition);
+  let range: ts.TextRange = typeof (cursorPosition as ts.TextRange).pos==='undefined' ? {pos: cursorPosition as number, end: cursorPosition as number} :  cursorPosition as ts.TextRange 
+  const child = sourceFile.getDescendantAtPos(range.pos);
   // console.log(child.getText());
 
   const arg: CodeFixOptions = {
     diagnostics,
     containingTarget: child.compilerNode,
     containingTargetLight: child.compilerNode,
+    positionOrRange: range,
     log: verbose ? console.log : defaultLog,
     simpleNode: child,
     simpleProject: project,

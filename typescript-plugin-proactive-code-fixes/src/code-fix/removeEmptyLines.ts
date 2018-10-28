@@ -41,7 +41,7 @@ export const removeEmptyLines: CodeFix = {
     }
   },
 
-  description: (options: CodeFixOptions): string => `Remove selection's empty lines`,
+  description: (options: CodeFixOptions): string => `Remove empty lines`,
 
   apply: (options: CodeFixOptions) => {
     if (!options.positionOrRange || (options.positionOrRange as ts.TextRange).pos === undefined) {
@@ -52,6 +52,7 @@ export const removeEmptyLines: CodeFix = {
     const text = fullSource.substring(range.pos, range.end).replace(/\s*\n\r\s*/gm, '\n\r').replace(/\s*\n\s*/gm, '\n')
     const fullText = fullSource.substring(0, range.pos) + text + fullSource.substring(range.end, fullSource.length)    
     options.simpleNode.getSourceFile().replaceWithText(fullText)
+    options.simpleNode.getSourceFile().formatText()
   }
 
 }

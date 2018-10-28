@@ -50,14 +50,14 @@ const result = nonDeclared(1,2,{a: 'g})
 export const codeFixCreateVariable: CodeFix = {
 
   name: 'Declare variable or function',
- 
+
   config: { variableType: 'const' },
 
   predicate: (options: CodeFixOptions): boolean => {
     if (
-      ts.isIdentifier(options.containingTarget) && 
-      !ts.isTypeReferenceNode(options.containingTarget.parent)
-      &&
+      ts.isIdentifier(options.containingTarget) &&
+      !ts.isTypeReferenceNode(options.containingTarget.parent) &&
+      !ts.isNewExpression(options.containingTarget.parent) &&
       options.diagnostics.find(d => (d.code === 2304 || d.code === 2552) && d.start === options.containingTargetLight.getStart())) {
       return true
     }
@@ -73,9 +73,9 @@ export const codeFixCreateVariable: CodeFix = {
     const parent = options.simpleNode.getParent()
 
     const container = parent.getFirstAncestorByKind(ts.SyntaxKind.Block) || options.simpleNode.getSourceFile()
-    const statementAncestor = parent.getAncestors().find(a => a.getParent() === container)|| options.simpleNode.getSourceFile()
+    const statementAncestor = parent.getAncestors().find(a => a.getParent() === container) || options.simpleNode.getSourceFile()
 
-    if (TypeGuards.isIdentifier(options.simpleNode) && TypeGuards.isCallExpression(parent) && TypeGuards.isIdentifier(parent.getExpression()) && parent.getExpression().getText()===options.simpleNode.getText()) {
+    if (TypeGuards.isIdentifier(options.simpleNode) && TypeGuards.isCallExpression(parent) && TypeGuards.isIdentifier(parent.getExpression()) && parent.getExpression().getText() === options.simpleNode.getText()) {
 
       const functionName = options.simpleNode.getText()
       const functionArguments = parent.getArguments().map((a, index) => {
@@ -92,15 +92,15 @@ function ${functionName}(${functionArguments.join(', ')}): ${returnType} {
 
       if (!TypeGuards.isPropertyAccessExpression(parent.getChildAtIndex(0))) {
         // it's function call and the function is not a member i.e bar()
-          return buildRefactorEditInfo(options.sourceFile, functionText, statementAncestor.getStart())
+        return buildRefactorEditInfo(options.sourceFile, functionText, statementAncestor.getStart())
       }
       else {
         // it's a function call and the function is a member, i.e : foo.bar() - this is tackled by another fix: declareMember
       }
-    } 
+    }
     else {
       // its non function variable
-      if(TypeGuards.isBinaryExpression(options.simpleNode.getParentOrThrow()) && TypeGuards.isStatement(options.simpleNode.getParentOrThrow().getParentOrThrow())){
+      if (TypeGuards.isBinaryExpression(options.simpleNode.getParentOrThrow()) && TypeGuards.isStatement(options.simpleNode.getParentOrThrow().getParentOrThrow())) {
         // is an expression like a=1 we only preppend 'let '
         return buildRefactorEditInfo(options.sourceFile, `let `, options.simpleNode.getStart())
       }

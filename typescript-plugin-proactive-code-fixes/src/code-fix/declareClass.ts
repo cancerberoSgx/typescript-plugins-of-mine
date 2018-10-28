@@ -44,6 +44,8 @@ export const declareClass: CodeFix = {
     if (
       ts.isIdentifier(arg.containingTargetLight) &&
       !ts.isTypeReferenceNode(arg.containingTargetLight.parent) &&
+      !ts.isCallExpression(arg.containingTargetLight.parent) &&
+      !ts.isBinaryExpression(arg.containingTargetLight.parent) &&
       (
         arg.diagnostics.find(d => d.code === 2304 && d.start === arg.containingTargetLight.getStart()) ||
         (arg.containingTargetLight.parent.kind === ts.SyntaxKind.NewExpression &&
@@ -73,6 +75,8 @@ export const declareClass: CodeFix = {
     }
     let what: string
     let code: string
+    let start: number = arg.simpleNode.getFirstAncestor(a=>TypeGuards.isBlock(a.getParent()) || TypeGuards.isSourceFile(a.getParent())).getFullStart()
+
     if (simpleClassDec) {
       let h: HeritageClause = arg.simpleNode.getFirstAncestorByKind(ts.SyntaxKind.HeritageClause)
       if (!TypeGuards.isHeritageClause(h)) {
@@ -106,9 +110,9 @@ ${simpleClassDec.isExported() ? 'export ' : ''}${what} ${arg.simpleNode.getText(
           fileName: arg.sourceFile.fileName,
           textChanges: [
             {
-              newText: code,
+              newText: '\n'+code,
               span: {
-                start: 0,
+                start,
                 length: 0
               }
             }
