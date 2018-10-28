@@ -1,5 +1,6 @@
 import { Project, SourceFile } from 'ts-simple-ast';
 import { moveNode } from '../src/moveNode';
+import { printSourceFile } from './testUtil';
 
 
 describe('moveNode', ()=>{
@@ -49,9 +50,3 @@ describe('moveNode', ()=>{
   
   })
 })
-
-
-function printSourceFile(sf: SourceFile) {
-  return sf.getText().trim().replace(/[\s]+/gm, ' ')
-}
-

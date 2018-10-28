@@ -1,5 +1,6 @@
-import { findReferencesDeclaredOutside } from '../src/moveNode';
+import { findReferencesDeclaredOutside, moveNode } from '../src/moveNode';
 import Project, { TypeGuards } from 'ts-simple-ast';
+import { sourceFileEquals } from './testUtil';
 
 describe('findReferencesDeclaredOutside', () => {
 
@@ -10,7 +11,7 @@ export function f1(a: number){}
   const f2File = project.createSourceFile('f2.ts', `
 import {f1} from './f1'
 function f3(){}
-export function f2(){
+function f2(){
   const a = 1
   return f3(f1(a))
 }
@@ -20,8 +21,7 @@ export function f2(){
 
   it('outside are only f1 and f3 , but only f1 was imported', () => {
     const refsOutside = findReferencesDeclaredOutside(f2)
-    console.log('Outside: ', refsOutside.map(r=>r.getText()).join(', '));
-    
+  
     expect(refsOutside.length && refsOutside.find(r => !['f1', 'f3'].includes(r.getText()))).toBeFalsy()
 
     const refsOutsideImported = refsOutside.filter(r=>r.getFirstAncestor(TypeGuards.isImportDeclaration))
@@ -32,7 +32,25 @@ export function f2(){
   it('inside are only f2 and a', () => {
     const refsInside = findReferencesDeclaredOutside(f2, false)
 
-    console.log('Inside: '+refsInside.map(r=>r.getText()).join(', '));
+    // console.log('Inside: '+refsInside.map(r=>r.getText()).join(', '));
     expect(refsInside.find(r => !['a', 'f2'].includes(r.getText()))).toBeFalsy()
+  })
+
+  it('moveNode must import all nodes used by node that are declared outside it but not imported . Make sure they are exported', ()=>{
+    const destFile = project.createSourceFile('dest.ts', '')
+    moveNode(f2, destFile)
+    sourceFileEquals(destFile, `
+import { f1 } from "./f1";
+import { f3 } from "./f2";
+
+export function f2() {
+    const a = 1
+    return f3(f1(a))
+}
+`)
+
+sourceFileEquals(f2File, `export function f3(){}`)
+    // console.log(destFile.getText());
+    // console.log(f2File.getText());
   })
 })

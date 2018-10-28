@@ -3,11 +3,8 @@ import { basename, dirname, isAbsolute, join } from 'path';
 import Project, { RegularExpressionLiteral } from 'ts-simple-ast';
 import { LanguageServiceOptionals, getPluginCreate } from 'typescript-plugin-util';
 import { createSimpleASTProject } from 'ts-simple-ast-extra';
-
-
 import { Action, create } from 'typescript-plugins-text-based-user-interaction';
 import * as ts_module from 'typescript/lib/tsserverlibrary';
-// import { moveDeclarationNamed } from './moveDeclaration';
 import { getInputConsumer, setLogger, InputConsumer } from 'input-ui-ipc-provider';
 import { moveNode } from './moveNode';
 
@@ -67,7 +64,9 @@ function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSetti
   }
   try {
     info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor sebaseba1`)
-    getUserInput().then(({ dest2, declarationName }) => {
+    const dest2 = selectedAction.args.dest
+    const declarationName =  selectedAction.args.declarationName
+    // getUserInput().then(({ dest2, declarationName }) => {
 
       info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor sebaseba2 ${dest2}, ${declarationName}`)
 
@@ -78,35 +77,24 @@ function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSetti
       const targetFile = simpleProject.getSourceFile(dest) || simpleProject.createSourceFile(dest, '')
       info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor moveDeclarationNamed ${selectedAction.args.declarationName}, ${sourceFile.getFilePath()}, ${targetFile.getFilePath()}`)
 
-      const declarationToMove = sourceFile.getClass(selectedAction.args.declarationName) || sourceFile.getInterface(selectedAction.args.declarationName) || sourceFile.getFunction(selectedAction.args.declarationName)
+      const declarationToMove = sourceFile.getClass(selectedAction.args.declarationName) || 
+        sourceFile.getInterface(selectedAction.args.declarationName) || 
+        sourceFile.getFunction(selectedAction.args.declarationName)
+
       moveNode(declarationToMove, targetFile)
 
-      // moveDeclarationNamed(selectedAction.args.declarationName, sourceFile, simpleProject, targetFile)
-      // info.languageService.getEmitOutput(sourceFile.getFilePath())
-      // info.languageService.getEmitOutput(targetFile.getFilePath())
       simpleProject.saveSync()
-
-
-    })
+    // })
   } catch (error) {
     info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor error  ${selectedAction.name} ${error + ' - ' + error.stack}`)
     return refactors
   }
   info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor ${selectedAction.name} took  ${(now() - t0) / 1000000}`)
 }
-function getUserInput(): Promise<{ dest2: string, declarationName: string }> {
-  // return inputConsumer.askSupported().then(support=>{
-  // info.project.projectService.logger.info(`${PLUGIN_NAME} getEditsForRefactor sebaseba3 ${support.inputText}` )
-  // if(!support.inputText){  
-  return Promise.resolve({ dest2: selectedAction.args.dest, declarationName: selectedAction.args.declarationName })
-  // }
-  // const result: {dest2: string, declarationName: string} = {dest2: '', declarationName: ''}
-  // return inputConsumer.inputText({prompt: 'Please enter name of the declaration to move', value: 'UnaAhi' , })//TODO: input validation - exists and is first level
-  // .then(response=>{result.declarationName=response.answer; return Promise.resolve(response.answer)})
-  // .then(declarationName=>inputConsumer.inputText({prompt: 'Please enter the target file path where you want to move '+declarationName, value: '../oneFile.ts' , }))
-  // .then(response=>{result.dest2=response.answer; return Promise.resolve(result)})
-  // })
-}
+// function getUserInput(): Promise<{ dest2: string, declarationName: string }> {
+//   return Promise.resolve({ dest2: selectedAction.args.dest, declarationName: selectedAction.args.declarationName })
+  
+// }
 function getCompletionsAtPosition(fileName: string, position: number, options: ts_module.GetCompletionsAtPositionOptions | undefined): ts_module.CompletionInfo {
   const prior = info.languageService.getCompletionsAtPosition(fileName, position, options);
   if (prior) {
