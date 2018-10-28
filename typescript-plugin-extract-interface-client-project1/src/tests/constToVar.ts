@@ -10,3 +10,7 @@
 
 
 
+export const obj1 = {a: 1}
+
+export interface II {a: number}
+export class CC {a(){}}

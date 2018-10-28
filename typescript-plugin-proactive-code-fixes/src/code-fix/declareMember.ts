@@ -134,7 +134,7 @@ const fixTargetDecl = (targetNode: tsa.Node, newMemberName: string, newMemberTyp
   } else {
     return print(`WARNING cannot recognized targetNode : ${targetNode && targetNode.getKindName()} ${targetNode && targetNode.getText()}`)
   }
-  const sourceFile = targetNode.getSourceFile()
+  // const sourceFile = targetNode.getSourceFile()
   decls.forEach(d => {
     if (TypeGuards.isVariableDeclaration(d)) {
       const targetInit = d.getInitializer()
@@ -146,33 +146,32 @@ const fixTargetDecl = (targetNode: tsa.Node, newMemberName: string, newMemberTyp
       if (typeDeclInThisFile && (TypeGuards.isInterfaceDeclaration(typeDeclInThisFile) || TypeGuards.isClassDeclaration(typeDeclInThisFile))) {
         return fixTargetDecl(typeDeclInThisFile, newMemberName, newMemberType, args, print, results)
       }
-      else
-        if (!TypeGuards.isObjectLiteralExpression(targetInit)) {
-          //TODO - unknown situation - we should print in the file for discover new cases.
-          return print(`WARNING  !TypeGuards.isObjectLiteralExpression(targetInit) targetInit.getKindName() === ${targetInit && targetInit.getKindName()} targetInit.getText() === ${targetInit && targetInit.getText()}  d.getKindName() === ${d && d.getKindName()} d.getText() === ${d && d.getText()}`)
-        }
-        else if (!args) {
-          const member = targetInit.addPropertyAssignment({
+      else if (!TypeGuards.isObjectLiteralExpression(targetInit)) {
+        //TODO - unknown situation - we should print in the file for discover new cases.
+        return print(`WARNING  !TypeGuards.isObjectLiteralExpression(targetInit) targetInit.getKindName() === ${targetInit && targetInit.getKindName()} targetInit.getText() === ${targetInit && targetInit.getText()}  d.getKindName() === ${d && d.getKindName()} d.getText() === ${d && d.getText()}`)
+      }
+      else if (!args) {
+        const member = targetInit.addPropertyAssignment({
+          //TODO: use ast getstructure. we are not considering: jsdoc, hasquestion, modifiers, etc
+          name: newMemberName,
+          initializer: 'null'
+        })
+        pushMember(member, d.getSourceFile(), results)
+      }
+      else {
+        const member = targetInit.addMethod({
+          //TODO: use ast getstructure. we are not considering: jsdoc, hasquestion, modifiers, etc
+          name: newMemberName,
+          returnType: newMemberType.getText(),
+          bodyText: `throw new Error('Not Implemented')`,
+          parameters: args.map(a => ({
             //TODO: use ast getstructure. we are not considering: jsdoc, hasquestion, modifiers, etc
-            name: newMemberName,
-            initializer: 'null'
-          })
-          pushMember(member, sourceFile, results)
-        }
-        else {
-          const member = targetInit.addMethod({
-            //TODO: use ast getstructure. we are not considering: jsdoc, hasquestion, modifiers, etc
-            name: newMemberName,
-            returnType: newMemberType.getText(),
-            bodyText: `throw new Error('Not Implemented')`,
-            parameters: args.map(a => ({
-              //TODO: use ast getstructure. we are not considering: jsdoc, hasquestion, modifiers, etc
-              name: a.name,
-              type: a.type.getText()
-            }))
-          })
-          pushMember(member, sourceFile, results)
-        }
+            name: a.name,
+            type: a.type.getText()
+          }))
+        })
+        pushMember(member, d.getSourceFile(), results)
+      }
     }
 
     else if (TypeGuards.isInterfaceDeclaration(d)) {
@@ -181,8 +180,9 @@ const fixTargetDecl = (targetNode: tsa.Node, newMemberName: string, newMemberTyp
           name: newMemberName,
           type: newMemberType.getText()
         })
-        pushMember(member, sourceFile, results)
-      } else {
+        pushMember(member, d.getSourceFile(), results)
+      }
+      else {
         const member = d.addMethod({
           //TODO: use ast getstructure. we are not considering: jsdoc, hasquestion, modifiers, etc
           name: newMemberName,
@@ -193,7 +193,7 @@ const fixTargetDecl = (targetNode: tsa.Node, newMemberName: string, newMemberTyp
             type: a.type.getText()
           }))
         })
-        pushMember(member, sourceFile, results)
+        pushMember(member, d.getSourceFile(), results)
       }
     }
 
@@ -203,7 +203,7 @@ const fixTargetDecl = (targetNode: tsa.Node, newMemberName: string, newMemberTyp
           name: newMemberName,
           type: newMemberType.getText()
         })
-        pushMember(member, sourceFile, results)
+        pushMember(member, d.getSourceFile(), results)
       }
       else {
         const member = d.addMethod({
@@ -217,7 +217,7 @@ const fixTargetDecl = (targetNode: tsa.Node, newMemberName: string, newMemberTyp
           })),
           bodyText: `throw new Error('Not Implemented')`
         })
-        pushMember(member, sourceFile, results)
+        pushMember(member, d.getSourceFile(), results)
       }
     }
 

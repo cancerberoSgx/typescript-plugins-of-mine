@@ -97,14 +97,25 @@ export const toNamedParameters: CodeFix = {
       })),
     } as InterfaceDeclarationStructure;
 
+    // const textChanges: ts.TextChange[] = []
+
     container.insertInterface(functionLikeDeclaration.getChildIndex(), interfaceStructure)
     const parameterDeclarationStructure: ParameterDeclarationStructure = {
       name: '{' + functionLikeDeclaration.getParameters().map(param => param.getName() + (param.getInitializer() ? (' = ' + param.getInitializer().getText()) : '')).join(', ') + '}',
       type: interfaceName + (functionLikeDeclaration.getTypeParameters().length ? 
         `<${functionLikeDeclaration.getTypeParameters().map(tp=>tp.getText()).join(', ')}>` : ''),
-      
     }
     functionLikeDeclaration.getParameters().forEach(param => param.remove())
     functionLikeDeclaration.addParameter(parameterDeclarationStructure)
+
+    // const refactor: ts.RefactorEditInfo = {
+    //   edits: [
+    //     {
+    //       fileName: container.getSourceFile().getFilePath(),
+    //       textChanges
+    //     }
+    //   ]
+    // }
+    // return refactor
   }
 }

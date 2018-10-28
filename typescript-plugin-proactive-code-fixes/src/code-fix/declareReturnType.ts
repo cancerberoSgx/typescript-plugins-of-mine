@@ -142,7 +142,7 @@ const inferReturnType = (decl: tsa.Node & tsa.SignaturedDeclaration, arg: CodeFi
   )
   const intStructureT0 = now()
   const intStructure: tsa.InterfaceDeclarationStructure = {
-    docs: ['TODO: Document me'],
+    // docs: ['TODO: Document me'],
     name: decl.getReturnTypeNode().getText(),
     properties: type.getProperties()
       .filter(p => {
@@ -152,7 +152,7 @@ const inferReturnType = (decl: tsa.Node & tsa.SignaturedDeclaration, arg: CodeFi
       .map(p => {
         const v = p.getValueDeclaration()
         return {
-          docs: ['TODO: Document me'],
+          // docs: ['TODO: Document me'],
           name: p.getName(),
           type: project.getTypeChecker().getTypeAtLocation(p.getValueDeclaration()).getText(),
           val: p.getValueDeclaration(),
@@ -175,7 +175,7 @@ const inferReturnType = (decl: tsa.Node & tsa.SignaturedDeclaration, arg: CodeFi
           return
         }
         return {
-          docs: ['TODO: Document me'],
+          // docs: ['TODO: Document me'],
           name: p.getName(),
           returnType: init.getReturnType() ? init.getReturnType().getText() : 'any',
           parameters: init.getParameters().map(pa => ({

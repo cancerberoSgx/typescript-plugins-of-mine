@@ -27,3 +27,13 @@ class C {
 }
 const notDefined: C
 const a = notDefined.foof + 9
+
+
+import {II, CC} from './constToVar'
+
+const o2: II = {
+  foo: 5
+}
+
+const ccc = new CC()
+ccc.a()

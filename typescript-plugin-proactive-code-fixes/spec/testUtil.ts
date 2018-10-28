@@ -129,17 +129,22 @@ export function basicTest(position: number, config: DefaultBeforeEachResult, fix
 export function testCodeFixRefactorEditInfo(code: string, cursorPosition: number, codeFixName: string): ts.RefactorEditInfo{
   const project = new Project({
     // useVirtualFileSystem: true
-  })
   // TODO : ts-simple-ast : useVirtualFileSystem: true : breaks typechecker
+  })
   const sourceFile = project.createSourceFile('foo.ts', code)
+  return testCodeFixRefactorEditInfo2(sourceFile, project, cursorPosition, codeFixName)
+}
+
+export function testCodeFixRefactorEditInfo2(sourceFile: SourceFile, project: Project, cursorPosition: number, codeFixName: string, verbose: boolean=false): ts.RefactorEditInfo{
   const diagnostics = getDiagnosticsInCurrentLocation(project.getProgram().compilerObject, sourceFile.compilerNode, cursorPosition);
-  // expect(diagnostics.find(d => d.code === 2304 && d.messageText.toString().includes('nonexistent'))).toBeDefined()
   const child = sourceFile.getDescendantAtPos(cursorPosition);
+  // console.log(child.getText());
+
   const arg: CodeFixOptions = {
     diagnostics,
     containingTarget: child.compilerNode,
     containingTargetLight: child.compilerNode,
-    log: defaultLog,
+    log: verbose ? console.log : defaultLog,
     simpleNode: child,
     simpleProject: project,
     program: project.getProgram().compilerObject,

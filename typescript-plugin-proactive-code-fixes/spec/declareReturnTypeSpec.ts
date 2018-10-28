@@ -12,6 +12,6 @@ function fn<T>(): FNResult<T> {
     const cursorPosition = code.indexOf('FNResult<T>') + 1
     const result = testCodeFixRefactorEditInfo(code, cursorPosition, declareReturnType.name)
     const s = removeWhiteSpaces(result.edits[0].textChanges[0].newText, ' ')
-    expect(s).toContain(`interface FNResult<T> { /** * TODO: Document me */ a: number; /** * TODO: Document me */ b: string; /** * TODO: Document me */ log(msg: any): string; /** * TODO: Document me */ kill<T>(): number; }`)
+    expect(s).toContain(`interface FNResult<T> { a: number; b: string; log(msg: any): string; kill<T>(): number; }`)
   })  
 })

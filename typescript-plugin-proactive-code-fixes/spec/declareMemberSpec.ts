@@ -1,9 +1,10 @@
 import { declareMember } from '../src/code-fix/declareMember';
-import { removeWhiteSpaces, testCodeFixRefactorEditInfo } from './testUtil';
+import { removeWhiteSpaces, testCodeFixRefactorEditInfo, testCodeFixRefactorEditInfo2 } from './testUtil';
+import Project, { TypeGuards, Identifier } from 'ts-simple-ast';
 
 describe('declareMember', () => {
-  it('add missing method to object literal', () => {
 
+  it('add missing method to object literal', () => {
     const code = `
 const o = {
   foo: () => { return 1 }
@@ -41,7 +42,8 @@ i = hello.world([[1, 2, 3], [4, 5]])
     const result = testCodeFixRefactorEditInfo(code, code.indexOf('hello.world(') + 6, declareMember.name)
     const s = removeWhiteSpaces(result.edits[0].textChanges[0].newText, ' ')
     // console.log(s);
-    expect(s).toContain(`, world(arg0: number[][]): any;`)
+    expect(s).not.toContain(`, world(arg0: number[][]): any;`)
+    expect(s).toContain(`world(arg0: number[][]): any;`)
     // expect(result.edits[0].textChanges[0].span.start).toBeCloseTo(code.indexOf('interface Hello {')+'interface Hello {'.length, 2)
   })
 
@@ -72,5 +74,31 @@ new CCC().fooo([1])
     // console.log(result.edits[0].textChanges[0]);
     // expect(s).not.toContain(`, mama(arg0: number, arg1: number, arg2: number): string`)
     expect(s).toContain(`fooo(arg0: number[]): any { throw new Error('Not Implemented') }`)
+  })
+
+  xit('add missing member to object in other file', async () => { // TODO: not working
+    const project = new Project()
+    const file1= project.createSourceFile('src/f1.ts', `
+export const obj1 = {a: 1}
+`)
+    const file2 = project.createSourceFile('src/f2.ts', `
+import {obj1} from './f1'; 
+obj1.foo(1)
+const obj2 = {}
+obj2.bar(2)
+    `)
+    // const obj1 = file2.getFirstDescendant(d=>d.getText()==='obj1'&& TypeGuards.isPropertyAccessExpression(d.getParent()))
+    // console.log('TT', obj1.getType().getText(), obj1.getType().getApparentType().getText(), project.getTypeChecker().getTypeAtLocation(obj1).getText());
+    
+    const result = testCodeFixRefactorEditInfo2(file2, project, file2.getFullText().indexOf('foo(')+1, declareMember.name, true)
+    console.log(result);
+    
+    const result2 = testCodeFixRefactorEditInfo2(file2, project, file2.getFullText().indexOf('bar(')+1, declareMember.name, true)
+    console.log(result2);
+    // const result = testCodeFixRefactorEditInfo(code, code.indexOf('.fooo([1])') + 3, declareMember.name)
+    // const s = removeWhiteSpaces(result.edits[0].textChanges[0].newText, ' ')
+    // console.log(result.edits[0].textChanges[0]);
+    // expect(s).not.toContain(`, mama(arg0: number, arg1: number, arg2: number): string`)
+    // expect(s).toContain(`fooo(arg0: number[]): any { throw new Error('Not Implemented') }`)
   })
 })
