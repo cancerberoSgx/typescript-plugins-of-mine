@@ -40,7 +40,7 @@ describe('moveNode', ()=>{
     
     // console.log('ERRORS: '+project.getPreEmitDiagnostics().map(e=>e.getMessageText()+' - '+(e.getSourceFile() && e.getSourceFile().getFilePath())).join('\n'))
     
-    moveNode(Food, animalFile)
+    moveNode(Food, animalFile, project)
     // console.log(printSourceFile(lionFile));
     
     

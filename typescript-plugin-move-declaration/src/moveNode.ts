@@ -1,11 +1,10 @@
 import { Node, SourceFile, ReferenceEntry, Project, ClassDeclaration, TypeGuards, Statement, ReferenceFindableNode, InterfaceDeclaration, FunctionDeclaration, EnumDeclaration, ExportableNode } from 'ts-simple-ast'
 
 // TODO: 
-// * make sure moved node is exported and is imported in node.getSourceFile()
 // * enumDeclaration , variable declarations
-// *
+// * 
 export type NodeType = ClassDeclaration | InterfaceDeclaration | FunctionDeclaration
-export function moveNode(node: NodeType, destFile: SourceFile) {
+export function moveNode(node: NodeType, destFile: SourceFile, project: Project) {
 
   // we copy all the imports from node.getSourceFile() to destFile and the organize imports so the moved declaration don't miss any import
   addImportsToDestFile(node, destFile);
@@ -23,6 +22,11 @@ export function moveNode(node: NodeType, destFile: SourceFile) {
     f.getImportDeclarations().filter(i => i.getModuleSpecifierSourceFile() === node.getSourceFile()).forEach(i => i.remove())
   })
 
+  node.getSourceFile().addImportDeclaration({
+    moduleSpecifier: node.getSourceFile().getRelativePathAsModuleSpecifierTo(destFile),
+    namedImports: [{name: node.getName()}]
+  })
+
   // move the declaration
   let finalNode: NodeType
   if (TypeGuards.isClassDeclaration(node)) {
@@ -38,7 +42,18 @@ export function moveNode(node: NodeType, destFile: SourceFile) {
 
   finalNode.setIsExported(true)
   destFile.organizeImports()
-  node.getSourceFile().organizeImports()
+  safeOrganizeImports(node.getSourceFile(), project);
+  // nodeFile.organizeImports()
+}
+
+let tmpSourceFile: SourceFile
+function safeOrganizeImports(f: SourceFile, project: Project) {
+  if(!tmpSourceFile){
+    tmpSourceFile= project.createSourceFile('tmp.ts', '')
+  }
+  tmpSourceFile.replaceWithText(f.getText())
+  tmpSourceFile.organizeImports()
+  f.replaceWithText(tmpSourceFile.getText())
 }
 
 function getReferences(node: ReferenceFindableNode): ReferenceEntry[] {

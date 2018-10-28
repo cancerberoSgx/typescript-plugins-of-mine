@@ -81,7 +81,7 @@ function getEditsForRefactor(fileName: string, formatOptions: ts.FormatCodeSetti
         sourceFile.getInterface(selectedAction.args.declarationName) || 
         sourceFile.getFunction(selectedAction.args.declarationName)
 
-      moveNode(declarationToMove, targetFile)
+      moveNode(declarationToMove, targetFile, simpleProject)
 
       simpleProject.saveSync()
     // })

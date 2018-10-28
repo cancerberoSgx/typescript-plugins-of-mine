@@ -31,26 +31,7 @@ function f2(){
 
   it('inside are only f2 and a', () => {
     const refsInside = findReferencesDeclaredOutside(f2, false)
-
-    // console.log('Inside: '+refsInside.map(r=>r.getText()).join(', '));
     expect(refsInside.find(r => !['a', 'f2'].includes(r.getText()))).toBeFalsy()
   })
 
-  it('moveNode must import all nodes used by node that are declared outside it but not imported . Make sure they are exported', ()=>{
-    const destFile = project.createSourceFile('dest.ts', '')
-    moveNode(f2, destFile)
-    sourceFileEquals(destFile, `
-import { f1 } from "./f1";
-import { f3 } from "./f2";
-
-export function f2() {
-    const a = 1
-    return f3(f1(a))
-}
-`)
-
-sourceFileEquals(f2File, `export function f3(){}`)
-    // console.log(destFile.getText());
-    // console.log(f2File.getText());
-  })
 })

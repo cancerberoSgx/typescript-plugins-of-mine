@@ -57,7 +57,7 @@ export const codeFixCreateVariable: CodeFix = {
     if (
       ts.isIdentifier(options.containingTarget) &&
       !ts.isTypeReferenceNode(options.containingTarget.parent) &&
-      !ts.isNewExpression(options.containingTarget.parent) &&
+      !(ts.isNewExpression(options.containingTarget.parent) && (options.containingTarget.parent as ts.NewExpression).expression.getText()===options.containedTarget.getText()) && 
       options.diagnostics.find(d => (d.code === 2304 || d.code === 2552) && d.start === options.containingTargetLight.getStart())) {
       return true
     }
