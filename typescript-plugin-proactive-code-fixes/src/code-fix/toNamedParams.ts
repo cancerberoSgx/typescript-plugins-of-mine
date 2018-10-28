@@ -101,8 +101,8 @@ export const toNamedParameters: CodeFix = {
     const textChanges: ts.TextChange[] = []
    
     const dummySourceFile = arg.simpleProject.createSourceFile('tmp12.ts')
-    const intDecl = dummySourceFile.insertInterface(functionLikeDeclaration.getChildIndex(), interfaceStructure)
-    textChanges.push(buildTextChange(intDecl.getFullText()+'\n', functionLikeDeclaration.getChildIndex()))
+    const intDecl = dummySourceFile.insertInterface(0, interfaceStructure)
+    textChanges.push(buildTextChange('\n'+intDecl.getFullText()+'\n', functionLikeDeclaration.getFullStart()))
 
     const parameterDeclarationStructure: ParameterDeclarationStructure = {
       name: '{' + functionLikeDeclaration.getParameters().map(param => param.getName() + (param.getInitializer() ? (' = ' + param.getInitializer().getText()) : '')).join(', ') + '}',
