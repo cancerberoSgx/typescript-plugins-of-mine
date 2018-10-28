@@ -1,3 +1,8 @@
+
+
+var a = 1, c = 2,
+
+
 const o = {
   foo: () => { return 1 }
 }

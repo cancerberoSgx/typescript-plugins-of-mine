@@ -4,6 +4,7 @@ import { getKindName, findAscendant } from 'typescript-ast-util';
 import { CodeFix, CodeFixOptions } from '../codeFixes';
 import { Statement } from '../../../typescript-ast-util/node_modules/typescript/lib/tsserverlibrary';
 import { Block, SourceFile, TypeGuards, StatementedNode, Node, VariableStatementStructure } from 'ts-simple-ast';
+import { buildRefactorEditInfo } from '../util';
 
 /**
 
@@ -72,11 +73,17 @@ export const splitVariableDeclarationList: CodeFix = {
         }]
       })
       ) as VariableStatementStructure[]
-  
+
       const variableStatement = arg.simpleNode.getFirstAncestorByKind(ts.SyntaxKind.VariableStatement)
-      const indexToInsert = variableStatement.getChildIndex()
-      container.removeStatement(indexToInsert)
-      container.insertVariableStatements(indexToInsert, variableStatements)
+      
+      const start = variableStatement.getStart()
+      const length = variableStatement.getFullWidth() + 2 // TODO: don't know why I have to do +2 in order to work OK
+      
+      const variableStatementNodes = container.insertVariableStatements(0, variableStatements)
+      const code = variableStatementNodes.map(s=>s.getText()).join('\n') // TODO: respect formatOptions
+
+      return buildRefactorEditInfo(arg.sourceFile, code, start, length)
+
     } else {
       arg.log(`not apply because condition not meet: TypeGuards.isBlock(container) || TypeGuards.isSourceFile(container) === ${TypeGuards.isBlock(container) || TypeGuards.isSourceFile(container)} - container kind is ${container.getKindName()}`)
     }

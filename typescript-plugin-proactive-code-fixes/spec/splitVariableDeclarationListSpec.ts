@@ -1,15 +1,12 @@
-import { basicTest, defaultAfterEach, defaultBeforeEach, DefaultBeforeEachResult } from './testUtil';
+import { splitVariableDeclarationList } from '../src/code-fix/splitVariableDeclarationList';
+import { removeWhiteSpaces, testCodeFixRefactorEditInfo } from './testUtil';
 
 describe('splitVariableDeclarationList', () => {
-  let config: DefaultBeforeEachResult
-  beforeEach(() => {
-    config = defaultBeforeEach({ createNewFile: `let i = 0, c = 's', arr = []` })
-  })
   it('basic', async () => {
-    basicTest(8, config, 'splitVariableDeclarationList', ['let c', 'let arr'], [`let i: number = 0; let c: string = 's'; let arr: any[] = [];`])
-  })
-  afterEach(() => {
-    defaultAfterEach(config)
+    const code = `let i = 0, c = 's', arr = []`
+    const result = testCodeFixRefactorEditInfo(code, code.indexOf('i = 0'), splitVariableDeclarationList.name)
+    const s = removeWhiteSpaces(result.edits[0].textChanges[0].newText, ' ')
+    expect(s).toContain(`let i: number = 0; let c: string = 's'; let arr: {} = [];`)
   })
 })
 
