@@ -2,6 +2,7 @@ import { ArrowFunction, TypeGuards } from 'ts-simple-ast';
 import * as ts from 'typescript';
 import { findAscendant } from 'typescript-ast-util';
 import { CodeFix, CodeFixOptions } from '../codeFixes';
+import { buildRefactorEditInfo } from '../util';
 
 let description: string | undefined
 
@@ -42,7 +43,7 @@ export const arrowFunctionBodyTransformations: CodeFix = {
         description = DESCRIPTION_REMOVE_BODY
       }
     }
-    else if(arrow){
+    else if (arrow) {
       description = DESCRIPTION_ADD_BODY
     }
     return !!description
@@ -66,11 +67,12 @@ export const arrowFunctionBodyTransformations: CodeFix = {
         const newText =
           (hasTypeParameters ? '<' : '') + simpleArrow.getTypeParameters().map(tp => tp.getText()).join(', ') + (hasTypeParameters ? '>' : '') +
           (parameterListMustHaveParen ? '(' : '') + simpleArrow.getParameters().map(p => p.getText()).join(', ') + (parameterListMustHaveParen ? ')' : '') +
-          (simpleArrow.getReturnTypeNode() ? ': ' + simpleArrow.getReturnTypeNode().getText() : '') + ' => ' + 
+          (simpleArrow.getReturnTypeNode() ? ': ' + simpleArrow.getReturnTypeNode().getText() : '') + ' => ' +
           (firstChild.getExpression().getKind() === ts.SyntaxKind.ObjectLiteralExpression ? ('(' + firstChild.getExpression().getText() + ')') : firstChild.getExpression().getText())
 
         options.log(`DESCRIPTION_REMOVE_BODY replacing old text ${simpleArrow.getText()} new text: ${newText}`)
-        simpleArrow.replaceWithText(newText)
+        // simpleArrow.replaceWithText(newText)
+        return buildRefactorEditInfo(options.sourceFile, newText, simpleArrow.getStart(), simpleArrow.getWidth())
       } else {
         return // TODO: log
       }
@@ -87,7 +89,8 @@ export const arrowFunctionBodyTransformations: CodeFix = {
         (TypeGuards.isParenthesizedExpression(expression) ? expression.getExpression().getText() : expression.getText()) + '; }'
 
       options.log(`DESCRIPTION_ADD_BODY replacing old text ${simpleArrow.getText()} new text: ${newText}`)
-      simpleArrow.replaceWithText(newText)
+      // simpleArrow.replaceWithText(newText)
+      return buildRefactorEditInfo(options.sourceFile, newText, simpleArrow.getStart(), simpleArrow.getWidth())
     }
     else {
       options.log('apply not executed because node does not comply with description === DESCRIPTION_ADD_BODY && simpleArrow.getEqualsGreaterThan() && simpleArrow.getEqualsGreaterThan().getNextSibling(), simpleArrow.getText() === ' + simpleArrow.getText())

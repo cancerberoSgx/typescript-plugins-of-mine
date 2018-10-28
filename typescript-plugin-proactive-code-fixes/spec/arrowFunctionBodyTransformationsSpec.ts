@@ -1,4 +1,9 @@
-const code = `
+import { arrowFunctionBodyTransformations } from '../src/code-fix/arrowFunctionTransformations';
+import { removeWhiteSpaces, testCodeFixRefactorEditInfo } from './testUtil';
+
+describe('arrowFunctionBodyTransformations', () => {
+
+  const code = `
 const o = {
   fn: o1 => 'hello' + o1,
   bodied: a => { return a - 1 + 2 / 6; },
@@ -6,25 +11,20 @@ const o = {
   returningObjectLiteral: <T>(a) => ({ a, b: 'hi' })
 }
 `
-import { basicTest, defaultAfterEach, defaultBeforeEach, DefaultBeforeEachResult } from './testUtil';
-
-describe('arrowFunctionBodyTransformations', () => {
-  let config: DefaultBeforeEachResult
-  beforeEach(() => {
-    config = defaultBeforeEach({ createNewFile: code })
-  })
   it('add body single arg no parenth', async () => {
-    basicTest(code.indexOf(`=> 'hello'`)+1, config, 'arrowFunctionTransformations', [`return 'hello' + o1`])
+    const result = testCodeFixRefactorEditInfo(code, code.indexOf(`=> 'hello'`), arrowFunctionBodyTransformations.name)
+    const s = removeWhiteSpaces(result.edits[0].textChanges[0].newText, ' ')
+    expect(s).toContain(`return 'hello' + o1`)
   })
 
   it('remove body ', async () => {
-    basicTest(code.indexOf(`a => { return a - 1 + 2`)+1, config, 'arrowFunctionTransformations', [`bodied: a => a - 1 + 2 / 6,`])
-  })  
+    const result = testCodeFixRefactorEditInfo(code, code.indexOf(`a => { return a - 1 + 2`), arrowFunctionBodyTransformations.name)
+    const s = removeWhiteSpaces(result.edits[0].textChanges[0].newText, ' ')
+    expect(s).toContain('a => a - 1 + 2 / 6')
+  })
   it('add body returning object literal', async () => {
-    basicTest(code.indexOf(`=> ({ a, b: 'hi' })`)+1, config, 'arrowFunctionTransformations', [`=> { return { a, b: 'hi' }; }`])
-  }) 
-  
-  afterEach(() => {
-    defaultAfterEach(config)
+    const result = testCodeFixRefactorEditInfo(code, code.indexOf(`=> ({ a, b: 'hi' })`), arrowFunctionBodyTransformations.name)
+    const s = removeWhiteSpaces(result.edits[0].textChanges[0].newText, ' ')
+    expect(s).toContain(`=> { return { a, b: 'hi' }; }`)
   })
 })
