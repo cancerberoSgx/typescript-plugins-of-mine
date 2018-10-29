@@ -1,5 +1,5 @@
 import { ClassDeclaration, FunctionDeclaration, InterfaceDeclaration, Project, SourceFile, TypeGuards } from 'ts-simple-ast';
-import { addImportsToDestFile, fixImportsInReferencingFiles, safeOrganizeImports } from './moveNodeUtil';
+import { fixImportsInDestFile, fixImportsInReferencingFiles, safeOrganizeImports } from './moveNodeUtil';
 
 // TODO: 
 // * enumDeclaration , variable declarations
@@ -9,7 +9,7 @@ export type NodeType = ClassDeclaration | InterfaceDeclaration | FunctionDeclara
 export function moveNode(node: NodeType, destFile: SourceFile, project: Project) {
 
   // we copy all the imports from node.getSourceFile() to destFile and the organize imports so the moved declaration don't miss any import
-  addImportsToDestFile(node, destFile);
+  fixImportsInDestFile(node, destFile);
 
   // For each sourceFile that reference node, we add an import declaration to node but specifying nodeFile. (we "move" the oriinal import declarations only changing the specifier to point to destFile).
   fixImportsInReferencingFiles(node, destFile);
@@ -32,6 +32,6 @@ export function moveNode(node: NodeType, destFile: SourceFile, project: Project)
 
   finalNode.setIsExported(true)
     finalNode.setIsDefaultExport(nodeIsDefaultExport)
-  safeOrganizeImports(destFile, project);
-  safeOrganizeImports(node.getSourceFile(), project);
+  safeOrganizeImports(destFile);
+  safeOrganizeImports(node.getSourceFile());
 }

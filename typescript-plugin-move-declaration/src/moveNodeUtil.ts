@@ -1,8 +1,9 @@
 import { ExportableNode, Node, Project, ReferenceEntry, ReferenceFindableNode, SourceFile, TypeGuards, ImportSpecifierStructure } from 'ts-simple-ast';
 import { flat } from 'typescript-ast-util';
 import { NodeType } from './moveNode';
+import { createProject } from '../spec/testUtil';
 
-export function addImportsToDestFile(node: NodeType, destFile: SourceFile) {
+export function fixImportsInDestFile(node: NodeType, destFile: SourceFile) {
   const importsToAddToDestFile = node.getSourceFile().getImportDeclarations().filter(i => i.getModuleSpecifierSourceFile() !== destFile).map(i => {
     const specifiedFile = i.getModuleSpecifierSourceFile()
     const isLibrary = !specifiedFile || !i.getModuleSpecifierValue().trim().startsWith('.')
@@ -44,12 +45,21 @@ export function fixImportsInReferencingFiles(node: NodeType, destFile: SourceFil
     const newImports = f.getImportDeclarations()
       .filter(i => i.getModuleSpecifierSourceFile() === node.getSourceFile())
       .map(i => {
-
+        const s = i.getStructure()
+        // get the named input but only for node (in case there are multiple names in the import we remove the others)
+        let namedImports
+        if (s.namedImports && Array.isArray(s.namedImports)) {
+          namedImports = s.namedImports.filter(ni => typeof (ni) === 'string' ? ni === node.getName() : ni.name === node.getName())
+        }
+        else if (s.namedImports) {
+          // console.log('ELSE');
+          namedImports = [{ name: node.getName() }] // and good luck!
+          //TODO: what is the case when namedImports is of type writerFunction, not an array ? how do I handle that ? - an structure shound be serializable and here a field can be a function !!! 
+        }
         return {
-          ...i.getStructure(),
+          ...s,
           moduleSpecifier: f.getRelativePathAsModuleSpecifierTo(destFile),
-          namedImports: node.isDefaultExport() ? undefined : [{ name: node.getName() }] // heads up - we only want to import node in case the original import ontains more than one name. 
-          // TODO: support other non named imports like default and alias
+          namedImports
         }
       });
     f.addImportDeclarations(newImports);
@@ -57,7 +67,7 @@ export function fixImportsInReferencingFiles(node: NodeType, destFile: SourceFil
   });
   node.getSourceFile().addImportDeclaration({
     moduleSpecifier: node.getSourceFile().getRelativePathAsModuleSpecifierTo(destFile),
-    namedImports: node.isDefaultExport() ?  undefined : [{ name: node.getName() }], 
+    namedImports: node.isDefaultExport() ? undefined : [{ name: node.getName() }],
     defaultImport: node.isDefaultExport() ? node.getName() : undefined,
   });
 }
@@ -65,8 +75,9 @@ export function fixImportsInReferencingFiles(node: NodeType, destFile: SourceFil
 
 let tmpSourceFile: SourceFile
 
-export function safeOrganizeImports(f: SourceFile, project: Project) {
+export function safeOrganizeImports(f: SourceFile, ) {
   if (!tmpSourceFile) {
+    const project = createProject()
     tmpSourceFile = project.createSourceFile(`tmp_${new Date().getTime()}.ts`, '')
   }
   tmpSourceFile.replaceWithText(f.getText())
@@ -90,10 +101,10 @@ export function findReferencesDeclaredOutside(node: Node, outside: boolean = tru
     .map(d => {
       return getReferences(d)
 
-      .filter(r => r.isDefinition() && (outside ? !r.getNode().getFirstAncestor(a => a === node) : !!r.getNode().getFirstAncestor(a => a === node)))
-      .map(r => r.getNode())
- 
-        // .filter(r => (outside ? !r.getNode().getFirstAncestor(a => a === node) : !!r.getNode().getFirstAncestor(a => a === node))).map(r => r.getNode())
+        .filter(r => r.isDefinition() && (outside ? !r.getNode().getFirstAncestor(a => a === node) : !!r.getNode().getFirstAncestor(a => a === node)))
+        .map(r => r.getNode())
+
+      // .filter(r => (outside ? !r.getNode().getFirstAncestor(a => a === node) : !!r.getNode().getFirstAncestor(a => a === node))).map(r => r.getNode())
     })
   return flat(refs).filter((n, i, a) => a.indexOf(n) === i)
 }

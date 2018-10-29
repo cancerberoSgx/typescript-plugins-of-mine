@@ -91,7 +91,7 @@ function f3(){
 
 
 
-  fit('default imports', () => {
+  it('default imports', () => {
 
     const project = createProject()
     const f1File = project.createSourceFile('f1.ts', `
@@ -129,6 +129,51 @@ function aux(){return f1()}
     sourceFileEquals(f2File, `
 import utility1 from "./dest"; 
 export default function(){return 'default2'+utility1()}
+ `)
+
+  })
+
+
+
+  it('alias imports', () => {
+
+    const project = createProject()
+    const f1File = project.createSourceFile('f1.ts', `
+export interface I1 {}
+export interface another {
+  method(i1:I1): void
+}
+  `)
+
+    const f2File = project.createSourceFile('f2.ts', `
+import {I1 as Interface1} from './f1'
+export interface I2 extends Interface1{}
+  `)
+    const i1 = f1File.getInterface('I1')
+
+    const destFile = project.createSourceFile('dest.ts', '') // TODO What happens if dest.ts already has a default export ? we should abort
+
+        assertProjectNoErrors(project, ) //  2307 - Cannot find module 'a-library-f1'.
+
+    moveNode(i1, destFile, project)
+
+    assertProjectNoErrors(project, )
+
+    sourceFileEquals(destFile, `
+    export interface I1 {
+    }
+      `)
+    sourceFileEquals(f1File, `
+     import { I1 } from "./dest";
+    export interface another {
+      method(i1:I1): void
+    }
+   `)
+
+    sourceFileEquals(f2File, ` 
+    import { I1 as Interface1 } from "./dest";
+
+    export interface I2 extends Interface1{}
  `)
 
   })
