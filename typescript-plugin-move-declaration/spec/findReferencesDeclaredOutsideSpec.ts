@@ -1,6 +1,5 @@
-import { findReferencesDeclaredOutside, moveNode } from '../src/moveNode';
 import Project, { TypeGuards } from 'ts-simple-ast';
-import { sourceFileEquals } from './testUtil';
+import { findReferencesDeclaredOutside } from '../src/moveNodeUtil';
 
 describe('findReferencesDeclaredOutside', () => {
 
