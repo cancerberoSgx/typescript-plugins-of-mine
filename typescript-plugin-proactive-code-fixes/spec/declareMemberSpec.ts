@@ -68,7 +68,7 @@ const k = hello.mama(1, 2, 3) + ' how are you?'
     expect(s).toContain(`mama(arg0: number, arg1: number, arg2: number): string`)
 
     const output = applyTextChanges(code, result.edits[0].textChanges )
-    expect(removeWhiteSpaces(output , ` `)).toBe(`interface Hello { mama(arg0: number, arg1: number, arg2: number): string; } const hello: Hello = {} const k = hello.mama(1, 2, 3) + ' how are you?' `)
+    expect(removeWhiteSpaces(output , ' ')).toBe(`interface Hello { mama(arg0: number, arg1: number, arg2: number): string; } const hello: Hello = {} const k = hello.mama(1, 2, 3) + ' how are you?' `)
   })
 
 

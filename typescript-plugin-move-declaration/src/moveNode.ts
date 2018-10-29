@@ -43,7 +43,6 @@ export function moveNode(node: NodeType, destFile: SourceFile, project: Project)
   finalNode.setIsExported(true)
   destFile.organizeImports()
   safeOrganizeImports(node.getSourceFile(), project);
-  // nodeFile.organizeImports()
 }
 
 let tmpSourceFile: SourceFile
@@ -78,7 +77,7 @@ export function findReferencesDeclaredOutside(node: Node, outside: boolean = tru
 }
 
 
-
+// &%&% moveDeclarationNamed('addImportsToDestFile', './moveNodeUtil.ts')
 export function addImportsToDestFile(node: Node, destFile: SourceFile){
   const importsToAddToDestFile = node.getSourceFile().getImportDeclarations().filter(i => i.getModuleSpecifierSourceFile() !== destFile).map(i => {
     return {

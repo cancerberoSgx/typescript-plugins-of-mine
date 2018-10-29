@@ -127,24 +127,10 @@ export function basicTest(position: number, config: DefaultBeforeEachResult, fix
 }
 
 
-// export function testCodeFixRefactorEditInfo3(code: string, cursorPosition: number|ts.TextRange, codeFixName: string): {result: ts.RefactorEditInfo, sourceFile: SourceFile, project: Project} {
-
-//   const project = new Project({
-//     // useVirtualFileSystem: true
-//   // TODO : ts-simple-ast : useVirtualFileSystem: true : breaks typechecker
-//   })
-//   const sourceFile = project.createSourceFile('foo.ts', code)
-//   return   {
-//     result: testCodeFixRefactorEditInfo2(sourceFile, project, cursorPosition, codeFixName),
-//     sourceFile, 
-//     project
-//   }
-// }
-
 export function testCodeFixRefactorEditInfo(code: string, cursorPosition: number|ts.TextRange, codeFixName: string): ts.RefactorEditInfo{
   const project = new Project({
     // useVirtualFileSystem: true
-  // TODO : ts-simple-ast : useVirtualFileSystem: true : breaks typechecker
+  // TODO : ts-simple-ast : useVirtualFileSystem: true : breaks typechecker if we dont manually load libts.d.ts
   })
   const sourceFile = project.createSourceFile('foo.ts', code)
   return testCodeFixRefactorEditInfo2(sourceFile, project, cursorPosition, codeFixName)
@@ -154,7 +140,6 @@ export function testCodeFixRefactorEditInfo2(sourceFile: SourceFile, project: Pr
   const diagnostics = getDiagnosticsInCurrentLocation(project.getProgram().compilerObject, sourceFile.compilerNode, cursorPosition);
   let range: ts.TextRange = typeof (cursorPosition as ts.TextRange).pos==='undefined' ? {pos: cursorPosition as number, end: cursorPosition as number} :  cursorPosition as ts.TextRange 
   const child = sourceFile.getDescendantAtPos(range.pos);
-  // console.log(child.getText());
 
   const arg: CodeFixOptions = {
     diagnostics,
