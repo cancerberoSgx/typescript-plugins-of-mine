@@ -2,7 +2,7 @@ import { ExportableNode, Node, Project, ReferenceEntry, ReferenceFindableNode, S
 import { flat } from 'typescript-ast-util';
 import { NodeType } from './moveNode';
 
-export function addImportsToDestFile(node: Node, destFile: SourceFile) {
+export function addImportsToDestFile(node: NodeType, destFile: SourceFile) {
   const importsToAddToDestFile = node.getSourceFile().getImportDeclarations().filter(i => i.getModuleSpecifierSourceFile() !== destFile).map(i => {
     const specifiedFile = i.getModuleSpecifierSourceFile()
     const isLibrary = !specifiedFile || !i.getModuleSpecifierValue().trim().startsWith('.')
@@ -48,7 +48,7 @@ export function fixImportsInReferencingFiles(node: NodeType, destFile: SourceFil
         return {
           ...i.getStructure(),
           moduleSpecifier: f.getRelativePathAsModuleSpecifierTo(destFile),
-          namedImports: [{ name: node.getName() }] // heads up - we only want to import node in case the original import ontains more than one name. 
+          namedImports: node.isDefaultExport() ? undefined : [{ name: node.getName() }] // heads up - we only want to import node in case the original import ontains more than one name. 
           // TODO: support other non named imports like default and alias
         }
       });
@@ -57,7 +57,8 @@ export function fixImportsInReferencingFiles(node: NodeType, destFile: SourceFil
   });
   node.getSourceFile().addImportDeclaration({
     moduleSpecifier: node.getSourceFile().getRelativePathAsModuleSpecifierTo(destFile),
-    namedImports: [{ name: node.getName() }]
+    namedImports: node.isDefaultExport() ?  undefined : [{ name: node.getName() }], 
+    defaultImport: node.isDefaultExport() ? node.getName() : undefined,
   });
 }
 

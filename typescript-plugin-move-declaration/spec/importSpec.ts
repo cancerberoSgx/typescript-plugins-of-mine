@@ -88,4 +88,48 @@ function f3(){
   `)
 
   })
+
+
+
+  fit('default imports', () => {
+
+    const project = createProject()
+    const f1File = project.createSourceFile('f1.ts', `
+export default function f1(){return 'default1'}
+function aux(){return f1()}
+  `)
+
+    const f2File = project.createSourceFile('f2.ts', `
+import utility1 from './f1'
+export default function(){return 'default2'+utility1()}
+  `)
+    const f1 = f1File.getFunction('f1')
+
+    const destFile = project.createSourceFile('dest.ts', '') // TODO What happens if dest.ts already has a default export ? we should abort
+
+    
+    assertProjectNoErrors(project, ) //  2307 - Cannot find module 'a-library-f1'.
+    moveNode(f1, destFile, project)
+
+
+    // console.log('dest\n', destFile.getText());
+    // console.log('f1\n', f1File.getText());
+    // console.log('f2\n', f2File.getText());
+
+
+    assertProjectNoErrors(project, )
+    sourceFileEquals(destFile, `
+export default function f1() { return 'default1' }
+  `)
+    sourceFileEquals(f1File, `
+import f1 from "./dest"; 
+function aux(){return f1()}
+   `)
+
+    sourceFileEquals(f2File, `
+import utility1 from "./dest"; 
+export default function(){return 'default2'+utility1()}
+ `)
+
+  })
 })

@@ -15,6 +15,7 @@ export function moveNode(node: NodeType, destFile: SourceFile, project: Project)
   fixImportsInReferencingFiles(node, destFile);
 
   // move the declaration - first add a copy of the node to destFile
+
   let finalNode: NodeType
   if (TypeGuards.isClassDeclaration(node)) {
     finalNode = destFile.addClass(node.getStructure())
@@ -25,10 +26,12 @@ export function moveNode(node: NodeType, destFile: SourceFile, project: Project)
   else if (TypeGuards.isFunctionDeclaration(node)) {
     finalNode =destFile.addFunction(node.getStructure())
   }
+  const nodeIsDefaultExport = node.isDefaultExport()
   // and then remove node from its sourceFile
   node.remove()
 
   finalNode.setIsExported(true)
+    finalNode.setIsDefaultExport(nodeIsDefaultExport)
   safeOrganizeImports(destFile, project);
   safeOrganizeImports(node.getSourceFile(), project);
 }

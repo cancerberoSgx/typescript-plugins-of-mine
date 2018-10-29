@@ -41,6 +41,7 @@ https://github.com/theia-ide/typescript-language-server
 
 ## projects most of them plugins
 
+ * a plugin that convert / refactor in an entire project a file that has a default export and convert it into a named export  - if we can archive that then with that we can attack / simplify the problem of default exports on refactors like move-declaration 
 Would be good to have a gallery to share knowledge!
 
  * https://github.com/angular/angular/blob/master/packages/language-service/src/
