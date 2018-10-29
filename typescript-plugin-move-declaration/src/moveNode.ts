@@ -1,9 +1,10 @@
 import { ClassDeclaration, FunctionDeclaration, InterfaceDeclaration, Project, SourceFile, TypeGuards } from 'ts-simple-ast';
-import { addImportsToDestFile, addImportsToReferencingFiles, safeOrganizeImports } from './moveNodeUtil';
+import { addImportsToDestFile, fixImportsInReferencingFiles, safeOrganizeImports } from './moveNodeUtil';
 
 // TODO: 
 // * enumDeclaration , variable declarations
 // * test with no named imports like default or alias
+// * issue : see importSpec, when the node is imported toghether with other names like in import {a, node, b} from 'foo' then we must isolate `node` in its own import in fixImportsInReferencingFiles()
 export type NodeType = ClassDeclaration | InterfaceDeclaration | FunctionDeclaration
 export function moveNode(node: NodeType, destFile: SourceFile, project: Project) {
 
@@ -11,7 +12,7 @@ export function moveNode(node: NodeType, destFile: SourceFile, project: Project)
   addImportsToDestFile(node, destFile);
 
   // For each sourceFile that reference node, we add an import declaration to node but specifying nodeFile. (we "move" the oriinal import declarations only changing the specifier to point to destFile).
-  addImportsToReferencingFiles(node, destFile);
+  fixImportsInReferencingFiles(node, destFile);
 
   // move the declaration - first add a copy of the node to destFile
   let finalNode: NodeType

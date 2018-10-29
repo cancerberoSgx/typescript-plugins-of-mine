@@ -1,12 +1,12 @@
 import { Project, SourceFile } from 'ts-simple-ast';
 import { moveNode } from '../src/moveNode';
-import { printSourceFile } from './testUtil';
+import { printSourceFile, printProjectDiagnostics, assertProjectNoErrors, createProject } from './testUtil';
 
 
 describe('moveNode', ()=>{
   it('basic', ()=>{
 
-    const project = new Project({ useVirtualFileSystem: true })
+    const project = createProject()
 
     const lionFile = project.createSourceFile('src/animal/lion/Lion.ts', `
     import {Food} from '../../food/Food'
@@ -38,11 +38,11 @@ describe('moveNode', ()=>{
     const Food = foodFile.getClass('Food')
     const tmpFile = project.createSourceFile('tmp.ts', '')
     
-    // console.log('ERRORS: '+project.getPreEmitDiagnostics().map(e=>e.getMessageText()+' - '+(e.getSourceFile() && e.getSourceFile().getFilePath())).join('\n'))
-    
+    // printProjectDiagnostics(project);
+    assertProjectNoErrors(project)
     moveNode(Food, animalFile, project)
     // console.log(printSourceFile(lionFile));
-    
+    assertProjectNoErrors(project)
     
     expect(printSourceFile(foodFile)).toEqual('')
     expect(printSourceFile(animalFile)).toEqual('import { Energy } from "../energy/Energy"; export class Animal { breath(air: number){} } export class Food { energy: Energy; canEatBy: Animal[]; }')
