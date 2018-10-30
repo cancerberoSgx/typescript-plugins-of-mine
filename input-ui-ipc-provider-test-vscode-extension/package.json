@@ -11,9 +11,9 @@
     "test-vscode": "npm run build && node ./node_modules/vscode/bin/test"
   },
   "dependencies": {
-    "input-ui-ipc-provider-vscode": "file:../input-ui-ipc-provider-vscode",
-    "input-ui-ipc-provider-test-typescript-plugin": "file:../input-ui-ipc-provider-test-typescript-plugin",
-    "typescript-plugin-move-declaration": "file:../typescript-plugin-move-declaration"
+    "input-ui-ipc-provider-vscode": "/home/sg/git/typescript-plugins-of-mine/.yamat/input-ui-ipc-provider-vscode-0.0.7.tgz",
+    "input-ui-ipc-provider-test-typescript-plugin": "/home/sg/git/typescript-plugins-of-mine/.yamat/input-ui-ipc-provider-test-typescript-plugin-0.0.7.tgz",
+    "typescript-plugin-move-declaration": "/home/sg/git/typescript-plugins-of-mine/.yamat/typescript-plugin-move-declaration-0.0.11.tgz"
   },
   "devDependencies": {
     "@types/mocha": "^5.2.5",

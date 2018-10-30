@@ -26,13 +26,13 @@
   "license": "MIT",
   "dependencies": {
     "hrtime-now": "^1.0.5",
-    "input-ui-ipc-provider": "file:../input-ui-ipc-provider",
+    "input-ui-ipc-provider": "/home/sg/git/typescript-plugins-of-mine/.yamat/input-ui-ipc-provider-0.0.9.tgz",
     "ts-simple-ast": "^18.0.0",
-    "ts-simple-ast-extra": "file:../ts-simple-ast-extra",
+    "ts-simple-ast-extra": "/home/sg/git/typescript-plugins-of-mine/.yamat/ts-simple-ast-extra-0.0.7.tgz",
     "typescript": "^3.1.4",
-    "typescript-ast-util": "file:../typescript-ast-util",
-    "typescript-plugin-util": "file:../typescript-plugin-util",
-    "typescript-plugins-text-based-user-interaction": "file:../typescript-plugins-text-based-user-interaction"
+    "typescript-ast-util": "/home/sg/git/typescript-plugins-of-mine/.yamat/typescript-ast-util-1.1.6.tgz",
+    "typescript-plugin-util": "/home/sg/git/typescript-plugins-of-mine/.yamat/typescript-plugin-util-1.0.14.tgz",
+    "typescript-plugins-text-based-user-interaction": "/home/sg/git/typescript-plugins-of-mine/.yamat/typescript-plugins-text-based-user-interaction-0.0.15.tgz"
   },
   "devDependencies": {
     "@types/jasmine": "^2.8.9",

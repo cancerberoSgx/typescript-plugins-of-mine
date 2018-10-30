@@ -13,7 +13,7 @@
     "test-vscode": "npm run build && node ./node_modules/vscode/bin/test"
   },
   "dependencies": {
-    "input-ui-ipc-provider": "file:../input-ui-ipc-provider",
+    "input-ui-ipc-provider": "/home/sg/git/typescript-plugins-of-mine/.yamat/input-ui-ipc-provider-0.0.9.tgz",
     "vscode": "^1.1.21"
   },
   "devDependencies": {
