@@ -1,6 +1,6 @@
 {
   "name": "input-ui-ipc-provider-test-typescript-plugin",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "input-ui-ipc-provider-test-typescript-plugin ",
   "main": "dist/src/index.js",
   "private": true,
@@ -21,12 +21,12 @@
   "license": "MIT",
   "dependencies": {
     "hrtime-now": "^1.0.5",
-    "input-ui-ipc-provider": "/home/sg/git/typescript-plugins-of-mine/.yamat/input-ui-ipc-provider-0.0.9.tgz",
+    "input-ui-ipc-provider": "0.0.10",
     "ts-simple-ast": "^18.0.0",
-    "ts-simple-ast-extra": "/home/sg/git/typescript-plugins-of-mine/.yamat/ts-simple-ast-extra-0.0.7.tgz",
+    "ts-simple-ast-extra": "0.0.8",
     "typescript": "^3.1.4",
-    "typescript-ast-util": "/home/sg/git/typescript-plugins-of-mine/.yamat/typescript-ast-util-1.1.6.tgz",
-    "typescript-plugin-util": "/home/sg/git/typescript-plugins-of-mine/.yamat/typescript-plugin-util-1.0.14.tgz"
+    "typescript-ast-util": "1.1.7",
+    "typescript-plugin-util": "1.0.15"
   },
   "devDependencies": {
     "@types/jasmine": "^2.8.9",

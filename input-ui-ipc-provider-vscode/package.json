@@ -1,7 +1,7 @@
 {
   "name": "input-ui-ipc-provider-vscode",
   "description": "vscode implementation of https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/input-ui-ipc-provider",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "main": "./dist/index",
   "typings": "./dist/index.d.ts",
   "scripts": {
@@ -13,7 +13,7 @@
     "test-vscode": "npm run build && node ./node_modules/vscode/bin/test"
   },
   "dependencies": {
-    "input-ui-ipc-provider": "/home/sg/git/typescript-plugins-of-mine/.yamat/input-ui-ipc-provider-0.0.9.tgz",
+    "input-ui-ipc-provider": "0.0.10",
     "vscode": "^1.1.21"
   },
   "devDependencies": {
