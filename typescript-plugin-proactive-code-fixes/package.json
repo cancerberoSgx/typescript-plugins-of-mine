@@ -1,6 +1,6 @@
 {
   "name": "typescript-plugin-proactive-code-fixes",
-  "version": "0.0.17",
+  "version": "0.0.18",
   "description": "TypeScript Language Service Plugin with lots of code - fixes and refactors for fast code development which are available in others typed language's IDEs like Java/eclipse",
   "main": "dist/src/index.js",
   "typings": "dist/src/typings.d.ts",
@@ -26,10 +26,10 @@
   "dependencies": {
     "hrtime-now": "^1.0.5",
     "ts-simple-ast": "^18.0.0",
-    "ts-simple-ast-extra": "file:../ts-simple-ast-extra",
+    "ts-simple-ast-extra": "0.0.9",
     "typescript": "^3.1.4",
-    "typescript-ast-util": "file:../typescript-ast-util",
-    "typescript-plugin-util": "file:../typescript-plugin-util"
+    "typescript-ast-util": "1.1.8",
+    "typescript-plugin-util": "1.0.16"
   },
   "devDependencies": {
     "@types/jasmine": "^2.8.9",

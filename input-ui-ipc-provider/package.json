@@ -1,6 +1,6 @@
 {
   "name": "input-ui-ipc-provider",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "high level API for external process providing with input user experience like inputText, selectOption, etc",
   "main": "dist/src/index.js",
   "typings": "dist/src/index.d.ts",

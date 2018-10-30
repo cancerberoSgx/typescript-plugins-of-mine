@@ -140,19 +140,6 @@ export function getIndexAfterLastImport(f: SourceFile): number{
 }
 
 
-
-
-// let tmpSourceFile: SourceFile
-
-// export function safeOrganizeImports(f: SourceFile, project: Project) {
-//   if (!tmpSourceFile) {
-//     tmpSourceFile = project.createSourceFile(`tmp_${new Date().getTime()}.ts`, '')
-//   }
-//   tmpSourceFile.replaceWithText(f.getText())
-//   tmpSourceFile.organizeImports()
-//   f.replaceWithText(tmpSourceFile.getText())
-// }
-
 export function getReferences(node: ReferenceFindableNode): ReferenceEntry[] {
   const references: ReferenceEntry[] = []
   const referencedSymbols = node.findReferences();
