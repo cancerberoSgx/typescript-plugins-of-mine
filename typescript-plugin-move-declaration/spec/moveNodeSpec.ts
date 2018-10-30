@@ -45,8 +45,9 @@ describe('moveNode', ()=>{
     assertProjectNoErrors(project)
     
     expect(printSourceFile(foodFile)).toEqual('')
-    expect(printSourceFile(animalFile)).toEqual('import { Energy } from "../energy/Energy"; export class Animal { breath(air: number){} } export class Food { energy: Energy; canEatBy: Animal[]; }')
+    expect(printSourceFile(animalFile)).toEqual('import { Energy } from "../energy/Energy"; export class Food { energy: Energy; canEatBy: Animal[]; } export class Animal { breath(air: number){} }')
     expect(printSourceFile(lionFile)).toEqual(`import {Animal} from '../Animal' import { Food } from "../Animal"; export class Lion extends Animal{ eat(meat: Food){} }`)
   
   })
 })
+

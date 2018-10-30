@@ -21,13 +21,13 @@
   "license": "MIT",
   "dependencies": {
     "hrtime-now": "^1.0.5",
-    "input-ui-ipc-provider": "0.0.10",
+    "input-ui-ipc-provider": "file:../input-ui-ipc-provider",
     "ts-simple-ast": "^18.0.0",
-    "ts-simple-ast-extra": "0.0.8",
+    "ts-simple-ast-extra": "file:../ts-simple-ast-extra",
     "typescript": "^3.1.4",
-    "typescript-ast-util": "1.1.7",
-    "typescript-plugin-util": "1.0.15",
-    "typescript-plugins-text-based-user-interaction": "0.0.16"
+    "typescript-ast-util": "file:../typescript-ast-util",
+    "typescript-plugin-util": "file:../typescript-plugin-util",
+    "typescript-plugins-text-based-user-interaction": "file:../typescript-plugins-text-based-user-interaction"
   },
   "devDependencies": {
     "@types/jasmine": "^2.8.9",

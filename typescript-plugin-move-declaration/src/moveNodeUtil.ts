@@ -4,7 +4,22 @@ import { NodeType } from './moveNode';
 import { createProject } from '../spec/testUtil';
 
 export function fixImportsInDestFile(node: NodeType, destFile: SourceFile) {
-  const importsToAddToDestFile = node.getSourceFile().getImportDeclarations()
+
+  destFile.getImportDeclarations()
+  .filter(i => i.getModuleSpecifierSourceFile() === node.getSourceFile())
+  .forEach(i=>{
+    if(i.getNamedImports().length>1){
+      const ni = i.getNamedImports().find(ni=>ni.getName()===node.getName())
+      if(ni){
+        ni.remove()
+      }
+    }
+    else {
+      i.remove()
+    }
+  })
+  const importsToAddToDestFile = node.getSourceFile()
+  .getImportDeclarations()
     .filter(i => i.getModuleSpecifierSourceFile() !== destFile)
     .map(i => {
       const specifiedFile = i.getModuleSpecifierSourceFile()
@@ -15,6 +30,7 @@ export function fixImportsInDestFile(node: NodeType, destFile: SourceFile) {
         moduleSpecifier
       }
     })
+    
   // import all nodes used by node that are declared outside it but not imported . Make sure they are exported
   const referencedByNodeNotImported = findReferencesDeclaredOutside(node)
     .filter(r => r.getSourceFile() === node.getSourceFile() && !r.getFirstAncestor(TypeGuards.isImportDeclaration))
@@ -26,12 +42,14 @@ export function fixImportsInDestFile(node: NodeType, destFile: SourceFile) {
       return n
     })
     .filter((n, i, a) => a.indexOf(n) === i)
+
   referencedByNodeNotImported.forEach(n => {
     importsToAddToDestFile.push({
       moduleSpecifier: destFile.getRelativePathAsModuleSpecifierTo(node.getSourceFile()),
       namedImports: [{ name: n.getText() }]
     })
   })
+  
 
   destFile.addImportDeclarations(importsToAddToDestFile)
 }
@@ -42,6 +60,7 @@ export function fixImportsInReferencingFiles(node: NodeType, destFile: SourceFil
   getReferences(node)
     .map(r => r.getSourceFile())
     .filter((f, i, a) => a.indexOf(f) === i)
+    .filter(f=>f!==destFile)
     .forEach(f => {
       const newImports = f.getImportDeclarations()
         .filter(i => i.getModuleSpecifierSourceFile() === node.getSourceFile())
@@ -110,19 +129,29 @@ export function fixExportsInReferencingFiles(node: NodeType, destFile: SourceFil
 }
 
 
-
-
-
-let tmpSourceFile: SourceFile
-
-export function safeOrganizeImports(f: SourceFile, project: Project) {
-  if (!tmpSourceFile) {
-    tmpSourceFile = project.createSourceFile(`tmp_${new Date().getTime()}.ts`, '')
+export function getIndexAfterLastImport(f: SourceFile): number{
+  const ids = f.getImportDeclarations()
+  if(ids.length){
+    return ids[ids.length-1].getChildIndex()+1
   }
-  tmpSourceFile.replaceWithText(f.getText())
-  tmpSourceFile.organizeImports()
-  f.replaceWithText(tmpSourceFile.getText())
+  else {
+    return 0
+  }
 }
+
+
+
+
+// let tmpSourceFile: SourceFile
+
+// export function safeOrganizeImports(f: SourceFile, project: Project) {
+//   if (!tmpSourceFile) {
+//     tmpSourceFile = project.createSourceFile(`tmp_${new Date().getTime()}.ts`, '')
+//   }
+//   tmpSourceFile.replaceWithText(f.getText())
+//   tmpSourceFile.organizeImports()
+//   f.replaceWithText(tmpSourceFile.getText())
+// }
 
 export function getReferences(node: ReferenceFindableNode): ReferenceEntry[] {
   const references: ReferenceEntry[] = []

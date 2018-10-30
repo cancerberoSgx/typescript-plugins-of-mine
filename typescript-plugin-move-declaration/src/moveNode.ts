@@ -1,5 +1,5 @@
 import { ClassDeclaration, FunctionDeclaration, InterfaceDeclaration, Project, SourceFile, TypeGuards } from 'ts-simple-ast';
-import { fixImportsInDestFile, fixImportsInReferencingFiles, safeOrganizeImports, fixExportsInReferencingFiles } from './moveNodeUtil';
+import { fixExportsInReferencingFiles, fixImportsInDestFile, fixImportsInReferencingFiles, getIndexAfterLastImport } from './moveNodeUtil';
 
 // TODO: 
 // * enumDeclaration , variable declarations
@@ -21,21 +21,23 @@ export function moveNode(node: NodeType, destFile: SourceFile, project: Project)
   // move the declaration - first add a copy of the node to destFile
 
   let finalNode: NodeType
+  const index = getIndexAfterLastImport(destFile)
   if (TypeGuards.isClassDeclaration(node)) {
-    finalNode = destFile.addClass(node.getStructure())
+    finalNode = destFile.insertClass(index, node.getStructure())
   }
   else if (TypeGuards.isInterfaceDeclaration(node)) {
-    finalNode =destFile.addInterface(node.getStructure())
+    finalNode = destFile.insertInterface(index, node.getStructure())
   }
   else if (TypeGuards.isFunctionDeclaration(node)) {
-    finalNode =destFile.addFunction(node.getStructure())
+    finalNode = destFile.insertFunction(index, node.getStructure())
   }
   const nodeIsDefaultExport = node.isDefaultExport()
   // and then remove node from its sourceFile
   node.remove()
 
   finalNode.setIsExported(true)
-    finalNode.setIsDefaultExport(nodeIsDefaultExport)
-  safeOrganizeImports(destFile, project);
-  safeOrganizeImports(node.getSourceFile(), project);
+  finalNode.setIsDefaultExport(nodeIsDefaultExport)
+  destFile.organizeImports()
+  node.getSourceFile().organizeImports()
 }
+
