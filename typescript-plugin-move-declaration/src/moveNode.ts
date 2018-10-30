@@ -5,6 +5,8 @@ import { fixImportsInDestFile, fixImportsInReferencingFiles, safeOrganizeImports
 // * enumDeclaration , variable declarations
 // * test with no named imports like default or alias
 // * issue : see importSpec, when the node is imported toghether with other names like in import {a, node, b} from 'foo' then we must isolate `node` in its own import in fixImportsInReferencingFiles()
+// moving decl that is default exported to a file that already has a default exported should be aborted
+// problem with index with export * from './foo'
 export type NodeType = ClassDeclaration | InterfaceDeclaration | FunctionDeclaration
 export function moveNode(node: NodeType, destFile: SourceFile, project: Project) {
 
@@ -32,6 +34,6 @@ export function moveNode(node: NodeType, destFile: SourceFile, project: Project)
 
   finalNode.setIsExported(true)
     finalNode.setIsDefaultExport(nodeIsDefaultExport)
-  safeOrganizeImports(destFile);
-  safeOrganizeImports(node.getSourceFile());
+  safeOrganizeImports(destFile, project);
+  safeOrganizeImports(node.getSourceFile(), project);
 }

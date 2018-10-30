@@ -1,6 +1,6 @@
 {
   "name": "typescript-plugin-function-signature-refactors",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "description": "TypeScript Language Service Plugin plugin with several refactors related to function-like signature. ",
   "main": "dist/src/index.js",
   "typings": "dist/src/typings.d.ts",

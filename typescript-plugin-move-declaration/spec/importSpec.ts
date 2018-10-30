@@ -62,15 +62,17 @@ export interface a {}
     const f2File = project.createSourceFile('f2.ts', `
 import {x, f1, a} from './f1'
 function f3(){
+  const aux = x + 1
   return f1()
 }
+interface b extends a {}
   `)
     const f1 = f1File.getFunction('f1')
 
     const destFile = project.createSourceFile('dest.ts', '')
-    assertProjectNoErrors(project, [2307]) //  2307 - Cannot find module 'a-library-f1'.
+    assertProjectNoErrors(project)
     moveNode(f1, destFile, project)
-    assertProjectNoErrors(project, [2307])
+    assertProjectNoErrors(project)
     sourceFileEquals(destFile, `
 export function f1() {
 }
@@ -81,10 +83,10 @@ export interface a {}
    `)
 
     sourceFileEquals(f2File, `
-import { f1 } from "./dest";
-function f3(){
-  return f1()
-}
+import {x, a} from './f1' 
+import { f1 } from "./dest"; 
+function f3(){ const aux = x + 1 return f1() } 
+interface b extends a {}
   `)
 
   })
@@ -107,8 +109,8 @@ export default function(){return 'default2'+utility1()}
 
     const destFile = project.createSourceFile('dest.ts', '') // TODO What happens if dest.ts already has a default export ? we should abort
 
-    
-    assertProjectNoErrors(project, ) //  2307 - Cannot find module 'a-library-f1'.
+
+    assertProjectNoErrors(project) //  2307 - Cannot find module 'a-library-f1'.
     moveNode(f1, destFile, project)
 
 
@@ -117,7 +119,7 @@ export default function(){return 'default2'+utility1()}
     // console.log('f2\n', f2File.getText());
 
 
-    assertProjectNoErrors(project, )
+    assertProjectNoErrors(project)
     sourceFileEquals(destFile, `
 export default function f1() { return 'default1' }
   `)
@@ -151,13 +153,12 @@ export interface I2 extends Interface1{}
   `)
     const i1 = f1File.getInterface('I1')
 
-    const destFile = project.createSourceFile('dest.ts', '') // TODO What happens if dest.ts already has a default export ? we should abort
-
-        assertProjectNoErrors(project, ) //  2307 - Cannot find module 'a-library-f1'.
+    const destFile = project.createSourceFile('dest.ts', '')
+    assertProjectNoErrors(project)
 
     moveNode(i1, destFile, project)
 
-    assertProjectNoErrors(project, )
+    assertProjectNoErrors(project)
 
     sourceFileEquals(destFile, `
     export interface I1 {

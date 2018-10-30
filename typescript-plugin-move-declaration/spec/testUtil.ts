@@ -23,6 +23,7 @@ export function createProject(lib: string[] = ['es5', 'es6', 'dom', 'scripthost'
   loadDtsFiles(fs, lib);
   return project
 }
+
 function loadDtsFiles(fs: FileSystemHost, lib: string[]) {
   const fileNames = [`node_modules/typescript/lib/lib.d.ts`].concat(lib.map(l => `node_modules/typescript/lib/lib.${l}.d.ts`))
   fileNames.forEach(absolutePath => {

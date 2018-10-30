@@ -12,7 +12,7 @@
             "runtimeExecutable": "${execPath}",
             "args": [
                 "--extensionDevelopmentPath=${workspaceFolder}",
-                "${workspaceFolder}/../../ts-simple-ast "
+                "${workspaceFolder}/../../ts-simple-ast"
             ],
             "outFiles": [
                 "${workspaceFolder}/out/**/*.js"

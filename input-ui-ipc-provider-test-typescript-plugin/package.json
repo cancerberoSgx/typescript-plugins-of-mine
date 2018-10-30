@@ -1,6 +1,6 @@
 {
   "name": "input-ui-ipc-provider-test-typescript-plugin",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "input-ui-ipc-provider-test-typescript-plugin ",
   "main": "dist/src/index.js",
   "private": true,

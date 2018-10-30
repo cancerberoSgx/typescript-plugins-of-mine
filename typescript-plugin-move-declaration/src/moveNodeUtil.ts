@@ -4,15 +4,17 @@ import { NodeType } from './moveNode';
 import { createProject } from '../spec/testUtil';
 
 export function fixImportsInDestFile(node: NodeType, destFile: SourceFile) {
-  const importsToAddToDestFile = node.getSourceFile().getImportDeclarations().filter(i => i.getModuleSpecifierSourceFile() !== destFile).map(i => {
-    const specifiedFile = i.getModuleSpecifierSourceFile()
-    const isLibrary = !specifiedFile || !i.getModuleSpecifierValue().trim().startsWith('.')
-    const moduleSpecifier = isLibrary ? i.getModuleSpecifierValue() : destFile.getRelativePathAsModuleSpecifierTo(specifiedFile)
-    return {
-      ...i.getStructure(),
-      moduleSpecifier
-    }
-  })
+  const importsToAddToDestFile = node.getSourceFile().getImportDeclarations()
+    .filter(i => i.getModuleSpecifierSourceFile() !== destFile)
+    .map(i => {
+      const specifiedFile = i.getModuleSpecifierSourceFile()
+      const isLibrary = !specifiedFile || !i.getModuleSpecifierValue().trim().startsWith('.')
+      const moduleSpecifier = isLibrary ? i.getModuleSpecifierValue() : destFile.getRelativePathAsModuleSpecifierTo(specifiedFile)
+      return {
+        ...i.getStructure(),
+        moduleSpecifier
+      }
+    })
   // import all nodes used by node that are declared outside it but not imported . Make sure they are exported
   const referencedByNodeNotImported = findReferencesDeclaredOutside(node)
     .filter(r => r.getSourceFile() === node.getSourceFile() && !r.getFirstAncestor(TypeGuards.isImportDeclaration))
@@ -36,48 +38,63 @@ export function fixImportsInDestFile(node: NodeType, destFile: SourceFile) {
 
 
 export function fixImportsInReferencingFiles(node: NodeType, destFile: SourceFile) {
-  // first obtain all the files referencing (importing) node 
-  const referencedSourceFiles = getReferences(node)
+  getReferences(node)
     .map(r => r.getSourceFile())
-    .filter((f, i, a) => a.indexOf(f) === i);
-
-  referencedSourceFiles.forEach(f => {
-    const newImports = f.getImportDeclarations()
-      .filter(i => i.getModuleSpecifierSourceFile() === node.getSourceFile())
-      .map(i => {
-        const s = i.getStructure()
-        // get the named input but only for node (in case there are multiple names in the import we remove the others)
-        let namedImports
-        if (s.namedImports && Array.isArray(s.namedImports)) {
-          namedImports = s.namedImports.filter(ni => typeof (ni) === 'string' ? ni === node.getName() : ni.name === node.getName())
-        }
-        else if (s.namedImports) {
-          // console.log('ELSE');
-          namedImports = [{ name: node.getName() }] // and good luck!
-          //TODO: what is the case when namedImports is of type writerFunction, not an array ? how do I handle that ? - an structure shound be serializable and here a field can be a function !!! 
-        }
-        return {
-          ...s,
-          moduleSpecifier: f.getRelativePathAsModuleSpecifierTo(destFile),
-          namedImports
-        }
-      });
-    f.addImportDeclarations(newImports);
-    f.getImportDeclarations().filter(i => i.getModuleSpecifierSourceFile() === node.getSourceFile()).forEach(i => i.remove());
-  });
+    .filter((f, i, a) => a.indexOf(f) === i)
+    .forEach(f => {
+      const newImports = f.getImportDeclarations()
+        .filter(i => i.getModuleSpecifierSourceFile() === node.getSourceFile())
+        .map(i => {
+          const s = i.getStructure()
+          // get the named import but only for node (in case there are multiple names in the import we remove the others)
+          let namedImports
+          if (s.namedImports && Array.isArray(s.namedImports)) {
+            namedImports = s.namedImports.filter(ni => typeof (ni) === 'string' ? ni === node.getName() : ni.name === node.getName())
+          }
+          else if (s.namedImports) {
+            namedImports = [{ name: node.getName() }] // and good luck!
+            //TODO: what is the case when namedImports is of type writerFunction, not an array ? how do I handle that ? - an structure shound be serializable and here a field can be a function !!! 
+          }
+          return {
+            ...s,
+            moduleSpecifier: f.getRelativePathAsModuleSpecifierTo(destFile),
+            namedImports
+          }
+        })
+      f.addImportDeclarations(newImports);
+      f.getImportDeclarations()
+        .filter(i => i.getModuleSpecifierSourceFile() === node.getSourceFile())
+        .forEach(i => {
+          // if(i.getModuleSpecifierSourceFile() === node.getSourceFile()){
+            if (i.getNamedImports() && i.getNamedImports().length > 1) {
+              const ni = i.getNamedImports().find(ni => ni.getName() === node.getName())
+              if (ni) {
+                ni.remove()
+              }
+            }
+            else {
+              i.remove()
+            }
+          // }
+          // else {
+          //   console.log(f.getBaseName(), i.getText());
+            
+          // }
+          
+        })
+    })
   node.getSourceFile().addImportDeclaration({
     moduleSpecifier: node.getSourceFile().getRelativePathAsModuleSpecifierTo(destFile),
     namedImports: node.isDefaultExport() ? undefined : [{ name: node.getName() }],
     defaultImport: node.isDefaultExport() ? node.getName() : undefined,
-  });
+  })
 }
 
 
 let tmpSourceFile: SourceFile
 
-export function safeOrganizeImports(f: SourceFile, ) {
+export function safeOrganizeImports(f: SourceFile, project: Project) {
   if (!tmpSourceFile) {
-    const project = createProject()
     tmpSourceFile = project.createSourceFile(`tmp_${new Date().getTime()}.ts`, '')
   }
   tmpSourceFile.replaceWithText(f.getText())
