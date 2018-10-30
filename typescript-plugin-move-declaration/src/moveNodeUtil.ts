@@ -37,6 +37,7 @@ export function fixImportsInDestFile(node: NodeType, destFile: SourceFile) {
 }
 
 
+
 export function fixImportsInReferencingFiles(node: NodeType, destFile: SourceFile) {
   getReferences(node)
     .map(r => r.getSourceFile())
@@ -65,22 +66,15 @@ export function fixImportsInReferencingFiles(node: NodeType, destFile: SourceFil
       f.getImportDeclarations()
         .filter(i => i.getModuleSpecifierSourceFile() === node.getSourceFile())
         .forEach(i => {
-          // if(i.getModuleSpecifierSourceFile() === node.getSourceFile()){
-            if (i.getNamedImports() && i.getNamedImports().length > 1) {
-              const ni = i.getNamedImports().find(ni => ni.getName() === node.getName())
-              if (ni) {
-                ni.remove()
-              }
+          if (i.getNamedImports() && i.getNamedImports().length > 1) {
+            const ni = i.getNamedImports().find(ni => ni.getName() === node.getName())
+            if (ni) {
+              ni.remove()
             }
-            else {
-              i.remove()
-            }
-          // }
-          // else {
-          //   console.log(f.getBaseName(), i.getText());
-            
-          // }
-          
+          }
+          else {
+            i.remove()
+          }
         })
     })
   node.getSourceFile().addImportDeclaration({
@@ -89,6 +83,34 @@ export function fixImportsInReferencingFiles(node: NodeType, destFile: SourceFil
     defaultImport: node.isDefaultExport() ? node.getName() : undefined,
   })
 }
+
+
+
+// fixes those files that contain export * from 'nodeFile' - heads up we need to go file by file because these doesn't contain references to the node
+export function fixExportsInReferencingFiles(node: NodeType, destFile: SourceFile, project: Project) {
+  project.getSourceFiles()
+    .forEach(f => {
+      f.getExportDeclarations()
+        .filter(i => i.getModuleSpecifierSourceFile() === node.getSourceFile())
+        .forEach(i => {
+          const ne = i.getNamedExports().find(ne => ne.getName() === node.getName())
+          if (ne) {
+            ne.remove()
+          }
+          const isLibrary = !i.getModuleSpecifierSourceFile() || !i.getModuleSpecifierValue().trim().startsWith('.')
+          const moduleSpecifier = isLibrary ? i.getModuleSpecifierValue() : i.getModuleSpecifierSourceFile().getRelativePathAsModuleSpecifierTo(destFile)
+          f.addExportDeclaration({
+            ...i.getStructure(),
+            moduleSpecifier, 
+            namedExports: [{name: node.getName()}]
+          })
+
+        })
+    })
+}
+
+
+
 
 
 let tmpSourceFile: SourceFile
@@ -120,8 +142,6 @@ export function findReferencesDeclaredOutside(node: Node, outside: boolean = tru
 
         .filter(r => r.isDefinition() && (outside ? !r.getNode().getFirstAncestor(a => a === node) : !!r.getNode().getFirstAncestor(a => a === node)))
         .map(r => r.getNode())
-
-      // .filter(r => (outside ? !r.getNode().getFirstAncestor(a => a === node) : !!r.getNode().getFirstAncestor(a => a === node))).map(r => r.getNode())
     })
   return flat(refs).filter((n, i, a) => a.indexOf(n) === i)
 }

@@ -109,17 +109,10 @@ export default function(){return 'default2'+utility1()}
 
     const destFile = project.createSourceFile('dest.ts', '') // TODO What happens if dest.ts already has a default export ? we should abort
 
-
     assertProjectNoErrors(project) //  2307 - Cannot find module 'a-library-f1'.
     moveNode(f1, destFile, project)
-
-
-    // console.log('dest\n', destFile.getText());
-    // console.log('f1\n', f1File.getText());
-    // console.log('f2\n', f2File.getText());
-
-
     assertProjectNoErrors(project)
+
     sourceFileEquals(destFile, `
 export default function f1() { return 'default1' }
   `)
