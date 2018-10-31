@@ -7,7 +7,7 @@ Each project has its own TODO but here are some general ones:
  * in the concrete vscode extension, should I update simplesourcefile when buffer change ? https://code.visualstudio.com/docs/extensions/example-language-server#_incremental-text-document-synchronization - probably yes so we dont get nasty error - tsa takes too long...
 
 
- * unit tests for all!!!
+ * (done) unit tests for all!!!
 
   
  * enable strict==true in tsconfig
@@ -130,7 +130,7 @@ d===l only if we add the new property as any or ugly casting. i think is OK if w
 
  * generate index.ts with all the exports - have a nice name in ts-simple-ast dont know...
  
- * (difficulty medium, usefulness: high) string-concat replace with string template
+ * (difficulty medium, usefulness: high) (done) string-concat replace with string template
 
 
  * independent extension : copy& paste with imports - organize imports, formatting, and in the right order (pste each decl before dependencies - after dependants) etc
@@ -157,11 +157,13 @@ function a(){}
  * more general than previous one (seee its impl) - user defined template-based action to remove or not a line
 
  * class ReorderParams implements CodeFix {} typescript nor mine proactive is suggesting to implement the interface because has missing method implementations. only for properties it works
+
  * (d:s,u:s)	"code": "2448",	"message": "Block-scoped variable 'findInterfacesWithPropertyNamed' used before its declaration.",
  
  * if to switch and viceversa.
  
  * (d: m, u: s/m) (done) crate type from return value : two ideas for agile type definition and refactor:
+
  * (done)  (useful and cheap). Title: declare new type from return value. Imagine you componse this function that returns a rich object: 
  ```
 function doEval(string, context: EvalContext) {

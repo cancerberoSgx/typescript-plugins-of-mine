@@ -22,7 +22,10 @@ import { renameVariable } from './code-fix/variableRename';
 import { organizeImportsAndFormat } from './code-fix/organizeImportsAndFormat';
 import { removeComments } from './code-fix/removeComments';
 import { addType } from './code-fix/addType';
+import { changeReturnType } from './code-fix/changeReturnType';
 
 export {CodeFix, CodeFixOptions} from 'ts-simple-ast-extra';
 
-export const codeFixes: CodeFix[] = [codeFixCreateConstructor, codeFixCreateVariable, declareClass, const2let, nameFunction, implementInterfaceObjectLiteral, declareReturnType, declareMember, addReturnStatement, implementInterfaceMember, renameVariable, splitVariableDeclarationList, toNamedParameters, memberChangeScope, removeEmptyLines, arrowFunctionBodyTransformations, extractInterface, methodDelegate, template2Literal, stringChangeQuoteChar, organizeImportsAndFormat, removeComments, addType]
+export const codeFixes: CodeFix[] = [codeFixCreateConstructor, codeFixCreateVariable, declareClass, const2let, nameFunction, implementInterfaceObjectLiteral, declareReturnType, declareMember, addReturnStatement, implementInterfaceMember, renameVariable, splitVariableDeclarationList, toNamedParameters, memberChangeScope, removeEmptyLines, arrowFunctionBodyTransformations, extractInterface, methodDelegate, template2Literal, stringChangeQuoteChar, organizeImportsAndFormat, removeComments, addType, 
+  changeReturnType
+]

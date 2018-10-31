@@ -19,7 +19,7 @@ const c = 1
 
 var asdfsdf = 1
 
-function ff() {
+function ff(): number {
   return 'a'
 }
 
@@ -32,3 +32,7 @@ const cc = gg()
 
 const fff = foo => { return new A().m1(foo) }
 
+
+function hhg(): string{
+  return 1
+}
