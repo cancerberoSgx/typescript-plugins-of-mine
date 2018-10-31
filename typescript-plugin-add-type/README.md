@@ -1,3 +1,5 @@
+obsolete by proactive-code-fixes - add Type refactor
+
 this is currently kind of abandoned
 
 # typescript-plugin-add-type
