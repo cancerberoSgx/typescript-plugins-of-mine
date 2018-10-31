@@ -1,6 +1,6 @@
 import Project, { SourceFile, NamedNode, ArrowFunction, Node, TypeGuards } from 'ts-simple-ast';
 import { applyTextChanges, createTextChanges } from '../src';
-import { moveToNewFile, addBracesToArrowFunction, removeBracesFromArrowFunction } from '../src/refactors';
+import { moveToNewFile, addBracesToArrowFunction, removeBracesFromArrowFunction, convertToEs6Module, fixUnusedIdentifiers } from '../src/refactors';
 
 describe('fileSpec', ()=>{
   it('moveToNewFile refactor', ()=>{
@@ -46,5 +46,44 @@ const c = a => {return a + 1; }
   expect(f.getText()).toContain(`const c = a => a+1`)
 
   })
+
+
+  it('convertToEs6Module', ()=>{
+    const project = new Project()
+    const code = `
+    const r = require('f')
+    const f = foo('r')
+    import {foo} from 'bar'
+    `
+    const f = project.createSourceFile('f1.ts', code)
+    
+    convertToEs6Module(project, f)
+    
+    expect(f.getText()).toContain('import r from \'f\';')
+    
+  })
+  
+  
+xit('fixUnusedIdentifiers', ()=>{ // it doesn't work
+    const project = new Project()
+    const code = `
+    const r = require('f')
+    export function f(){}
+    function foo(){}
+    foo()
+    function unu(){}
+    const a = 1
+    `
+    const f = project.createSourceFile('f1.ts', code)
+    project.createSourceFile('f2.ts',`import {f} from './f1';f()`)
+    fixUnusedIdentifiers(project, f)//, f.getFunction('foo'))
+    
+    console.log(f.getText());
+    // expect(f.getText()).toContain('import r from \'f\';')
+  
+    })
+
+    
 })
 
+// const r = require('f')
