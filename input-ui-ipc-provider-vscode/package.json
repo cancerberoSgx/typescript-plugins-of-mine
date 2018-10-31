@@ -13,7 +13,7 @@
     "test-vscode": "npm run build && node ./node_modules/vscode/bin/test"
   },
   "dependencies": {
-    "input-ui-ipc-provider": "0.0.11",
+    "input-ui-ipc-provider": "file:../input-ui-ipc-provider",
     "vscode": "^1.1.21"
   },
   "devDependencies": {
