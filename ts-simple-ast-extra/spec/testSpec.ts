@@ -53,12 +53,23 @@ export type Length<T> = T extends ArrayLike<infer U> ? number : never; // Not af
     `
     const project = new Project({useVirtualFileSystem: true})
     const f = project.createSourceFile('f1.ts', code)
-    const result = applyAllSuggestedCodeFixes(project, f)
-    // console.log(result.modified[0].getText());
+    // const result = applyAllSuggestedCodeFixes(project, f)
     
-    // project.getLanguageService().compilerObject.getSuggestionDiagnostics(f.getFilePath()).forEach(s=>{
-    //   console.log( s.code, s.messageText)
+    // const service = project.getLanguageService().compilerObject
+    applyAllSuggestedCodeFixes(project, f,  [6133, 7028, 6199])
+    // service.getSuggestionDiagnostics(f.getFilePath()).forEach(s=>{
+    //     const fixes = service.getCodeFixesAtPosition(f.getFilePath(), s.start, s.start+s.length, [s.code], {}, {})
+    //     // console.log(fixes.map(f=>f.fixId));
+    //     // if()
+    //     // service.getCombinedCodeFix({fileName: f.getFilePath()}, )
+    //     applyCodeFixes(project, fixes)
+    //       console.log( s.code, s.messageText, fixes.length, 'fixid: ', fixes.map(f=>f.fixId))
     // })
+    // console.log(f.getText());
+
+    expect(f.getText().startsWith(`import { used1 } from "foo";
+import { used2 } from "foo";
+used1; used2;`))
   })
 })  
 

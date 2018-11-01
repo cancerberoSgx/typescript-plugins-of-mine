@@ -54,7 +54,7 @@ const c = a => {return a + 1; }
 
 
   it('convertToEs6Module', () => {
-    const project = new Project()
+    const project = new Project({useVirtualFileSystem: true})
     const code = `
     const r = require('f')
     const f = foo('r')
@@ -64,12 +64,12 @@ const c = a => {return a + 1; }
 
     convertToEs6Module(project, f)
 
-    expect(f.getText()).toContain('import r from \'f\';')
+    expect(f.getText()).toContain('import r=require(\'f\');')
 
   })
 
 
-  fit('fixUnusedIdentifiers', () => { // it doesn't work
+  it('removeAllUnusedIdentifiers', () => { 
     const project = new Project()
     const code = `
     const r = require('f')
@@ -83,7 +83,10 @@ const c = a => {return a + 1; }
     project.createSourceFile('f2.ts', `import {f} from './f1';f()`)
     removeAllUnusedIdentifiers(project, f)//, f.getFunction('foo'))
 
-    console.log(f.getText());
+    expect(f.getText()).toBe(`export function f(){}
+    function foo(){}
+    foo()
+    `)
     // expect(f.getText()).toContain('import r from \'f\';')
 
   })
