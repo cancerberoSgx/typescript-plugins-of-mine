@@ -1,9 +1,8 @@
 
-import * as ts from 'typescript'
 import Project from 'ts-simple-ast';
-import { applyAllSuggestedCodeFixes } from '../src';
+import { removeAllUnused } from '../src/refactors';
 describe('changes', () => {
-  it('applyAllSuggestedCodeFixes', ()=>{
+  it('removeAllUnused', ()=>{
     const code = `
 import d from "foo";
 import d2, { used1 } from "foo";
@@ -56,7 +55,8 @@ export type Length<T> = T extends ArrayLike<infer U> ? number : never; // Not af
     // const result = applyAllSuggestedCodeFixes(project, f)
     
     // const service = project.getLanguageService().compilerObject
-    applyAllSuggestedCodeFixes(project, f,  [6133, 7028, 6199])
+    // applyAllSuggestedCodeFixes(project, f,  [6133, 7028, 6199])
+    removeAllUnused(project, f)
     // service.getSuggestionDiagnostics(f.getFilePath()).forEach(s=>{
     //     const fixes = service.getCodeFixesAtPosition(f.getFilePath(), s.start, s.start+s.length, [s.code], {}, {})
     //     // console.log(fixes.map(f=>f.fixId));
@@ -71,6 +71,30 @@ export type Length<T> = T extends ArrayLike<infer U> ? number : never; // Not af
 import { used2 } from "foo";
 used1; used2;`))
   })
+
+
+  it('removeAllUnusedIdentifiers', () => { 
+    const project = new Project()
+    const code = `
+    const r = require('f')
+    export function f(){}
+    function foo(){}
+    foo()
+    function unu(){}
+    const a = 1
+    `
+    const f = project.createSourceFile('f1.ts', code)
+    project.createSourceFile('f2.ts', `import {f} from './f1';f()`)
+    removeAllUnused(project, f)//, f.getFunction('foo'))
+
+    expect(f.getText()).toBe(`export function f(){}
+    function foo(){}
+    foo()
+    `)
+    // expect(f.getText()).toContain('import r from \'f\';')
+
+  })
+
 })  
 
 
