@@ -16,6 +16,8 @@ export function getConfigFilePath(project: ts_module.server.Project): string | u
   // TODO: for integrate it in simple-ast try with findConfigFile
 }
 
+const a = 1
+
 /**
  * (dirty way) of creating a ts-simple-ast Project from an exiting ts.server.Project. Given project must be a
  * configured project (created with a tsconfig file. It will recreates the project from scratch so it can take

@@ -1,6 +1,6 @@
 import Project, { ArrowFunction, ImportDeclaration, Node, SourceFile, Statement } from 'ts-simple-ast';
 import { createTextChanges } from '../src';
-import { applyCodeFixes, applyFileTextChanges, ApplyFileTextChangesResult } from './changes';
+import { applyCodeFixes, applyFileTextChanges, ApplyFileTextChangesResult, getSuggestedCodeFixesInside, applyAllSuggestedCodeFixes } from './changes';
 
 export function addBracesToArrowFunction(project: Project, arrowFunction: ArrowFunction) {
   // project.getLanguageService().compilerObject
@@ -54,24 +54,28 @@ export function convertToEs6Module(project: Project, file: SourceFile, importDec
 
 
 // it doesn't work
-export function fixUnusedIdentifiers(project: Project, file: SourceFile, rootNode?: Node) {
+export function removeAllUnusedIdentifiers(project: Project, node: Node) {
   // project.getLanguageService().compilerObject
   // const range = 
-  const fixes = project.getLanguageService().compilerObject.getCodeFixesAtPosition(file.getFilePath(), rootNode ? rootNode.getStart() : 0, rootNode ? rootNode.getEnd() : file.getEnd(),
-    [
-      6138,
-      6196,
-      6138,
-      //  6192, 6198, 6199, 6205
-    ], {}, {})
+  // getall
+  // const fixes = getSuggestedCodeFixesInside(project, node.getSourceFile(), [6133, 7028, 6199])//.filter(f=>f.c)
+  // const fixes = project.getLanguageService().compilerObject.getCodeFixesAtPosition(node.getSourceFile().getFilePath(), node.getStart(), node.getEnd(),   [ 6133,7028, 6199
+  //     // 6138,
+  //     // 6196,
+  //     // 6138,
+  //     //  6192, 6198, 6199, 6205
+  //   ], {}, {})
 
-  fixes.forEach(fix => {
-    fix.changes.forEach(change => {
 
-      file.applyTextChanges(createTextChanges(change.textChanges))
-      // textChanges = textChanges.concat(change.textChanges)
-    })
-  })
+  return applyAllSuggestedCodeFixes(project, node, [6133, 7028, 6199])
+
+  // fixes.forEach(fix => {
+  //   fix.changes.forEach(change => {
+
+  //     file.applyTextChanges(createTextChanges(change.textChanges))
+  //     // textChanges = textChanges.concat(change.textChanges)
+  //   })
+  // })
   // console.log(textChanges);
 
   // const range = {pos: arrowFunction.getStart(), end: arrowFunction.getEnd()}
@@ -79,3 +83,14 @@ export function fixUnusedIdentifiers(project: Project, file: SourceFile, rootNod
   // arrowFunction.getSourceFile().applyTextChanges(createTextChanges(edits.edits[0].textChanges))
 }
 
+function f():Promise<number> {
+  return new Promise(resolve=>{
+    resolve(1)
+  })
+}
+
+function m() {
+  f().then(n=>{
+
+  })
+}

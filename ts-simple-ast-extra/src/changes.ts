@@ -1,6 +1,6 @@
-import Project, { TextChange, SourceFile } from 'ts-simple-ast';
+import Project, { TextChange, SourceFile, Node } from 'ts-simple-ast';
 import * as ts from 'typescript'
-import { flat } from './misc';
+import { flat, flatReadOnly } from './misc';
 
 export function createTextChanges(textChanges: ts.TextChange[]): TextChange[] {
   return textChanges.map(compilerNode => {
@@ -17,7 +17,7 @@ export function applyTextChanges(code: string, textChanges: ts.TextChange[]): st
 }
 
 export interface ApplyFileTextChangesResult  {modified: SourceFile[], removed: SourceFile[], created: SourceFile[]}
-export function applyFileTextChanges(project: Project, fileTextChanges: ts.FileTextChanges[], removeEmpty: boolean = false): ApplyFileTextChangesResult {
+export function applyFileTextChanges(project: Project, fileTextChanges: ReadonlyArray<ts.FileTextChanges>, removeEmpty: boolean = false): ApplyFileTextChangesResult {
   const result: ApplyFileTextChangesResult = {
     modified: [],
     removed: [],
@@ -51,10 +51,29 @@ export function applyFileTextChanges(project: Project, fileTextChanges: ts.FileT
 
 
 export function applyCodeFixes(project: Project, codeFixes: ReadonlyArray<ts.CodeFixAction>){
-  return applyFileTextChanges(project, flat(codeFixes.map(f=>f.changes)))
+  return codeFixes.map(f=>applyFileTextChanges(project, f.changes))
+  // return applyFileTextChanges(project, codeFixes)//flat(codeFixes.map(f=>f.changes)))
 }
 
+export function applyAllSuggestedCodeFixes(project: Project, containerNode: Node, codes?: number[]) {
+  const fixes = getSuggestedCodeFixesInside(project, containerNode, codes)
+  return fixes.map(f=>applyCodeFixes(project, f))
+  // return applyCodeFixes(project, )
+}
 
+export function getSuggestedCodeFixesInside(project: Project, containerNode: Node, codes?: number[]): ReadonlyArray<ReadonlyArray<ts.CodeFixAction>>{
+  const service = project.getLanguageService().compilerObject
+  // return flatReadOnly(
+   return service.getSuggestionDiagnostics(containerNode.getSourceFile().getFilePath()).map(d=>{
+    if(d.start>=containerNode.getStart() && d.start+d.length<=containerNode.getEnd() && (!codes || codes.includes(d.code))){
+      return service.getCodeFixesAtPosition(containerNode.getSourceFile().getFilePath(), d.start, d.start+d.length, [d.code], {}, {})
+    }
+    // else {
+    //   return[[]] as any// ReadonlyArray<ReadonlyArray<ts.CodeFixAction>>
+    // }
+  }).filter(a=>a && a.length)
+  // )
+}
 let applyTextChangesSourceFile: SourceFile
 
 function applyTextChangesGetSourceFile() {
