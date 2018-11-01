@@ -1,10 +1,12 @@
 
 import Project from 'ts-simple-ast';
 import { convertNamedImportsToNamespaceImport, convertNamespaceImportToNamedImports } from '../src/refactors';
+import * as ts from 'typescript'
 
 describe('convertImport', () => {
 
-  it('convertImportNamespaceToNamed', ()=>{
+  it('convertImportNamespaceToNamed', () => {
+
     const code = `import * as m from "m";
 m.a;
 m.b;`
@@ -17,7 +19,7 @@ a;
 b;`)
   })
 
-  it('convertNamedImportsToNamespaceImport', ()=>{
+  it('convertNamedImportsToNamespaceImport', () => {
     const code = `import {a,b,c} from './foo'; a(b,c)`
     const project = new Project()
     const f = project.createSourceFile('f1.ts', code)
@@ -26,11 +28,5 @@ b;`)
     expect(f.getText()).toBe(`import * as foo from './foo'; foo.a(foo.b,foo.c)`)
   })
 
-  
-
 
 })  
-
-
-
-

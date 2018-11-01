@@ -12,6 +12,8 @@ Each project has its own TODO but here are some general ones:
   
  * enable strict==true in tsconfig
 
+
+
  * put the ideas below taht makes sense in a pretty table and present to ts vscode teams. 
  
  * typescript-simple-ast performance problems - are there ? test how well simple-ast behaves in langauge service plugins with big projects. see plugin-util/simple-ast-util.ts - build a cache of sourcefiles and a refresh() method
@@ -23,6 +25,32 @@ Each project has its own TODO but here are some general ones:
  
 
 ## plugin ideas - (refactor - code fix)
+
+
+
+ * typescript has a lot of useful code fix and refactors inside. since the editor is not suggesting me any of these and also they dont appear in getSUggestedDiagnosics() make a plugin that includes all of them in getSUggestedDiagnosics(). If they are there then they should be shown in the editor. 
+ Also this is kind of configurable ex: prefer arrow functions with braces, prefer async instead of promises,  prefer namespace import or named imporst. So this plugin should have a configuration (would be perfect in vscode). 
+
+ Example code that prints all the code fixed supported out of the box: 
+  fit('research', () => {
+    const supported = ts.getSupportedCodeFixes().map(s => parseInt(s, 10))
+    const tsDiagnostics = getTsDiagnostics()
+    const supportedMessages = tsDiagnostics.filter(d => supported.includes(d.code)).map(d => `${d.code} - ${d.message}`).join('\n')
+    console.log(supportedMessages);
+
+  })
+  interface TsDiagnostic {
+    code: number,
+    category: number,
+    key: string,
+    message: string,
+    reportsUnneccesary: any
+  }
+  function getTsDiagnostics(): TsDiagnostic[] {
+    return Object.values((ts as any).Diagnostics)
+  }
+
+
 
  * wrap selection with try-catch
 
