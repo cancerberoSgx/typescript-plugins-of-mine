@@ -24,6 +24,8 @@ Each project has its own TODO but here are some general ones:
 
 ## plugin ideas - (refactor - code fix)
 
+ * wrap selection with try-catch
+
  * check this: https://github.com/Microsoft/TypeScript/pull/13940 and if its possible to add custom transforms fromplugins add one that let user embedd raw text from fs at compile time.
 
  * reorder members alphabetically , by type(constructors first) or by modifiers (public first). Let the user stablish these rules. 

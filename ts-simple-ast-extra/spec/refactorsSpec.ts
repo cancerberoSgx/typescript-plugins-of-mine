@@ -1,8 +1,8 @@
-import Project, { SourceFile, NamedNode, ArrowFunction, Node, TypeGuards } from 'ts-simple-ast';
-import { applyTextChanges, createTextChanges } from '../src';
-import { moveToNewFile, addBracesToArrowFunction, removeBracesFromArrowFunction, convertToEs6Module, fixUnusedIdentifiers } from '../src/refactors';
+import Project, { TypeGuards } from 'ts-simple-ast';
+import { addBracesToArrowFunction, convertToEs6Module, fixUnusedIdentifiers, moveToNewFile, removeBracesFromArrowFunction } from '../src/refactors';
 
 describe('fileSpec', ()=>{
+
   it('moveToNewFile refactor', ()=>{
     const project = new Project()
     const code = `
@@ -11,11 +11,16 @@ const c = new Class1()
 `
     const f = project.createSourceFile('f1.ts', code)
     
-  moveToNewFile(project,  f.getClass('Class1'))
+  const result = moveToNewFile(project,  [f.getClass('Class1')])
+  // console.log(result);
+  
   expect(f.getText()).not.toContain('class Class1')
   expect(f.getText()).toContain('import { Class1 } from "./Class1";')
   const newFile = project.getSourceFile('Class1.ts')
   expect (newFile.getText()).toContain('export class Class1')
+
+  expect(result.created[0].getBaseName()).toBe('Class1.ts')
+  expect(result.modified[0].getBaseName()).toBe('f1.ts')
   
   })
 
