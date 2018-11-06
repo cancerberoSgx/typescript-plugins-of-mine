@@ -62,7 +62,7 @@ function getCompletionEntryDetails(fileName: string, position: number, name: str
     return
   }
   // info.project.updateGraph()
-  info.project.registerFileUpdate(fileName)
+  // info.project.registerFileUpdate(fileName)
 
   const program = info.languageService.getProgram()
   const sourceFile = program.getSourceFile(fileName)
@@ -75,11 +75,17 @@ function getCompletionEntryDetails(fileName: string, position: number, name: str
   //TODO: we return a codeAction.text change that basically replace all the text with the new one - we could do t better...
   return {
     name,
-    kind: ts.ScriptElementKind.unknown,
+    kind: ts.ScriptElementKind.string,
     kindModifiers: '',
-    displayParts: [],
-    documentation: [],
-    tags: [],
+    displayParts: [
+      {    kind: 'keyword', text: 'var'}
+    ],
+    documentation: [
+      {kind: 'doc1', text: 'shshshsh'}
+    ],
+    tags: [
+      {name: 'tag1', text: 'foooo'}
+    ],
     codeActions: [{
       description: 'variable declaration postfix ',
       changes: [
@@ -94,7 +100,9 @@ function getCompletionEntryDetails(fileName: string, position: number, name: str
         }
       ]
     }],
-    source: []
+    source: [
+      {      kind: 'keyword', text: 'var'}
+    ]
   }
 }
 

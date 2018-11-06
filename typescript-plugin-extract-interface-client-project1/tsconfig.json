@@ -41,9 +41,9 @@
       // {
       //   "name": "typescript-plugin-method-delegate"
       // },
-      // {
-      //   "name": "typescript-plugin-postfix"
-      // },
+      {
+        "name": "typescript-plugin-postfix"
+      },
       // {
       //   "name": "typescript-plugin-function-signature-refactors"
       // },
