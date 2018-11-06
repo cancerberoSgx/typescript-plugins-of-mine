@@ -23,6 +23,11 @@ function ff(): number {
   return 'a'
 }
 
+class casdasd {
+  constructor() {
+    this.prop = 1;
+  }
+}
 class A {
   m1(foo) { return ''+foo }
 }
@@ -31,8 +36,15 @@ function gg() { return new A() }
 const cc = gg()
 
 const fff = foo => { return new A().m1(foo) }
-
+const f = 'a'+'be'
 
 function hhg(): string{
   return 1
 }
+
+export function a (){}
+
+function fsdfsdfsd(): Promise<void> {
+return new Promise(resolve=>{resolve()}).then(r=>{})
+}
+

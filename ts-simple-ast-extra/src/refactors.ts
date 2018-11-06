@@ -25,7 +25,10 @@ export function convertToEs6Module(project: Project, node: Node){
 }
 
 export function removeAllUnused(project: Project, node: Node) {
-  return applyAllSuggestedCodeFixes(project, node, [6133, 7028, 6199, 
+  return applyAllSuggestedCodeFixes(project, node, [
+    6133, // variable is declared but is never read
+    7028, 
+    6199, 
     6192 // All imports in import declaration are unused.
   ])
 }

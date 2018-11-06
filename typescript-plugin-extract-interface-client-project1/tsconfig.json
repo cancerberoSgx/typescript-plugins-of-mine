@@ -33,6 +33,11 @@
       {
         "name": "typescript-plugin-move-declaration"
       },
+      {
+        "name": "typescript-plugin-all-ts-fixes-and-refactors"
+      },
+      
+
       // {
       //   "name": "typescript-plugin-method-delegate"
       // },
