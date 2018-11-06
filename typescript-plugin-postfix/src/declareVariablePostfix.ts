@@ -20,7 +20,9 @@ export class DeclareVariablePostfixConfig implements PostfixConfig {
 }
 
 const isExpression = node => getKindName(node).endsWith('Expression') || node.kind === ts.SyntaxKind.Identifier || getKindName(node).endsWith('Literal')
+
 const isNotExpression = node => !isExpression(node)
+
 const isBlock = node => getKindName(node).endsWith('Block') || node.kind === ts.SyntaxKind.SourceFile
 const isStatement = node => getKindName(node).endsWith('Statement')
 
@@ -42,43 +44,39 @@ export class DeclareVariablePostFix implements Postfix {
     let { program, fileName, position, target, log } = opts
 
     const sourceFile = program.getSourceFile(fileName)
-    // if(!ts.isPropertyAccessExpression(target)){
-      target = findAscendant(target, ts.isPropertyAccessExpression,true)
+      target = findAscendant(target, ts.isPropertyAccessExpression, true)
       if(!target){
         opts.log('declareVariable postfix doing nothing because !findAscendant(target, ts.isPropertyAccessExpression,true)'+ getKindName(opts.target))
-        return //'TODO1\n'
+        return
       }
-    // }
 
-    // // the target expression that will be declared as variable. 
+    // the target expression that will be declared as variable. 
     const targetExpression = findChild(findAscendant(target, isNotExpression), isExpression, false)
     // const statementContainer = findAscendant(targetExpression, isBlock)
     const declarationNextSibling = findAscendant(targetExpression, n=> !n.parent || isBlock(n.parent) && isStatement(n), true)
 
+    opts.log(`declarationNextSibling ${declarationNextSibling.getText()} ${getKindName(declarationNextSibling)}`)
 
     
     // //Following commented code is also an implementation without transforms and printer that doesn't reformat the code but has some issues though...
     // // poor man indentation detector
     if(!ts.isPropertyAccessExpression(target)){
       opts.log('declareVariable postfix doing nothing because !ts.isPropertyAccessExpression(target)'+ getKindName(opts.target))
-      return //'TODO2\n'
+      return 
     }
     const siblingIndentationMatch = /^(\s*)/m.exec(declarationNextSibling.getFullText())
     const siblingIndentation = siblingIndentationMatch ? siblingIndentationMatch[1] : ''
-    let allText = sourceFile.getFullText()
+    const allText = sourceFile.getFullText()
     // Let's remove ".let" from the target expression:
-    const targetExpressionTextWithoutNode =
-      allText.substring(targetExpression.pos, target.expression.end) //+  // -1 to remove the prefixed dot 
-      // allText.substring(target.name.end, targetExpression.end)
+    const targetExpressionTextWithoutNode =  allText.substring(targetExpression.pos, target.expression.end) 
 
-      const left =targetExpression// (targetExpression as ts.BinaryExpression).left||targetExpression
+      const variableName = this.variableName()
     const allNewText = allText.substring(0, declarationNextSibling.pos) +  
       // the following lines add our dummy variable declaration instead of the targetlocation
-      siblingIndentation + 'const renameIt = ' + targetExpressionTextWithoutNode + ';' + 
+      siblingIndentation + `${this.config.type||'const'} ${variableName} = ` + targetExpressionTextWithoutNode + ';' + 
       allText.substring(declarationNextSibling.pos , targetExpression.pos) +  
-      ' renameIt ' +//+left.getText()+'-'+getKindName(left) +' - '+
-      allText.substring( left.end, sourceFile.end) + 
-      // 'seba\n'
+      ` ${variableName} ` +
+      allText.substring(targetExpression.end, sourceFile.end) + 
       ''
 
     // opts.log('RETURNIG TEXT: '+allNewText)
@@ -142,7 +140,7 @@ export class DeclareVariablePostFix implements Postfix {
   }
 
   variableName(): string {
-    return 'nameMePlease'
+    return 'nameMePlease'+this.counter++
   }
 
   getVariableFlag() {

@@ -34,10 +34,10 @@ function getCompletionsAtPosition(fileName: string, position: number,
     kindModifiers: p.config.kindModifiers,
     sortText: p.config.sortText,
     insertText: ' ', // TODO: hack: If I don't do this then vscode will automatically add `this.name``in the text sourcefile - no matter the implementation - I don't know why or how to disable that besides this
-    // replacementSpan: {start: 0, length: 0},//p.config.replacementSpan,
-    hasAction: p.config.hasAction,
-    source: p.config.source,
-    isRecommended: p.config.isRecommended
+    // replacementSpan: {start: 2, length: 1},//p.config.replacementSpan,
+    // hasAction: p.config.hasAction,
+    // source: p.config.source,
+    // isRecommended: p.config.isRecommended
   } as ts_module.CompletionEntry))
 
   // prior completions
@@ -98,13 +98,14 @@ ${result}
       changes: [
         {
           fileName,
-          textChanges:  diffAndCreateTextChanges(sourceFile.getText(), result) .reverse() // need to reverse it so it works for refactors
-            // [
-            //   {
-            //     newText: result,
-            //     span: { start: 0, length: sourceFile.end }
-            //   }
-            // ]
+          textChanges:  
+          // diffAndCreateTextChanges(sourceFile.getText(), result) .reverse() // need to reverse it so it works for refactors
+            [
+              {
+                newText: result,
+                span: { start: 0, length: sourceFile.end }
+              }
+            ]
         }
       ]
     }],
