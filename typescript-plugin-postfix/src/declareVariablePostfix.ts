@@ -30,11 +30,15 @@ export class DeclareVariablePostFix implements Postfix {
   target: ts.Node
   name: 'Variable Declaration'
   description: 'Adds a variable declaration when user start typing `.const`, `.let` or `var`'
-
+  
   constructor(public config: DeclareVariablePostfixConfig) { 
     this.counter=0
   }
-
+  
+  getInsertText(opts: PostfixPredicateOptions): string {
+    return ' '
+  }
+  
   predicate(opts: PostfixPredicateOptions): boolean {
     return true
   }

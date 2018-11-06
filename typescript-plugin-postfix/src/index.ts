@@ -1,4 +1,4 @@
-import { findChildContainingPosition, getKindName, printNode, diffAndCreateTextChanges } from 'typescript-ast-util';
+import { findChildContainingPosition, getKindName, printNode, diffAndCreateTextChanges, findChildContainingRangeLight } from 'typescript-ast-util';
 import { getPluginCreate } from 'typescript-plugin-util';
 import * as ts_module from 'typescript/lib/tsserverlibrary';
 import { getAllPostfix } from './postfixHome';
@@ -24,16 +24,21 @@ export = getPluginCreate({ getCompletionsAtPosition, getCompletionEntryDetails }
 function getCompletionsAtPosition(fileName: string, position: number,
   options: ts_module.GetCompletionsAtPositionOptions | undefined): ts_module.CompletionInfo {
 
+    const sourceFile = info.languageService.getProgram().getSourceFile(fileName)
   const predicateArg: PostfixPredicateOptions = {
-    fileName, position
+    file: sourceFile,
+     position, log,
+     target: findChildContainingRangeLight(sourceFile, {pos: position, end: position})
   }
+
+ 
   // our completions
   const postFixCompletionEntries = getAllPostfix().filter(p => p.predicate(predicateArg)).map(p => ({
     name: p.config.name,
     kind: p.config.kind || ts.ScriptElementKind.unknown,
     kindModifiers: p.config.kindModifiers,
     sortText: p.config.sortText,
-    insertText: ' ', // TODO: hack: If I don't do this then vscode will automatically add `this.name``in the text sourcefile - no matter the implementation - I don't know why or how to disable that besides this
+    insertText: p.getInsertText(predicateArg)||' ', // TODO: hack: If I don't do this then vscode will automatically add `this.name``in the text sourcefile - no matter the implementation - I don't know why or how to disable that besides this
     // replacementSpan: {start: 2, length: 1},//p.config.replacementSpan,
     // hasAction: p.config.hasAction,
     // source: p.config.source,
@@ -66,7 +71,7 @@ function getCompletionEntryDetails(fileName: string, position: number, name: str
 
   const program = info.languageService.getProgram()
   const sourceFile = program.getSourceFile(fileName)
-  const target = findChildContainingPosition(sourceFile, position - 1)
+  const target = findChildContainingRangeLight(sourceFile, {pos:position, end:position})//(sourceFile, position - 1)
   const result = postfix.execute({ program, fileName, position, target, log }) as string
 
   log(`${PLUGIN_NAME} - getCompletionEntryDetails postfix.execute called with filename: ${fileName}, position: ${position}, target:  ${target && target.getText()} - parent is : ${target.parent.getText()} postfix.execute returned result: 

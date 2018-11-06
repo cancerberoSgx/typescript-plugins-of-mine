@@ -8,6 +8,7 @@ export interface Postfix{
   predicate(opts: PostfixPredicateOptions): boolean
   /** User selected this Postfix - this method implements the code transformation */
   execute(opts: PostfixExecuteOptions):PostfixExecuteResult
+  getInsertText(opts: PostfixPredicateOptions): string
 }
 /**
  * value returned by postfix implementation execute() method. This is contract between plugin 
@@ -19,12 +20,19 @@ export interface PostfixExecuteResult{
 }
 
 export interface PostfixExecuteOptions {
-  program:ts.Program, fileName: string, position: number, target: ts.Node, log: (msg:string)=>void
+  program:ts.Program, 
+  fileName: string,
+  position: number, 
+  target: ts.Node, 
+  log: (msg:string)=>void
 }
 
 export interface PostfixPredicateOptions {
-  fileName: string
+  file: ts.SourceFile
   position: number
+
+  target: ts.Node, 
+  log: (msg:string)=>void
 }
 
 /**
