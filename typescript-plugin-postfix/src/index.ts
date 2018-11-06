@@ -1,9 +1,9 @@
-import { findChildContainingPosition, getKindName, printNode } from 'typescript-ast-util';
+import { findChildContainingPosition, getKindName, printNode, diffAndCreateTextChanges } from 'typescript-ast-util';
 import { getPluginCreate } from 'typescript-plugin-util';
 import * as ts_module from 'typescript/lib/tsserverlibrary';
 import { getAllPostfix } from './postfixHome';
 import { PostfixPredicateOptions } from './types';
-import * as ts from 'typescript' 
+import * as ts from 'typescript'
 
 const PLUGIN_NAME = 'typescript-plugin-postfix'
 const REFACTOR_ACTION_NAME = `${PLUGIN_NAME}-refactor-action`
@@ -12,7 +12,7 @@ const REFACTOR_ACTION_NAME = `${PLUGIN_NAME}-refactor-action`
 let info: ts_module.server.PluginCreateInfo
 let log
 
-export = getPluginCreate({getCompletionsAtPosition, getCompletionEntryDetails}, (modules, anInfo) => {
+export = getPluginCreate({ getCompletionsAtPosition, getCompletionEntryDetails }, (modules, anInfo) => {
   // ts = modules.typescript
   info = anInfo
   log = function (msg) {
@@ -34,14 +34,14 @@ function getCompletionsAtPosition(fileName: string, position: number,
     kindModifiers: p.config.kindModifiers,
     sortText: p.config.sortText,
     insertText: ' ', // TODO: hack: If I don't do this then vscode will automatically add `this.name``in the text sourcefile - no matter the implementation - I don't know why or how to disable that besides this
-    replacementSpan: p.config.replacementSpan,
+    // replacementSpan: {start: 0, length: 0},//p.config.replacementSpan,
     hasAction: p.config.hasAction,
     source: p.config.source,
     isRecommended: p.config.isRecommended
   } as ts_module.CompletionEntry))
 
   // prior completions
-  let completions = info.languageService.getCompletionsAtPosition(fileName, position, options) || {
+  let completions:  ts_module.CompletionInfo = info.languageService.getCompletionsAtPosition(fileName, position, options) || {
     entries: [],
     isGlobalCompletion: false, // TODO: not sure about any of these. 
     isMemberCompletion: false,
@@ -69,40 +69,49 @@ function getCompletionEntryDetails(fileName: string, position: number, name: str
   const target = findChildContainingPosition(sourceFile, position - 1)
   const result = postfix.execute({ program, fileName, position, target, log }) as string
 
-  log(`${PLUGIN_NAME} - getCompletionEntryDetails postfix.execute called with filename: ${fileName}, position: ${position}, target:  ${target && target.getText()} - parent is : ${target.parent.getText()} postfix.execute returned result ==  ${result}`)
-  
+  log(`${PLUGIN_NAME} - getCompletionEntryDetails postfix.execute called with filename: ${fileName}, position: ${position}, target:  ${target && target.getText()} - parent is : ${target.parent.getText()} postfix.execute returned result: 
+***
+${result}
+***`)
+
 
   //TODO: we return a codeAction.text change that basically replace all the text with the new one - we could do t better...
+  // const changes = diffAndCreateTextChanges(sourceFile.getFullText(), result) 
   return {
     name,
-    kind: ts.ScriptElementKind.string,
+    kind: ts.ScriptElementKind.unknown,
     kindModifiers: '',
+    
     displayParts: [
-      {    kind: 'keyword', text: 'var'}
+      // { kind: 'keyword', text: 'var' },
+      // { kind: 'localName', text: 'nameMePlease' }
     ],
-    documentation: [
-      {kind: 'doc1', text: 'shshshsh'}
-    ],
-    tags: [
-      {name: 'tag1', text: 'foooo'}
-    ],
+    // documentation: [
+    //   {kind: 'keyword', text: 'var'}
+    // ],
+    // tags: [
+    //   {name: 'tag1', text: 'foooo'}
+    // ],
     codeActions: [{
       description: 'variable declaration postfix ',
+      // commands: [{}],
       changes: [
         {
           fileName,
-          textChanges: [
-            {
-              newText: result,
-              span: { start: 0, length: sourceFile.end }
-            }
-          ]
+          textChanges:  diffAndCreateTextChanges(sourceFile.getText(), result) .reverse() // need to reverse it so it works for refactors
+            // [
+            //   {
+            //     newText: result,
+            //     span: { start: 0, length: sourceFile.end }
+            //   }
+            // ]
         }
       ]
     }],
-    source: [
-      {      kind: 'keyword', text: 'var'}
-    ]
+    // source: [
+    //   {     
+    //      kind: 'keyword', text: 'var'}
+    // ]
   }
 }
 

@@ -3,7 +3,7 @@ import { LanguageService } from 'typescript';
 import { LanguageServiceOptionals } from './LanguageServiceOptionals';
 
 
-export function initReturnTypeSignature(modules: { typescript: typeof ts_module }): { create: (info: ts.server.PluginCreateInfo) => ts.LanguageService } {
+export function initReturnTypeSignature(modules: { typescript: typeof ts_module }): { create: (info: ts_module.server.PluginCreateInfo) => ts.LanguageService } {
   return undefined as any
 }
 /**
@@ -12,10 +12,10 @@ export function initReturnTypeSignature(modules: { typescript: typeof ts_module 
  * @param onCreate callback when `create` is called
  */
 export function pluginCreateCreate(languageService: LanguageServiceOptionals,
-  onCreate: (info: ts.server.PluginCreateInfo) => undefined)
-  : (info: ts.server.PluginCreateInfo) => ts.LanguageService {
+  onCreate: (info: ts_module.server.PluginCreateInfo) => undefined)
+  : (info: ts_module.server.PluginCreateInfo) => ts.LanguageService {
 
-  return function create(info: ts.server.PluginCreateInfo): ts.LanguageService {
+  return function create(info: ts_module.server.PluginCreateInfo): ts.LanguageService {
     onCreate(info)
     const proxy: ts.LanguageService = Object.create(null)
     for (let k of Object.keys(info.languageService) as Array<keyof ts.LanguageService>) {
@@ -39,7 +39,7 @@ export function pluginCreateCreate(languageService: LanguageServiceOptionals,
  */
 export function pluginCreateInit(languageService: LanguageServiceOptionals,
   onInit: (modules: { typescript: typeof ts_module }) => undefined,
-  onCreate: (info: ts.server.PluginCreateInfo) => undefined)
+  onCreate: (info: ts_module.server.PluginCreateInfo) => undefined)
   : (typeof initReturnTypeSignature) {
 
   return function init(modules: { typescript: typeof ts_module }) {
@@ -68,13 +68,13 @@ export function pluginCreateInit(languageService: LanguageServiceOptionals,
  * @param cb called when both init and create are done. your plugin was installed successfully
  * @return the {create} object ready to be exported as it is
  */
-export  function getPluginCreate(languageService:LanguageServiceOptionals, cb: (modules: { typescript: typeof ts_module }, info: ts.server.PluginCreateInfo)=>void):(typeof initReturnTypeSignature){
+export  function getPluginCreate(languageService:LanguageServiceOptionals, cb: (modules: { typescript: typeof ts_module }, info: ts_module.server.PluginCreateInfo)=>void):(typeof initReturnTypeSignature){
   let modules: { typescript: typeof ts_module }
   return  pluginCreateInit(languageService, modules_=>{
       modules = modules_
       return undefined
     },
-    (info: ts.server.PluginCreateInfo) => {
+    (info: ts_module.server.PluginCreateInfo) => {
       cb(modules, info)
       return undefined
     })
@@ -95,5 +95,5 @@ export  function getPluginCreate(languageService:LanguageServiceOptionals, cb: (
 //     return undefined
 //   })
 
-// interface PluginDefaultInitializeHandler{modules: { typescript: typeof ts_module }, info: ts.server.PluginCreateInfo}
+// interface PluginDefaultInitializeHandler{modules: { typescript: typeof ts_module }, info: ts_module.server.PluginCreateInfo}
 // /*{promise: Promise <PluginDefaultInitializeHandler>, create: (typeof initReturnTypeSignature)}*/

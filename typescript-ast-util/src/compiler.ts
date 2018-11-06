@@ -40,6 +40,7 @@ export function compileProject(projectFolder: string, rootFiles: Array<string> =
     getSourceFile: (fileName, languageVersion) => ts.createSourceFile(fileName, readFileSync(fileName).toString(), ts.ScriptTarget.Latest, true)
   }
   const program = ts.createProgram(rootFiles, compilerOptions.options, compilerHost);
+  // ts.createLanguageService()
 
   ts.formatDiagnosticsWithColorAndContext(program.getSyntacticDiagnostics(), compilerHost)
   ts.formatDiagnosticsWithColorAndContext(program.getDeclarationDiagnostics(), compilerHost)

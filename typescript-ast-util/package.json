@@ -28,6 +28,7 @@
     "@types/jasmine": "^2.8.9",
     "jasmine": "^3.3.0",
     "ts-node": "^7.0.1",
+    "ts-simple-ast": "^18.0.0",
     "typedoc": "^0.13.0"
   },
   "repository": "https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-ast-util"
