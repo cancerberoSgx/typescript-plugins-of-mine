@@ -24,8 +24,8 @@ const isExpression = node => getKindName(node).endsWith('Expression') || node.ki
 const isNotExpression = node => !isExpression(node)
 
 export class ConsolePostFix implements Postfix {
-  name: 'Variable Declaration'
-  description: 'Adds a variable declaration when user start typing `.const`, `.let` or `var`'
+  name: 'Wrapps expression with console.log call'
+  description: 'Wrapps expression with console.log call'
 
   constructor(public config: ConsolePostfixConfig) { }
 
@@ -42,13 +42,9 @@ export class ConsolePostFix implements Postfix {
     if (targetExpression.getFullText().length < s.length) {
       const start = targetExpression.getWidth() - opts.target.getWidth() - 1
       const end = targetExpression.getWidth() - 1
-      return '' +
-        s.substring(start, end) +
-        ''
+      return         s.substring(start, end)
     }
-    return '' +
-      opts.file.getFullText().substring(opts.position - s.length - 1 - opts.target.getWidth(), opts.position - 1 - s.length) +
-      ''
+    return opts.file.getFullText().substring(opts.position - s.length - 1 - opts.target.getWidth(), opts.position - 1 - s.length) 
   }
 
   predicate(opts: PostfixPredicateOptions): boolean {

@@ -7,7 +7,7 @@ export interface Postfix{
    * programmatically. **Please implement it fast** */
   predicate(opts: PostfixPredicateOptions): boolean
   /** User selected this Postfix - this method implements the code transformation */
-  execute(opts: PostfixExecuteOptions):PostfixExecuteResult
+  execute(opts: PostfixExecuteOptions):string
   getInsertText(opts: PostfixPredicateOptions): string
 }
 /**
@@ -15,9 +15,9 @@ export interface Postfix{
  * getCompletionEntryDetails() implementor and plugin implementation (for ex class `DeclareVariablePostFix`) 
  * They colaborate to update the Sourcefile somehow, hopefully using ts.CompletionEntryDetails if possible
  */
-export interface PostfixExecuteResult{
+// export interface PostfixExecuteResult{
 
-}
+// }
 
 export interface PostfixExecuteOptions {
   program:ts.Program, 

@@ -35,15 +35,31 @@ export class DeclareVariablePostFix implements Postfix {
     this.counter=0
   }
   
-  getInsertText(opts: PostfixPredicateOptions): string {
-    return ' '
-  }
-  
   predicate(opts: PostfixPredicateOptions): boolean {
     return true
   }
 
   private counter:number
+
+  getInsertText(opts: PostfixPredicateOptions): string {
+    const target2 = findAscendant(opts.target, ts.isPropertyAccessExpression, true)
+    if (!target2) {
+      opts.log('declareVariable postfix doing nothing because !findAscendant(target2, ts.isPropertyAccessExpression,true)' + getKindName(opts.target))
+      return
+    }
+    
+    const targetExpression = findChild(findAscendant(target2, isNotExpression, true), isExpression, false)
+    const s = `${this.config.type} ${this.variableName()} = ${opts.file.getFullText().substring(targetExpression.pos, opts.target.getFullStart()-1) };`
+    
+    if (targetExpression.getFullText().length - opts.target.getFullWidth() < 'const '.length) {
+      return ' ' // TODO
+    //   // const start = targetExpression.getWidth() - opts.target.getWidth() - 1
+    //   // const end = targetExpression.getWidth() - 1
+    //   // return        s.substring(start, end)
+    }
+    return opts.file.getFullText().substring(opts.position - s.length - 4 - opts.target.getWidth()*2, opts.position - opts.target.getWidth() -4 - s.length) 
+  }
+
   execute(opts: PostfixExecuteOptions): string {
     let { program, fileName, position, target, log } = opts
 

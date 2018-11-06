@@ -37,8 +37,10 @@ function getCompletionsAtPosition(fileName: string, position: number,
     name: p.config.name,
     kind: p.config.kind || ts.ScriptElementKind.unknown,
     kindModifiers: p.config.kindModifiers,
-    sortText: p.config.sortText,
-    insertText: p.getInsertText(predicateArg)||' ', // TODO: hack: If I don't do this then vscode will automatically add `this.name``in the text sourcefile - no matter the implementation - I don't know why or how to disable that besides this
+    // sortText: p.config.sortText,
+    insertText: '_INSERTED_',
+    // sourceFile.getFullText().substring(position+predicateArg.target.getWidth(), position+predicateArg.target.getWidth()+1),//
+    // p.getInsertText(predicateArg)||' ', // TODO: hack: If I don't do this then vscode will automatically add `this.name``in the text sourcefile - no matter the implementation - I don't know why or how to disable that besides this
     // replacementSpan: {start: 2, length: 1},//p.config.replacementSpan,
     // hasAction: p.config.hasAction,
     // source: p.config.source,
@@ -72,13 +74,17 @@ function getCompletionEntryDetails(fileName: string, position: number, name: str
   const program = info.languageService.getProgram()
   const sourceFile = program.getSourceFile(fileName)
   const target = findChildContainingRangeLight(sourceFile, {pos:position, end:position})//(sourceFile, position - 1)
-  const result = postfix.execute({ program, fileName, position, target, log }) as string
+  const result = postfix.execute({ program, fileName, position, target, log }) || sourceFile.getFullText() as string
 
   log(`${PLUGIN_NAME} - getCompletionEntryDetails postfix.execute called with filename: ${fileName}, position: ${position}, target:  ${target && target.getText()} - parent is : ${target.parent.getText()} postfix.execute returned result: 
 ***
 ${result}
 ***`)
 
+
+// if(!result){
+//   return undefined;
+// }
 
   //TODO: we return a codeAction.text change that basically replace all the text with the new one - we could do t better...
   // const changes = diffAndCreateTextChanges(sourceFile.getFullText(), result) 
