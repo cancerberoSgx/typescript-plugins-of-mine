@@ -1,4 +1,4 @@
-
+IMPORTANT: recently I find out that vanilla typescript already support many of these fixes and refactors out of the box. Check typescript-plugin-all-ts-fixes-and-refactors project. It means that if the impleentatio nalready exists we should probably change our current implementatinos to use that. 
  
 ## TODO
 
@@ -28,9 +28,9 @@ Each project has its own TODO but here are some general ones:
 
 
 
+ * add / remove semicolongs from statements - emove can be tricky ! but add should not if we transform statement by statement using ts transform.
 
-
- * wrap selection with try-catch
+ * wrap selection with try-catch or with Promise<> - general wrap tool - maybe using postfix like plugin ? 
 
  * check this: https://github.com/Microsoft/TypeScript/pull/13940 and if its possible to add custom transforms fromplugins add one that let user embedd raw text from fs at compile time.
 

@@ -1,5 +1,6 @@
 import * as diff from 'diff';
-import { SourceFile, TextChange } from 'typescript';
+import { SourceFile, TextChange, TextSpan } from 'typescript';
+// import { TextSpan } from 'ts-simple-ast';
 
 /** Taken from ts-simple-ast - TODO: it behaves differently than  ts.LanguageService's getCompletionEntryDetails or getEditsForRefactor - for it to work you will need to  `reverse()`  the edits*/
 export function getTextFromFormattingEdits(sourceFile: SourceFile | string, textChanges: ReadonlyArray<TextChange>) {
@@ -42,4 +43,21 @@ export function diffAndCreateTextChanges(s1: string, s2: string): TextChange[] {
     })
   })
   return result.reverse()
+}
+
+// /** returns TextSpan representing the addition of given string to given string in given position */
+// export function insertTextSpan(text: string, pos: number, toInsert:string): TextSpan {
+//   return {start: pos, length: toInsert.length}
+// }
+
+export function changeText(text: string, toInsert: {pos: number, toAdd?: string, toRemove?: string}[]): string{
+  let s = text.split('')
+  let indexIncr=0
+  toInsert.forEach(data=>{
+    data.toAdd = data.toAdd || ''
+    data.toRemove = data.toRemove || ''
+    s.splice(data.pos+indexIncr, data.toRemove.length, ...data.toAdd.split(''))
+    indexIncr+=data.toAdd.length-data.toRemove.length
+  })
+  return s.join('')
 }

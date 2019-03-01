@@ -1,3 +1,9 @@
+**Discontinued / Research**
+
+[Current status notes](discontinued.md)
+
+# TypeScript plugins and related tools of mine.
+
 [![Build Status](https://travis-ci.org/cancerberoSgx/typescript-plugins-of-mine.svg?branch=master)](https://travis-ci.org/cancerberoSgx/typescript-plugins-of-mine)
 [![Coverage Status](https://coveralls.io/repos/cancerberoSgx/typescript-plugins-of-mine/badge.svg)](https://coveralls.io/r/cancerberoSgx/typescript-plugins-of-mine)
 
