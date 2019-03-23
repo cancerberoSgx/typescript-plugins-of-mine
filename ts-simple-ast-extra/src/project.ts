@@ -1,5 +1,5 @@
 import { basename } from 'path'
-import Project, { Node, Options, IndentationText, QuoteKind, ManipulationSettings, NewLineKind } from 'ts-simple-ast'
+import Project, { IndentationText, QuoteKind, ManipulationSettings, NewLineKind, ProjectOptions } from 'ts-simple-ast'
 import * as ts_module from 'typescript/lib/tsserverlibrary'
 import { writeFileSync } from 'fs';
 
@@ -25,7 +25,7 @@ const a = 1
  */
 export function createSimpleASTProject(nativeProjectOrPath: ts_module.server.Project | string, formatOptions?: ts.FormatCodeSettings, userPreferences?: ts_module.UserPreferences): Project {
   const tsConfigFilePath = typeof nativeProjectOrPath === 'string' ? nativeProjectOrPath : getConfigFilePath(nativeProjectOrPath)
-  const projectConfig: Options = {
+  const projectConfig: ProjectOptions = {
     tsConfigFilePath,
     manipulationSettings: buildManipulationSettings(formatOptions, userPreferences)
   }

@@ -1,6 +1,6 @@
 {
   "name": "ts-simple-ast-extra",
-  "version": "0.0.9",
+  "version": "0.0.14",
   "description": "extra utilities for ts-simple-ast ",
   "main": "dist/src/index.js",
   "typings": "dist/src/index.d.ts",
@@ -18,7 +18,7 @@
   "author": "Sebastian Gurin",
   "license": "MIT",
   "dependencies": {
-    "ts-simple-ast": "^18.0.0",
+    "ts-simple-ast": "^21.0.4",
     "typescript": "^3.1.4"
   },
   "devDependencies": {

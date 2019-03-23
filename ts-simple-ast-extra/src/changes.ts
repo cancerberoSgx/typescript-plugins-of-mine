@@ -17,6 +17,7 @@ export function applyTextChanges(code: string, textChanges: ts.TextChange[]): st
 }
 
 export interface ApplyFileTextChangesResult { modified: SourceFile[], removed: SourceFile[], created: SourceFile[] }
+
 export function applyFileTextChanges(project: Project, ftc: ts.FileTextChanges, removeEmpty: boolean = false, result: ApplyFileTextChangesResult = {
   modified: [],
   removed: [],
@@ -68,7 +69,7 @@ export function applyAllSuggestedCodeFixes(project: Project, containerNode: Node
   let fixes = getSuggestedCodeFixesInside(project, containerNode, codes)
   while (fixes && fixes.length) {
     applyFileTextChanges(project, fixes[0].changes[0], removeEmpty, result)
-    fixes = getSuggestedCodeFixesInside(project, containerNode, codes) // TODO: performance we only need the first one. Also use comnbinedCodeFix to apply several at once increases performance
+    fixes = getSuggestedCodeFixesInside(project, containerNode, codes) // TODO: performance we only need the first one. Also use combined CodeFix to apply several at once increases performance
 
   }
   return result
