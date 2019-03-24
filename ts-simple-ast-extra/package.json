@@ -1,6 +1,6 @@
 {
   "name": "ts-simple-ast-extra",
-  "version": "0.0.16",
+  "version": "0.0.18",
   "description": "extra utilities for ts-simple-ast ",
   "main": "dist/src/index.js",
   "typings": "dist/src/index.d.ts",

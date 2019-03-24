@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>TestConfig | ts-simple-ast-extra</title>
+	<title>&quot;modify&quot; | ts-simple-ast-extra</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,51 +56,132 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="../modules/_test_.html">&quot;test&quot;</a>
-				</li>
-				<li>
-					<a href="_test_.testconfig.html">TestConfig</a>
+					<a href="_modify_.html">&quot;modify&quot;</a>
 				</li>
 			</ul>
-			<h1>Interface TestConfig</h1>
+			<h1>External module &quot;modify&quot;</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
-			<section class="tsd-panel tsd-hierarchy">
-				<h3>Hierarchy</h3>
-				<ul class="tsd-hierarchy">
-					<li>
-						<span class="target">TestConfig</span>
-					</li>
-				</ul>
-			</section>
 			<section class="tsd-panel-group tsd-index-group">
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section tsd-is-external">
-							<h3>Properties</h3>
+							<h3>Functions</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_test_.testconfig.html#files" class="tsd-kind-icon">files</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-external"><a href="_modify_.html#array2dinsert" class="tsd-kind-icon">array2DInsert</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-external"><a href="_modify_.html#ensurearraylength" class="tsd-kind-icon">ensure<wbr>Array<wbr>Length</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-external"><a href="_modify_.html#objectliteralinsert" class="tsd-kind-icon">object<wbr>Literal<wbr>Insert</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group tsd-is-external">
-				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-					<a name="files" class="tsd-anchor"></a>
-					<h3>files</h3>
-					<div class="tsd-signature tsd-kind-icon">files<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">[]</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/745053e/ts-simple-ast-extra/src/test.ts#L4">test.ts:4</a></li>
-						</ul>
-					</aside>
+				<h2>Functions</h2>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
+					<a name="array2dinsert" class="tsd-anchor"></a>
+					<h3>array2DInsert</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">array2DInsert<span class="tsd-signature-symbol">(</span>init<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ArrayLiteralExpression</span>, fileId<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, index<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, data<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in modify.ts:4</li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>init: <span class="tsd-signature-type">ArrayLiteralExpression</span></h5>
+								</li>
+								<li>
+									<h5>fileId: <span class="tsd-signature-type">number</span></h5>
+								</li>
+								<li>
+									<h5>index: <span class="tsd-signature-type">number</span></h5>
+								</li>
+								<li>
+									<h5>data: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
+					<a name="ensurearraylength" class="tsd-anchor"></a>
+					<h3>ensure<wbr>Array<wbr>Length</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">ensure<wbr>Array<wbr>Length<span class="tsd-signature-symbol">(</span>a<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ArrayLiteralExpression</span>, index<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, item<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in modify.ts:14</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>makes sure there are items until index-1 (se we can add the index-th)</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>a: <span class="tsd-signature-type">ArrayLiteralExpression</span></h5>
+								</li>
+								<li>
+									<h5>index: <span class="tsd-signature-type">number</span></h5>
+								</li>
+								<li>
+									<h5>item: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
+					<a name="objectliteralinsert" class="tsd-anchor"></a>
+					<h3>object<wbr>Literal<wbr>Insert</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">object<wbr>Literal<wbr>Insert<span class="tsd-signature-symbol">(</span>init<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ObjectLiteralExpression</span>, fileId<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, objectLiteral<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in modify.ts:22</li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>init: <span class="tsd-signature-type">ObjectLiteralExpression</span></h5>
+								</li>
+								<li>
+									<h5>fileId: <span class="tsd-signature-type">number</span></h5>
+								</li>
+								<li>
+									<h5>objectLiteral: <span class="tsd-signature-type">object</span></h5>
+									<ul class="tsd-parameters">
+										<li class="tsd-parameter-index-signature">
+											<h5><span class="tsd-signature-symbol">[</span>n: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">]: </span><span class="tsd-signature-type">any</span></h5>
+										</li>
+									</ul>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
 				</section>
 			</section>
 		</div>
@@ -114,89 +195,68 @@
 						<span>Internals</span>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="../modules/_index_.html">"index"</a>
+						<a href="_index_.html">"index"</a>
 					</li>
 					<li class="label tsd-is-external">
 						<span>Externals</span>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="../modules/_misc_.html">"misc"</a>
-					</li>
-					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="../modules/_modify_.html">"modify"</a>
-					</li>
-					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="../modules/_node_.html">"node"</a>
-					</li>
-					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="../modules/_project_.html">"project"</a>
-					</li>
-					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="../modules/_query_buildselector_.html">"query/build<wbr>Selector"</a>
-					</li>
-					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="../modules/_query_index_.html">"query/index"</a>
-					</li>
-					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="../modules/_query_selectnode_.html">"query/select<wbr>Node"</a>
-					</li>
-					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="../modules/_query_types_.html">"query/types"</a>
-					</li>
-					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="../modules/_refactor_changes_.html">"refactor/changes"</a>
-					</li>
-					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="../modules/_refactor_codefix_.html">"refactor/code<wbr>Fix"</a>
-					</li>
-					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="../modules/_refactor_extractinterface_.html">"refactor/extract<wbr>Interface"</a>
-					</li>
-					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="../modules/_refactor_refactors_.html">"refactor/refactors"</a>
-					</li>
-					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="../modules/_reference_.html">"reference"</a>
+						<a href="_misc_.html">"misc"</a>
 					</li>
 					<li class="current tsd-kind-external-module tsd-is-external">
-						<a href="../modules/_test_.html">"test"</a>
+						<a href="_modify_.html">"modify"</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="../modules/_types_.html">"types"</a>
+						<a href="_node_.html">"node"</a>
+					</li>
+					<li class=" tsd-kind-external-module tsd-is-external">
+						<a href="_project_.html">"project"</a>
+					</li>
+					<li class=" tsd-kind-external-module tsd-is-external">
+						<a href="_query_buildselector_.html">"query/build<wbr>Selector"</a>
+					</li>
+					<li class=" tsd-kind-external-module tsd-is-external">
+						<a href="_query_index_.html">"query/index"</a>
+					</li>
+					<li class=" tsd-kind-external-module tsd-is-external">
+						<a href="_query_selectnode_.html">"query/select<wbr>Node"</a>
+					</li>
+					<li class=" tsd-kind-external-module tsd-is-external">
+						<a href="_query_types_.html">"query/types"</a>
+					</li>
+					<li class=" tsd-kind-external-module tsd-is-external">
+						<a href="_refactor_changes_.html">"refactor/changes"</a>
+					</li>
+					<li class=" tsd-kind-external-module tsd-is-external">
+						<a href="_refactor_codefix_.html">"refactor/code<wbr>Fix"</a>
+					</li>
+					<li class=" tsd-kind-external-module tsd-is-external">
+						<a href="_refactor_extractinterface_.html">"refactor/extract<wbr>Interface"</a>
+					</li>
+					<li class=" tsd-kind-external-module tsd-is-external">
+						<a href="_refactor_refactors_.html">"refactor/refactors"</a>
+					</li>
+					<li class=" tsd-kind-external-module tsd-is-external">
+						<a href="_reference_.html">"reference"</a>
+					</li>
+					<li class=" tsd-kind-external-module tsd-is-external">
+						<a href="_test_.html">"test"</a>
+					</li>
+					<li class=" tsd-kind-external-module tsd-is-external">
+						<a href="_types_.html">"types"</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-is-external">
-						<a href="_test_.modifyandassertconfig.html" class="tsd-kind-icon">Modify<wbr>And<wbr>Assert<wbr>Config</a>
-					</li>
-				</ul>
-				<ul class="current">
-					<li class="current tsd-kind-interface tsd-parent-kind-external-module tsd-is-external">
-						<a href="_test_.testconfig.html" class="tsd-kind-icon">Test<wbr>Config</a>
-						<ul>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-								<a href="_test_.testconfig.html#files" class="tsd-kind-icon">files</a>
-							</li>
-						</ul>
-					</li>
-				</ul>
-				<ul class="after-current">
-					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-is-external">
-						<a href="_test_.testresult.html" class="tsd-kind-icon">Test<wbr>Result</a>
+					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
+						<a href="_modify_.html#array2dinsert" class="tsd-kind-icon">array2DInsert</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
-						<a href="../modules/_test_.html#createprojectfiles" class="tsd-kind-icon">create<wbr>Project<wbr>Files</a>
+						<a href="_modify_.html#ensurearraylength" class="tsd-kind-icon">ensure<wbr>Array<wbr>Length</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
-						<a href="../modules/_test_.html#modifyandassert" class="tsd-kind-icon">modify<wbr>And<wbr>Assert</a>
-					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
-						<a href="../modules/_test_.html#printdiagnostics" class="tsd-kind-icon">print<wbr>Diagnostics</a>
-					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
-						<a href="../modules/_test_.html#printreferences" class="tsd-kind-icon">print<wbr>References</a>
+						<a href="_modify_.html#objectliteralinsert" class="tsd-kind-icon">object<wbr>Literal<wbr>Insert</a>
 					</li>
 				</ul>
 			</nav>

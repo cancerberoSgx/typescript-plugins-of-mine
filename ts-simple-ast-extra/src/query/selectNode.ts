@@ -9,8 +9,6 @@ import { AstPath, SelectOptions } from './types'
 export function selectNode<T extends Node>(astPath: AstPath, rootNode: Node, options?: SelectOptions): T | undefined {
   let n: Node = rootNode
   let c: Node | undefined
-  //  let pathNodes =  path.split('/').filter(a=>a)
-  //  .map(i=>parseInt(i))
   let { path } = astPath
   const tail = path.slice(1, path.length)
   ;[...tail, path[0]].forEach(pathNode => {

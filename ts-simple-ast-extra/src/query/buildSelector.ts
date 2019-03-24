@@ -5,7 +5,7 @@ import { BuildAstPathOptions, AstPath, ASTPathNode } from './types'
  * Creates a selector like `0/4/3/` where numbers are the child index of the node on that level with respect
  * to the parent (getChildIndex()), starting from the sourceFile
  */
-export function buildSelector(node: Node, options: BuildAstPathOptions = {}): AstPath {
+export function buildAstPath(node: Node, options: BuildAstPathOptions = {}): AstPath {
   let path: ASTPathNode[] = []
   node
     .getAncestors()

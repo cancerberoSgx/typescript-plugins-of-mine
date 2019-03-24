@@ -85,6 +85,8 @@
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_query_types_.buildastpathoptions.html#includenodekind" class="tsd-kind-icon">include<wbr>Node<wbr>Kind</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_query_types_.buildastpathoptions.html#includepathtosourcefile" class="tsd-kind-icon">include<wbr>Path<wbr>ToSource<wbr>File</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_query_types_.buildastpathoptions.html#mode" class="tsd-kind-icon">mode</a></li>
 							</ul>
 						</section>
 					</div>
@@ -98,13 +100,47 @@
 					<div class="tsd-signature tsd-kind-icon">include<wbr>Node<wbr>Kind<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in query/types.ts:12</li>
+							<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/745053e/ts-simple-ast-extra/src/query/types.ts#L14">query/types.ts:14</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Includes or not node kind so select() can verify they match when selecting besides just nevigating through the children node&#39;s indexes</p>
+							<p>Includes or not node kind so select() can verify they match when selecting besides just navigating
+							through the children node&#39;s indexes</p>
 						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+					<a name="includepathtosourcefile" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> include<wbr>Path<wbr>ToSource<wbr>File</h3>
+					<div class="tsd-signature tsd-kind-icon">include<wbr>Path<wbr>ToSource<wbr>File<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/745053e/ts-simple-ast-extra/src/query/types.ts#L21">query/types.ts:21</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>TODO</p>
+						</div>
+						<p>If true the selector will also contain the path from the root node to its source file so select can
+						verify this.</p>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+					<a name="mode" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> mode</h3>
+					<div class="tsd-signature tsd-kind-icon">mode<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"getChildren"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"forEachChildren"</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/745053e/ts-simple-ast-extra/src/query/types.ts#L9">query/types.ts:9</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>TODO</p>
+						</div>
+						<p>Mode on which node&#39;s children are obtained (i.e.) <code>getChildren()</code> vs <code>forEachChildren()</code>.</p>
 					</div>
 				</section>
 			</section>
@@ -126,6 +162,9 @@
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
 						<a href="../modules/_misc_.html">"misc"</a>
+					</li>
+					<li class=" tsd-kind-external-module tsd-is-external">
+						<a href="../modules/_modify_.html">"modify"</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
 						<a href="../modules/_node_.html">"node"</a>
@@ -158,6 +197,9 @@
 						<a href="../modules/_refactor_refactors_.html">"refactor/refactors"</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
+						<a href="../modules/_reference_.html">"reference"</a>
+					</li>
+					<li class=" tsd-kind-external-module tsd-is-external">
 						<a href="../modules/_test_.html">"test"</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
@@ -180,6 +222,12 @@
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
 								<a href="_query_types_.buildastpathoptions.html#includenodekind" class="tsd-kind-icon">include<wbr>Node<wbr>Kind</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+								<a href="_query_types_.buildastpathoptions.html#includepathtosourcefile" class="tsd-kind-icon">include<wbr>Path<wbr>ToSource<wbr>File</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+								<a href="_query_types_.buildastpathoptions.html#mode" class="tsd-kind-icon">mode</a>
 							</li>
 						</ul>
 					</li>
