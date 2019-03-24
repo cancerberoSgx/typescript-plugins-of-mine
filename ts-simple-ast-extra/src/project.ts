@@ -1,5 +1,5 @@
 import { basename } from 'path'
-import Project, { IndentationText, QuoteKind, ManipulationSettings, NewLineKind, ProjectOptions } from 'ts-simple-ast'
+import Project, { IndentationText, QuoteKind, ManipulationSettings, NewLineKind, ProjectOptions } from 'ts-morph'
 import * as ts_module from 'typescript/lib/tsserverlibrary'
 import { writeFileSync } from 'fs';
 

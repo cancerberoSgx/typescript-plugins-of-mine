@@ -1,5 +1,5 @@
 
-import Project from 'ts-simple-ast';
+import Project from 'ts-morph';
 import { removeAllUnused } from '../src/refactors';
 describe('changes', () => {
   it('removeAllUnused', ()=>{

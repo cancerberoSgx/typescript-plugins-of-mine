@@ -1,4 +1,4 @@
-import { Node } from 'ts-simple-ast';
+import { Node } from 'ts-morph';
 
 
 /**

@@ -1,4 +1,4 @@
-import { ClassDeclaration, ExpressionWithTypeArguments, TypeGuards, InterfaceDeclaration } from 'ts-simple-ast';
+import { ClassDeclaration, ExpressionWithTypeArguments, TypeGuards, InterfaceDeclaration } from 'ts-morph';
 
 /**
  * returns all implements clauses of this class and its super classes both things recursively 

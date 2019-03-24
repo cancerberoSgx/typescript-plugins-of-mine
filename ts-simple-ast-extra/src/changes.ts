@@ -1,4 +1,4 @@
-import Project, { TextChange, SourceFile, Node } from 'ts-simple-ast';
+import Project, { TextChange, SourceFile, Node } from 'ts-morph';
 import * as ts from 'typescript'
 import { flat, flatReadOnly } from './misc';
 

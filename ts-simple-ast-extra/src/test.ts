@@ -1,4 +1,4 @@
-import Project, {ts,  Node, ScriptTarget, SourceFile, NamedNode } from "ts-simple-ast";
+import Project, {ts,  Node, ScriptTarget, SourceFile, NamedNode } from 'ts-morph';
 
 export interface TestConfig {
   files: { name: string, text: string, path: string }[]
