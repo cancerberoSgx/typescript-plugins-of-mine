@@ -1,6 +1,6 @@
 import Project, { TextChange, SourceFile, Node } from 'ts-morph';
 import * as ts from 'typescript'
-import { flat, flatReadOnly } from './misc';
+import { flat, flatReadOnly } from '../misc';
 
 export function createTextChanges(textChanges: ts.TextChange[]): TextChange[] {
   return textChanges.map(compilerNode => {

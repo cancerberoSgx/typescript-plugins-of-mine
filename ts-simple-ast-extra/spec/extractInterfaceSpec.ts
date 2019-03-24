@@ -2,7 +2,7 @@ import Project from 'ts-morph';
 import { extractInterface } from '../src';
 
 describe('ExtractInterface', () => {
-  it('should infer member types and copy docs and only process public members', () => {
+  it('should create an interface from given class with only public members, jsdocs and correct types and type params', () => {
     const project = new Project()
     project.createSourceFile(
       'test.ts',

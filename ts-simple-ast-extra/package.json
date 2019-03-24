@@ -8,7 +8,9 @@
     "test": "ts-node node_modules/jasmine/bin/jasmine",
     "build": "tsc",
     "prepare": "npm run build",
-    "doc": "typedoc --mode modules --ignoreCompilerErrors --out ../docs/ts-simple-ast-extra src/index.ts "
+    "clean": "rm -rf dist",
+    "doc": "typedoc --mode modules --ignoreCompilerErrors --out ../docs/ts-simple-ast-extra src/index.ts ",
+    "all": "npm run clean && npm run build && npm run test && npm run doc"
   },
   "keywords": [
     "TypeScript",

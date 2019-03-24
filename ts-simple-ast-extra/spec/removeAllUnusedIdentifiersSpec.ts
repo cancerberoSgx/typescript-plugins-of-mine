@@ -1,6 +1,6 @@
 
 import Project from 'ts-morph';
-import { removeAllUnused } from '../src/refactors';
+import { removeAllUnused } from '../src/refactor/refactors';
 describe('changes', () => {
   it('removeAllUnused', ()=>{
     const code = `
