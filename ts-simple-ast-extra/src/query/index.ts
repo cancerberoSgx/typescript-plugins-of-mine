@@ -1,4 +1,4 @@
-import { Node, SourceFile, TypeGuards } from 'ts-morph';
+import { Node, SourceFile } from 'ts-morph';
 import { getChildrenForEachChild } from '../node';
 
 /**
@@ -40,21 +40,3 @@ export function selectFromAst<T extends Node>(s: AstPath, f: SourceFile): T|unde
   return n as any
 }
 
-
-
-
-
-// export function pathUp(options: {parent: Node, child: Node, indexMode: 'childGetChildIndex'|'getChildrenIndex'|'forEachChildIndex'}) {
-//   const a: PathPoint[] = []
-//   if(!options.child.getAncestors().find(a=>a===options.parent)){
-//     throw `children needs to be descendant of parent`
-//   }
-//   let n: Node=options.child
-//   do{
-//     n=
-//     a.push({
-//       index: n.getParent() ? options.indexMode==='childGetChildIndex' ? n.getChildIndex()n.getChildIndex()  : 
-//     })
-//   }
-//   while((n))
-// }
