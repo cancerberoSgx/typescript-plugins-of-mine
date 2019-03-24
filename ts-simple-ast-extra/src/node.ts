@@ -1,9 +1,8 @@
-import { Node } from 'ts-morph';
-
+import { Node } from 'ts-morph'
 
 /**
  * like Node.getChildren but using forEachChild(). TODO: perhaps is a good idea to add a useForEachChild to
- * ts-simple-ast getChildren that is optional but if provided do this ? 
+ * ts-simple-ast getChildren that is optional but if provided do this ?
  */
 export function getChildrenForEachChild(n: Node): Node[] {
   const result: Node[] = []
@@ -16,16 +15,14 @@ export function getChildrenForEachChild(n: Node): Node[] {
  *  @param n
  */
 export function getName(n: Node): string {
-  return (n as any).getName ? ((n as any).getName() + '') : ''
-} 
-
-
+  return (n as any).getName ? (n as any).getName() + '' : ''
+}
 
 /**
  * Iterates recursively over all children of given node and apply visitor on each of them. If visitor returns
  * non falsy value then it stops visiting and that value is returned to the caller. See
- * https://en.wikipedia.org/wiki/Tree_traversal for the meaning of "DeepFirst". 
- * 
+ * https://en.wikipedia.org/wiki/Tree_traversal for the meaning of "DeepFirst".
+ *
  * @param getChildrenMode if true it will use `node.getChildren()` o obtain children instead of default
  * behavior that is using `node.forEachChild`
  */
@@ -46,8 +43,12 @@ export function visitChildrenRecursiveDeepFirst(
   }
   let i = 0
   if (!getChildrenMode) {
-    node.forEachChild(child => visitChildrenRecursiveDeepFirst(child, visitor, i++, level + 1, stopOnTruthy, getChildrenMode))
+    node.forEachChild(child =>
+      visitChildrenRecursiveDeepFirst(child, visitor, i++, level + 1, stopOnTruthy, getChildrenMode)
+    )
   } else {
-    node.getChildren().forEach(child => visitChildrenRecursiveDeepFirst(child, visitor, i++, level + 1, stopOnTruthy, getChildrenMode))
+    node
+      .getChildren()
+      .forEach(child => visitChildrenRecursiveDeepFirst(child, visitor, i++, level + 1, stopOnTruthy, getChildrenMode))
   }
 }
