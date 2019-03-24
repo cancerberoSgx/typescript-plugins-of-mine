@@ -1,7 +1,7 @@
 import { ClassDeclaration, ExpressionWithTypeArguments, TypeGuards, InterfaceDeclaration } from 'ts-morph';
 
 /**
- * returns all implements clauses of this class and its super classes both things recursively 
+ * Returns all implements clauses of this class and its super classes both things recursively 
  */
 export const getImplementsAll = (cl: ClassDeclaration): ExpressionWithTypeArguments[] => {
   let result: ExpressionWithTypeArguments[] = []
@@ -24,6 +24,10 @@ export const getImplementsAll = (cl: ClassDeclaration): ExpressionWithTypeArgume
   return result
 }
 
+/**
+ * 
+ * Returns all the extended classes or interface of given class or interface declaration ,recursively
+ */
 export const getExtendsRecursively = (decl: ClassDeclaration | InterfaceDeclaration): ExpressionWithTypeArguments[] => {
   let extendExpressions = TypeGuards.isClassDeclaration(decl) ? (decl.getExtends() ? [decl.getExtends()] : []) : decl.getExtends()
   extendExpressions.filter(notUndefined).forEach(expr => {

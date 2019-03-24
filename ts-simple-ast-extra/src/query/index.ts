@@ -1,42 +1,86 @@
-import { Node, SourceFile } from 'ts-morph';
+import { Node, SourceFile, SyntaxKind } from 'ts-morph';
 import { getChildrenForEachChild } from '../node';
-
 /**
- * creates a selector like `0/4/3/` where numbers are the child index of the node on that level with respect to the parent (getChildIndex()), starting from the sourceFile
+ * Creates a selector like `0/4/3/` where numbers are the child index of the node on that level with respect
+ * to the parent (getChildIndex()), starting from the sourceFile
  */
-export function buildAstSelector(n: Node): AstPath {
-  let s=''
-  n.getAncestors().reverse().forEach((a, i)=>{
+export function buildAstSelector(node: Node, options: BuildAstPathOptions={}): AstPath {
+  let path: ASTPathNode[] = []
+  node.getAncestors().reverse().forEach((a, i)=>{
     const index = a.getParent()?getChildrenForEachChild(a.getParent()).findIndex(c=>c===a) : 0
-    s+=`${index}/`
+    path.push({
+      index, 
+      ...(
+        options.includeNodeKind ? 
+        { nodeKind: a.getKind(),
+        parentKind: a.getParent() ? a.getParent()!.getKind() : undefined
+      } : 
+      {}
+      )
+     
+    })
   })
-  return s
+  return {
+    path, 
+    createOptions: options
+  }
 }
 
-interface PathPoint { 
+interface BuildAstPathOptions{
+  // /**
+  //  * TODO
+  //  *  Mode on which node's children are obtained (i.e.) `getChildren()` vs `forEachChildren()`. 
+  //  */
+  // mode?: 'getChildren'|'forEachChildren'
+  /**
+   * Includes or not node kind so select() can verify they match when selecting besides just nevigating through the children node's indexes
+   */
+  includeNodeKind?: boolean
+  // TODO: we could add `includeKinds` to 
+}
+
+interface ASTPathNode {
+  /** index of current node relative to is parent according to [[]] */ 
   index: number
-  kind: string
-  parentKind: string
+  nodeKind?: SyntaxKind
+  parentKind?: SyntaxKind
 }
-export type AstPath = string
 
+interface AstPath {
+  path: ASTPathNode[]
+  createOptions: BuildAstPathOptions
+  // /**
+  //  * TODO
+  //  * Path from the parent to its SourceFile. 
+  //  */
+  // parentToRootPath?: ASTPathNode[]
+}
+interface SelectOptions {
+  // /**
+  //  * If true we throw in case there's amismatch in node path kind and the actual AST nodes
+  //  */
+  // verifyNodeKind?: boolean
+}
 /**
  * inverse operation than buildAstPath, it will loop up for a node in a sourceFile given a path
- * @param s 
- * @param f 
+ * @param path 
+ * @param rootNode 
  */
-export function selectFromAst<T extends Node>(s: AstPath, f: SourceFile): T|undefined {
-  let n: Node=f, c: Node//=f
- let nums =  s.split('/').filter(a=>a)
- .map(i=>parseInt(i))
- const tail = nums.slice(1, nums.length)
- nums = [...tail, nums[0]]
-  nums
-  .forEach((i, index)=>{
+export function selectFromAst<T extends Node>(astPath: AstPath, rootNode: Node, options?: SelectOptions): T|undefined {
+  let n: Node=rootNode
+  let c: Node|undefined
+//  let pathNodes =  path.split('/').filter(a=>a)
+//  .map(i=>parseInt(i))
+let {path} = astPath
+ const tail = path.slice(1, path.length)
+//  path = [...tail, path[0]]
+//  path
+;
+[...tail, path[0]]  .forEach((pathNode)=>{
     const children = getChildrenForEachChild(n)
-    c = children[i]
+    c = children[pathNode.index]
       n=c 
   })
-  return n as any
+  return n as T
 }
 

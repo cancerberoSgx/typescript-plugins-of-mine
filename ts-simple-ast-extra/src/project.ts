@@ -51,7 +51,7 @@ export function buildManipulationSettings(formatOptions?: ts.FormatCodeSettings,
     indentationText,
     newLineKind: !formatOptions ? NewLineKind.LineFeed : formatOptions.newLineCharacter === '\n' ? NewLineKind.LineFeed : NewLineKind.CarriageReturnLineFeed,
     quoteKind: (userPreferences && userPreferences.quotePreference === 'double') ? QuoteKind.Double : QuoteKind.Single,
-    insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces: formatOptions && formatOptions.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces
+    insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces: !!formatOptions && !!formatOptions.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces
   }
   return obj
 }
@@ -62,7 +62,7 @@ export function buildManipulationSettings(formatOptions?: ts.FormatCodeSettings,
 export function getSimpleProject(project: ts_module.server.Project, formatOptions?: ts.FormatCodeSettings, userPreferences?: ts_module.UserPreferences): Project {
 
   // TODO: try to cache and do unit test simulating TLS if(!simpleProject){
-  let tsConfigPath: string = getConfigFilePath(project)
+  let tsConfigPath: string = getConfigFilePath(project)!
   let simpleProject: Project = createSimpleASTProject(tsConfigPath, formatOptions, userPreferences)
   // }
   return simpleProject

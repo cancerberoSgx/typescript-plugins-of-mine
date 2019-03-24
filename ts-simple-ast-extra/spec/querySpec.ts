@@ -28,6 +28,6 @@ class A implements I<number> {
     const n = f.getDescendants().filter(TypeGuards.isIdentifier).find(i => i.getText() === 'jacinto')!
     const sel = buildAstSelector(n)
     const n2 = selectFromAst<Identifier>(sel, f)
-    expect(n.getText()).toBe(n2.getText())
+    expect(n.getText()).toBe(n2!.getText())
   })
 })

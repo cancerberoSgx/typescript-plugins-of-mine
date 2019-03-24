@@ -40,9 +40,9 @@ export interface ModifyAndAssertConfig {
 
 export function modifyAndAssert({ node, modification, asserts, verbose = false }: ModifyAndAssertConfig) {
   asserts.filter(a => a.before && a.file).forEach(({ before, after, file }) => {
-    expect(file.getText()).toContain(before)
+    expect(file!.getText()).toContain(before!)
     if (after) {
-      expect(file.getText()).not.toContain(after, `OFFENDING file: ${file.getFilePath()}`)
+      expect(file!.getText()).not.toContain(after, `OFFENDING file: ${file!.getFilePath()}`)
     }
   })
   if (node && modification) {
@@ -52,15 +52,15 @@ export function modifyAndAssert({ node, modification, asserts, verbose = false }
   }
   asserts.filter(a => a.after && a.file).forEach(({ before, after, file }) => {
     if (before) {
-      expect(file.getText()).not.toContain(before, `OFFENDING file: ${file.getFilePath()}`)
+      expect(file!.getText()).not.toContain(before, `OFFENDING file: ${file!.getFilePath()}`)
     }
-    expect(file.getText()).toContain(after, `OFFENDING file: ${file.getFilePath()}`)
+    expect(file!.getText()).toContain(after!, `OFFENDING file: ${file!.getFilePath()}`)
   })
 }
 
 export function printDiagnostics(project: Project) {
   console.log(project.getPreEmitDiagnostics()
-    .map(d => d.getMessageText().toString() + ' - ' + d.getSourceFile().getFilePath() + '#' + d.getLineNumber())
+    .map(d => d.getMessageText().toString() + ' - ' + d.getSourceFile()!.getFilePath() + '#' + d.getLineNumber())
     .join('\n'))
 }
 

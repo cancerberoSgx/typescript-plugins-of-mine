@@ -4,19 +4,26 @@ import { applyAllSuggestedCodeFixes, ApplyFileTextChangesResult, applyRefactorEd
 export function addBracesToArrowFunction(project: Project, arrowFunction: ArrowFunction) {
   const range = { pos: arrowFunction.getStart(), end: arrowFunction.getEnd() }
   const edits = project.getLanguageService().compilerObject.getEditsForRefactor(arrowFunction.getSourceFile().getFilePath(), {}, range, 'Add or remove braces in an arrow function', 'Add braces to arrow function', {})
-  return applyRefactorEditInfo(project, edits)
+  if(edits){
+    return applyRefactorEditInfo(project, edits)
+  }
 }
 
 export function removeBracesFromArrowFunction(project: Project, arrowFunction: ArrowFunction) {
   const range = { pos: arrowFunction.getStart(), end: arrowFunction.getEnd() }
   const edits = project.getLanguageService().compilerObject.getEditsForRefactor(arrowFunction.getSourceFile().getFilePath(), {}, range, 'Add or remove braces in an arrow function', 'Remove braces from arrow function', {})
-  return applyRefactorEditInfo(project, edits)
+  if(edits){
+    return applyRefactorEditInfo(project, edits)
+  }
 }
 
-export function moveToNewFile(project: Project, node: Node, removeEmpty: boolean=false): ApplyFileTextChangesResult {
+export function moveToNewFile(project: Project, node: Node, removeEmpty: boolean=false): ApplyFileTextChangesResult|undefined {
   const range = { pos: node.getStart(), end: node.getEnd() }
   const edits = project.getLanguageService().compilerObject.getEditsForRefactor(node.getSourceFile().getFilePath(), {}, range, 'Move to a new file', 'Move to a new file', {})
-  return applyRefactorEditInfo(project, edits, removeEmpty)
+  if(edits){
+    return applyRefactorEditInfo(project, edits, removeEmpty)
+  }
+
 }
 
 export function convertToEs6Module(project: Project, node: Node){
@@ -39,11 +46,15 @@ export function inferTypesFromUsage(project: Project, node: Node) {
 export function  convertNamespaceImportToNamedImports(project: Project, node: Node) {
   const range = { pos: node.getStart(), end: node.getEnd() }
   const edits = project.getLanguageService().compilerObject.getEditsForRefactor(node.getSourceFile().getFilePath(), {}, range, 'Convert import', 'Convert namespace import to named imports', {})
-  return applyRefactorEditInfo(project, edits)
+  if(edits){
+    return applyRefactorEditInfo(project, edits)
+  }
  }
 
 export function convertNamedImportsToNamespaceImport(project: Project, node: Node) {
   const range = { pos: node.getStart(), end: node.getEnd() }
   const edits = project.getLanguageService().compilerObject.getEditsForRefactor(node.getSourceFile().getFilePath(), {}, range, 'Convert import', 'Convert named imports to namespace import', {})
-  return applyRefactorEditInfo(project, edits)
+  if(edits){
+    return applyRefactorEditInfo(project, edits)
+  }
 }

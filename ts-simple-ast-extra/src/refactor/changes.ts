@@ -1,6 +1,7 @@
 import Project, { TextChange, SourceFile, Node } from 'ts-morph';
 import * as ts from 'typescript'
 import { flat, flatReadOnly } from '../misc';
+import { notUndefined } from '../types';
 
 export function createTextChanges(textChanges: ts.TextChange[]): TextChange[] {
   return textChanges.map(compilerNode => {
@@ -75,7 +76,7 @@ export function applyAllSuggestedCodeFixes(project: Project, containerNode: Node
   return result
 }
 
-export function getSuggestedCodeFixesInside(project: Project, containerNode: Node, codes?: number[]): ReadonlyArray<ts.CodeFixAction> {
+export function getSuggestedCodeFixesInside(project: Project, containerNode: Node, codes?: number[]): ReadonlyArray<ts.CodeFixAction>|undefined {
   const service = project.getLanguageService().compilerObject
   const diagnostics = service
 
@@ -85,7 +86,9 @@ export function getSuggestedCodeFixesInside(project: Project, containerNode: Nod
         return service.getCodeFixesAtPosition(containerNode.getSourceFile().getFilePath(), d.start, d.start + d.length, [d.code], {}, {})
       }
     }).filter(a => a && a.length)
-  return flatReadOnly(diagnostics)
+    // if(diagnostics){
+      return flatReadOnly(diagnostics.filter(notUndefined))
+    // }
 
 }
 

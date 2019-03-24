@@ -6,10 +6,8 @@
     "outDir": "./dist", 
     "rootDir": ".",
     "strict": true,  
-    "strictNullChecks": false,   
     "esModuleInterop": true,
     "declaration": true,
     "sourceMap": true,
-    "skipLibCheck": true
   }
 }

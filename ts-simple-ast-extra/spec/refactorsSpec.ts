@@ -11,16 +11,16 @@ const c = new Class1()
 `
     const f = project.createSourceFile('f1.ts', code)
 
-    const result = moveToNewFile(project, f.getClass('Class1'))
+    const result = moveToNewFile(project, f.getClass('Class1')!)
     // console.log(result);
 
     expect(f.getText()).not.toContain('class Class1')
     expect(f.getText()).toContain('import { Class1 } from "./Class1";')
     const newFile = project.getSourceFile('Class1.ts')
-    expect(newFile.getText()).toContain('export class Class1')
+    expect(newFile!.getText()).toContain('export class Class1')
 
-    expect(result.created[0].getBaseName()).toBe('Class1.ts')
-    expect(result.modified[0].getBaseName()).toBe('f1.ts')
+    expect(result!.created[0].getBaseName()).toBe('Class1.ts')
+    expect(result!.modified[0].getBaseName()).toBe('f1.ts')
 
   })
 
@@ -31,7 +31,7 @@ const c = a => a+1
 `
     const f = project.createSourceFile('f1.ts', code)
     const arrow = f.getFirstDescendant(TypeGuards.isArrowFunction)
-    addBracesToArrowFunction(project, arrow)
+    addBracesToArrowFunction(project, arrow!)
 
     expect(f.getText()).toContain(`const c = a => {
 return a+1;
@@ -46,7 +46,7 @@ const c = a => {return a + 1; }
 `
     const f = project.createSourceFile('f1.ts', code)
     const arrow = f.getFirstDescendant(TypeGuards.isArrowFunction)
-    removeBracesFromArrowFunction(project, arrow)
+    removeBracesFromArrowFunction(project, arrow!)
 
     expect(f.getText()).toContain(`const c = a => a+1`)
 

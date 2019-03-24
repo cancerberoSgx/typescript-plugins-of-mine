@@ -26,7 +26,7 @@ class A implements I<number> {
     )
     
     const f = project.getSourceFile('test.ts')!
-    extractInterface(f.getClass('A'))
+    extractInterface(f.getClass('A')!)
 
     expect(removeWhites(f.getText() )).toBe(
       removeWhites(
