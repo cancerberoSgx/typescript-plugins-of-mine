@@ -1,5 +1,5 @@
 import Project, { Identifier, TypeGuards } from 'ts-morph';
-import { buildAstSelector, selectFromAst } from '../src/query';
+import { buildSelector, selectNode } from "..";
 
 describe('ExtractInterface', () => {
   it('should create an interface from given class with only public members, jsdocs and correct types and type params', () => {
@@ -26,8 +26,8 @@ class A implements I<number> {
     )
     const f = project.getSourceFile('test.ts')!
     const n = f.getDescendants().filter(TypeGuards.isIdentifier).find(i => i.getText() === 'jacinto')!
-    const sel = buildAstSelector(n)
-    const n2 = selectFromAst<Identifier>(sel, f)
+    const sel = buildSelector(n)
+    const n2 = selectNode<Identifier>(sel, f)
     expect(n.getText()).toBe(n2!.getText())
   })
 })

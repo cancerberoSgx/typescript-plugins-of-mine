@@ -6,5 +6,4 @@ export * from './refactor/codeFix'
 export * from './refactor/refactors'
 export * from './query/index'
 export { extractInterface } from './refactor/extractInterface'
-
 export * from './types'
