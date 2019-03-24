@@ -1,5 +1,5 @@
 import Project, { Identifier, TypeGuards } from 'ts-morph';
-import { buildAstPath, selectNode } from "..";
+import { buildAstPath, selectNode } from '../src';
 
 describe('ExtractInterface', () => {
   it('should create an interface from given class with only public members, jsdocs and correct types and type params', () => {

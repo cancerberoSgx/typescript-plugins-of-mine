@@ -7,3 +7,7 @@ export function flatReadOnly<T>(arr: ReadonlyArray<ReadonlyArray<T>>): ReadonlyA
 export function quote(s: string, q: string = '"'): string {
   return q + s.replace(new RegExp(q, 'g'), '\\' + q) + q
 }
+
+export function removeWhites(s: string, replaceWith = ' ') {
+  return s.replace(/\s+/gm, replaceWith).trim()
+}
