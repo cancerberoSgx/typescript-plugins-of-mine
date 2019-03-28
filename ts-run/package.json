@@ -1,0 +1,47 @@
+{
+  "name": "ts-run",
+  "version": "0.0.1",
+  "description": "run TypeScript in the browser - like ts-node but works everywhere",
+  "main": "dist/src/index.js",
+  "typings": "dist/src/index.d.ts",
+  "scripts": {
+    "build-test": "npm run clean &&  npx tsc && npx parcel build src/test/index.html -d docs --no-content-hash --detailed-report --public-url './' && npm run copy-test",
+    "build-test-local": "npm run build-test &&  npx http-server docs ",
+    "build-test-local-gz": "npm run build-test && gzip docs/*.* && npx http-server docs --gzip",
+    "copy-test": "mkdir -p docs/libs && mkdir -p docs/test && cp node_modules/typescript/lib/lib.*.d.ts docs/libs && cp tsconfig.json docs/test && cp src/test/index.appcache docs",
+    "start-test": "npx parcel serve  --no-hmr --open --no-source-maps --no-autoinstall src/test/index.html -d docs",
+    "prettier": " npx prettier  --write --arrow-parens avoid --parser typescript --use-tabs false --no-semi true --single-quote true --tab-width 2 --trailing-comma none --end-of-line lf --prose-wrap preserve --print-width 120 --jsx-bracket-same-line true \"src/**/*.ts*\"",
+    "clean": "rm -rf dist docs",
+    "test": "ts-node node_modules/jasmine/bin/jasmine",
+    "all": "npm run clean && npm run prettier && npm run build && npm run test && npm run doc",
+    "pack-examples": "npx embed-json-in-ts --mode string --input \"src/examples/toPack/**/*.ts*\" --output src/examples/packed --preserveExtension --debug"
+  },
+  "keywords": [
+    "TypeScript",
+    "TypeScript Language Service",
+    "plugin"
+  ],
+  "author": "Sebastian Gurin",
+  "license": "MIT",
+  "dependencies": {
+    "hyperquest-promise": "0.0.6",
+    "misc-utils-of-mine-generic": "0.0.12",
+    "misc-utils-of-mine-typescript": "0.0.12",
+    "p-queue": "^4.0.0",
+    "prettier": "^1.16.4",
+    "ts-simple-ast-extra": "0.0.19"
+  },
+  "devDependencies": {
+    "@types/jasmine": "^2.8.9",
+    "@types/p-queue": "^3.2.1",
+    "embed-json-in-ts": "0.0.8",
+    "http-server": "^0.11.1",
+    "jasmine": "^3.3.0",
+    "parcel": "^1.11.0",
+    "prettier": "^1.16.4",
+    "ts-morph": "^1.3.1",
+    "ts-node": "^7.0.1",
+    "typescript": "^3.3.333"
+  },
+  "repository": "https://github.com/cancerberoSgx/typescript-plugin-of-mine/tree/master/ts-run"
+}
