@@ -6,4 +6,3 @@ tmp
 *.tgz
 evaluated_*
 .idea
-ts-run
