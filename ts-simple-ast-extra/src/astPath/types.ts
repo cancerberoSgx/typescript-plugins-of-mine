@@ -1,5 +1,5 @@
 import { SyntaxKind } from 'ts-morph'
-let types
+
 export interface BuildAstPathOptions {
   /**
    * TODO
@@ -20,16 +20,23 @@ export interface BuildAstPathOptions {
    */
   includePathToSourceFile?: boolean
 }
+
 export interface ASTPathNode {
   /** index of current node relative to is parent according to [[]] */
   index: number
   nodeKind?: SyntaxKind
   parentKind?: SyntaxKind
 }
+
+/**
+ * This object is valid JSON so it can be serialized with `JSON.stringify`
+ */
 export interface AstPath {
+  // selector: string
   path: ASTPathNode[]
   createOptions: BuildAstPathOptions
 }
+
 export interface SelectOptions {
   /**
    * TODO

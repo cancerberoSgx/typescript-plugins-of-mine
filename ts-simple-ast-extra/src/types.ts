@@ -1,5 +1,5 @@
 import { ClassDeclaration, ExpressionWithTypeArguments, TypeGuards, InterfaceDeclaration } from 'ts-morph'
-
+import { notUndefined } from 'misc-utils-of-mine-typescript'
 /**
  * Returns all implements clauses of this class and its super classes both things recursively
  */
@@ -70,11 +70,3 @@ export const findInterfacesWithPropertyNamed = (decl: ClassDeclaration, memberNa
     .filter(TypeGuards.isInterfaceDeclaration)
     .filter(d => d.getMembers().find(m => TypeGuards.isPropertyNamedNode(m) && m.getName() === memberName))
     .filter((value, pos, arr) => arr.indexOf(value) === pos) // union
-
-/** Removes undefined from type */
-export type NotUndefined<T> = Exclude<T, undefined>
-
-/** Useful for filtering out undefined values without casting. */
-export function notUndefined<T>(n: T): n is NotUndefined<T> {
-  return n !== undefined
-}

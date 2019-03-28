@@ -75,6 +75,7 @@
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-external"><a href="_node_.html#getchildrenforeachchild" class="tsd-kind-icon">get<wbr>Children<wbr>For<wbr>Each<wbr>Child</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-external"><a href="_node_.html#getname" class="tsd-kind-icon">get<wbr>Name</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-external"><a href="_node_.html#isnode" class="tsd-kind-icon">is<wbr>Node</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-external"><a href="_node_.html#visitchildrenrecursivedeepfirst" class="tsd-kind-icon">visit<wbr>Children<wbr>Recursive<wbr>Deep<wbr>First</a></li>
 							</ul>
 						</section>
@@ -93,7 +94,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/0d107e9/ts-simple-ast-extra/src/node.ts#L7">node.ts:7</a></li>
+									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/5e8c3b2/ts-simple-ast-extra/src/node.ts#L7">node.ts:7</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -122,7 +123,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/0d107e9/ts-simple-ast-extra/src/node.ts#L17">node.ts:17</a></li>
+									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/5e8c3b2/ts-simple-ast-extra/src/node.ts#L17">node.ts:17</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -142,6 +143,29 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
+					<a name="isnode" class="tsd-anchor"></a>
+					<h3>is<wbr>Node</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">is<wbr>Node<span class="tsd-signature-symbol">(</span>n<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/5e8c3b2/ts-simple-ast-extra/src/node.ts#L56">node.ts:56</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>n: <span class="tsd-signature-type">any</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
 					<a name="visitchildrenrecursivedeepfirst" class="tsd-anchor"></a>
 					<h3>visit<wbr>Children<wbr>Recursive<wbr>Deep<wbr>First</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
@@ -151,7 +175,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/0d107e9/ts-simple-ast-extra/src/node.ts#L29">node.ts:29</a></li>
+									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/5e8c3b2/ts-simple-ast-extra/src/node.ts#L29">node.ts:29</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -240,7 +264,16 @@
 						<span>Externals</span>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="_misc_.html">"misc"</a>
+						<a href="_astpath_buildselector_.html">"ast<wbr>Path/build<wbr>Selector"</a>
+					</li>
+					<li class=" tsd-kind-external-module tsd-is-external">
+						<a href="_astpath_index_.html">"ast<wbr>Path/index"</a>
+					</li>
+					<li class=" tsd-kind-external-module tsd-is-external">
+						<a href="_astpath_selectnode_.html">"ast<wbr>Path/select<wbr>Node"</a>
+					</li>
+					<li class=" tsd-kind-external-module tsd-is-external">
+						<a href="_astpath_types_.html">"ast<wbr>Path/types"</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
 						<a href="_modify_.html">"modify"</a>
@@ -249,19 +282,10 @@
 						<a href="_node_.html">"node"</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="_project_.html">"project"</a>
+						<a href="_projectclient_.html">"project<wbr>Client"</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="_query_buildselector_.html">"query/build<wbr>Selector"</a>
-					</li>
-					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="_query_index_.html">"query/index"</a>
-					</li>
-					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="_query_selectnode_.html">"query/select<wbr>Node"</a>
-					</li>
-					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="_query_types_.html">"query/types"</a>
+						<a href="_projecttsmodule_.html">"project<wbr>TsModule"</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
 						<a href="_refactor_changes_.html">"refactor/changes"</a>
@@ -293,6 +317,9 @@
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
 						<a href="_node_.html#getname" class="tsd-kind-icon">get<wbr>Name</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
+						<a href="_node_.html#isnode" class="tsd-kind-icon">is<wbr>Node</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
 						<a href="_node_.html#visitchildrenrecursivedeepfirst" class="tsd-kind-icon">visit<wbr>Children<wbr>Recursive<wbr>Deep<wbr>First</a>

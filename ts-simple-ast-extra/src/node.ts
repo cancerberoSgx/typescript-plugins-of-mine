@@ -52,3 +52,7 @@ export function visitChildrenRecursiveDeepFirst(
       .forEach(child => visitChildrenRecursiveDeepFirst(child, visitor, i++, level + 1, stopOnTruthy, getChildrenMode))
   }
 }
+
+export function isNode(n: any): n is Node {
+  return n && typeof n.getText === 'function' && typeof n.getKindName === 'function'
+}

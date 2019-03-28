@@ -1,4 +1,4 @@
-import { notUndefined } from './types'
+import { notUndefined } from 'misc-utils-of-mine-typescript'
 import { Identifier, Node, SyntaxKind } from 'ts-morph'
 
 export function getDefinitionsOf(id: Identifier) {

@@ -1,7 +1,6 @@
 // general interfaces used by some of my plugins that contains several refactors and are based on ts-simple-ast
 
-import Project, { Node } from 'ts-morph'
-import * as ts from 'typescript'
+import { Project, Node, ts } from 'ts-morph'
 
 export interface CodeFix {
   name: string

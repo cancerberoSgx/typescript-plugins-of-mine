@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>TestResult | ts-simple-ast-extra</title>
+	<title>SelectOptions | ts-simple-ast-extra</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,13 +56,13 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="../modules/_test_.html">&quot;test&quot;</a>
+					<a href="../modules/_astpath_types_.html">&quot;astPath/types&quot;</a>
 				</li>
 				<li>
-					<a href="_test_.testresult.html">TestResult</a>
+					<a href="_astpath_types_.selectoptions.html">SelectOptions</a>
 				</li>
 			</ul>
-			<h1>Interface TestResult</h1>
+			<h1>Interface SelectOptions</h1>
 		</div>
 	</div>
 </header>
@@ -73,7 +73,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">TestResult</span>
+						<span class="target">SelectOptions</span>
 					</li>
 				</ul>
 			</section>
@@ -84,8 +84,7 @@
 						<section class="tsd-index-section tsd-is-external">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_test_.testresult.html#files" class="tsd-kind-icon">files</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_test_.testresult.html#project" class="tsd-kind-icon">project</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_astpath_types_.selectoptions.html#verifynodekind" class="tsd-kind-icon">verify<wbr>Node<wbr>Kind</a></li>
 							</ul>
 						</section>
 					</div>
@@ -94,32 +93,20 @@
 			<section class="tsd-panel-group tsd-member-group tsd-is-external">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-					<a name="files" class="tsd-anchor"></a>
-					<h3>files</h3>
-					<div class="tsd-signature tsd-kind-icon">files<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
+					<a name="verifynodekind" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> verify<wbr>Node<wbr>Kind</h3>
+					<div class="tsd-signature tsd-kind-icon">verify<wbr>Node<wbr>Kind<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/5e8c3b2/ts-simple-ast-extra/src/test.ts#L10">test.ts:10</a></li>
+							<li>Defined in astPath/types.ts:46</li>
 						</ul>
 					</aside>
-					<div class="tsd-type-declaration">
-						<h4>Type declaration</h4>
-						<ul class="tsd-parameters">
-							<li class="tsd-parameter-index-signature">
-								<h5><span class="tsd-signature-symbol">[</span>name: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">]: </span><span class="tsd-signature-type">SourceFile</span></h5>
-							</li>
-						</ul>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>TODO</p>
+						</div>
+						<p>If true and the Ast path includes them, it will verify that each node kind on the path matches the AST&#39;s</p>
 					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-					<a name="project" class="tsd-anchor"></a>
-					<h3>project</h3>
-					<div class="tsd-signature tsd-kind-icon">project<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Project</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/5e8c3b2/ts-simple-ast-extra/src/test.ts#L11">test.ts:11</a></li>
-						</ul>
-					</aside>
 				</section>
 			</section>
 		</div>
@@ -147,7 +134,7 @@
 					<li class=" tsd-kind-external-module tsd-is-external">
 						<a href="../modules/_astpath_selectnode_.html">"ast<wbr>Path/select<wbr>Node"</a>
 					</li>
-					<li class=" tsd-kind-external-module tsd-is-external">
+					<li class="current tsd-kind-external-module tsd-is-external">
 						<a href="../modules/_astpath_types_.html">"ast<wbr>Path/types"</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
@@ -177,7 +164,7 @@
 					<li class=" tsd-kind-external-module tsd-is-external">
 						<a href="../modules/_reference_.html">"reference"</a>
 					</li>
-					<li class="current tsd-kind-external-module tsd-is-external">
+					<li class=" tsd-kind-external-module tsd-is-external">
 						<a href="../modules/_test_.html">"test"</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
@@ -188,38 +175,26 @@
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
 					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-is-external">
-						<a href="_test_.modifyandassertconfig.html" class="tsd-kind-icon">Modify<wbr>And<wbr>Assert<wbr>Config</a>
+						<a href="_astpath_types_.astpathnode.html" class="tsd-kind-icon">ASTPath<wbr>Node</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-is-external">
-						<a href="_test_.testconfig.html" class="tsd-kind-icon">Test<wbr>Config</a>
+						<a href="_astpath_types_.astpath.html" class="tsd-kind-icon">Ast<wbr>Path</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-is-external">
+						<a href="_astpath_types_.buildastpathoptions.html" class="tsd-kind-icon">Build<wbr>Ast<wbr>Path<wbr>Options</a>
 					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface tsd-parent-kind-external-module tsd-is-external">
-						<a href="_test_.testresult.html" class="tsd-kind-icon">Test<wbr>Result</a>
+						<a href="_astpath_types_.selectoptions.html" class="tsd-kind-icon">Select<wbr>Options</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-								<a href="_test_.testresult.html#files" class="tsd-kind-icon">files</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-								<a href="_test_.testresult.html#project" class="tsd-kind-icon">project</a>
+								<a href="_astpath_types_.selectoptions.html#verifynodekind" class="tsd-kind-icon">verify<wbr>Node<wbr>Kind</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
-					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
-						<a href="../modules/_test_.html#createprojectfiles" class="tsd-kind-icon">create<wbr>Project<wbr>Files</a>
-					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
-						<a href="../modules/_test_.html#modifyandassert" class="tsd-kind-icon">modify<wbr>And<wbr>Assert</a>
-					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
-						<a href="../modules/_test_.html#printdiagnostics" class="tsd-kind-icon">print<wbr>Diagnostics</a>
-					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
-						<a href="../modules/_test_.html#printreferences" class="tsd-kind-icon">print<wbr>References</a>
-					</li>
 				</ul>
 			</nav>
 		</div>

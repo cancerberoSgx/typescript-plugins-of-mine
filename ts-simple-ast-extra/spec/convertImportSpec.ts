@@ -1,7 +1,6 @@
 
-import Project from 'ts-morph';
-import { convertNamedImportsToNamespaceImport, convertNamespaceImportToNamedImports } from '../src/refactor/refactors';
-import * as ts from 'typescript'
+import {Project} from 'ts-morph';
+import { convertNamedImportsToNamespaceImport, convertNamespaceImportToNamedImports } from '../src';
 
 describe('convertImport', () => {
 

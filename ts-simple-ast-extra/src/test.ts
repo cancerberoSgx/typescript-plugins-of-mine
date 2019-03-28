@@ -1,3 +1,5 @@
+// tools for testing against ts-morph
+
 import Project, { ts, Node, ScriptTarget, SourceFile, NamedNode } from 'ts-morph'
 
 export interface TestConfig {

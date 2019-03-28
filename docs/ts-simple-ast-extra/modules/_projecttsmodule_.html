@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>ASTPathNode | ts-simple-ast-extra</title>
+	<title>&quot;projectTsModule&quot; | ts-simple-ast-extra</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,78 +56,129 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="../modules/_query_types_.html">&quot;query/types&quot;</a>
-				</li>
-				<li>
-					<a href="_query_types_.astpathnode.html">ASTPathNode</a>
+					<a href="_projecttsmodule_.html">&quot;projectTsModule&quot;</a>
 				</li>
 			</ul>
-			<h1>Interface ASTPathNode</h1>
+			<h1>External module &quot;projectTsModule&quot;</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
-			<section class="tsd-panel tsd-hierarchy">
-				<h3>Hierarchy</h3>
-				<ul class="tsd-hierarchy">
-					<li>
-						<span class="target">ASTPathNode</span>
-					</li>
-				</ul>
-			</section>
 			<section class="tsd-panel-group tsd-index-group">
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section tsd-is-external">
-							<h3>Properties</h3>
+							<h3>Functions</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_query_types_.astpathnode.html#index" class="tsd-kind-icon">index</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_query_types_.astpathnode.html#nodekind" class="tsd-kind-icon">node<wbr>Kind</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_query_types_.astpathnode.html#parentkind" class="tsd-kind-icon">parent<wbr>Kind</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-external"><a href="_projecttsmodule_.html#createsimpleastproject" class="tsd-kind-icon">create<wbr>SimpleASTProject</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-external"><a href="_projecttsmodule_.html#getconfigfilepath" class="tsd-kind-icon">get<wbr>Config<wbr>File<wbr>Path</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-external"><a href="_projecttsmodule_.html#getsimpleproject" class="tsd-kind-icon">get<wbr>Simple<wbr>Project</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group tsd-is-external">
-				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-					<a name="index" class="tsd-anchor"></a>
-					<h3>index</h3>
-					<div class="tsd-signature tsd-kind-icon">index<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/0d107e9/ts-simple-ast-extra/src/query/types.ts#L25">query/types.ts:25</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>index of current node relative to is parent according to [[]]</p>
-						</div>
-					</div>
+				<h2>Functions</h2>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
+					<a name="createsimpleastproject" class="tsd-anchor"></a>
+					<h3>create<wbr>SimpleASTProject</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">create<wbr>SimpleASTProject<span class="tsd-signature-symbol">(</span>nativeProjectOrPath<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ts_module.server.Project</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span>, formatOptions<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">ts.FormatCodeSettings</span>, userPreferences<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">ts_module.UserPreferences</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Project</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in projectTsModule.ts:25</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>(dirty way) of creating a ts-simple-ast Project from an exiting ts.server.Project. Given project must be a
+										configured project (created with a tsconfig file. It will recreates the project from scratch so it can take
+									some time. Use it with discretion</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>nativeProjectOrPath: <span class="tsd-signature-type">ts_module.server.Project</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> formatOptions: <span class="tsd-signature-type">ts.FormatCodeSettings</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> userPreferences: <span class="tsd-signature-type">ts_module.UserPreferences</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Project</span></h4>
+						</li>
+					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-					<a name="nodekind" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> node<wbr>Kind</h3>
-					<div class="tsd-signature tsd-kind-icon">node<wbr>Kind<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">SyntaxKind</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/0d107e9/ts-simple-ast-extra/src/query/types.ts#L26">query/types.ts:26</a></li>
-						</ul>
-					</aside>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
+					<a name="getconfigfilepath" class="tsd-anchor"></a>
+					<h3>get<wbr>Config<wbr>File<wbr>Path</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Config<wbr>File<wbr>Path<span class="tsd-signature-symbol">(</span>project<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ts_module.server.Project</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in projectTsModule.ts:10</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>gets the config file of given ts project or undefined if given is not a ConfiguredProject or tsconfig
+									cannot be found</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>project: <span class="tsd-signature-type">ts_module.server.Project</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span>
+								<span class="tsd-signature-symbol"> | </span>
+								<span class="tsd-signature-type">undefined</span>
+							</h4>
+						</li>
+					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-					<a name="parentkind" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> parent<wbr>Kind</h3>
-					<div class="tsd-signature tsd-kind-icon">parent<wbr>Kind<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">SyntaxKind</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/0d107e9/ts-simple-ast-extra/src/query/types.ts#L27">query/types.ts:27</a></li>
-						</ul>
-					</aside>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
+					<a name="getsimpleproject" class="tsd-anchor"></a>
+					<h3>get<wbr>Simple<wbr>Project</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Simple<wbr>Project<span class="tsd-signature-symbol">(</span>project<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ts_module.server.Project</span>, formatOptions<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">ts.FormatCodeSettings</span>, userPreferences<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">ts_module.UserPreferences</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Project</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in projectTsModule.ts:42</li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>project: <span class="tsd-signature-type">ts_module.server.Project</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> formatOptions: <span class="tsd-signature-type">ts.FormatCodeSettings</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> userPreferences: <span class="tsd-signature-type">ts_module.UserPreferences</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Project</span></h4>
+						</li>
+					</ul>
 				</section>
 			</section>
 		</div>
@@ -141,89 +192,68 @@
 						<span>Internals</span>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="../modules/_index_.html">"index"</a>
+						<a href="_index_.html">"index"</a>
 					</li>
 					<li class="label tsd-is-external">
 						<span>Externals</span>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="../modules/_misc_.html">"misc"</a>
+						<a href="_astpath_buildselector_.html">"ast<wbr>Path/build<wbr>Selector"</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="../modules/_modify_.html">"modify"</a>
+						<a href="_astpath_index_.html">"ast<wbr>Path/index"</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="../modules/_node_.html">"node"</a>
+						<a href="_astpath_selectnode_.html">"ast<wbr>Path/select<wbr>Node"</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="../modules/_project_.html">"project"</a>
+						<a href="_astpath_types_.html">"ast<wbr>Path/types"</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="../modules/_query_buildselector_.html">"query/build<wbr>Selector"</a>
+						<a href="_modify_.html">"modify"</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="../modules/_query_index_.html">"query/index"</a>
+						<a href="_node_.html">"node"</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="../modules/_query_selectnode_.html">"query/select<wbr>Node"</a>
+						<a href="_projectclient_.html">"project<wbr>Client"</a>
 					</li>
 					<li class="current tsd-kind-external-module tsd-is-external">
-						<a href="../modules/_query_types_.html">"query/types"</a>
+						<a href="_projecttsmodule_.html">"project<wbr>TsModule"</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="../modules/_refactor_changes_.html">"refactor/changes"</a>
+						<a href="_refactor_changes_.html">"refactor/changes"</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="../modules/_refactor_codefix_.html">"refactor/code<wbr>Fix"</a>
+						<a href="_refactor_codefix_.html">"refactor/code<wbr>Fix"</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="../modules/_refactor_extractinterface_.html">"refactor/extract<wbr>Interface"</a>
+						<a href="_refactor_extractinterface_.html">"refactor/extract<wbr>Interface"</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="../modules/_refactor_refactors_.html">"refactor/refactors"</a>
+						<a href="_refactor_refactors_.html">"refactor/refactors"</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="../modules/_reference_.html">"reference"</a>
+						<a href="_reference_.html">"reference"</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="../modules/_test_.html">"test"</a>
+						<a href="_test_.html">"test"</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="../modules/_types_.html">"types"</a>
+						<a href="_types_.html">"types"</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-				</ul>
-				<ul class="current">
-					<li class="current tsd-kind-interface tsd-parent-kind-external-module tsd-is-external">
-						<a href="_query_types_.astpathnode.html" class="tsd-kind-icon">ASTPath<wbr>Node</a>
-						<ul>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-								<a href="_query_types_.astpathnode.html#index" class="tsd-kind-icon">index</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-								<a href="_query_types_.astpathnode.html#nodekind" class="tsd-kind-icon">node<wbr>Kind</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-								<a href="_query_types_.astpathnode.html#parentkind" class="tsd-kind-icon">parent<wbr>Kind</a>
-							</li>
-						</ul>
+					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
+						<a href="_projecttsmodule_.html#createsimpleastproject" class="tsd-kind-icon">create<wbr>SimpleASTProject</a>
 					</li>
-				</ul>
-				<ul class="after-current">
-					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-is-external">
-						<a href="_query_types_.astpath.html" class="tsd-kind-icon">Ast<wbr>Path</a>
+					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
+						<a href="_projecttsmodule_.html#getconfigfilepath" class="tsd-kind-icon">get<wbr>Config<wbr>File<wbr>Path</a>
 					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-is-external">
-						<a href="_query_types_.buildastpathoptions.html" class="tsd-kind-icon">Build<wbr>Ast<wbr>Path<wbr>Options</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-is-external">
-						<a href="_query_types_.selectoptions.html" class="tsd-kind-icon">Select<wbr>Options</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-parent-kind-external-module tsd-is-external tsd-is-not-exported">
-						<a href="../modules/_query_types_.html#types" class="tsd-kind-icon">types</a>
+					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
+						<a href="_projecttsmodule_.html#getsimpleproject" class="tsd-kind-icon">get<wbr>Simple<wbr>Project</a>
 					</li>
 				</ul>
 			</nav>

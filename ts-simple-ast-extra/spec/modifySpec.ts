@@ -1,6 +1,6 @@
 import {Project, SyntaxKind, TypeGuards} from'ts-morph'
 import { array2DInsert } from '../src';
-import { removeWhites } from '../src/misc';
+import { removeWhites } from 'misc-utils-of-mine-generic';
 
 describe('modify', () => {
   describe('array2DInsert', () => {

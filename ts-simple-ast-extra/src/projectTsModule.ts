@@ -1,7 +1,9 @@
-import { basename } from 'path'
-import Project, { IndentationText, QuoteKind, ManipulationSettings, NewLineKind, ProjectOptions } from 'ts-morph'
+// warning: this won't work on the client side - it's for typescript compiler plugin API - node.js only . TODO: remove to another package so this works 100% on the client side
+
+import Project, { ProjectOptions } from 'ts-morph'
 import * as ts_module from 'typescript/lib/tsserverlibrary'
-import { writeFileSync } from 'fs'
+import { basename } from 'path'
+import { buildManipulationSettings } from './projectClient'
 
 /** gets the config file of given ts project or undefined if given is not a ConfiguredProject or tsconfig
  * cannot be found */
@@ -14,8 +16,6 @@ export function getConfigFilePath(project: ts_module.server.Project): string | u
   }
   // TODO: for integrate it in simple-ast try with findConfigFile
 }
-
-const a = 1
 
 /**
  * (dirty way) of creating a ts-simple-ast Project from an exiting ts.server.Project. Given project must be a
@@ -35,34 +35,6 @@ export function createSimpleASTProject(
   }
   const project = new Project(projectConfig)
   return project
-}
-
-export function buildManipulationSettings(
-  formatOptions?: ts.FormatCodeSettings,
-  userPreferences?: ts_module.UserPreferences
-): ManipulationSettings {
-  let indentationText: IndentationText = IndentationText.TwoSpaces
-  if (formatOptions) {
-    if (!formatOptions.convertTabsToSpaces) {
-      indentationText = IndentationText.Tab
-    } else if (formatOptions.tabSize === 4) {
-      indentationText = IndentationText.FourSpaces
-    } else if (formatOptions.tabSize === 8) {
-      indentationText = IndentationText.EightSpaces
-    }
-  }
-  const obj: ManipulationSettings = {
-    indentationText,
-    newLineKind: !formatOptions
-      ? NewLineKind.LineFeed
-      : formatOptions.newLineCharacter === '\n'
-      ? NewLineKind.LineFeed
-      : NewLineKind.CarriageReturnLineFeed,
-    quoteKind: userPreferences && userPreferences.quotePreference === 'double' ? QuoteKind.Double : QuoteKind.Single,
-    insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces:
-      !!formatOptions && !!formatOptions.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces
-  }
-  return obj
 }
 
 // TODO: encapsulate simple project creation here so we can start testing caching the project and refreshing

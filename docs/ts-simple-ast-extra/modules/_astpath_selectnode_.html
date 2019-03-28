@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>AstPath | ts-simple-ast-extra</title>
+	<title>&quot;astPath/selectNode&quot; | ts-simple-ast-extra</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,62 +56,77 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="../modules/_query_types_.html">&quot;query/types&quot;</a>
-				</li>
-				<li>
-					<a href="_query_types_.astpath.html">AstPath</a>
+					<a href="_astpath_selectnode_.html">&quot;astPath/selectNode&quot;</a>
 				</li>
 			</ul>
-			<h1>Interface AstPath</h1>
+			<h1>External module &quot;astPath/selectNode&quot;</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
-			<section class="tsd-panel tsd-hierarchy">
-				<h3>Hierarchy</h3>
-				<ul class="tsd-hierarchy">
-					<li>
-						<span class="target">AstPath</span>
-					</li>
-				</ul>
-			</section>
 			<section class="tsd-panel-group tsd-index-group">
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section tsd-is-external">
-							<h3>Properties</h3>
+							<h3>Functions</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_query_types_.astpath.html#createoptions" class="tsd-kind-icon">create<wbr>Options</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_query_types_.astpath.html#path" class="tsd-kind-icon">path</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-has-type-parameter tsd-is-external"><a href="_astpath_selectnode_.html#selectnode" class="tsd-kind-icon">select<wbr>Node</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group tsd-is-external">
-				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-					<a name="createoptions" class="tsd-anchor"></a>
-					<h3>create<wbr>Options</h3>
-					<div class="tsd-signature tsd-kind-icon">create<wbr>Options<span class="tsd-signature-symbol">:</span> <a href="_query_types_.buildastpathoptions.html" class="tsd-signature-type">BuildAstPathOptions</a></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/0d107e9/ts-simple-ast-extra/src/query/types.ts#L31">query/types.ts:31</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-					<a name="path" class="tsd-anchor"></a>
-					<h3>path</h3>
-					<div class="tsd-signature tsd-kind-icon">path<span class="tsd-signature-symbol">:</span> <a href="_query_types_.astpathnode.html" class="tsd-signature-type">ASTPathNode</a><span class="tsd-signature-symbol">[]</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/0d107e9/ts-simple-ast-extra/src/query/types.ts#L30">query/types.ts:30</a></li>
-						</ul>
-					</aside>
+				<h2>Functions</h2>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module tsd-has-type-parameter tsd-is-external">
+					<a name="selectnode" class="tsd-anchor"></a>
+					<h3>select<wbr>Node</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module tsd-has-type-parameter tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">select<wbr>Node&lt;T&gt;<span class="tsd-signature-symbol">(</span>astPath<span class="tsd-signature-symbol">: </span><a href="../interfaces/_astpath_types_.astpath.html" class="tsd-signature-type">AstPath</a>, rootNode<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Node</span>, options<span class="tsd-signature-symbol">?: </span><a href="../interfaces/_astpath_types_.selectoptions.html" class="tsd-signature-type">SelectOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in astPath/selectNode.ts:10</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Will select a node from given AstPath. Will look up from rootNode will loop up for a node in a
+									SourceFile given a path.</p>
+								</div>
+							</div>
+							<h4 class="tsd-type-parameters-title">Type parameters</h4>
+							<ul class="tsd-type-parameters">
+								<li>
+									<h4>T<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Node</span></h4>
+								</li>
+							</ul>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>astPath: <a href="../interfaces/_astpath_types_.astpath.html" class="tsd-signature-type">AstPath</a></h5>
+								</li>
+								<li>
+									<h5>rootNode: <span class="tsd-signature-type">Node</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>ancestor node from where to select, previously used to build astPath with <code>buildAstPath</code></p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> options: <a href="../interfaces/_astpath_types_.selectoptions.html" class="tsd-signature-type">SelectOptions</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">T</span>
+								<span class="tsd-signature-symbol"> | </span>
+								<span class="tsd-signature-type">undefined</span>
+							</h4>
+						</li>
+					</ul>
 				</section>
 			</section>
 		</div>
@@ -125,86 +140,62 @@
 						<span>Internals</span>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="../modules/_index_.html">"index"</a>
+						<a href="_index_.html">"index"</a>
 					</li>
 					<li class="label tsd-is-external">
 						<span>Externals</span>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="../modules/_misc_.html">"misc"</a>
+						<a href="_astpath_buildselector_.html">"ast<wbr>Path/build<wbr>Selector"</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="../modules/_modify_.html">"modify"</a>
-					</li>
-					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="../modules/_node_.html">"node"</a>
-					</li>
-					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="../modules/_project_.html">"project"</a>
-					</li>
-					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="../modules/_query_buildselector_.html">"query/build<wbr>Selector"</a>
-					</li>
-					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="../modules/_query_index_.html">"query/index"</a>
-					</li>
-					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="../modules/_query_selectnode_.html">"query/select<wbr>Node"</a>
+						<a href="_astpath_index_.html">"ast<wbr>Path/index"</a>
 					</li>
 					<li class="current tsd-kind-external-module tsd-is-external">
-						<a href="../modules/_query_types_.html">"query/types"</a>
+						<a href="_astpath_selectnode_.html">"ast<wbr>Path/select<wbr>Node"</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="../modules/_refactor_changes_.html">"refactor/changes"</a>
+						<a href="_astpath_types_.html">"ast<wbr>Path/types"</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="../modules/_refactor_codefix_.html">"refactor/code<wbr>Fix"</a>
+						<a href="_modify_.html">"modify"</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="../modules/_refactor_extractinterface_.html">"refactor/extract<wbr>Interface"</a>
+						<a href="_node_.html">"node"</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="../modules/_refactor_refactors_.html">"refactor/refactors"</a>
+						<a href="_projectclient_.html">"project<wbr>Client"</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="../modules/_reference_.html">"reference"</a>
+						<a href="_projecttsmodule_.html">"project<wbr>TsModule"</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="../modules/_test_.html">"test"</a>
+						<a href="_refactor_changes_.html">"refactor/changes"</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="../modules/_types_.html">"types"</a>
+						<a href="_refactor_codefix_.html">"refactor/code<wbr>Fix"</a>
+					</li>
+					<li class=" tsd-kind-external-module tsd-is-external">
+						<a href="_refactor_extractinterface_.html">"refactor/extract<wbr>Interface"</a>
+					</li>
+					<li class=" tsd-kind-external-module tsd-is-external">
+						<a href="_refactor_refactors_.html">"refactor/refactors"</a>
+					</li>
+					<li class=" tsd-kind-external-module tsd-is-external">
+						<a href="_reference_.html">"reference"</a>
+					</li>
+					<li class=" tsd-kind-external-module tsd-is-external">
+						<a href="_test_.html">"test"</a>
+					</li>
+					<li class=" tsd-kind-external-module tsd-is-external">
+						<a href="_types_.html">"types"</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-is-external">
-						<a href="_query_types_.astpathnode.html" class="tsd-kind-icon">ASTPath<wbr>Node</a>
-					</li>
-				</ul>
-				<ul class="current">
-					<li class="current tsd-kind-interface tsd-parent-kind-external-module tsd-is-external">
-						<a href="_query_types_.astpath.html" class="tsd-kind-icon">Ast<wbr>Path</a>
-						<ul>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-								<a href="_query_types_.astpath.html#createoptions" class="tsd-kind-icon">create<wbr>Options</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-								<a href="_query_types_.astpath.html#path" class="tsd-kind-icon">path</a>
-							</li>
-						</ul>
-					</li>
-				</ul>
-				<ul class="after-current">
-					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-is-external">
-						<a href="_query_types_.buildastpathoptions.html" class="tsd-kind-icon">Build<wbr>Ast<wbr>Path<wbr>Options</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-is-external">
-						<a href="_query_types_.selectoptions.html" class="tsd-kind-icon">Select<wbr>Options</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-parent-kind-external-module tsd-is-external tsd-is-not-exported">
-						<a href="../modules/_query_types_.html#types" class="tsd-kind-icon">types</a>
+					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-has-type-parameter tsd-is-external">
+						<a href="_astpath_selectnode_.html#selectnode" class="tsd-kind-icon">select<wbr>Node</a>
 					</li>
 				</ul>
 			</nav>

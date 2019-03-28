@@ -1,7 +1,6 @@
-import Project, { TextChange, SourceFile, Node } from 'ts-morph'
-import * as ts from 'typescript'
-import { flat, flatReadOnly } from '../misc'
-import { notUndefined } from '../types'
+import { ts, Project, TextChange, SourceFile, Node } from 'ts-morph'
+import { notUndefined } from 'misc-utils-of-mine-typescript'
+import { flatReadOnly } from 'misc-utils-of-mine-generic'
 
 export function createTextChanges(textChanges: ts.TextChange[]): TextChange[] {
   return textChanges.map(compilerNode => {
@@ -105,7 +104,6 @@ export function getSuggestedCodeFixesInside(
 ): ReadonlyArray<ts.CodeFixAction> | undefined {
   const service = project.getLanguageService().compilerObject
   const diagnostics = service
-
     .getSuggestionDiagnostics(containerNode.getSourceFile().getFilePath())
     .map(d => {
       if (
@@ -124,9 +122,7 @@ export function getSuggestedCodeFixesInside(
       }
     })
     .filter(a => a && a.length)
-  // if(diagnostics){
   return flatReadOnly(diagnostics.filter(notUndefined))
-  // }
 }
 
 let applyTextChangesSourceFile: SourceFile

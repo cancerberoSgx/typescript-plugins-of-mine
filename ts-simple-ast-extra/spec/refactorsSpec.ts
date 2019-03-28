@@ -1,5 +1,5 @@
-import Project, { TypeGuards } from 'ts-morph';
-import { addBracesToArrowFunction, convertToEs6Module, moveToNewFile, removeBracesFromArrowFunction } from '../src/refactor/refactors';
+import { Project, TypeGuards } from 'ts-morph';
+import { addBracesToArrowFunction, convertToEs6Module, moveToNewFile, removeBracesFromArrowFunction } from '../src/';
 
 describe('fileSpec', () => {
 
