@@ -1,6 +1,6 @@
 import { CompilerOptions, ts } from 'ts-morph';
 import { File } from './file';
-import { dirname } from '.';
+import { dirname } from "./misc";
 export async function getCompilerOptions(f: File) {
   const tsConfigData = await f.getContent();
   const tsconfigPath = dirname(f.getFilePath());

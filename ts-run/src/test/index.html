@@ -1,30 +1,11 @@
 <!DOCTYPE html>
-<!-- <html manifest="index.appcache"> -->
 <html> 
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>ts-morph Playground</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <script>
-  window.addEventListener('load', function(e) {
-  if (window.applicationCache) {
-    window.applicationCache.addEventListener('updateready', function(e) {
-        if (window.applicationCache.status == window.applicationCache.UPDATEREADY) {
-          // Browser downloaded a new app cache.
-          // Swap it in and reload the page to get the new hotness.
-          window.applicationCache.swapCache();
-          if (confirm('A new version of this site is available. Load it?')) {
-            window.location.reload();
-          }
-        } else {
-          // Manifest didn't changed. Nothing new to server.
-        }
-    }, false);
-  }
-}, false);
-  </script>
+ 
 </head>
 
 <body>

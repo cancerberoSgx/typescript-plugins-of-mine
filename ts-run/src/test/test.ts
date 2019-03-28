@@ -1,4 +1,4 @@
-import { run } from '..';
+import { run } from "../run";
 import { ContentFile, RemoteFile } from '../file';
 
 async function test(){
@@ -8,8 +8,7 @@ async function test(){
     files: [],
     tsConfigJson: new RemoteFile(`${location.href}test/tsconfig.json`)
   })
-  console.log(result);
-  
+  console.log(result);  
 }
 
 test( )
