@@ -8,6 +8,8 @@ async function test(){
     files: [],
     tsConfigJson: new RemoteFile(`${location.href}test/tsconfig.json`)
   })
+  console.log(result);
+  
 }
 
 test( )

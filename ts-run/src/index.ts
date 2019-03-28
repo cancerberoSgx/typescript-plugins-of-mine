@@ -2,9 +2,12 @@ import { CompilerOptions } from 'ts-morph';
 import { File } from './file';
 import { loadLibrariesFromUrl } from './loadLibrariesFromUrl';
 
+import { Project, FileSystemHost } from "ts-morph";
+import { getCompilerOptions } from './getCompilerOptions';
+import { withoutExtension } from 'misc-utils-of-mine-generic';
 
 interface Options {
-  /** TODO: currently only remote supported - future - at compile time we can embedd all libraries in the bundle */
+  /** TODO: currently only remote supported - future - at compile time we can embed all libraries in the bundle */
   mode?: 'remote' | 'embed'
   compilerOptions?: CompilerOptions
   tsConfigJson?: File,
@@ -19,20 +22,16 @@ interface Result<T=any> {
   /** the result of evaluating the emitted output */
   result: T
   errors: any[]
+  /** target file emitted text */
+  emitted: string
 }
-
-import { Project, FileSystemHost } from "ts-morph";
-import { getCompilerOptions } from './getCompilerOptions';
-import { withoutExtension } from 'misc-utils-of-mine-generic';
 
 /**
  * run a ts-morph project without writing to FS (be able to run ts in the browser)
  */
 export async function run(options: Options) : Promise<Result> {
   const knownTypescriptLibsCdn = `${location.href}libs/`
-  // TODO: filter libraries from options.compilerOptions.lib
   const responses = await loadLibrariesFromUrl(options.tsLibBaseUrl || knownTypescriptLibsCdn)
-  // const libs = responses.map(r=>({url: r.options.url, content: r.data}))
 
   const compilerOptions: CompilerOptions = await getCompilerOptions(options.tsConfigJson!);
   const project = new Project({ useVirtualFileSystem: true, compilerOptions });
@@ -40,27 +39,22 @@ export async function run(options: Options) : Promise<Result> {
     throw `options.verifyNoProjectErrors&& project.getPreEmitDiagnostics().length ` + options.verifyNoProjectErrors && project.getPreEmitDiagnostics().map(d => d.getMessageText())
   }
   const fs = project.getFileSystem();
+
   // HEADS UPwe write all the libraries, alough we know which the compilerOptions require, they require each other and we dont have  that info- play safe - and write all
   for (const r of responses) {
     fs.writeFileSync(`${r.fileName}`, r.content);
   }
-
   const f = project.createSourceFile(options.targetFile.getFilePath(), await options.targetFile.getContent())
-
   if (options.verifyNoProjectErrors && project.getPreEmitDiagnostics().length) {
     throw `options.verifyNoProjectErrors&& project.getPreEmitDiagnostics().length 2222 ` + options.verifyNoProjectErrors && project.getPreEmitDiagnostics().map(d => d.getMessageText())
   }
-  // const ev = f!.getEmitOutput().getOutputFiles().map(d=>d.getFilePath())
-  // console.log(ev, 'seba');
-  // console.log(text);
-
   const emitted = f!.getEmitOutput().getOutputFiles().find(f => f.getFilePath().endsWith(`${withoutExtension(options.targetFile.getFilePath())}.js`))
   if (!emitted) {
     throw '!emitted'
   }
   const text = emitted!.getText()
-  return { result: eval(text) , errors: []}
-  // console.log(project.getPreEmitDiagnostics().map(d=>d.getMessageText()).join(', '));
+  const result = eval(text) 
+  return { result , emitted : text, errors: []}
 }
 
 //TODO: to misc
@@ -74,11 +68,8 @@ export function dirname(s: string) {
 //     // Please consult your version of the compiler to see what's necessary.
 //     // Note: It is best to generate this list of file names at compile time somehow based on the compiler api version
     // used (these are the .d.ts files found in the node_modules/typescript/lib folder).
-
-
 // }
 // 
-
 // loadDtsFiles(fs);
 
 // compilerOptions!.lib!.forEach(l=>{ 
