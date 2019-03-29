@@ -1,10 +1,5 @@
-import {Project} from 'ts-morph';
-
 describe('researchSpec', () => {
-
   it('research', () => {
-    
+    expect(1).toBe(1)
   })
-
-
 })  

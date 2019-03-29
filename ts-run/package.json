@@ -9,12 +9,12 @@
     "build-test": "npm run clean &&  npm run build && npx parcel build src/test/index.html -d docs --no-content-hash --detailed-report --public-url './' && npm run copy-test",
     "build-test-local": "npm run build-test &&  npx http-server docs ",
     "build-test-local-gz": "npm run build-test && gzip docs/*.* && npx http-server docs --gzip",
-    "copy-test": "mkdir -p docs/libs && mkdir -p docs/test && cp node_modules/typescript/lib/lib.*.d.ts docs/libs && cp tsconfig.json docs/test && cp src/test/index.appcache docs",
-    "start-test": "npx parcel serve  --no-hmr --open  --no-autoinstall src/test/index.html -d docs",
+    "copy-test": "mkdir -p docs/libs && mkdir -p docs/test && cp node_modules/typescript/lib/lib.*.d.ts docs/libs && cp tsconfig.json docs/test ",
+    "start-test": "npm run copy-test && npx parcel serve  --no-hmr --open  --no-autoinstall src/test/index.html -d docs",
     "prettier": " npx prettier  --write --arrow-parens avoid --parser typescript --use-tabs false --no-semi true --single-quote true --tab-width 2 --trailing-comma none --end-of-line lf --prose-wrap preserve --print-width 120 --jsx-bracket-same-line true \"src/**/*.ts*\"",
     "clean": "rm -rf dist docs",
     "test": "ts-node node_modules/jasmine/bin/jasmine",
-    "all": "npm run clean && npm run prettier && npm run build && npm run test && npm run doc",
+    "all": "npm run clean && npm run prettier && npm run build && npm run test",
     "pack-examples": "npx embed-json-in-ts --mode string --input \"src/examples/toPack/**/*.ts*\" --output src/examples/packed --preserveExtension --debug"
   },
   "keywords": [
