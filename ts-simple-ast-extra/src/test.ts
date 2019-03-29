@@ -62,10 +62,12 @@ export function modifyAndAssert({ node, modification, asserts, verbose = false }
     })
 }
 export function printDiagnostics(project: Project) {
-  console.log(project
-    .getPreEmitDiagnostics()
-    .map(d => d.getMessageText().toString() + ' - ' + d.getSourceFile()!.getFilePath() + '#' + d.getLineNumber())
-    .join('\n'));
+  console.log(
+    project
+      .getPreEmitDiagnostics()
+      .map(d => d.getMessageText().toString() + ' - ' + d.getSourceFile()!.getFilePath() + '#' + d.getLineNumber())
+      .join('\n')
+  )
 }
 
 export function printReferences(helperFunction: NamedNode) {

@@ -8,6 +8,7 @@ import {
   MethodSignatureStructure,
   PropertySignatureStructure
 } from 'ts-morph'
+
 import { getImplementsAll } from '../types'
 
 export function extractInterface(
