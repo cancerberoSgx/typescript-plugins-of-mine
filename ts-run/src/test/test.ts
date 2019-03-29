@@ -8,7 +8,18 @@ async function test(){
     files: [],
     tsConfigJson: new RemoteFile(`${location.href}test/tsconfig.json`)
   })
-  console.log(result);  
+  console.log(result.totalTime);  
+
+
+  const result2 = await run({
+    // tsLibBaseUrl: `${location.href}libs/`,
+    targetFile: new ContentFile( 'test2.ts',`import {a} from './test3'; console.log('imported: ' + a)`),
+    files: [new ContentFile( 'test3.ts',`export const a = 'hello world'`)],
+    // tsConfigJson: new RemoteFile(`${location.href}test/tsconfig.json`),
+    project: result.project
+  })
+  console.log(result2.totalTime);  
+
 }
 
 test( )

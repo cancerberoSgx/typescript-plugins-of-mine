@@ -1,4 +1,4 @@
-import { CompilerOptions } from 'ts-morph';
+import {Project,  CompilerOptions } from 'ts-morph';
 import { File } from './file';
 
 
@@ -14,11 +14,19 @@ export interface TsRunOptions {
   tsLibBaseUrl?: string;
   /** if true it wont eval the emitted text and just return it */
   dontEval?: boolean
+
+  /** if given, it will ignores compilerOptions/tsConfigJson, won't load libraries and just use this project as it is. Use [[dontCleanProject]] to not remove its .ts files before adding the new execution ones*/
+  project?: Project
+/** see [[project]] */
+  dontCleanProject?: boolean
 }
 export interface TsRunResult<T = any> {
   /** the result of evaluating the emitted output */
   result: T;
   errors: any[];
   /** target file emitted text */
-  emitted: string;
+  emitted: string
+  project: Project
+  totalTime: number
+
 }
