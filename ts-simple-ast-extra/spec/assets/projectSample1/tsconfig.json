@@ -1,7 +1,8 @@
 {
   "compilerOptions": {
     "lib": ["esnext"],
-    "strict": true,  
+    "strict": true,
+    "skipLibCheck": true
   }, 
   "include": ["src"],
   "exclude": ["src_bkp"]

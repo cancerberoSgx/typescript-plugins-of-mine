@@ -1,4 +1,4 @@
-import Project, { Diagnostic, DiagnosticMessageChain, SourceFile } from 'ts-morph';
+import Project, { Diagnostic, DiagnosticMessageChain, SourceFile, ScriptTarget } from 'ts-morph';
 
 export function createProject(...args: string[]|string[][]) {
   const project = new Project();
@@ -21,7 +21,7 @@ export function expectNoErrors(project: Project) {
 
 export function getDiagnosticMessage(d: Diagnostic){
   const s =  d.getMessageText()
-  return typeof s === 'string' ? s :print(s.getNext())
+  return `${d.getSourceFile() && d.getSourceFile()!.getBaseName()}: ${typeof s === 'string' ? s :print(s.getNext())}`
 }
 
 function print(s: DiagnosticMessageChain|undefined): string{

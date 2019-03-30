@@ -138,6 +138,7 @@ function addImportsToTarget(node: Declaration, target: SourceFile) {
         .filter(n => TypeGuards.isNamedNode(n) || isDeclaration(n))
     )
     .flat()
+    .filter(t=>!t.getSourceFile().getFilePath().includes('node_modules/typescript/lib/lib.')) // don't  import standard types like Date, Promise, etc
     .forEach(t => {
       const typeName = TypeGuards.isNamedNode(t) ? t.getNameNode() : isDeclaration(t) ? t.getNameNode() : undefined
       if (!typeName) {

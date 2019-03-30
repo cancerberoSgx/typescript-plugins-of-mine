@@ -158,7 +158,7 @@ describe('moveDeclaration', () => {
       moveDeclaration({
         declaration: f2.getInterfaceOrThrow('J'), target: f3
       })
-      ).toThrow()
+    ).toThrow()
     expectNoErrors(project)
     expect(removeWhites(f1.getText())).toBe(removeWhites(`
       export default interface I{}
@@ -223,36 +223,25 @@ describe('moveDeclaration', () => {
 
 
 
-  it('should throw on default import and namespace import and files should not change', () => {
+  it('should never import declarations that are in standard libraries (like Date, Promise, etc)', () => {
     const { project, f1, f2, f3 } = createProject(`
-      export default interface I{}
+      export function f(d: Date): RegExp { throw 1 }
     `, `
-      import D from './f1'
-      export default interface J{}
-      `, `
-      import * as f2 from './f2'
-    `)
-    expect(() =>
-      moveDeclaration({
-        declaration: f1.getInterfaceOrThrow('I'), target: f2
-      })).toThrow()
-
-    expect(() =>
-      moveDeclaration({
-        declaration: f2.getInterfaceOrThrow('J'), target: f3
-      })
-      ).toThrow()
+      export const s = 1
+      `)
+    moveDeclaration({
+      declaration: f1.getFunctionOrThrow('f'), target: f2
+    })
     expectNoErrors(project)
     expect(removeWhites(f1.getText())).toBe(removeWhites(`
-      export default interface I{}
     `))
     expect(removeWhites(f2.getText())).toBe(removeWhites(`
-      import D from './f1'
-      export default interface J{}
+      export function f(d: Date): RegExp {
+        throw 1
+      }
+      export const s = 1
     `))
-    expect(removeWhites(f3.getText())).toBe(removeWhites(`
-      import * as f2 from './f2'
-    `))
+
   })
 
   xit('should support variables and', () => {
@@ -262,27 +251,31 @@ describe('moveDeclaration', () => {
   })
 
 
-  describe('moveDeclaration in a sample project', ()=>{
+  describe('moveDeclaration in a sample project', () => {
+    // beforeEach(()=>{
+    //   rm('-rf', 'spec/assets/projectSample1/src_bkp')
+    //   cp('-r', 'spec/assets/projectSample1/src', 'spec/assets/projectSample1/src_bkp')
+    // })
+    // afterEach(()=>{
+    //   rm('-rf', 'spec/assets/projectSample1/src')
+    //   mv('-r', 'spec/assets/projectSample1/src_bkp', 'spec/assets/projectSample1/src')
+    // })
 
-    beforeEach(()=>{
-      rm('-rf', 'spec/assets/projectSample1/src_bkp')
-      cp('-r', 'spec/assets/projectSample1/src', 'spec/assets/projectSample1/src_bkp')
-    })
-
-    afterEach(()=>{
-      rm('-rf', 'spec/assets/projectSample1/src')
-      mv('-r', 'spec/assets/projectSample1/src_bkp', 'spec/assets/projectSample1/src')
-    })
-
-    it('s', ()=>{
-      const p = new Project({tsConfigFilePath: './tsconfig.json', addFilesFromTsConfig: true})
+    it('should move abstract declaration in complex tsconfig project', () => {
+      const p = new Project({ tsConfigFilePath: 'spec/assets/projectSample1/tsconfig.json', addFilesFromTsConfig: true })
+      expectNoErrors(p)
+      // console.log(p.getSourceFiles().map(f=>f.getFilePath()))
       const f1 = p.getSourceFileOrThrow('Unit.ts')
       const f2 = p.getSourceFileOrThrow('Thing.ts')
       const c = f1.getInterfaceOrThrow('Unit')
       moveDeclaration({
-        target: f2,declaration: c
+        target: f2, declaration: c
       })
-
-      })
+      expectNoErrors(p)
+      expect(removeWhites(f1.getText())).toBe('')
+      expect(removeWhites(p.getSourceFileOrThrow('Warrior.ts').getText())).toContain(`import { Unit } from "../../base/Thing"`)
+      expect(removeWhites(f2.getText())).toContain(`export interface Unit extends Thing { health: number; move(x: number, y: number, animationMode: 'simple'|'complex', arriveDateLimit: Date): Promise<void>; } export interface Thing{ name:string description:string id: string }`)
+           // p.saveSync()
+    })
   })
 })
