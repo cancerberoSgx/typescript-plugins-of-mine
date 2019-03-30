@@ -7,16 +7,29 @@ import {
   TypeGuards,
   ImportDeclaration,
   SyntaxKind,
-  Node
+  Node,
+  EnumDeclaration,
+  VariableDeclaration,
+  FunctionDeclaration,
+  EnumDeclarationStructure,
+  FunctionDeclarationStructure,
+  TypeAliasDeclaration,
+  TypeAliasDeclarationStructure,
+  NameableNode,
+  NamedNode,
+  QualifiedName,
+  Identifier,
+  BindingName
 } from 'ts-morph'
 import { getNodeLocalNamesNotReferencing } from '..'
 import { notFalsy } from 'misc-utils-of-mine-typescript'
+import { getNodeLocalNames } from '../locals';
 
 interface Options {
   declaration: Declaration // TODO: more general
   target: SourceFile
 }
-type Declaration = ClassDeclaration | InterfaceDeclaration
+type Declaration = ClassDeclaration | InterfaceDeclaration | EnumDeclaration  | TypeAliasDeclaration | FunctionDeclaration // TODO: variables
 
 /**
  * TODO: do all in other files so we can rollback if it fails at last moment
@@ -39,7 +52,7 @@ export function moveDeclaration(options: Options) {
   if (nodeName !== node.getName()) {
     node.rename(nodeName)
   }
-  updateOtherFilesImports(node, target, nodeName)
+  updateOtherFilesImports(node, target, node)
 
   const nodeOriginalFile = node.getSourceFile()
   nodeOriginalFile.insertImportDeclaration(0, {
@@ -55,7 +68,7 @@ export function moveDeclaration(options: Options) {
   target.organizeImports()
 }
 
-function updateOtherFilesImports(node: InterfaceDeclaration, target: SourceFile, nodeName: string) {
+function updateOtherFilesImports(node: Declaration, target: SourceFile, nodeName: Node&NamedNode) {
   node
     .findReferences()
     .map(r => r.getDefinition())
@@ -64,7 +77,7 @@ function updateOtherFilesImports(node: InterfaceDeclaration, target: SourceFile,
     .filter(notFalsy)
     .filter(TypeGuards.isImportSpecifier)
     .forEach(d => {
-      ensureImport(d.getSourceFile(), target, nodeName)
+      ensureImport(d.getSourceFile(), target, nodeName.getFirstChildByKindOrThrow(SyntaxKind.Identifier)||nodeName.getFirstChildByKindOrThrow(SyntaxKind.QualifiedName))
       if (
         d.getParent()!.getElements().length <= 1 &&
         !d
@@ -94,7 +107,7 @@ function updateOtherFilesImports(node: InterfaceDeclaration, target: SourceFile,
  */
 function addImportsToTarget(node: Declaration, target: SourceFile) {
   ;[...node.getDescendants(), node]
-    .filter(TypeGuards.isTypeReferenceNode)
+    .filter(TypeGuards.isReferenceFindableNode)
     .filter(
       (
         t,
@@ -102,28 +115,48 @@ function addImportsToTarget(node: Declaration, target: SourceFile) {
         a // dedup
       ) =>
         a.findIndex(
-          n => n.getSourceFile() === t.getSourceFile() && n.getTypeName().getText() === t.getTypeName().getText()
+          n => n===t || n.getSourceFile() === t.getSourceFile() && n.getText() === t.getText()
         ) === i
     )
+    .map(n=>n.findReferences().map(r=>r.getDefinition().getDeclarationNode()).filter(notFalsy)
+    // .map(n=>{
+    //   console.log('NODE '+n.getText(), n.getKindName(), TypeGuards.isNamedNode(n))      
+    //   return n})
+    . filter(n=>TypeGuards.isNamedNode(n)||TypeGuards.isClassDeclaration(n)||TypeGuards.isInterfaceDeclaration(n)||TypeGuards.isFunctionDeclaration(n)||TypeGuards.isVariableDeclaration(n)||TypeGuards.isEnumDeclaration(n)||TypeGuards.isTypeAliasDeclaration(n)) // TODO: in isDeclaration predicate
+    ).flat()
     .forEach(t => {
-      const typeName = t.getTypeName().getText()
-      ensureImport(target, t.getSourceFile(), typeName)
+      // console.log( typeName.getText(),t.getSourceFile().getBaseName() ,target.getBaseName());
+      const typeName =TypeGuards.isNamedNode(t) ?  t.getNameNode() : (TypeGuards.isClassDeclaration(t)||TypeGuards.isInterfaceDeclaration(t)||TypeGuards.isFunctionDeclaration(t)||TypeGuards.isVariableDeclaration(t)||TypeGuards.isTypeAliasDeclaration(t)) ? t.getNameNode() : undefined
+      if(!typeName){
+        throw 'TODO999 '+t.getText()
+      }
+      // if(TypeGuards.isNamedNode(typeName)||TypeGuards.isIdentifier(typeName)||TypeGuards.isQualifiedName(typeName)){
+        ensureImport(target, t.getSourceFile(), typeName)
+      // }
+      // else {
+      //   throw 'type reference type name is not named node ' + typeName.getText() + ' - '+typeName.getKindName()
+      // }
       const name = t.getFirstChildByKind(SyntaxKind.Identifier)
       if (name) {
         const defs = name.findReferences().map(r => r.getDefinition())
-        if (defs.length === 1) {
-          const exportable = defs[0].getDeclarationNode()
-          if (exportable) {
-            if (TypeGuards.isExportableNode(exportable)) {
-              exportable.setIsExported(true)
+        if (defs.length >= 1) {
+          const dd = defs.filter(d=>d.getDeclarationNode() && TypeGuards.isExportableNode(d.getDeclarationNode()!))
+          dd.forEach(d=>{
+            const exportable = d.getDeclarationNode()
+            if (exportable) {
+              if (TypeGuards.isExportableNode(exportable)) {
+                exportable.setIsExported(true)
+              } else {
+                throw 'type definition is not exportable ' + t.getText() + ' ' + exportable.getText()
+              }
             } else {
-              throw 'type definition is not exportable ' + t.getText() + ' ' + exportable.getText()
+              throw 'cannot get declaration node ' + t.getText()
             }
-          } else {
-            throw 'cannot get declaration node ' + t.getText()
-          }
+          })          
+          dd.length > 1&&console.warn(           'unexpected number of definitions ' + t.getText())
         } else {
-          throw 'unexpected number of definitions ' + t.getText()
+        throw 'no declarations found for node ' + t.getText()
+          
         }
       } else {
         throw 'type with not name ' + t.getText()
@@ -131,21 +164,29 @@ function addImportsToTarget(node: Declaration, target: SourceFile) {
     })
 }
 
-function ensureImport(target: SourceFile, dest: SourceFile, typeName: string) {
+function ensureImport(target: SourceFile, dest: SourceFile, typeName:  Identifier|QualifiedName|BindingName) {
   let i: ImportDeclaration | undefined = target.getImportDeclaration(i => i.getModuleSpecifierSourceFile() === dest)
-  if (i) {
-    if (!i.getNamedImports().find(n => n.getName() === typeName)) {
-      i.addNamedImport(typeName)
+const name = getNodeNameForFile(TypeGuards.isNamedNode(typeName) ? typeName.getName() : typeName.getText(), target)
+if(!name){
+  throw 'cannot ensureImport of node without name'
+}
+  // const targetLocals = getNodeLocalNames(target)
+  if (i ){//&& !getNodeLocalNames(target).includes(name)) {
+    if (!i.getNamedImports().find(n => n.getName() === name)) {
+      i.addNamedImport(name)
     }
+    // else {
+    //   console.warn(     'TODO123 '+name+' - import: '+i.getText()+' - target: '+target.getBaseName()+' - dest: '+dest.getBaseName())
+    // }
   } else {
     target.insertImportDeclaration(0, {
       moduleSpecifier: target.getRelativePathAsModuleSpecifierTo(dest),
-      namedImports: [typeName]
+      namedImports: [name]
     })
   }
 }
 
-function removeImportsToNode(target: SourceFile, node: InterfaceDeclaration) {
+function removeImportsToNode(target: SourceFile, node: Declaration) {
   target
     .getImportDeclarations()
     .filter(i => i.getModuleSpecifierSourceFile() === node.getSourceFile())
@@ -168,24 +209,38 @@ function addDeclaration(node: Declaration, target: SourceFile) {
     index = ids[ids.length - 1].getChildIndex() + 1
   }
   node.setIsExported(true)
-  const nodeStructure = node.getStructure()
   if (TypeGuards.isClassDeclaration(node)) {
-    target.insertClass(index, nodeStructure as ClassDeclarationStructure)
+    target.insertClass(index, node.getStructure())
   } else if (TypeGuards.isInterfaceDeclaration(node)) {
-    target.insertInterface(index, nodeStructure as InterfaceDeclarationStructure)
+    target.insertInterface(index, node.getStructure())
+  }
+  else if (TypeGuards.isEnumDeclaration(node)) {
+    target.insertEnum(index, node.getStructure())
+  }
+  else if (TypeGuards.isFunctionDeclaration(node)) {
+    target.insertFunction(index, node.getStructure())
+  }
+  else if (TypeGuards.isTypeAliasDeclaration(node)) {
+    target.insertTypeAlias(index, node.getStructure())
+  }
+  else {
+    throw 'Node kind not supported '+target.getKindName()
   }
 }
 
 /**
  * Gets a safe name for node to be moved as root node of given file.
  */
-function getNodeNameForFile(node: Declaration, ...files: SourceFile[]) {
+function getNodeNameForFile(node: Declaration|string, ...files: SourceFile[]) {
   const targetLocalNames = files.map(f => getNodeLocalNamesNotReferencing(f, node)).flat()
-  let nodeName = node.getName()!
+  let nodeName = typeof node ==='string' ? node : node.getName()!
+  if(!nodeName){
+    throw 'node must have name'
+  }
   let i = 1
   while (targetLocalNames.includes(nodeName)) {
     i++
-    nodeName = `${node.getName()!}${i}`
+    nodeName = `${nodeName!}${i}`
   }
   return nodeName
 }
