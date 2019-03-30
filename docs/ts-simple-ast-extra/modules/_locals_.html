@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>&quot;types&quot; | ts-simple-ast-extra</title>
+	<title>&quot;locals&quot; | ts-simple-ast-extra</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,10 +56,10 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="_types_.html">&quot;types&quot;</a>
+					<a href="_locals_.html">&quot;locals&quot;</a>
 				</li>
 			</ul>
-			<h1>External module &quot;types&quot;</h1>
+			<h1>External module &quot;locals&quot;</h1>
 		</div>
 	</div>
 </header>
@@ -70,12 +70,20 @@
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
+						<section class="tsd-index-section tsd-is-external tsd-is-not-exported">
+							<h3>Interfaces</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-interface tsd-parent-kind-external-module tsd-is-external tsd-is-not-exported"><a href="../interfaces/_locals_.symbol.html" class="tsd-kind-icon">Symbol</a></li>
+							</ul>
+						</section>
 						<section class="tsd-index-section tsd-is-external">
 							<h3>Functions</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-external"><a href="_types_.html#findinterfaceswithpropertynamed" class="tsd-kind-icon">find<wbr>Interfaces<wbr>With<wbr>Property<wbr>Named</a></li>
-								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-external"><a href="_types_.html#getextendsrecursively" class="tsd-kind-icon">get<wbr>Extends<wbr>Recursively</a></li>
-								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-external"><a href="_types_.html#getimplementsall" class="tsd-kind-icon">get<wbr>Implements<wbr>All</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-external"><a href="_locals_.html#getlocals" class="tsd-kind-icon">get<wbr>Locals</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-external"><a href="_locals_.html#getnodelocalnames" class="tsd-kind-icon">get<wbr>Node<wbr>Local<wbr>Names</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-external"><a href="_locals_.html#getnodelocalnamesnotreferencing" class="tsd-kind-icon">get<wbr>Node<wbr>Local<wbr>Names<wbr>Not<wbr>Referencing</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-external"><a href="_locals_.html#getnodelocalsnotreferencing" class="tsd-kind-icon">get<wbr>Node<wbr>Locals<wbr>Not<wbr>Referencing</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-external"><a href="_locals_.html#getnodename" class="tsd-kind-icon">get<wbr>Node<wbr>Name</a></li>
 							</ul>
 						</section>
 					</div>
@@ -84,84 +92,126 @@
 			<section class="tsd-panel-group tsd-member-group tsd-is-external">
 				<h2>Functions</h2>
 				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
-					<a name="findinterfaceswithpropertynamed" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagConst">Const</span> find<wbr>Interfaces<wbr>With<wbr>Property<wbr>Named</h3>
+					<a name="getlocals" class="tsd-anchor"></a>
+					<h3>get<wbr>Locals</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">find<wbr>Interfaces<wbr>With<wbr>Property<wbr>Named<span class="tsd-signature-symbol">(</span>decl<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ClassDeclaration</span>, memberName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">InterfaceDeclaration</span><span class="tsd-signature-symbol">[]</span></li>
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Locals<span class="tsd-signature-symbol">(</span>n<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Node</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/_locals_.symbol.html" class="tsd-signature-type">Symbol</a><span class="tsd-signature-symbol">[]</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/d4e7c8f/ts-simple-ast-extra/src/types.ts#L61">types.ts:61</a></li>
+									<li>Defined in locals.ts:25</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>decl: <span class="tsd-signature-type">ClassDeclaration</span></h5>
-								</li>
-								<li>
-									<h5>memberName: <span class="tsd-signature-type">string</span></h5>
+									<h5>n: <span class="tsd-signature-type">Node</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">InterfaceDeclaration</span><span class="tsd-signature-symbol">[]</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/_locals_.symbol.html" class="tsd-signature-type">Symbol</a><span class="tsd-signature-symbol">[]</span></h4>
 						</li>
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
-					<a name="getextendsrecursively" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagConst">Const</span> get<wbr>Extends<wbr>Recursively</h3>
+					<a name="getnodelocalnames" class="tsd-anchor"></a>
+					<h3>get<wbr>Node<wbr>Local<wbr>Names</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Extends<wbr>Recursively<span class="tsd-signature-symbol">(</span>decl<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ClassDeclaration</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">InterfaceDeclaration</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ExpressionWithTypeArguments</span><span class="tsd-signature-symbol">[]</span></li>
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Node<wbr>Local<wbr>Names<span class="tsd-signature-symbol">(</span>target<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Node</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/d4e7c8f/ts-simple-ast-extra/src/types.ts#L39">types.ts:39</a></li>
+									<li>Defined in locals.ts:8</li>
 								</ul>
 							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Returns all the extended classes or interface of given class or interface declaration ,recursively</p>
-								</div>
-							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>decl: <span class="tsd-signature-type">ClassDeclaration</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">InterfaceDeclaration</span></h5>
+									<h5>target: <span class="tsd-signature-type">Node</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">ExpressionWithTypeArguments</span><span class="tsd-signature-symbol">[]</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></h4>
 						</li>
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
-					<a name="getimplementsall" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagConst">Const</span> get<wbr>Implements<wbr>All</h3>
+					<a name="getnodelocalnamesnotreferencing" class="tsd-anchor"></a>
+					<h3>get<wbr>Node<wbr>Local<wbr>Names<wbr>Not<wbr>Referencing</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Implements<wbr>All<span class="tsd-signature-symbol">(</span>cl<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ClassDeclaration</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ExpressionWithTypeArguments</span><span class="tsd-signature-symbol">[]</span></li>
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Node<wbr>Local<wbr>Names<wbr>Not<wbr>Referencing<span class="tsd-signature-symbol">(</span>target<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Node</span>, notReferencing<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Node</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/d4e7c8f/ts-simple-ast-extra/src/types.ts#L6">types.ts:6</a></li>
+									<li>Defined in locals.ts:21</li>
 								</ul>
 							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Returns all implements clauses of this class and its super classes both things recursively</p>
-								</div>
-							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>cl: <span class="tsd-signature-type">ClassDeclaration</span></h5>
+									<h5>target: <span class="tsd-signature-type">Node</span></h5>
+								</li>
+								<li>
+									<h5>notReferencing: <span class="tsd-signature-type">Node</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">ExpressionWithTypeArguments</span><span class="tsd-signature-symbol">[]</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
+					<a name="getnodelocalsnotreferencing" class="tsd-anchor"></a>
+					<h3>get<wbr>Node<wbr>Locals<wbr>Not<wbr>Referencing</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Node<wbr>Locals<wbr>Not<wbr>Referencing<span class="tsd-signature-symbol">(</span>target<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Node</span>, notReferencing<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Node</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/_locals_.symbol.html" class="tsd-signature-type">Symbol</a><span class="tsd-signature-symbol">[]</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in locals.ts:12</li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>target: <span class="tsd-signature-type">Node</span></h5>
+								</li>
+								<li>
+									<h5>notReferencing: <span class="tsd-signature-type">Node</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/_locals_.symbol.html" class="tsd-signature-type">Symbol</a><span class="tsd-signature-symbol">[]</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
+					<a name="getnodename" class="tsd-anchor"></a>
+					<h3>get<wbr>Node<wbr>Name</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Node<wbr>Name<span class="tsd-signature-symbol">(</span>n<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Node</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in locals.ts:3</li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>n: <span class="tsd-signature-type">Node</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">undefined</span>
+								<span class="tsd-signature-symbol"> | </span>
+								<span class="tsd-signature-type">string</span>
+							</h4>
 						</li>
 					</ul>
 				</section>
@@ -194,7 +244,7 @@
 					<li class=" tsd-kind-external-module tsd-is-external">
 						<a href="_astpath_types_.html">"ast<wbr>Path/types"</a>
 					</li>
-					<li class=" tsd-kind-external-module tsd-is-external">
+					<li class="current tsd-kind-external-module tsd-is-external">
 						<a href="_locals_.html">"locals"</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
@@ -227,21 +277,30 @@
 					<li class=" tsd-kind-external-module tsd-is-external">
 						<a href="_test_.html">"test"</a>
 					</li>
-					<li class="current tsd-kind-external-module tsd-is-external">
+					<li class=" tsd-kind-external-module tsd-is-external">
 						<a href="_types_.html">"types"</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
-						<a href="_types_.html#findinterfaceswithpropertynamed" class="tsd-kind-icon">find<wbr>Interfaces<wbr>With<wbr>Property<wbr>Named</a>
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-is-external tsd-is-not-exported">
+						<a href="../interfaces/_locals_.symbol.html" class="tsd-kind-icon">Symbol</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
-						<a href="_types_.html#getextendsrecursively" class="tsd-kind-icon">get<wbr>Extends<wbr>Recursively</a>
+						<a href="_locals_.html#getlocals" class="tsd-kind-icon">get<wbr>Locals</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
-						<a href="_types_.html#getimplementsall" class="tsd-kind-icon">get<wbr>Implements<wbr>All</a>
+						<a href="_locals_.html#getnodelocalnames" class="tsd-kind-icon">get<wbr>Node<wbr>Local<wbr>Names</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
+						<a href="_locals_.html#getnodelocalnamesnotreferencing" class="tsd-kind-icon">get<wbr>Node<wbr>Local<wbr>Names<wbr>Not<wbr>Referencing</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
+						<a href="_locals_.html#getnodelocalsnotreferencing" class="tsd-kind-icon">get<wbr>Node<wbr>Locals<wbr>Not<wbr>Referencing</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
+						<a href="_locals_.html#getnodename" class="tsd-kind-icon">get<wbr>Node<wbr>Name</a>
 					</li>
 				</ul>
 			</nav>

@@ -1,13 +1,5 @@
-import {
-  ClassDeclaration,
-  SourceFile,
-  TypeGuards,
-  SyntaxKind,
-  InterfaceDeclaration,
-  ClassDeclarationStructure,
-  InterfaceDeclarationStructure
-} from 'ts-morph'
-import { getNodeLocalNames, getNodeLocalNamesNotReferencing } from '../reference'
+import { ClassDeclaration, ClassDeclarationStructure, InterfaceDeclaration, InterfaceDeclarationStructure, SourceFile, TypeGuards } from 'ts-morph';
+import { getNodeLocalNamesNotReferencing } from '..';
 
 interface Options {
   declaration: Declaration // TODO: more general
@@ -36,8 +28,6 @@ export function moveDeclaration(options: Options) {
   }
 
   const nodeSourceFile = node.getSourceFile()
-  // const references = node.getNameNode()!.findReferencesAsNodes()
-  // const referencesInOtherFiles  =references.filter(r=>r.getSourceFile()!==nodeSourceFile)
   nodeSourceFile.addImportDeclaration({
     // will later be removed with organizeImports if unused
     namedImports: [nodeName],
@@ -85,10 +75,6 @@ function addDeclaration(node: Declaration, target: SourceFile, index = 0) {
  */
 function getNodeNameForFile(node: Declaration, ...files: SourceFile[]) {
   const targetLocalNames = files.map(f => getNodeLocalNamesNotReferencing(f, node)).flat()
-  // const targetLocalNames = files.map(f => getNodeLocalNames(f)).flat()
-
-  // console.log(targetLocalNames);
-
   let nodeName = node.getName()!
   let i = 1
   while (targetLocalNames.includes(nodeName)) {
