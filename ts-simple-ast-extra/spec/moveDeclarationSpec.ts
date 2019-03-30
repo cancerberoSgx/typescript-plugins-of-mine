@@ -198,12 +198,10 @@ describe('moveDeclaration', () => {
       declaration: f2.getFunctionOrThrow('f'), target: f3
     })
     expectNoErrors(project)
-    // console.log('SHSJSHHSHSHS\n\n\n\n\njkasjhkdshjdjsdjhds\n');
     moveDeclaration({
       declaration: f3.getTypeAliasOrThrow('T'), target: f1
     })
     expectNoErrors(project)
-    // console.log(f1.getText(), ' --\n', f2.getText(), ' --\n', f3.getText(), ' --\n');
     expect(removeWhites(f1.getText())).toBe(removeWhites(`
       import { a } from "./f2"; 
       import { f } from "./f3"; 

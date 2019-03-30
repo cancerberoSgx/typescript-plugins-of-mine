@@ -10,8 +10,13 @@ export function getNodeLocalNames(target: Node) {
   return getLocals(target).map(s => s.escapedName.toString())
 }
 
-export function getNodeLocalsNotReferencing(target: Node, notReferencing: Node|string) {
-  const name = typeof notReferencing==='string' ? notReferencing : TypeGuards.hasName(notReferencing) ? notReferencing.getName() : undefined
+export function getNodeLocalsNotReferencing(target: Node, notReferencing: Node | string) {
+  const name =
+    typeof notReferencing === 'string'
+      ? notReferencing
+      : TypeGuards.hasName(notReferencing)
+      ? notReferencing.getName()
+      : undefined
   if (!name) {
     throw 'notReferencing not must have a name'
   }
@@ -27,7 +32,7 @@ export function getNodeLocalsDeclarations(target: Node): ts.Declaration[] {
     .filter(notFalsy)
 }
 
-export function getNodeLocalNamesNotReferencing(target: Node, notReferencing: Node|string) {
+export function getNodeLocalNamesNotReferencing(target: Node, notReferencing: Node | string) {
   return getNodeLocalsNotReferencing(target, notReferencing).map(n => n.escapedName.toString())
 }
 
