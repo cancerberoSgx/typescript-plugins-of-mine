@@ -1,6 +1,8 @@
 import { removeWhites } from 'misc-utils-of-mine-generic';
 import { moveDeclaration } from '../src/refactor/moveDeclaration';
 import { createProject, expectNoErrors } from './testUtil';
+import Project from 'ts-morph';
+import { cp, rm, mv } from 'shelljs';
 
 describe('moveDeclaration', () => {
 
@@ -260,4 +262,27 @@ describe('moveDeclaration', () => {
   })
 
 
+  describe('moveDeclaration in a sample project', ()=>{
+
+    beforeEach(()=>{
+      rm('-rf', 'spec/assets/projectSample1/src_bkp')
+      cp('-r', 'spec/assets/projectSample1/src', 'spec/assets/projectSample1/src_bkp')
+    })
+
+    afterEach(()=>{
+      rm('-rf', 'spec/assets/projectSample1/src')
+      mv('-r', 'spec/assets/projectSample1/src_bkp', 'spec/assets/projectSample1/src')
+    })
+
+    it('s', ()=>{
+      const p = new Project({tsConfigFilePath: './tsconfig.json', addFilesFromTsConfig: true})
+      const f1 = p.getSourceFileOrThrow('Unit.ts')
+      const f2 = p.getSourceFileOrThrow('Thing.ts')
+      const c = f1.getInterfaceOrThrow('Unit')
+      moveDeclaration({
+        target: f2,declaration: c
+      })
+
+      })
+  })
 })
