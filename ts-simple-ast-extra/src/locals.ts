@@ -19,17 +19,18 @@ export function getNodeLocalsNotReferencing(target: Node, notReferencing: Node) 
   )
 }
 
-export function getNodeLocalsDeclarations(target: Node) {
+export function getNodeLocalsDeclarations(target: Node) : ts.Declaration[] {
   return getLocals(target)
     .map(l => l.declarations && l.declarations)
     .flat()
     .filter(notFalsy)
 }
+
 export function getNodeLocalNamesNotReferencing(target: Node, notReferencing: Node) {
   return getNodeLocalsNotReferencing(target, notReferencing).map(n => n.escapedName.toString())
 }
 
-export function getLocals(n: Node) {
+export function getLocals(n: Node) : Symbol[]{
   const locals = (n.compilerNode as any)['locals'] as ts.SymbolTable
   if (!locals) {
     return []
@@ -37,6 +38,16 @@ export function getLocals(n: Node) {
   const r = (Array.from(locals.entries() as any) as any[]).map(s => s[1])
   return r as Symbol[]
 }
+
+// export function getReferencesIn(n:Node): ts.Declaration[]{
+//   const r = [...n.getDescendants(), n]
+//   // .filter(isDeclaration)
+//   .filter(TypeGuards.isTypeReferenceNode)
+//   // .map(n=>getNodeLocalsDeclarations(n))
+//   // .flat()
+//   // .filter(notFalsy)
+//   return r
+// }
 
 interface Symbol {
   flags: ts.SymbolFlags

@@ -1,4 +1,4 @@
-import Project from 'ts-morph';
+import Project, { Diagnostic, DiagnosticMessageChain } from 'ts-morph';
 
 export function createProject(...args: string[]) {
   const project = new Project();
@@ -10,5 +10,17 @@ export function createProject(...args: string[]) {
 }
 
 export function expectNoErrors(project: Project) {
-  expect(project.getPreEmitDiagnostics().map(d => d.getMessageText()).join(', ')).toBe('');
+  expect(project.getPreEmitDiagnostics().map(d => getDiagnosticMessage(d)).join(', ')).toBe('');
+}
+export function getDiagnosticMessage(d: Diagnostic){
+  const s =  d.getMessageText()
+  return typeof s === 'string' ? s :print(s.getNext())
+}
+
+function print(s: DiagnosticMessageChain|undefined): string{
+  if(!s){
+    return ''
+  }else {
+    return `${s.getMessageText()} - ${print(s.getNext())}`
+  }
 }

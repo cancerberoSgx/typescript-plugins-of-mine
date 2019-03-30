@@ -6,6 +6,9 @@
   "typings": "dist/src/index.d.ts",
   "scripts": {
     "test": "ts-node node_modules/jasmine/bin/jasmine",
+
+    "test-debug": "ts-node node_modules/jasmine/bin/jasmine --invert --inspect-brk",
+   
     "build": "tsc",
     "prepare": "npm run build",
     "clean": "rm -rf dist",
