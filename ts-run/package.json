@@ -13,7 +13,7 @@
     "start-test": "npm run copy-test && npx parcel serve  --no-hmr --open  --no-autoinstall src/test/index.html -d docs",
     "prettier": " npx prettier  --write --arrow-parens avoid --parser typescript --use-tabs false --no-semi true --single-quote true --tab-width 2 --trailing-comma none --end-of-line lf --prose-wrap preserve --print-width 120 --jsx-bracket-same-line true \"src/**/*.ts*\"",
     "clean": "rm -rf dist docs",
-    "test": "ts-node node_modules/jasmine/bin/jasmine",
+    "test": "npx ts-node node_modules/jasmine/bin/jasmine.js # npx jest --config ./jest.config-spec.js",
     "all": "npm run clean && npm run prettier && npm run build && npm run test",
     "pack-examples": "npx embed-json-in-ts --mode string --input \"src/examples/toPack/**/*.ts*\" --output src/examples/packed --preserveExtension --debug"
   },
@@ -26,16 +26,18 @@
   "license": "MIT",
   "dependencies": {
     "hyperquest-promise": "0.0.6",
-    "misc-utils-of-mine-generic": "0.0.12",
+    "misc-utils-of-mine-generic": "file:../../misc-utils-of-mine/misc-utils-of-mine-generic",
     "misc-utils-of-mine-typescript": "0.0.12",
     "p-queue": "^4.0.0",
     "prettier": "^1.16.4",
-    "ts-simple-ast-extra": "0.0.19"
+    "ts-simple-ast-extra": "file:../ts-simple-ast-extra"
   },
   "devDependencies": {
     "@types/jasmine": "^2.8.9",
     "@types/p-queue": "^3.2.1",
     "embed-json-in-ts": "0.0.8",
+    "@types/jest": "^24.0.6",
+    "jest": "^24.1.0",
     "http-server": "^0.11.1",
     "jasmine": "^3.3.0",
     "parcel": "^1.11.0",

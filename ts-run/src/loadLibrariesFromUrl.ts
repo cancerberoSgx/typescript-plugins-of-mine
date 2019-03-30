@@ -1,10 +1,12 @@
 import { get } from 'hyperquest-promise'
 import PQueue from 'p-queue'
 import { basename } from 'misc-utils-of-mine-generic'
+import { readFileSync } from 'fs'
+import { load } from './file'
 export async function loadLibrariesFromUrl(url: string) {
   const queue = new PQueue({ concurrency: 3 })
   // http://127.0.0.1:8080/libs/lib.dom.iterable.d.ts
-  const responses = await queue.addAll(allTsLibraryNames.map(l => () => get(`${url}${l}`)))
+  const responses = await queue.addAll(allTsLibraryNames.map(l => () => load(`${url}${l}`)))
   // console.log(responses.map((r, i) => r))
   // TODO: options.url can be undefined
   return responses.map(r => ({
@@ -13,6 +15,7 @@ export async function loadLibrariesFromUrl(url: string) {
     fileName: `node_modules/typescript/lib/${basename(r.response.url!)}`
   }))
 }
+
 export const allTsLibraryNames = [
   'lib.dom.d.ts',
   'lib.es2015.symbol.d.ts',

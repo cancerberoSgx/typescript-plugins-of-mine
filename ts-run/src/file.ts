@@ -1,5 +1,6 @@
 import { get } from 'hyperquest-promise'
 import { basename } from 'misc-utils-of-mine-generic'
+import { readFileSync } from 'fs'
 
 export interface File {
   getFilePath(): string
@@ -24,9 +25,24 @@ export class RemoteFile implements File {
   }
   async getContent() {
     if (!this.getContentPromise) {
-      this.getContentPromise = get(this.url)
+      this.getContentPromise = load(this.url)
     }
     const response = await this.getContentPromise
     return response.data
+  }
+}
+
+export function load(url: string): Promise<{ data: string; response: { url: string } }> {
+  if (url.startsWith('file://')) {
+    return new Promise(resolve => {
+      resolve({
+        data: readFileSync(url.substring('file://'.length)).toString(),
+        response: {
+          url
+        }
+      })
+    })
+  } else {
+    return get(url)
   }
 }

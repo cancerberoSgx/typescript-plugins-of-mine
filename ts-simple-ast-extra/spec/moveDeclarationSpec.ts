@@ -1,8 +1,7 @@
 import { removeWhites } from 'misc-utils-of-mine-generic';
-import { moveDeclaration } from '../src/refactor/moveDeclaration';
+import { moveDeclaration } from '../src/';
 import { createProject, expectNoErrors } from './testUtil';
-import Project from 'ts-morph';
-import { cp, rm, mv } from 'shelljs';
+import {Project} from 'ts-morph';
 
 describe('moveDeclaration', () => {
 
@@ -221,8 +220,6 @@ describe('moveDeclaration', () => {
     `))
   })
 
-
-
   it('should never import declarations that are in standard libraries (like Date, Promise, etc)', () => {
     const { project, f1, f2, f3 } = createProject(`
       export function f(d: Date): RegExp { throw 1 }
@@ -249,7 +246,6 @@ describe('moveDeclaration', () => {
 
   xit('should throw on unnamed node and files should not change', () => {
   })
-
 
   describe('moveDeclaration in a sample project', () => {
     // beforeEach(()=>{

@@ -6,7 +6,10 @@ export interface TsRunOptions {
   mode?: 'remote' | 'embed'
   compilerOptions?: CompilerOptions
   tsConfigJson?: File
-  files: File[]
+  /**
+   * the rest of the project files
+   */
+  files?: File[]
   verifyNoProjectErrors?: boolean
   targetFile: File
   /** where lib.*.d.ts files are available for fetching. nopkg npm cdn like.  */
@@ -22,11 +25,13 @@ export interface TsRunOptions {
   debug?: boolean
 }
 export interface TsRunResult<T = any> {
-  /** the result of evaluating the emitted output */
-  result: T
+  // /** the result of evaluating the emitted output */
+  // result: T
   errors: any[]
   /** target file emitted text */
   emitted: string
   project: Project
   totalTime: number
+  /** target module export value */
+  exported: any | undefined
 }

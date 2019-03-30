@@ -4,7 +4,9 @@ import {
   ManipulationSettings,
   NewLineKind,
   UserPreferences,
-  FormatCodeSettings
+  FormatCodeSettings,
+  CompilerOptions,
+  ts
 } from 'ts-morph'
 
 export function buildManipulationSettings(
@@ -33,4 +35,22 @@ export function buildManipulationSettings(
       !!formatOptions && !!formatOptions.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces
   }
   return obj
+}
+
+export function parseCompilerOptionsFromText(tsConfigData: string, basePath = './') {
+  let compilerOptions: CompilerOptions | undefined
+  const jsConfigJson = ts.parseConfigFileTextToJson(basePath, tsConfigData)
+  if (jsConfigJson.error) {
+    throw `parseCompilerOptionsFromText jsConfigJson.error 1: ${jsConfigJson.error.messageText}`
+  }
+  const tsConfigJson = ts.parseConfigFileTextToJson(basePath, tsConfigData)
+  if (tsConfigJson.error) {
+    throw `parseCompilerOptionsFromText tsConfigJson.error 2 :${jsConfigJson.error!.messageText}`
+  }
+  let r = ts.convertCompilerOptionsFromJson(tsConfigJson.config.compilerOptions, basePath)
+  if (r.errors.length) {
+    throw `parseCompilerOptionsFromText r.errors.length: ${r.errors.map(e => e.messageText)}`
+  }
+  compilerOptions = r.options
+  return compilerOptions
 }
