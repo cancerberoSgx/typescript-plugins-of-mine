@@ -19,7 +19,7 @@ export function getNodeLocalsNotReferencing(target: Node, notReferencing: Node) 
   )
 }
 
-export function getNodeLocalsDeclarations(target: Node) : ts.Declaration[] {
+export function getNodeLocalsDeclarations(target: Node): ts.Declaration[] {
   return getLocals(target)
     .map(l => l.declarations && l.declarations)
     .flat()
@@ -30,7 +30,7 @@ export function getNodeLocalNamesNotReferencing(target: Node, notReferencing: No
   return getNodeLocalsNotReferencing(target, notReferencing).map(n => n.escapedName.toString())
 }
 
-export function getLocals(n: Node) : Symbol[]{
+export function getLocals(n: Node): Symbol[] {
   const locals = (n.compilerNode as any)['locals'] as ts.SymbolTable
   if (!locals) {
     return []

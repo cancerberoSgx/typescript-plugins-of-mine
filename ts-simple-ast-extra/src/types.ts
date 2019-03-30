@@ -71,7 +71,33 @@ export const findInterfacesWithPropertyNamed = (decl: ClassDeclaration, memberNa
     .filter(d => d.getMembers().find(m => TypeGuards.isPropertyNamedNode(m) && m.getName() === memberName))
     .filter((value, pos, arr) => arr.indexOf(value) === pos) // union
 
-
 export function isDeclaration(n: Node) {
-  return TypeGuards.isConstructorDeclaration(n) || TypeGuards.isEnumDeclaration(n) || TypeGuards.isClassLikeDeclarationBase(n) || TypeGuards.isExportDeclaration(n) || TypeGuards.isImportDeclaration(n) || TypeGuards.isMethodDeclaration(n) || TypeGuards.isFunctionDeclaration(n) || TypeGuards.isVariableDeclaration(n) || TypeGuards.isPropertyDeclaration(n) || TypeGuards.isVariableDeclarationList(n) || TypeGuards.isInterfaceDeclaration(n) || TypeGuards.isNamespaceDeclaration(n) || TypeGuards.isParameterDeclaration(n) || TypeGuards.isTypeAliasDeclaration(n) || TypeGuards.isSignaturedDeclaration(n) || TypeGuards.isConstructorDeclaration(n) || TypeGuards.isSignaturedDeclaration(n) || TypeGuards.isConstructSignatureDeclaration(n) || TypeGuards.isGetAccessorDeclaration(n) || TypeGuards.isSetAccessorDeclaration(n) || TypeGuards.isFunctionLikeDeclaration(n) || TypeGuards.isImportEqualsDeclaration(n) || TypeGuards.isCallSignatureDeclaration(n) || TypeGuards.isIndexSignatureDeclaration(n) || TypeGuards.isConstructSignatureDeclaration(n) || TypeGuards.isMethodSignature(n) 
+  return (
+    TypeGuards.isConstructorDeclaration(n) ||
+    TypeGuards.isEnumDeclaration(n) ||
+    TypeGuards.isClassLikeDeclarationBase(n) ||
+    TypeGuards.isExportDeclaration(n) ||
+    TypeGuards.isImportDeclaration(n) ||
+    TypeGuards.isMethodDeclaration(n) ||
+    TypeGuards.isFunctionDeclaration(n) ||
+    TypeGuards.isVariableDeclaration(n) ||
+    TypeGuards.isPropertyDeclaration(n) ||
+    TypeGuards.isVariableDeclarationList(n) ||
+    TypeGuards.isInterfaceDeclaration(n) ||
+    TypeGuards.isNamespaceDeclaration(n) ||
+    TypeGuards.isParameterDeclaration(n) ||
+    TypeGuards.isTypeAliasDeclaration(n) ||
+    TypeGuards.isSignaturedDeclaration(n) ||
+    TypeGuards.isConstructorDeclaration(n) ||
+    TypeGuards.isSignaturedDeclaration(n) ||
+    TypeGuards.isConstructSignatureDeclaration(n) ||
+    TypeGuards.isGetAccessorDeclaration(n) ||
+    TypeGuards.isSetAccessorDeclaration(n) ||
+    TypeGuards.isFunctionLikeDeclaration(n) ||
+    TypeGuards.isImportEqualsDeclaration(n) ||
+    TypeGuards.isCallSignatureDeclaration(n) ||
+    TypeGuards.isIndexSignatureDeclaration(n) ||
+    TypeGuards.isConstructSignatureDeclaration(n) ||
+    TypeGuards.isMethodSignature(n)
+  )
 }
