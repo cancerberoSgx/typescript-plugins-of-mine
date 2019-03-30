@@ -1,5 +1,12 @@
-import { ClassDeclaration, ClassDeclarationStructure, InterfaceDeclaration, InterfaceDeclarationStructure, SourceFile, TypeGuards } from 'ts-morph';
-import { getNodeLocalNamesNotReferencing } from '..';
+import {
+  ClassDeclaration,
+  ClassDeclarationStructure,
+  InterfaceDeclaration,
+  InterfaceDeclarationStructure,
+  SourceFile,
+  TypeGuards
+} from 'ts-morph'
+import { getNodeLocalNamesNotReferencing } from '..'
 
 interface Options {
   declaration: Declaration // TODO: more general
@@ -21,18 +28,19 @@ export function moveDeclaration(options: Options) {
     throw 'Moving default exported nodes is not supported'
   }
 
-  // const nodeOriginalName = node.getName()!
   const nodeName = getNodeNameForFile(node, target)
   if (nodeName !== node.getName()) {
     node.rename(nodeName)
   }
 
-  const nodeSourceFile = node.getSourceFile()
-  nodeSourceFile.addImportDeclaration({
+  const nodeOriginalFile = node.getSourceFile()
+  nodeOriginalFile.addImportDeclaration({
     // will later be removed with organizeImports if unused
     namedImports: [nodeName],
-    moduleSpecifier: nodeSourceFile.getRelativePathAsModuleSpecifierTo(target)
+    moduleSpecifier: nodeOriginalFile.getRelativePathAsModuleSpecifierTo(target)
   })
+
+  // const refs = node.ref.findReferences().map(r=>r.getDefinition().getName())
 
   removeImportsToNode(target, node)
 
@@ -40,7 +48,7 @@ export function moveDeclaration(options: Options) {
   node.remove()
 
   // organize imports on all files, as final step since it will forgot nodes
-  nodeSourceFile.organizeImports()
+  nodeOriginalFile.organizeImports()
   target.organizeImports()
 }
 

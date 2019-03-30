@@ -32,7 +32,7 @@ describe('moveDeclaration', () => {
       `))
     })
 
-    it('should rename if target already has a declaration with that name', () => {
+    it('should rename if target already has a declaration with that name and export not', () => {
       const { project, f1, f2 } = createProject(`
         class C {}
         export const c = new C()
@@ -77,12 +77,29 @@ describe('moveDeclaration', () => {
     `))
     })
 
-    // xit('should export if its not', () => {
-
+    it('should import referenced types by node declaration in target sourcefile', () => {
+      const { project, f1, f2 } = createProject(`
+      export interface I {
+        m(): A
+      }
+      interface A {}
+    `, `
+      export const c = 1
+    `)
+    moveDeclaration({
+      declaration: f1.getInterfaceOrThrow('I'), target: f2
+    })
+    console.log(f1.getText(), f2.getText());
+    
+    // expectNoErrors(project)
+    // expect(removeWhites(f1.getText())).toBe(removeWhites(`
+    // `))
+    // expect(removeWhites(f2.getText())).toBe(removeWhites(`
+    //   export interface I {
+    //   }
+    //   export const c: I = {}
+    // `))
     // })
-
-    // xit('should import referenced types by node declaration in target sourcefile ', () => {
-
-    // })
+  })
 
 })

@@ -1,4 +1,5 @@
 import { Node, SyntaxKind, TypeGuards, ts } from 'ts-morph'
+import { notFalsy } from 'misc-utils-of-mine-typescript'
 
 export function getNodeName(n: Node) {
   const id = n.getFirstChildByKind(SyntaxKind.Identifier)
@@ -18,12 +19,21 @@ export function getNodeLocalsNotReferencing(target: Node, notReferencing: Node) 
   )
 }
 
+export function getNodeLocalsDeclarations(target: Node) {
+  return getLocals(target)
+    .map(l => l.declarations && l.declarations)
+    .flat()
+    .filter(notFalsy)
+}
 export function getNodeLocalNamesNotReferencing(target: Node, notReferencing: Node) {
   return getNodeLocalsNotReferencing(target, notReferencing).map(n => n.escapedName.toString())
 }
 
 export function getLocals(n: Node) {
   const locals = (n.compilerNode as any)['locals'] as ts.SymbolTable
+  if (!locals) {
+    return []
+  }
   const r = (Array.from(locals.entries() as any) as any[]).map(s => s[1])
   return r as Symbol[]
 }
