@@ -220,6 +220,39 @@ describe('moveDeclaration', () => {
   })
 
 
+
+  it('should throw on default import and namespace import and files should not change', () => {
+    const { project, f1, f2, f3 } = createProject(`
+      export default interface I{}
+    `, `
+      import D from './f1'
+      export default interface J{}
+      `, `
+      import * as f2 from './f2'
+    `)
+    expect(() =>
+      moveDeclaration({
+        declaration: f1.getInterfaceOrThrow('I'), target: f2
+      })).toThrow()
+
+    expect(() =>
+      moveDeclaration({
+        declaration: f2.getInterfaceOrThrow('J'), target: f3
+      })
+      ).toThrow()
+    expectNoErrors(project)
+    expect(removeWhites(f1.getText())).toBe(removeWhites(`
+      export default interface I{}
+    `))
+    expect(removeWhites(f2.getText())).toBe(removeWhites(`
+      import D from './f1'
+      export default interface J{}
+    `))
+    expect(removeWhites(f3.getText())).toBe(removeWhites(`
+      import * as f2 from './f2'
+    `))
+  })
+
   xit('should support variables and', () => {
   })
 

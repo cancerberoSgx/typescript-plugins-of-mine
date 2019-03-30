@@ -1,33 +1,28 @@
+import { notFalsy } from 'misc-utils-of-mine-typescript'
 import {
+  BindingName,
   ClassDeclaration,
-  ClassDeclarationStructure,
-  InterfaceDeclaration,
-  InterfaceDeclarationStructure,
-  SourceFile,
-  TypeGuards,
-  ImportDeclaration,
-  SyntaxKind,
-  Node,
   EnumDeclaration,
-  VariableDeclaration,
   FunctionDeclaration,
-  EnumDeclarationStructure,
-  FunctionDeclarationStructure,
-  TypeAliasDeclaration,
-  TypeAliasDeclarationStructure,
-  NameableNode,
-  NamedNode,
-  QualifiedName,
   Identifier,
-  BindingName
+  ImportDeclaration,
+  InterfaceDeclaration,
+  NamedNode,
+  Node,
+  QualifiedName,
+  SourceFile,
+  SyntaxKind,
+  TypeAliasDeclaration,
+  TypeGuards,
+  VariableDeclaration
 } from 'ts-morph'
 import { getNodeLocalNamesNotReferencing } from '..'
-import { notFalsy } from 'misc-utils-of-mine-typescript'
 
 interface Options {
   declaration: Declaration // TODO: more general
   target: SourceFile
 }
+
 type Declaration =
   | ClassDeclaration
   | InterfaceDeclaration
@@ -45,6 +40,7 @@ function isDeclaration(t: Node): t is Declaration & VariableDeclaration {
     TypeGuards.isTypeAliasDeclaration(t)
   )
 }
+
 /**
  * TODO: do all in other files so we can rollback if it fails at last moment
  */
@@ -121,7 +117,7 @@ function updateOtherFilesImports(node: Declaration, target: SourceFile, nodeName
 }
 
 /**
- * make sure the import declarations of all types referenced in node definition are imported in target source
+ * Makes sure the import declarations of all types referenced in node definition are imported in target source
  * file. It create import declarations and also make sure imported declarations are exported if not
  */
 function addImportsToTarget(node: Declaration, target: SourceFile) {
@@ -134,13 +130,12 @@ function addImportsToTarget(node: Declaration, target: SourceFile) {
         a // dedup
       ) => a.findIndex(n => n === t || (n.getSourceFile() === t.getSourceFile() && n.getText() === t.getText())) === i
     )
-    .map(
-      n =>
-        n
-          .findReferences()
-          .map(r => r.getDefinition().getDeclarationNode())
-          .filter(notFalsy)
-          .filter(n => TypeGuards.isNamedNode(n) || isDeclaration(n)) // TODO: in isDeclaration predicate
+    .map(n =>
+      n
+        .findReferences()
+        .map(r => r.getDefinition().getDeclarationNode())
+        .filter(notFalsy)
+        .filter(n => TypeGuards.isNamedNode(n) || isDeclaration(n))
     )
     .flat()
     .forEach(t => {

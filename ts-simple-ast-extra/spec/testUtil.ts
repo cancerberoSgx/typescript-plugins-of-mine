@@ -1,17 +1,24 @@
-import Project, { Diagnostic, DiagnosticMessageChain } from 'ts-morph';
+import Project, { Diagnostic, DiagnosticMessageChain, SourceFile } from 'ts-morph';
 
-export function createProject(...args: string[]) {
+export function createProject(...args: string[]|string[][]) {
   const project = new Project();
-  const f1 = project.createSourceFile('f1.ts', args[0] || '');
-  const f2 = project.createSourceFile('f2.ts', args[1] || '');
-  const f3 = project.createSourceFile('f3.ts', args[2] || '');
+  const files = (args as any[]).map((a, i)=>{
+    return typeof a ==='string' ? {content: a , file: `f${i+1}.ts`} : {content:a[1], file: a[0]} as {content: string, file: string}
+  }).map(f=>
+    project.createSourceFile(f.file, f.content)
+  )
   expectNoErrors(project);
-  return { project, f1, f2, f3 };
+  const fileMap: { f1: SourceFile, f2: SourceFile, f3: SourceFile, f4: SourceFile} = {} as any
+  files.forEach((f, i)=>{
+    (fileMap as any)[`f${i+1}`] = f
+  })
+  return { project, ...fileMap}  
 }
 
 export function expectNoErrors(project: Project) {
   expect(project.getPreEmitDiagnostics().map(d => getDiagnosticMessage(d)).join(', ')).toBe('');
 }
+
 export function getDiagnosticMessage(d: Diagnostic){
   const s =  d.getMessageText()
   return typeof s === 'string' ? s :print(s.getNext())
