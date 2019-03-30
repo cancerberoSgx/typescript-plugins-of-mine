@@ -104,39 +104,38 @@ describe('moveDeclaration', () => {
 
   it('should update other files import declarations', () => {
     const { project, f1, f2, f3 } = createProject(`
-    interface A {}
-    export interface I {
-      m(): A
-    }
-  `, `
-    export const c = 1
-  `, `
-  import { I } from './f1'
-  export class C implements I {
-    m() { return null as any }
-  }
-`)
+      interface A {}
+      export interface I {
+        m(): A
+      }
+    `, `
+      export const c = 1
+    `, `
+      import { I } from './f1'
+      export class C implements I {
+        m() { return null as any }
+      }
+    `)
     moveDeclaration({
       declaration: f1.getInterfaceOrThrow('I'), target: f2
     })
-    // console.log(f1.getText(), f2.getText(), f3.getText());
     expectNoErrors(project)
     expect(removeWhites(f1.getText())).toBe(removeWhites(`
-    export interface A {}
-  `))
+      export interface A {}
+    `))
     expect(removeWhites(f2.getText())).toBe(removeWhites(`
-    import { A } from "./f1";
-    export interface I {
-        m(): A;
-    }
-    export const c = 1
-  `))
+      import { A } from "./f1";
+      export interface I {
+          m(): A;
+      }
+      export const c = 1
+    `))
     expect(removeWhites(f3.getText())).toBe(removeWhites(`
-    import { I } from "./f2";
-    export class C implements I {
-      m() { return null as any }
-    }
-  `))
+      import { I } from "./f2";
+      export class C implements I {
+        m() { return null as any }
+      }
+    `))
   })
 
   it('should throw on default import and namespace import and files should not change', () => {
@@ -156,8 +155,8 @@ describe('moveDeclaration', () => {
     expect(() =>
       moveDeclaration({
         declaration: f2.getInterfaceOrThrow('J'), target: f3
-      })).toThrow()
-    // console.log(f1.getText(), f2.getText(), f3.getText());
+      })
+      ).toThrow()
     expectNoErrors(project)
     expect(removeWhites(f1.getText())).toBe(removeWhites(`
       export default interface I{}
@@ -170,7 +169,6 @@ describe('moveDeclaration', () => {
       import * as f2 from './f2'
     `))
   })
-
 
   it('should support multiple chained calls and function , enum, class and interface nodes', () => {
     const { project, f1, f2, f3 } = createProject(`
@@ -222,8 +220,9 @@ describe('moveDeclaration', () => {
   })
 
 
-  xit('should support variables and type alias', () => {
+  xit('should support variables and', () => {
   })
+
   xit('should throw on unnamed node and files should not change', () => {
   })
 

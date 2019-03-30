@@ -35,6 +35,16 @@ type Declaration =
   | TypeAliasDeclaration
   | FunctionDeclaration // TODO: variables
 
+function isDeclaration(t: Node): t is Declaration & VariableDeclaration {
+  return (
+    TypeGuards.isClassDeclaration(t) ||
+    TypeGuards.isInterfaceDeclaration(t) ||
+    TypeGuards.isEnumDeclaration(t) ||
+    TypeGuards.isFunctionDeclaration(t) ||
+    TypeGuards.isVariableDeclaration(t) ||
+    TypeGuards.isTypeAliasDeclaration(t)
+  )
+}
 /**
  * TODO: do all in other files so we can rollback if it fails at last moment
  */
@@ -130,28 +140,11 @@ function addImportsToTarget(node: Declaration, target: SourceFile) {
           .findReferences()
           .map(r => r.getDefinition().getDeclarationNode())
           .filter(notFalsy)
-          .filter(
-            n =>
-              TypeGuards.isNamedNode(n) ||
-              TypeGuards.isClassDeclaration(n) ||
-              TypeGuards.isInterfaceDeclaration(n) ||
-              TypeGuards.isFunctionDeclaration(n) ||
-              TypeGuards.isVariableDeclaration(n) ||
-              TypeGuards.isEnumDeclaration(n) ||
-              TypeGuards.isTypeAliasDeclaration(n)
-          ) // TODO: in isDeclaration predicate
+          .filter(n => TypeGuards.isNamedNode(n) || isDeclaration(n)) // TODO: in isDeclaration predicate
     )
     .flat()
     .forEach(t => {
-      const typeName = TypeGuards.isNamedNode(t)
-        ? t.getNameNode()
-        : TypeGuards.isClassDeclaration(t) ||
-          TypeGuards.isInterfaceDeclaration(t) ||
-          TypeGuards.isFunctionDeclaration(t) ||
-          TypeGuards.isVariableDeclaration(t) ||
-          TypeGuards.isTypeAliasDeclaration(t)
-        ? t.getNameNode()
-        : undefined
+      const typeName = TypeGuards.isNamedNode(t) ? t.getNameNode() : isDeclaration(t) ? t.getNameNode() : undefined
       if (!typeName) {
         throw 'TODO999 ' + t.getText()
       }
