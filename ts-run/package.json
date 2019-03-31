@@ -12,9 +12,10 @@
     "copy-test": "mkdir -p docs/libs && mkdir -p docs/test && cp node_modules/typescript/lib/lib.*.d.ts docs/libs && cp tsconfig.json docs/test ",
     "start-test": "npm run copy-test && npx parcel serve  --no-hmr --open  --no-autoinstall src/test/index.html -d docs",
     "prettier": " npx prettier  --write --arrow-parens avoid --parser typescript --use-tabs false --no-semi true --single-quote true --tab-width 2 --trailing-comma none --end-of-line lf --prose-wrap preserve --print-width 120 --jsx-bracket-same-line true \"src/**/*.ts*\"",
-    "clean": "rm -rf dist docs",
+    "clean": "rm -rf dist docs api",    
+    "doc": "typedoc --mode modules --ignoreCompilerErrors --theme markdown --out api src/index.ts ",
     "test": "npx ts-node node_modules/jasmine/bin/jasmine.js # npx jest --config ./jest.config-spec.js",
-    "all": "npm run clean && npm run prettier && npm run build && npm run test",
+    "all": "npm run clean && npm run prettier && npm run build && npm run test && npm run doc",
     "pack-examples": "npx embed-json-in-ts --mode string --input \"src/examples/toPack/**/*.ts*\" --output src/examples/packed --preserveExtension --debug"
   },
   "keywords": [
@@ -30,7 +31,9 @@
     "misc-utils-of-mine-typescript": "0.0.12",
     "p-queue": "^4.0.0",
     "prettier": "^1.16.4",
-    "ts-simple-ast-extra": "file:../ts-simple-ast-extra"
+    "ts-simple-ast-extra": "file:../ts-simple-ast-extra",
+    "typedoc": "^0.14.2",
+    "typedoc-plugin-markdown": "^1.1.27"
   },
   "devDependencies": {
     "@types/jasmine": "^2.8.9",

@@ -1,6 +1,5 @@
-import { get } from 'hyperquest-promise'
 import { basename } from 'misc-utils-of-mine-generic'
-import { readFileSync } from 'fs'
+import { load } from './loadFile'
 
 export interface File {
   getFilePath(): string
@@ -29,20 +28,5 @@ export class RemoteFile implements File {
     }
     const response = await this.getContentPromise
     return response.data
-  }
-}
-
-export function load(url: string): Promise<{ data: string; response: { url: string } }> {
-  if (url.startsWith('file://')) {
-    return new Promise(resolve => {
-      resolve({
-        data: readFileSync(url.substring('file://'.length)).toString(),
-        response: {
-          url
-        }
-      })
-    })
-  } else {
-    return get(url)
   }
 }

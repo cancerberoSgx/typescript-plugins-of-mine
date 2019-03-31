@@ -10,31 +10,36 @@
 ```
 npm install ts-run
 ```
+### API
+
+ * [api/modules/_run_.md](run())
+ * [api/modules/_types_.md](run() options)
+ * [api/modules/_file_.md](File)
 
 ### Browser Example
 
 ```ts
 const result = await run({
-    tsLibBaseUrl: `${location.href}libs/`,
-    targetFile: new ContentFile(
-      'src/test.ts', `
-      import { a } from './foo/foo'; 
-      export function test() {
-        return a * 2
-      }`),
-    files: [
-      new ContentFile(
-        'src/foo/foo.ts', `
-        export const a = Math.PI`)
-    ],
-    tsConfigJson: new RemoteFile(`${location.href}test/tsconfig.json`)
-  })
-  console.log(
-    'Time: ', printMs(result.totalTime),
-    '\nExported: ', result.exported.test(),
-    'Errors: \n', result.errors,
-    '\nEmitted: \n', result.emitted
-  )
+  tsLibBaseUrl: `${location.href}libs/`,
+  targetFile: new ContentFile(
+    'src/test.ts', `
+    import { a } from './foo/foo'; 
+    export function test() {
+      return a * 2
+    }`),
+  files: [
+    new ContentFile(
+      'src/foo/foo.ts', `
+      export const a = Math.PI`)
+  ],
+  tsConfigJson: new RemoteFile(`${location.href}test/tsconfig.json`)
+})
+console.log(
+  'Time: ', printMs(result.totalTime),
+  '\nExported: ', result.exported.test(),
+  'Errors: \n', result.errors,
+  '\nEmitted: \n', result.emitted
+)
 ```
 
 ### Node.js Example
