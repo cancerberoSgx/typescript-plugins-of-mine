@@ -3,6 +3,28 @@ import { basename } from 'misc-utils-of-mine-generic'
 import { File } from './file'
 import { readFileSync } from 'fs'
 import { get } from 'hyperquest-promise'
+
+export async function loadFiles(files: File[]) {
+  const queue = new PQueue({ concurrency: 3 })
+  const responses = await queue.addAll(files.map(f => () => f.getContent()))
+  return responses.map((r, i) => ({ filePath: files[i].getFilePath(), content: r }))
+}
+
+export function load(url: string): Promise<{ data: string; response: { url: string } }> {
+  if (url.startsWith('file://')) {
+    return new Promise(resolve => {
+      resolve({
+        data: readFileSync(url.substring('file://'.length)).toString(),
+        response: {
+          url
+        }
+      })
+    })
+  } else {
+    return get(url)
+  }
+}
+
 export async function loadLibrariesFromUrl(url: string) {
   const queue = new PQueue({ concurrency: 3 })
   // http://127.0.0.1:8080/libs/lib.dom.iterable.d.ts
@@ -56,24 +78,3 @@ export const allTsLibraryNames = [
   'lib.es2017.sharedmemory.d.ts',
   'lib.esnext.array.d.ts'
 ]
-
-export async function loadFiles(files: File[]) {
-  const queue = new PQueue({ concurrency: 3 })
-  const responses = await queue.addAll(files.map(f => () => f.getContent()))
-  return responses.map((r, i) => ({ filePath: files[i].getFilePath(), content: r }))
-}
-
-export function load(url: string): Promise<{ data: string; response: { url: string } }> {
-  if (url.startsWith('file://')) {
-    return new Promise(resolve => {
-      resolve({
-        data: readFileSync(url.substring('file://'.length)).toString(),
-        response: {
-          url
-        }
-      })
-    })
-  } else {
-    return get(url)
-  }
-}

@@ -28,7 +28,7 @@
 
 ▸ **getContent**(): `Promise`<`string`>
 
-*Defined in [file.ts:6](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/344cbd0/ts-run/src/file.ts#L6)*
+*Defined in [file.ts:6](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/09fbfec/ts-run/src/file.ts#L6)*
 
 **Returns:** `Promise`<`string`>
 
@@ -39,7 +39,7 @@ ___
 
 ▸ **getFilePath**(): `string`
 
-*Defined in [file.ts:5](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/344cbd0/ts-run/src/file.ts#L5)*
+*Defined in [file.ts:5](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/09fbfec/ts-run/src/file.ts#L5)*
 
 **Returns:** `string`
 

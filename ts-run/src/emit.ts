@@ -3,7 +3,10 @@ import { withoutExtension } from 'misc-utils-of-mine-generic'
 import { TsRunOptions } from './types'
 import { ModuleKind, ModuleResolutionKind } from 'typescript'
 import { almondMin } from './almondMin'
-export async function emit(project: Project, options: TsRunOptions, errors: any[]) {
+import { File } from './file'
+
+export async function emit(options: TsRunOptions & { targetFile: File; project: Project } ) {
+  const { project } = options
   // Heads up : we configure the project to emit AMD module in a single outFile so we can evaluate it
   project.compilerOptions.set({
     ...project.compilerOptions.get(),
@@ -29,14 +32,21 @@ new Promise(resolve=>{
   })
 })
   `
-  let result: any
-  let exported: any
-  try {
-    result = eval(code)
-    exported = await result
-  } catch (error) {
-    errors.push(error)
-  }
-  project.compilerOptions.set({ ...compilerOptionsOriginal, outFile: undefined })
-  return { result, code, targetExport: exported }
+  const {result, targetExport, errors: evaluateErrors}  = await evaluate(code);
+  project.compilerOptions.set({ ...compilerOptionsOriginal, outFile: undefined });
+  return {code, targetExport, errors: evaluateErrors.concat(evaluateErrors), result}
 }
+async function evaluate(code: string) {
+  let result: any;
+  let targetExport: any;
+  const errors: any[] = []
+  try {
+    result = eval(code);
+    targetExport = await result;
+  }
+  catch (error) {
+    errors.push(error);
+  }
+  return { result,   targetExport , errors };
+}
+

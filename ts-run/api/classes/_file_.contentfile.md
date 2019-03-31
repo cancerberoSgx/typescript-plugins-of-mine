@@ -36,7 +36,7 @@
 
 ⊕ **new ContentFile**(filePath: *`string`*, content: *`string`*): [ContentFile](_file_.contentfile.md)
 
-*Defined in [file.ts:9](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/344cbd0/ts-run/src/file.ts#L9)*
+*Defined in [file.ts:9](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/09fbfec/ts-run/src/file.ts#L9)*
 
 **Parameters:**
 
@@ -57,7 +57,7 @@ ___
 
 **● content**: *`string`*
 
-*Defined in [file.ts:10](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/344cbd0/ts-run/src/file.ts#L10)*
+*Defined in [file.ts:10](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/09fbfec/ts-run/src/file.ts#L10)*
 
 ___
 <a id="filepath"></a>
@@ -66,7 +66,7 @@ ___
 
 **● filePath**: *`string`*
 
-*Defined in [file.ts:10](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/344cbd0/ts-run/src/file.ts#L10)*
+*Defined in [file.ts:10](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/09fbfec/ts-run/src/file.ts#L10)*
 
 ___
 
@@ -80,7 +80,7 @@ ___
 
 *Implementation of [File](../interfaces/_file_.file.md).[getContent](../interfaces/_file_.file.md#getcontent)*
 
-*Defined in [file.ts:14](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/344cbd0/ts-run/src/file.ts#L14)*
+*Defined in [file.ts:14](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/09fbfec/ts-run/src/file.ts#L14)*
 
 **Returns:** `Promise`<`string`>
 
@@ -93,7 +93,7 @@ ___
 
 *Implementation of [File](../interfaces/_file_.file.md).[getFilePath](../interfaces/_file_.file.md#getfilepath)*
 
-*Defined in [file.ts:11](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/344cbd0/ts-run/src/file.ts#L11)*
+*Defined in [file.ts:11](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/09fbfec/ts-run/src/file.ts#L11)*
 
 **Returns:** `string`
 

@@ -64,7 +64,7 @@
   'lib.esnext.array.d.ts'
 ]
 
-*Defined in loadFile.ts:18*
+*Defined in [loadFile.ts:40](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/09fbfec/ts-run/src/loadFile.ts#L40)*
 
 ___
 
@@ -76,7 +76,7 @@ ___
 
 ▸ **load**(url: *`string`*): `Promise`<`object`>
 
-*Defined in loadFile.ts:66*
+*Defined in [loadFile.ts:13](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/09fbfec/ts-run/src/loadFile.ts#L13)*
 
 **Parameters:**
 
@@ -93,7 +93,7 @@ ___
 
 ▸ **loadFiles**(files: *[File](../interfaces/_file_.file.md)[]*): `Promise`<`object`[]>
 
-*Defined in loadFile.ts:60*
+*Defined in [loadFile.ts:7](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/09fbfec/ts-run/src/loadFile.ts#L7)*
 
 **Parameters:**
 
@@ -110,7 +110,7 @@ ___
 
 ▸ **loadLibrariesFromUrl**(url: *`string`*): `Promise`<`object`[]>
 
-*Defined in loadFile.ts:6*
+*Defined in [loadFile.ts:28](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/09fbfec/ts-run/src/loadFile.ts#L28)*
 
 **Parameters:**
 

@@ -16,16 +16,15 @@
 
 ###  emit
 
-▸ **emit**(project: *`Project`*, options: *[TsRunOptions](../interfaces/_types_.tsrunoptions.md)*, errors: *`any`[]*): `Promise`<`object`>
+▸ **emit**(options: *[TsRunOptions](../interfaces/_types_.tsrunoptions.md) & `object`*, errors: *`any`[]*): `Promise`<`object`>
 
-*Defined in emit.ts:6*
+*Defined in [emit.ts:7](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/09fbfec/ts-run/src/emit.ts#L7)*
 
 **Parameters:**
 
 | Name | Type |
 | ------ | ------ |
-| project | `Project` |
-| options | [TsRunOptions](../interfaces/_types_.tsrunoptions.md) |
+| options | [TsRunOptions](../interfaces/_types_.tsrunoptions.md) & `object` |
 | errors | `any`[] |
 
 **Returns:** `Promise`<`object`>

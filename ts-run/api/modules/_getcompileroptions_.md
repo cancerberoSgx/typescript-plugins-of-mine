@@ -18,7 +18,7 @@
 
 ▸ **getCompilerOptions**(f: *[File](../interfaces/_file_.file.md)*): `Promise`<`CompilerOptions`>
 
-*Defined in [getCompilerOptions.ts:6](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/344cbd0/ts-run/src/getCompilerOptions.ts#L6)*
+*Defined in [getCompilerOptions.ts:6](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/09fbfec/ts-run/src/getCompilerOptions.ts#L6)*
 
 **Parameters:**
 

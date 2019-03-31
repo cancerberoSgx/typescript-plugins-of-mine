@@ -20,13 +20,8 @@ export async function run(options: TsRunOptions): Promise<TsRunResult> {
   if (!options.dontCleanProject) {
     project.getSourceFiles().forEach(f => f.deleteImmediatelySync()) //TODO: async
   }
-  if (options.verifyNoProjectErrors && project.getPreEmitDiagnostics().length) {
-    throw `options.verifyNoProjectErrors&& project.getPreEmitDiagnostics().length ${options.verifyNoProjectErrors &&
-      project.getPreEmitDiagnostics().map(d => d.getMessageText())}`
-  }
   const fs = project.getFileSystem()
   // HEADS UP we write all the libraries, although we know which the compilerOptions require, they require each other and we dont have  that info- play safe - and write all
-  // const knownTypescriptLibsCdn = `${location.href}libs/`
   const knownTypescriptLibsCdn = `libs/`
 
   if (!options.project) {
@@ -35,14 +30,22 @@ export async function run(options: TsRunOptions): Promise<TsRunResult> {
       fs.writeFileSync(`${r.fileName}`, r.content)
     }
   }
-  const files = await loadFiles([options.targetFile, ...(options.files || [])])
+  const targetFile =
+    typeof options.targetFile === 'string'
+      ? (options.files || []).find(f => f.getFilePath() === options.targetFile)
+      : options.targetFile
+  if (!targetFile) {
+    throw new Error(`targetFile ${options.targetFile} couldn't be found among given files. Aborting. `)
+  }
+  const files = await loadFiles([targetFile, ...(options.files || [])])
   files.forEach(file => {
     project.createSourceFile(file.filePath, file.content)
   })
-  if (options.verifyNoProjectErrors && project.getPreEmitDiagnostics().length) {
+  if (options.verifyNoProjectErrors) {
+    const diagnostics = project.getPreEmitDiagnostics()
     throw `options.verifyNoProjectErrors&& project.getPreEmitDiagnostics().length 2222 ` +
-      options.verifyNoProjectErrors && project.getPreEmitDiagnostics().map(d => d.getMessageText())
+      options.verifyNoProjectErrors && diagnostics.map(d => d.getMessageText())
   }
-  var { code, targetExport } = await emit(project, options, errors)
-  return { emitted: code, errors, totalTime: Date.now() - t0, project, exported: targetExport }
+  var { code, targetExport, errors: emitErrors, result } = await emit({ ...options, project, targetFile})
+  return { emitted: code, errors: errors.concat(emitErrors), totalTime: Date.now() - t0, project, exported: targetExport }
 }
