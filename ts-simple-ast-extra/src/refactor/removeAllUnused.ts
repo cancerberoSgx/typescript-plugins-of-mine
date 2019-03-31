@@ -1,5 +1,5 @@
-import { Project, Node } from 'ts-morph';
-import { applyAllSuggestedCodeFixes } from './changes';
+import { Project, Node } from 'ts-morph'
+import { applyAllSuggestedCodeFixes } from './changes'
 
 export function removeAllUnused(project: Project, node: Node) {
   return applyAllSuggestedCodeFixes(project, node, [
@@ -7,5 +7,5 @@ export function removeAllUnused(project: Project, node: Node) {
     7028,
     6199,
     6192 // All imports in import declaration are unused.
-  ]);
+  ])
 }

@@ -19,7 +19,7 @@ import {
 import { getNodeLocalNamesNotReferencing } from '..'
 
 interface Options {
-  declaration: Declaration 
+  declaration: Declaration
   target: SourceFile
 }
 
@@ -121,15 +121,12 @@ function updateOtherFilesImports(node: Declaration, target: SourceFile, nodeName
  * file. It create import declarations and also make sure imported declarations are exported if not
  */
 function addImportsToTarget(node: Declaration, target: SourceFile) {
-  [...node.getDescendants(), node]
+  ;[...node.getDescendants(), node]
     .filter(TypeGuards.isReferenceFindableNode)
     // dedup
-    .filter( 
-      (
-        t,
-        i,
-        a 
-      ) => a.findIndex(n => n === t || (n.getSourceFile() === t.getSourceFile() && n.getText() === t.getText())) === i
+    .filter(
+      (t, i, a) =>
+        a.findIndex(n => n === t || (n.getSourceFile() === t.getSourceFile() && n.getText() === t.getText())) === i
     )
     .map(n =>
       n
@@ -146,7 +143,7 @@ function addImportsToTarget(node: Declaration, target: SourceFile) {
           .getSourceFile()
           .getFilePath()
           .includes('node_modules/typescript/lib/lib.')
-    ) 
+    )
     .forEach(t => {
       const typeName = TypeGuards.isNamedNode(t) ? t.getNameNode() : isDeclaration(t) ? t.getNameNode() : undefined
       if (!typeName) {

@@ -7,21 +7,21 @@ describe('ExtractInterface', () => {
     project.createSourceFile(
       'test.ts',
       `
-interface I<T=any>{
-  p:T
-}
-/** comment1 */
-class A implements I<number> {
-  /** comment2 */
-  p=9
-  protected h=0
-  m(i:number){
-  }
-  n(){
-    return new Date()
-  }
-  private g(){return 1}
-}
+        interface I<T=any>{
+          p:T
+        }
+        /** comment1 */
+        class A implements I<number> {
+          /** comment2 */
+          p=9
+          protected h=0
+          m(i:number){
+          }
+          n(){
+            return new Date()
+          }
+          private g(){return 1}
+        }
       `
     )
     
