@@ -1,4 +1,4 @@
-[ts-run](../README.md) > ["file"](../modules/_file_.md) > [File](../interfaces/_file_.file.md)
+[ts-run](../README.md) > ["types"](../modules/_types_.md) > [File](../interfaces/_types_.file.md)
 
 # Interface: File
 
@@ -15,8 +15,8 @@
 
 ### Methods
 
-* [getContent](_file_.file.md#getcontent)
-* [getFilePath](_file_.file.md#getfilepath)
+* [getContent](_types_.file.md#getcontent)
+* [getFilePath](_types_.file.md#getfilepath)
 
 ---
 
@@ -28,7 +28,7 @@
 
 ▸ **getContent**(): `Promise`<`string`>
 
-*Defined in [file.ts:6](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/09fbfec/ts-run/src/file.ts#L6)*
+*Defined in [types.ts:5](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/d827319/ts-run/src/types.ts#L5)*
 
 **Returns:** `Promise`<`string`>
 
@@ -39,7 +39,7 @@ ___
 
 ▸ **getFilePath**(): `string`
 
-*Defined in [file.ts:5](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/09fbfec/ts-run/src/file.ts#L5)*
+*Defined in [types.ts:4](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/d827319/ts-run/src/types.ts#L4)*
 
 **Returns:** `string`
 

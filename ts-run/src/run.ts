@@ -46,6 +46,12 @@ export async function run(options: TsRunOptions): Promise<TsRunResult> {
     throw `options.verifyNoProjectErrors&& project.getPreEmitDiagnostics().length 2222 ` +
       options.verifyNoProjectErrors && diagnostics.map(d => d.getMessageText())
   }
-  var { code, targetExport, errors: emitErrors, result } = await emit({ ...options, project, targetFile})
-  return { emitted: code, errors: errors.concat(emitErrors), totalTime: Date.now() - t0, project, exported: targetExport }
+  var { code, targetExport, errors: emitErrors, result } = await emit({ ...options, project, targetFile })
+  return {
+    emitted: code,
+    errors: errors.concat(emitErrors),
+    totalTime: Date.now() - t0,
+    project,
+    exported: targetExport
+  }
 }

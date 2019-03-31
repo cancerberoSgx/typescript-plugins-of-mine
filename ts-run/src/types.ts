@@ -1,5 +1,9 @@
-import { Project, CompilerOptions } from 'ts-morph'
-import { File } from './file'
+import { CompilerOptions, Project } from 'ts-morph'
+
+export interface File {
+  getFilePath(): string
+  getContent(): Promise<string>
+}
 
 export interface TsRunOptions {
   // /** TODO: currently only remote supported - future - at compile time we can embed all libraries in the bundle */

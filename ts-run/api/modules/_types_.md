@@ -6,6 +6,7 @@
 
 ### Interfaces
 
+* [File](../interfaces/_types_.file.md)
 * [TsRunOptions](../interfaces/_types_.tsrunoptions.md)
 * [TsRunResult](../interfaces/_types_.tsrunresult.md)
 

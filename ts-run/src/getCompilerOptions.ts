@@ -1,5 +1,5 @@
+import { File } from './types'
 import { CompilerOptions, ts } from 'ts-morph'
-import { File } from '.'
 import { parseCompilerOptionsFromText } from 'ts-simple-ast-extra'
 import { dirname } from 'misc-utils-of-mine-generic'
 

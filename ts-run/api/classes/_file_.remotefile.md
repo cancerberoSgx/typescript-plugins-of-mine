@@ -8,7 +8,7 @@
 
 ## Implements
 
-* [File](../interfaces/_file_.file.md)
+* [File](../interfaces/_types_.file.md)
 
 ## Index
 
@@ -37,7 +37,7 @@
 
 ⊕ **new RemoteFile**(url: *`string`*, filePath?: *`string`*): [RemoteFile](_file_.remotefile.md)
 
-*Defined in [file.ts:20](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/09fbfec/ts-run/src/file.ts#L20)*
+*Defined in [file.ts:16](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/d827319/ts-run/src/file.ts#L16)*
 
 **Parameters:**
 
@@ -58,7 +58,7 @@ ___
 
 **● filePath**: *`string`*
 
-*Defined in [file.ts:21](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/09fbfec/ts-run/src/file.ts#L21)*
+*Defined in [file.ts:17](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/d827319/ts-run/src/file.ts#L17)*
 
 ___
 <a id="getcontentpromise"></a>
@@ -67,7 +67,7 @@ ___
 
 **● getContentPromise**: *`any`*
 
-*Defined in [file.ts:20](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/09fbfec/ts-run/src/file.ts#L20)*
+*Defined in [file.ts:16](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/d827319/ts-run/src/file.ts#L16)*
 
 ___
 <a id="url"></a>
@@ -76,7 +76,7 @@ ___
 
 **● url**: *`string`*
 
-*Defined in [file.ts:21](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/09fbfec/ts-run/src/file.ts#L21)*
+*Defined in [file.ts:17](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/d827319/ts-run/src/file.ts#L17)*
 
 ___
 
@@ -88,9 +88,9 @@ ___
 
 ▸ **getContent**(): `Promise`<`any`>
 
-*Implementation of [File](../interfaces/_file_.file.md).[getContent](../interfaces/_file_.file.md#getcontent)*
+*Implementation of [File](../interfaces/_types_.file.md).[getContent](../interfaces/_types_.file.md#getcontent)*
 
-*Defined in [file.ts:25](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/09fbfec/ts-run/src/file.ts#L25)*
+*Defined in [file.ts:21](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/d827319/ts-run/src/file.ts#L21)*
 
 **Returns:** `Promise`<`any`>
 
@@ -101,9 +101,9 @@ ___
 
 ▸ **getFilePath**(): `string`
 
-*Implementation of [File](../interfaces/_file_.file.md).[getFilePath](../interfaces/_file_.file.md#getfilepath)*
+*Implementation of [File](../interfaces/_types_.file.md).[getFilePath](../interfaces/_types_.file.md#getfilepath)*
 
-*Defined in [file.ts:22](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/09fbfec/ts-run/src/file.ts#L22)*
+*Defined in [file.ts:18](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/d827319/ts-run/src/file.ts#L18)*
 
 **Returns:** `string`
 

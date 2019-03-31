@@ -31,7 +31,7 @@
 
 **● compilerOptions**: *`CompilerOptions`*
 
-*Defined in [types.ts:7](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/09fbfec/ts-run/src/types.ts#L7)*
+*Defined in [types.ts:11](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/d827319/ts-run/src/types.ts#L11)*
 
 ___
 <a id="debug"></a>
@@ -40,7 +40,7 @@ ___
 
 **● debug**: *`undefined` \| `false` \| `true`*
 
-*Defined in [types.ts:53](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/09fbfec/ts-run/src/types.ts#L53)*
+*Defined in [types.ts:57](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/d827319/ts-run/src/types.ts#L57)*
 
 Will print debug information using `console.log`
 
@@ -51,7 +51,7 @@ ___
 
 **● dontCleanProject**: *`undefined` \| `false` \| `true`*
 
-*Defined in [types.ts:48](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/09fbfec/ts-run/src/types.ts#L48)*
+*Defined in [types.ts:52](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/d827319/ts-run/src/types.ts#L52)*
 
 See [project](_types_.tsrunoptions.md#project)
 
@@ -62,7 +62,7 @@ ___
 
 **● dontEval**: *`undefined` \| `false` \| `true`*
 
-*Defined in [types.ts:37](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/09fbfec/ts-run/src/types.ts#L37)*
+*Defined in [types.ts:41](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/d827319/ts-run/src/types.ts#L41)*
 
 If true it wont eval the emitted text and just return the code as string in `èmitter`
 
@@ -71,9 +71,9 @@ ___
 
 ### `<Optional>` files
 
-**● files**: *[File](_file_.file.md)[]*
+**● files**: *[File](_types_.file.md)[]*
 
-*Defined in [types.ts:15](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/09fbfec/ts-run/src/types.ts#L15)*
+*Defined in [types.ts:19](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/d827319/ts-run/src/types.ts#L19)*
 
 The project's source files. If targetFile imports modules, they should be listed here.
 
@@ -84,7 +84,7 @@ ___
 
 **● project**: *`Project`*
 
-*Defined in [types.ts:44](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/09fbfec/ts-run/src/types.ts#L44)*
+*Defined in [types.ts:48](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/d827319/ts-run/src/types.ts#L48)*
 
 If given, it will ignore compilerOptions/tsConfigJson, won't load libraries and just use this project as it is.
 
@@ -95,9 +95,9 @@ ___
 
 ###  targetFile
 
-**● targetFile**: *[File](_file_.file.md) \| `string`*
+**● targetFile**: *[File](_types_.file.md) \| `string`*
 
-*Defined in [types.ts:23](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/09fbfec/ts-run/src/types.ts#L23)*
+*Defined in [types.ts:27](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/d827319/ts-run/src/types.ts#L27)*
 
 The file to run. Provide a string to run one of the files in `files`
 
@@ -106,9 +106,9 @@ ___
 
 ### `<Optional>` tsConfigJson
 
-**● tsConfigJson**: *[File](_file_.file.md)*
+**● tsConfigJson**: *[File](_types_.file.md)*
 
-*Defined in [types.ts:11](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/09fbfec/ts-run/src/types.ts#L11)*
+*Defined in [types.ts:15](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/d827319/ts-run/src/types.ts#L15)*
 
 `tsConfig.json` file to configure the project.
 
@@ -119,7 +119,7 @@ ___
 
 **● tsLibBaseUrl**: *`undefined` \| `string`*
 
-*Defined in [types.ts:32](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/09fbfec/ts-run/src/types.ts#L32)*
+*Defined in [types.ts:36](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/d827319/ts-run/src/types.ts#L36)*
 
 Base path of TypeScript `lib.*.d.ts` files (like `lib/lib.es2015.d.ts`). In the desktop these files are located at `node_modules/typescript/lib`.
 
@@ -134,7 +134,7 @@ ___
 
 **● verifyNoProjectErrors**: *`undefined` \| `false` \| `true`*
 
-*Defined in [types.ts:19](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/09fbfec/ts-run/src/types.ts#L19)*
+*Defined in [types.ts:23](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/d827319/ts-run/src/types.ts#L23)*
 
 It will verify that the project has no compile errors, just before emitting JS. Note that this will slow down the execution.
 

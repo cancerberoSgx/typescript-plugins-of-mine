@@ -64,7 +64,7 @@
   'lib.esnext.array.d.ts'
 ]
 
-*Defined in [loadFile.ts:40](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/09fbfec/ts-run/src/loadFile.ts#L40)*
+*Defined in [loadFile.ts:40](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/d827319/ts-run/src/loadFile.ts#L40)*
 
 ___
 
@@ -76,7 +76,7 @@ ___
 
 ▸ **load**(url: *`string`*): `Promise`<`object`>
 
-*Defined in [loadFile.ts:13](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/09fbfec/ts-run/src/loadFile.ts#L13)*
+*Defined in [loadFile.ts:13](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/d827319/ts-run/src/loadFile.ts#L13)*
 
 **Parameters:**
 
@@ -91,15 +91,15 @@ ___
 
 ###  loadFiles
 
-▸ **loadFiles**(files: *[File](../interfaces/_file_.file.md)[]*): `Promise`<`object`[]>
+▸ **loadFiles**(files: *[File](../interfaces/_types_.file.md)[]*): `Promise`<`object`[]>
 
-*Defined in [loadFile.ts:7](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/09fbfec/ts-run/src/loadFile.ts#L7)*
+*Defined in [loadFile.ts:7](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/d827319/ts-run/src/loadFile.ts#L7)*
 
 **Parameters:**
 
 | Name | Type |
 | ------ | ------ |
-| files | [File](../interfaces/_file_.file.md)[] |
+| files | [File](../interfaces/_types_.file.md)[] |
 
 **Returns:** `Promise`<`object`[]>
 
@@ -110,7 +110,7 @@ ___
 
 ▸ **loadLibrariesFromUrl**(url: *`string`*): `Promise`<`object`[]>
 
-*Defined in [loadFile.ts:28](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/09fbfec/ts-run/src/loadFile.ts#L28)*
+*Defined in [loadFile.ts:28](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/d827319/ts-run/src/loadFile.ts#L28)*
 
 **Parameters:**
 

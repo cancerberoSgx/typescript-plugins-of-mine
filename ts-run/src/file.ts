@@ -1,10 +1,6 @@
 import { basename } from 'misc-utils-of-mine-generic'
 import { load } from './loadFile'
-
-export interface File {
-  getFilePath(): string
-  getContent(): Promise<string>
-}
+import { File } from './types'
 
 export class ContentFile implements File {
   constructor(protected filePath: string, protected content: string) {}

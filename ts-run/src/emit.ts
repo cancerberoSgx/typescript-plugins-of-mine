@@ -1,11 +1,10 @@
 import { Project } from 'ts-morph'
 import { withoutExtension } from 'misc-utils-of-mine-generic'
-import { TsRunOptions } from './types'
+import { TsRunOptions, File } from './types'
 import { ModuleKind, ModuleResolutionKind } from 'typescript'
 import { almondMin } from './almondMin'
-import { File } from './file'
 
-export async function emit(options: TsRunOptions & { targetFile: File; project: Project } ) {
+export async function emit(options: TsRunOptions & { targetFile: File; project: Project }) {
   const { project } = options
   // Heads up : we configure the project to emit AMD module in a single outFile so we can evaluate it
   project.compilerOptions.set({
@@ -32,21 +31,19 @@ new Promise(resolve=>{
   })
 })
   `
-  const {result, targetExport, errors: evaluateErrors}  = await evaluate(code);
-  project.compilerOptions.set({ ...compilerOptionsOriginal, outFile: undefined });
-  return {code, targetExport, errors: evaluateErrors.concat(evaluateErrors), result}
+  const { result, targetExport, errors: evaluateErrors } = await evaluate(code)
+  project.compilerOptions.set({ ...compilerOptionsOriginal, outFile: undefined })
+  return { code, targetExport, errors: evaluateErrors.concat(evaluateErrors), result }
 }
 async function evaluate(code: string) {
-  let result: any;
-  let targetExport: any;
+  let result: any
+  let targetExport: any
   const errors: any[] = []
   try {
-    result = eval(code);
-    targetExport = await result;
+    result = eval(code)
+    targetExport = await result
+  } catch (error) {
+    errors.push(error)
   }
-  catch (error) {
-    errors.push(error);
-  }
-  return { result,   targetExport , errors };
+  return { result, targetExport, errors }
 }
-

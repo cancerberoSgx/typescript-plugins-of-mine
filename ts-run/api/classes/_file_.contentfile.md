@@ -8,7 +8,7 @@
 
 ## Implements
 
-* [File](../interfaces/_file_.file.md)
+* [File](../interfaces/_types_.file.md)
 
 ## Index
 
@@ -36,7 +36,7 @@
 
 ⊕ **new ContentFile**(filePath: *`string`*, content: *`string`*): [ContentFile](_file_.contentfile.md)
 
-*Defined in [file.ts:9](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/09fbfec/ts-run/src/file.ts#L9)*
+*Defined in [file.ts:5](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/d827319/ts-run/src/file.ts#L5)*
 
 **Parameters:**
 
@@ -57,7 +57,7 @@ ___
 
 **● content**: *`string`*
 
-*Defined in [file.ts:10](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/09fbfec/ts-run/src/file.ts#L10)*
+*Defined in [file.ts:6](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/d827319/ts-run/src/file.ts#L6)*
 
 ___
 <a id="filepath"></a>
@@ -66,7 +66,7 @@ ___
 
 **● filePath**: *`string`*
 
-*Defined in [file.ts:10](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/09fbfec/ts-run/src/file.ts#L10)*
+*Defined in [file.ts:6](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/d827319/ts-run/src/file.ts#L6)*
 
 ___
 
@@ -78,9 +78,9 @@ ___
 
 ▸ **getContent**(): `Promise`<`string`>
 
-*Implementation of [File](../interfaces/_file_.file.md).[getContent](../interfaces/_file_.file.md#getcontent)*
+*Implementation of [File](../interfaces/_types_.file.md).[getContent](../interfaces/_types_.file.md#getcontent)*
 
-*Defined in [file.ts:14](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/09fbfec/ts-run/src/file.ts#L14)*
+*Defined in [file.ts:10](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/d827319/ts-run/src/file.ts#L10)*
 
 **Returns:** `Promise`<`string`>
 
@@ -91,9 +91,9 @@ ___
 
 ▸ **getFilePath**(): `string`
 
-*Implementation of [File](../interfaces/_file_.file.md).[getFilePath](../interfaces/_file_.file.md#getfilepath)*
+*Implementation of [File](../interfaces/_types_.file.md).[getFilePath](../interfaces/_types_.file.md#getfilepath)*
 
-*Defined in [file.ts:11](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/09fbfec/ts-run/src/file.ts#L11)*
+*Defined in [file.ts:7](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/d827319/ts-run/src/file.ts#L7)*
 
 **Returns:** `string`
 

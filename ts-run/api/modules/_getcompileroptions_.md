@@ -16,15 +16,15 @@
 
 ###  getCompilerOptions
 
-▸ **getCompilerOptions**(f: *[File](../interfaces/_file_.file.md)*): `Promise`<`CompilerOptions`>
+▸ **getCompilerOptions**(f: *[File](../interfaces/_types_.file.md)*): `Promise`<`CompilerOptions`>
 
-*Defined in [getCompilerOptions.ts:6](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/09fbfec/ts-run/src/getCompilerOptions.ts#L6)*
+*Defined in [getCompilerOptions.ts:6](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/d827319/ts-run/src/getCompilerOptions.ts#L6)*
 
 **Parameters:**
 
 | Name | Type |
 | ------ | ------ |
-| f | [File](../interfaces/_file_.file.md) |
+| f | [File](../interfaces/_types_.file.md) |
 
 **Returns:** `Promise`<`CompilerOptions`>
 

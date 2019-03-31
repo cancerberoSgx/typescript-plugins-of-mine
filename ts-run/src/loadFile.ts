@@ -1,6 +1,6 @@
+import { File } from './types'
 import PQueue from 'p-queue'
 import { basename } from 'misc-utils-of-mine-generic'
-import { File } from './file'
 import { readFileSync } from 'fs'
 import { get } from 'hyperquest-promise'
 

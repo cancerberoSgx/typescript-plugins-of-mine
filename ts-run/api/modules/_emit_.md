@@ -7,6 +7,7 @@
 ### Functions
 
 * [emit](_emit_.md#emit)
+* [evaluate](_emit_.md#evaluate)
 
 ---
 
@@ -16,16 +17,32 @@
 
 ###  emit
 
-▸ **emit**(options: *[TsRunOptions](../interfaces/_types_.tsrunoptions.md) & `object`*, errors: *`any`[]*): `Promise`<`object`>
+▸ **emit**(options: *[TsRunOptions](../interfaces/_types_.tsrunoptions.md) & `object`*): `Promise`<`object`>
 
-*Defined in [emit.ts:7](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/09fbfec/ts-run/src/emit.ts#L7)*
+*Defined in [emit.ts:7](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/d827319/ts-run/src/emit.ts#L7)*
 
 **Parameters:**
 
 | Name | Type |
 | ------ | ------ |
 | options | [TsRunOptions](../interfaces/_types_.tsrunoptions.md) & `object` |
-| errors | `any`[] |
+
+**Returns:** `Promise`<`object`>
+
+___
+<a id="evaluate"></a>
+
+###  evaluate
+
+▸ **evaluate**(code: *`string`*): `Promise`<`object`>
+
+*Defined in [emit.ts:38](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/d827319/ts-run/src/emit.ts#L38)*
+
+**Parameters:**
+
+| Name | Type |
+| ------ | ------ |
+| code | `string` |
 
 **Returns:** `Promise`<`object`>
 

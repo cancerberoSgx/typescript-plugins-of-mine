@@ -28,7 +28,7 @@
 
 **● emitted**: *`string`*
 
-*Defined in [types.ts:60](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/09fbfec/ts-run/src/types.ts#L60)*
+*Defined in [types.ts:64](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/d827319/ts-run/src/types.ts#L64)*
 
 target file emitted text
 
@@ -39,7 +39,7 @@ ___
 
 **● errors**: *`any`[]*
 
-*Defined in [types.ts:58](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/09fbfec/ts-run/src/types.ts#L58)*
+*Defined in [types.ts:62](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/d827319/ts-run/src/types.ts#L62)*
 
 ___
 <a id="exported"></a>
@@ -48,7 +48,7 @@ ___
 
 **● exported**: *`any` \| `undefined`*
 
-*Defined in [types.ts:64](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/09fbfec/ts-run/src/types.ts#L64)*
+*Defined in [types.ts:68](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/d827319/ts-run/src/types.ts#L68)*
 
 target module export value
 
@@ -59,7 +59,7 @@ ___
 
 **● project**: *`Project`*
 
-*Defined in [types.ts:61](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/09fbfec/ts-run/src/types.ts#L61)*
+*Defined in [types.ts:65](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/d827319/ts-run/src/types.ts#L65)*
 
 ___
 <a id="totaltime"></a>
@@ -68,7 +68,7 @@ ___
 
 **● totalTime**: *`number`*
 
-*Defined in [types.ts:62](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/09fbfec/ts-run/src/types.ts#L62)*
+*Defined in [types.ts:66](https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/d827319/ts-run/src/types.ts#L66)*
 
 ___
 

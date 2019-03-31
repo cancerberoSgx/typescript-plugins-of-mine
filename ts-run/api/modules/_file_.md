@@ -9,9 +9,5 @@
 * [ContentFile](../classes/_file_.contentfile.md)
 * [RemoteFile](../classes/_file_.remotefile.md)
 
-### Interfaces
-
-* [File](../interfaces/_file_.file.md)
-
 ---
 
