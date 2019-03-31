@@ -76,7 +76,14 @@ export function applyRefactorEditInfo(
   })
   return result
 }
-
+/**
+ * Apply suggested code fixes like the ones returned by (`LanguageService#getSuggestionDiagnostics()`) to given `containerNode`.
+ * Code fixes are given in `codes` or if not provided, all language service suggestions will be applied.
+ *
+ * @param containerNode the node inside which to apply code fixes.
+ * @param codes code fixes codes to apply. If not provided all language service suggestions code fixes that apply to
+ * `containerNode` will be applied.
+ */
 export function applyAllSuggestedCodeFixes(
   project: Project,
   containerNode: Node,
