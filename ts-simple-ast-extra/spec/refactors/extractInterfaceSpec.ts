@@ -1,5 +1,5 @@
 import {Project} from 'ts-morph';
-import { extractInterface } from '../src';
+import { extractInterface } from '../../src';
 
 describe('ExtractInterface', () => {
   it('should create an interface from given class with only public members, jsdocs and correct types and type params', () => {

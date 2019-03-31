@@ -19,7 +19,7 @@ import {
 import { getNodeLocalNamesNotReferencing } from '..'
 
 interface Options {
-  declaration: Declaration // TODO: more general
+  declaration: Declaration 
   target: SourceFile
 }
 
@@ -121,13 +121,14 @@ function updateOtherFilesImports(node: Declaration, target: SourceFile, nodeName
  * file. It create import declarations and also make sure imported declarations are exported if not
  */
 function addImportsToTarget(node: Declaration, target: SourceFile) {
-  ;[...node.getDescendants(), node]
+  [...node.getDescendants(), node]
     .filter(TypeGuards.isReferenceFindableNode)
-    .filter(
+    // dedup
+    .filter( 
       (
         t,
         i,
-        a // dedup
+        a 
       ) => a.findIndex(n => n === t || (n.getSourceFile() === t.getSourceFile() && n.getText() === t.getText())) === i
     )
     .map(n =>
@@ -138,13 +139,14 @@ function addImportsToTarget(node: Declaration, target: SourceFile) {
         .filter(n => TypeGuards.isNamedNode(n) || isDeclaration(n))
     )
     .flat()
+    // don't  import standard types like Date, Promise, etc
     .filter(
       t =>
         !t
           .getSourceFile()
           .getFilePath()
           .includes('node_modules/typescript/lib/lib.')
-    ) // don't  import standard types like Date, Promise, etc
+    ) 
     .forEach(t => {
       const typeName = TypeGuards.isNamedNode(t) ? t.getNameNode() : isDeclaration(t) ? t.getNameNode() : undefined
       if (!typeName) {
@@ -235,7 +237,7 @@ function addDeclaration(node: Declaration, target: SourceFile) {
 }
 
 /**
- * Gets a safe name for node to be moved as root node of given file.
+ * Gets a safe name for given node to be moved as root node of given file.
  */
 function getNodeNameForFile(node: Declaration | string, ...files: SourceFile[]) {
   const targetLocalNames = files.map(f => getNodeLocalNamesNotReferencing(f, node)).flat()

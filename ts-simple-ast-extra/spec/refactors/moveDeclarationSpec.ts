@@ -1,6 +1,6 @@
 import { removeWhites } from 'misc-utils-of-mine-generic';
-import { moveDeclaration } from '../src/';
-import { createProject, expectNoErrors } from './testUtil';
+import { moveDeclaration } from '../../src';
+import { createProject, expectNoErrors } from '../testUtil';
 import {Project} from 'ts-morph';
 
 describe('moveDeclaration', () => {
