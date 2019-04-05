@@ -340,9 +340,11 @@ describe('moveDeclaration', () => {
       expect(removeWhites(p.getSourceFileOrThrow('Warrior.ts').getText())).toContain(
         `import { Unit } from "../../base/Thing"`
       )
-      expect(removeWhites(f2.getText())).toContain(removeWhites(`export interface Unit extends Thing { health: number; move(x: number, y: number, animationMode: 'simple' | 'complex', arriveDateLimit: Date): Promise<void>; } export interface Thing { name: string description: string id: string }`)       
+      expect(removeWhites(f2.getText())).toContain(
+        removeWhites(
+          `export interface Unit extends Thing { health: number; move(x: number, y: number, animationMode: 'simple' | 'complex', arriveDateLimit: Date): Promise<void>; } export interface Thing { name: string description: string id: string }`
+        )
       )
     })
   })
-  
 })
