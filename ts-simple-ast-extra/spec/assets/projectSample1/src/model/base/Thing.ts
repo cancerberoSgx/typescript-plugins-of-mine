@@ -1,5 +1,5 @@
-export interface Thing{
-  name:string
-  description:string
+export interface Thing {
+  name: string
+  description: string
   id: string
 }

@@ -1,9 +1,9 @@
-import {Project} from 'ts-morph';
+import { Project } from 'ts-morph'
 import { removeAllUnused } from '../../src'
-import { removeWhites } from 'misc-utils-of-mine-generic';
+import { removeWhites } from 'misc-utils-of-mine-generic'
 
 describe('removeAllUnused', () => {
-  it('should remove all unused imports, functions, interfaces, classes parameters and variables', ()=>{
+  it('should remove all unused imports, functions, interfaces, classes parameters and variables', () => {
     const code = `
       import d from "foo";
       import d2, { used1 } from "foo";
@@ -50,18 +50,21 @@ describe('removeAllUnused', () => {
       export class Ctu<T, U> {}
       export type Length<T> = T extends ArrayLike<infer U> ? number : never; // Not affected, can't delete
     `
-    const project = new Project({useVirtualFileSystem: true})
+    const project = new Project({ useVirtualFileSystem: true })
     const f = project.createSourceFile('f1.ts', code)
     removeAllUnused(project, f)
-    expect(removeWhites(f.getText()).startsWith(removeWhites(`
+    expect(
+      removeWhites(f.getText()).startsWith(
+        removeWhites(`
       import { used1 } from "foo";
       import { used2 } from "foo";
       used1; used2;
-    `)))
+    `)
+      )
+    )
   })
 
-
-  it('should not remove exported declarations', () => { 
+  it('should not remove exported declarations', () => {
     const project = new Project()
     const code = `
       const r = require('f')
@@ -73,16 +76,14 @@ describe('removeAllUnused', () => {
     `
     const f = project.createSourceFile('f1.ts', code)
     project.createSourceFile('f2.ts', `import {f} from './f1';f()`)
-    removeAllUnused(project, f)//, f.getFunction('foo'))
+    removeAllUnused(project, f) //, f.getFunction('foo'))
 
-    expect(removeWhites(f.getText())).toBe(removeWhites(`
+    expect(removeWhites(f.getText())).toBe(
+      removeWhites(`
       export function f(){}
       function foo(){}
       foo()
-    `))
-
+    `)
+    )
   })
-
-})  
-
-
+})

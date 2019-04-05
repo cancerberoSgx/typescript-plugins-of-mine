@@ -1,4 +1,3 @@
-
 // import Project from 'ts-morph';
 // import { convertNamedImportsToNamespaceImport, convertNamespaceImportToNamedImports } from '../src/refactor/refactors';
 // import * as ts from 'typescript'
@@ -24,4 +23,4 @@
 //     return Object.values((ts as any).Diagnostics)
 //   }
 
-// })  
+// })

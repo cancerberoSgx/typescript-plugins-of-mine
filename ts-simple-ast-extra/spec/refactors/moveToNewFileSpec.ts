@@ -1,8 +1,7 @@
-import { Project } from 'ts-morph';
-import { moveToNewFile } from '../../src';
+import { Project } from 'ts-morph'
+import { moveToNewFile } from '../../src'
 
 describe('moveToNewFile', () => {
-
   it('should move declaration to new file', () => {
     const project = new Project()
     const code = `
@@ -21,6 +20,5 @@ describe('moveToNewFile', () => {
 
     expect(result!.created[0].getBaseName()).toBe('Class1.ts')
     expect(result!.modified[0].getBaseName()).toBe('f1.ts')
-
   })
 })

@@ -10,79 +10,6 @@ import {
   Node,
   StringLiteral
 } from 'ts-morph'
-// import * as ts from 'typescript';
-// import { findAscendant } from "typescript-ast-util";
-// import { CodeFix, CodeFixOptions } from "../codeFixes";
-// import { changeQuoteChar, quote, buildRefactorEditInfo } from "../util";
-
-/**
-
-# Description
-
-utilities related to strings:
-
- * change string quote character
- * go from normal string concatenation to template strings and viceversa
- *
-
-# Example
-
-# TODO
-
- * TODO: still missing the part that transform from string concat to string templates
- * TaggedTemplateExpression getExpression and remove tag - has some utilitiesfor working with rxjs - perhaps we want to include those here?
- * TODO: recurse on expressions that have templateExpressions descendants
- * allow me to convert string concat (a binaryoperationexpression into a single templateExpression
- * console.log('a'+b+'c') -  change to template or viceversa works funny....
-*/
-
-// export class Template2Literal implements CodeFix {
-
-//   name = 'template2Literal'
-
-// const config = {
-//   // TODO: so we also transform all expressions recursively from/to templateexpressions - stringliterals
-//   recurseOnTemplateExpressions: false,
-//   wrapStringConcatenationWithParenthesis: false
-// }
-
-type Action = 'changeToLiteral' | 'changeConcatenationToTemplate'
-
-//   predicate(arg: CodeFixOptions): boolean {
-//     action = undefined
-//     const bin = <ts.BinaryExpression>findAscendant(arg.containingTargetLight, ts.isBinaryExpression, true)
-//     const binToken = bin && bin.operatorToken.getText()
-//     // heads up we can change just one literal to template or two operands in a binary expression '+' as long as one of them is a string
-//     if (ts.isStringLiteral(arg.containingTargetLight) && binToken !== '+') {
-//       // action = 'changeToTemplate'  // TODO: not implemented yet so we are not offering yet
-//     }
-//     else if (ts.isNoSubstitutionTemplateLiteral(arg.containingTargetLight) ||
-//       findAscendant<ts.TemplateExpression>(arg.containingTargetLight, ts.isTemplateExpression, true)) {
-//       action = 'changeToLiteral'
-//     }
-//     else if (binToken === '+') {
-//       const tc = arg.program.getTypeChecker()
-//       if (isString(bin.left, tc) || isString(bin.right, tc)) {
-//         action = 'changeConcatenationToTemplate'
-//       }
-//     }
-//     return !!action;
-//   }
-
-//   description(arg: CodeFixOptions): string {
-//     return action === 'changeToLiteral' ? `Change to string literal` : action === 'changeToTemplate' ? `Change string to template` : `Change concatenation to template`
-//   }
-// interface Options {
-//   // simpleNode: Node
-//   // action: Action
-//   // simpleProject: Project
-//   config: {
-//     // TODO: so we also transform all expressions recursively from/to templateexpressions - stringliterals
-//     recurseOnTemplateExpressions: boolean,
-//     wrapStringConcatenationWithParenthesis: boolean
-//   }
-//   log: (msg: string) => void
-// }
 
 export function stringConcatenationToTemplate(project: Project, node: Node) {
   const tc = project.getProgram().getTypeChecker()
@@ -211,11 +138,6 @@ function expression2String(expr: Expression): string {
   }
 }
 
-// function isString(expr: ts.Expression, tc: ts.TypeChecker): boolean {
-//   const t = tc.getTypeAtLocation(expr)
-//   return t.isStringLiteral() ? true : (t.getSymbol()&&t.getSymbol()!.getDeclarations()) ? !!t.getSymbol()!.getDeclarations()!.find(d => tc.getTypeAtLocation(d).isStringLiteral()) : false
-// }
-
 function isString2(expr: Expression, tc: TypeChecker): boolean {
   const t = tc.getTypeAtLocation(expr)
   return t.isStringLiteral()
@@ -227,23 +149,3 @@ function isString2(expr: Expression, tc: TypeChecker): boolean {
         .find(d => tc.getTypeAtLocation(d).isStringLiteral())
     : false
 }
-
-// export function buildRefactorEditInfo(sourceFile: ts.SourceFile, newText: string, start: number = 0, length: number = 0): ts.RefactorEditInfo {
-//   return {
-//     edits: [
-//       {
-//         fileName: sourceFile.fileName,
-//         textChanges: [
-//           {
-//             newText,
-//             span: { start, length }
-//           }
-//         ]
-//       }
-//     ]
-//   }
-// }
-
-// }
-
-// export const template2Literal = new Template2Literal()

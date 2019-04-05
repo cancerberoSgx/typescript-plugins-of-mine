@@ -1,5 +1,5 @@
-import {Project} from 'ts-morph';
-import { extractInterface } from '../../src';
+import { Project } from 'ts-morph'
+import { extractInterface } from '../../src'
 
 describe('ExtractInterface', () => {
   it('should create an interface from given class with only public members, jsdocs and correct types and type params', () => {
@@ -24,11 +24,11 @@ describe('ExtractInterface', () => {
         }
       `
     )
-    
+
     const f = project.getSourceFile('test.ts')!
     extractInterface(f.getClass('A')!)
 
-    expect(removeWhites(f.getText() )).toBe(
+    expect(removeWhites(f.getText())).toBe(
       removeWhites(
         `
         interface I<T=any>{
@@ -71,6 +71,6 @@ describe('ExtractInterface', () => {
   })
 })
 
-function removeWhites(s: string){
+function removeWhites(s: string) {
   return s.replace(/[\s\n]+/gm, ' ').trim()
 }

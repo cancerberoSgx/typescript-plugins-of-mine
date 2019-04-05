@@ -1,12 +1,12 @@
-import { Thing } from "../Thing";
+import { Thing } from '../Thing'
 
 export class ThingImpl implements Thing {
-  constructor(){
-    this.name=''
+  constructor() {
+    this.name = ''
     this.description = ''
-    this.id=Math.random()+''
+    this.id = Math.random() + ''
   }
-  name: string;
-  description: string;
-  id: string;
+  name: string
+  description: string
+  id: string
 }

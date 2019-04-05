@@ -1,12 +1,9 @@
-
-import {Project} from 'ts-morph';
-import { convertNamedImportsToNamespaceImport, convertNamespaceImportToNamedImports } from '../../src';
-import { removeWhites } from 'misc-utils-of-mine-generic';
+import { Project } from 'ts-morph'
+import { convertNamedImportsToNamespaceImport, convertNamespaceImportToNamedImports } from '../../src'
+import { removeWhites } from 'misc-utils-of-mine-generic'
 
 describe('convertImports', () => {
-
   it('convertImportNamespaceToNamed', () => {
-
     const code = `
       import * as m from "m";
       m.a;
@@ -14,11 +11,13 @@ describe('convertImports', () => {
     const project = new Project()
     const f = project.createSourceFile('f1.ts', code)
     convertNamespaceImportToNamedImports(project, f)
-    expect(removeWhites(f.getText())).toBe(removeWhites(`
+    expect(removeWhites(f.getText())).toBe(
+      removeWhites(`
       import { a,b } from "m";
       a;
       b;
-    `))
+    `)
+    )
   })
 
   it('convertNamedImportsToNamespaceImport', () => {
@@ -29,6 +28,4 @@ describe('convertImports', () => {
     convertNamedImportsToNamespaceImport(project, f)
     expect(f.getText()).toBe(`import * as foo from './foo'; foo.a(foo.b,foo.c)`)
   })
-
-
-})  
+})
