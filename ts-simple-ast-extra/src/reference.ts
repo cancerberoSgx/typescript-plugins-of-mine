@@ -1,5 +1,5 @@
-import { notUndefined, notFalsy } from 'misc-utils-of-mine-typescript'
 import { Identifier } from 'ts-morph'
+import { notUndefined } from './misc'
 
 export function getDefinitionsOf(id: Identifier) {
   return id

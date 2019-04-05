@@ -105,7 +105,7 @@
 					<div class="tsd-signature tsd-kind-icon">apply<wbr>Text<wbr>Changes<wbr>Source<wbr>File<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">SourceFile</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/06d1027/ts-simple-ast-extra/src/refactor/changes.ts#L128">refactor/changes.ts:128</a></li>
+							<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/c48734a/ts-simple-ast-extra/src/refactor/changes.ts#L135">refactor/changes.ts:135</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -122,9 +122,15 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/06d1027/ts-simple-ast-extra/src/refactor/changes.ts#L80">refactor/changes.ts:80</a></li>
+									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/c48734a/ts-simple-ast-extra/src/refactor/changes.ts#L87">refactor/changes.ts:87</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Apply suggested code fixes like the ones returned by (<code>LanguageService#getSuggestionDiagnostics()</code>) to given <code>containerNode</code>.
+									Code fixes are given in <code>codes</code> or if not provided, all language service suggestions will be applied.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
@@ -132,9 +138,16 @@
 								</li>
 								<li>
 									<h5>containerNode: <span class="tsd-signature-type">Node</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the node inside which to apply code fixes.</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> codes: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>code fixes codes to apply. If not provided all language service suggestions code fixes that apply to
+										<code>containerNode</code> will be applied.</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> removeEmpty: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;false</span></h5>
@@ -154,7 +167,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/06d1027/ts-simple-ast-extra/src/refactor/changes.ts#L25">refactor/changes.ts:25</a></li>
+									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/c48734a/ts-simple-ast-extra/src/refactor/changes.ts#L25">refactor/changes.ts:25</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -186,7 +199,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/06d1027/ts-simple-ast-extra/src/refactor/changes.ts#L64">refactor/changes.ts:64</a></li>
+									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/c48734a/ts-simple-ast-extra/src/refactor/changes.ts#L64">refactor/changes.ts:64</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -218,7 +231,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/06d1027/ts-simple-ast-extra/src/refactor/changes.ts#L11">refactor/changes.ts:11</a></li>
+									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/c48734a/ts-simple-ast-extra/src/refactor/changes.ts#L11">refactor/changes.ts:11</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -244,7 +257,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/06d1027/ts-simple-ast-extra/src/refactor/changes.ts#L130">refactor/changes.ts:130</a></li>
+									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/c48734a/ts-simple-ast-extra/src/refactor/changes.ts#L137">refactor/changes.ts:137</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">SourceFile</span></h4>
@@ -261,7 +274,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/06d1027/ts-simple-ast-extra/src/refactor/changes.ts#L5">refactor/changes.ts:5</a></li>
+									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/c48734a/ts-simple-ast-extra/src/refactor/changes.ts#L5">refactor/changes.ts:5</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -284,7 +297,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/06d1027/ts-simple-ast-extra/src/refactor/changes.ts#L100">refactor/changes.ts:100</a></li>
+									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/c48734a/ts-simple-ast-extra/src/refactor/changes.ts#L107">refactor/changes.ts:107</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -314,80 +327,8 @@
 					<li class="globals  ">
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
-					<li class="label tsd-is-external">
-						<span>Internals</span>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="_index_.html">"index"</a>
-					</li>
-					<li class="label tsd-is-external">
-						<span>Externals</span>
-					</li>
-					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="_astpath_buildselector_.html">"ast<wbr>Path/build<wbr>Selector"</a>
-					</li>
-					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="_astpath_index_.html">"ast<wbr>Path/index"</a>
-					</li>
-					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="_astpath_selectnode_.html">"ast<wbr>Path/select<wbr>Node"</a>
-					</li>
-					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="_astpath_types_.html">"ast<wbr>Path/types"</a>
-					</li>
-					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="_locals_.html">"locals"</a>
-					</li>
-					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="_modify_.html">"modify"</a>
-					</li>
-					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="_node_.html">"node"</a>
-					</li>
-					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="_projectclient_.html">"project<wbr>Client"</a>
-					</li>
-					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="_projecttsmodule_.html">"project<wbr>TsModule"</a>
-					</li>
-					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="_refactor_arrowbraces_.html">"refactor/arrow<wbr>Braces"</a>
-					</li>
 					<li class="current tsd-kind-external-module tsd-is-external">
 						<a href="_refactor_changes_.html">"refactor/changes"</a>
-					</li>
-					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="_refactor_codefix_.html">"refactor/code<wbr>Fix"</a>
-					</li>
-					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="_refactor_convertimports_.html">"refactor/convert<wbr>Imports"</a>
-					</li>
-					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="_refactor_extractinterface_.html">"refactor/extract<wbr>Interface"</a>
-					</li>
-					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="_refactor_index_.html">"refactor/index"</a>
-					</li>
-					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="_refactor_movedeclaration_.html">"refactor/move<wbr>Declaration"</a>
-					</li>
-					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="_refactor_movetonewfile_.html">"refactor/move<wbr>ToNew<wbr>File"</a>
-					</li>
-					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="_refactor_refactors_.html">"refactor/refactors"</a>
-					</li>
-					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="_refactor_removeallunused_.html">"refactor/remove<wbr>All<wbr>Unused"</a>
-					</li>
-					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="_reference_.html">"reference"</a>
-					</li>
-					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="_test_.html">"test"</a>
-					</li>
-					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="_types_.html">"types"</a>
 					</li>
 				</ul>
 			</nav>

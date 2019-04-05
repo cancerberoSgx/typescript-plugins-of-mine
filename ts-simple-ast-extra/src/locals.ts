@@ -1,5 +1,5 @@
 import { Node, SyntaxKind, TypeGuards, ts } from 'ts-morph'
-import { notFalsy } from 'misc-utils-of-mine-typescript'
+import { notFalsy } from './misc'
 
 export function getNodeName(n: Node) {
   const id = n.getFirstChildByKind(SyntaxKind.Identifier)

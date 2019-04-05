@@ -1,4 +1,3 @@
-import { notFalsy } from 'misc-utils-of-mine-typescript'
 import {
   BindingName,
   ClassDeclaration,
@@ -17,6 +16,7 @@ import {
   VariableDeclaration
 } from 'ts-morph'
 import { getNodeLocalNamesNotReferencing } from '..'
+import { notFalsy, notUndefined } from '../misc'
 
 interface Options {
   declaration: Declaration
@@ -144,6 +144,7 @@ function addImportsToTarget(node: Declaration, target: SourceFile) {
           .getFilePath()
           .includes('node_modules/typescript/lib/lib.')
     )
+    .filter(notUndefined)
     .forEach(t => {
       const typeName = TypeGuards.isNamedNode(t) ? t.getNameNode() : isDeclaration(t) ? t.getNameNode() : undefined
       if (!typeName) {
