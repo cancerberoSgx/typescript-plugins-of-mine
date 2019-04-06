@@ -1,14 +1,25 @@
-import { VariableDeclarationList, TypeGuards, VariableStatementStructure, SyntaxKind } from 'ts-morph'
+import { VariableDeclarationList, Node, TypeGuards, VariableStatementStructure, SyntaxKind } from 'ts-morph'
+/**
+ * Replace given node's VariableDeclarationList descendants with individual variable declaration statements one for each variable.
+ * It will add types if variables in variable declaration list don't declare them
+ */
+export function splitVariableDeclarations(node: Node) {
+  let c: VariableDeclarationList | undefined
+  while (
+    (c = node.getFirstDescendant(
+      d => TypeGuards.isVariableDeclarationList(d) && d.getDeclarations().length > 1
+    ) as VariableDeclarationList)
+  ) {
+    splitVariableDeclaration(c)
+  }
+}
 
+/**
+ * Replace given VariableDeclarationList node with variable declaration statements one for each variable.
+ * It will add types if variables in variable declaration list don't declare them
+ */
 export function splitVariableDeclaration(node: VariableDeclarationList) {
-  // const varDeclList = arg.simpleNode.getFirstAncestorByKind(ts.SyntaxKind.VariableDeclarationList)
-  // if (!varDeclList || !TypeGuards.isVariableDeclarationList(varDeclList)) {
-  // arg.log('not apply because no splitVariableDeclarationList ancestor was found')
-  // return
-  // }
-
   const container = node.getParent().getParent()
-
   if (TypeGuards.isBlock(container) || TypeGuards.isSourceFile(container)) {
     const variableStatements = node.getDeclarations().map(d => ({
       declarationKind: node.getDeclarationKindKeyword().getText(),
@@ -21,18 +32,12 @@ export function splitVariableDeclaration(node: VariableDeclarationList) {
         }
       ]
     })) as VariableStatementStructure[]
-
     const variableStatement = node.getFirstAncestorByKind(SyntaxKind.VariableStatement)
     if (!variableStatement) {
       throw 'cannot find VariableStatement ancestor for node ' + node.getKindName() + ' - ' + node.getText()
     }
-    // const start = variableStatement.getStart()
-    // const length = variableStatement.getFullWidth()// + 2 // TODO: don't know why I have to do +2 in order to work OK
-    // const variableStatementNodes = container.insertVariableStatements(variableStatement.getChildIndex(), variableStatements)
     container.insertVariableStatements(variableStatement.getChildIndex(), variableStatements)
     variableStatement.remove()
-    // const code = variableStatementNodes.map(s => s.getText()).join('\n') // TODO: respect formatOptions
-    // return buildRefactorEditInfo(arg.sourceFile, code, start, length)
   } else {
     throw `cannot find parent's parent Block or SourceFile for node ${node.getKindName()} - parent's parent kind is ${container.getKindName()}`
   }
