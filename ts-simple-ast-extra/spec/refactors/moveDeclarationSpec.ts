@@ -1,7 +1,7 @@
 import { removeWhites } from 'misc-utils-of-mine-generic'
+import { Project } from 'ts-morph'
 import { moveDeclaration } from '../../src'
 import { createProject, expectNoErrors } from '../testUtil'
-import { Project } from 'ts-morph'
 
 describe('moveDeclaration', () => {
   it('basic case', () => {

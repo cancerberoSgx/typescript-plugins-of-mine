@@ -1,8 +1,8 @@
 // warning: this won't work on the client side - it's for typescript compiler plugin API - node.js only . TODO: remove to another package so this works 100% on the client side
 
+import { basename } from 'path'
 import Project, { ProjectOptions } from 'ts-morph'
 import * as ts_module from 'typescript/lib/tsserverlibrary'
-import { basename } from 'path'
 import { buildManipulationSettings } from './projectClient'
 
 /** gets the config file of given ts project or undefined if given is not a ConfiguredProject or tsconfig

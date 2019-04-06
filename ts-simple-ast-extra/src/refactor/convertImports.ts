@@ -1,4 +1,4 @@
-import { Project, Node } from 'ts-morph'
+import { Node, Project } from 'ts-morph'
 import { applyRefactorEditInfo } from './changes'
 
 export function convertNamespaceImportToNamedImports(project: Project, node: Node) {

@@ -1,6 +1,6 @@
 import { Node, TypeGuards } from 'ts-morph'
 import { getChildrenForEachChild } from '../node'
-import { BuildAstPathOptions, AstPath, ASTPathNode } from './types'
+import { AstPath, ASTPathNode, BuildAstPathOptions } from './types'
 /**
  * Creates a selector like `0/4/3/` where numbers are the child index of the node on that level with respect
  * to the parent (getChildIndex()), starting from the sourceFile.

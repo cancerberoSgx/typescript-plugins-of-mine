@@ -1,4 +1,4 @@
-import { VariableDeclarationList, Node, TypeGuards, VariableStatementStructure, SyntaxKind } from 'ts-morph'
+import { Node, SyntaxKind, TypeGuards, VariableDeclarationList, VariableStatementStructure } from 'ts-morph'
 /**
  * Replace given node's VariableDeclarationList descendants with individual variable declaration statements one for each variable.
  * It will add types if variables in variable declaration list don't declare them

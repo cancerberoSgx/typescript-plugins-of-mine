@@ -1,4 +1,4 @@
-import { Project, Identifier, TypeGuards } from 'ts-morph'
+import { Identifier, Project, TypeGuards } from 'ts-morph'
 import { buildAstPath, selectNode } from '../src'
 
 describe('ExtractInterface', () => {

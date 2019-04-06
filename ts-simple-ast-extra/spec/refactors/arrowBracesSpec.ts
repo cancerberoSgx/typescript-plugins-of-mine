@@ -1,6 +1,6 @@
-import { Project, TypeGuards } from 'ts-morph'
-import { addBracesToArrowFunction, convertToEs6Module, moveToNewFile, removeBracesFromArrowFunction } from '../../src'
 import { removeWhites } from 'misc-utils-of-mine-generic'
+import { Project, TypeGuards } from 'ts-morph'
+import { addBracesToArrowFunction, removeBracesFromArrowFunction } from '../../src'
 
 describe('arrowBraces', () => {
   describe('addBracesToArrowFunction', () => {

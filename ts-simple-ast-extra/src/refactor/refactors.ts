@@ -1,4 +1,4 @@
-import { Project, Node } from 'ts-morph'
+import { Node, Project } from 'ts-morph'
 import { applyAllSuggestedCodeFixes } from './changes'
 
 export function convertToEs6Module(project: Project, node: Node) {

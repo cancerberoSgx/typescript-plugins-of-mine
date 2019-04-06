@@ -1,4 +1,4 @@
-import { ts, BinaryExpression, TypeChecker, TypeGuards, Node, Expression } from 'ts-morph'
+import { BinaryExpression, Expression, Node, ts, TypeChecker, TypeGuards } from 'ts-morph'
 
 /**
  * Transform all string concatenation expressions found in node and its descendants to string template expressions.

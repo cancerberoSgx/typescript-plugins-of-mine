@@ -1,6 +1,6 @@
+import { TypeGuards } from 'ts-morph'
+import { getNodeLocalNames, getNodeLocalNamesNotReferencing, getNodeLocalsDeclarations, isDeclaration } from '../src'
 import { createProject } from './testUtil'
-import { getNodeLocalNamesNotReferencing, getNodeLocalNames, getNodeLocalsDeclarations, isDeclaration } from '../src'
-import { TypeGuards, createWrappedNode } from 'ts-morph'
 
 describe('locals', () => {
   it('getNodeLocalNamesNotReferencing', () => {

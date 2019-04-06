@@ -1,5 +1,5 @@
-import { Unit } from './Unit'
 import { ThingImpl } from '../base/impl/ThingImpl'
+import { Unit } from './Unit'
 
 export abstract class UnitImpl extends ThingImpl implements Unit {
   health: number = 0

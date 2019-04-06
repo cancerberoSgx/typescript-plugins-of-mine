@@ -86,19 +86,18 @@
 					<a name="declarevariable" class="tsd-anchor"></a>
 					<h3>declare<wbr>Variable</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">declare<wbr>Variable<span class="tsd-signature-symbol">(</span>node<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Identifier</span>, tc<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TypeChecker</span>, diagnostics<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Diagnostic</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">declare<wbr>Variable<span class="tsd-signature-symbol">(</span>node<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Identifier</span>, tc<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TypeChecker</span>, diagnostics<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Diagnostic</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/d4316fe/ts-simple-ast-extra/src/refactor/declareVariable.ts#L36">refactor/declareVariable.ts:36</a></li>
+									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/26e96b2/ts-simple-ast-extra/src/refactor/declareVariable.ts#L26">refactor/declareVariable.ts:26</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Replace given VariableDeclarationList node with variable declaration statements one for each variable.
-									It will add types if variables in variable declaration list don&#39;t declare them</p>
+									<p>Will declare a variable or function on given identifier with error codes 2552 or 2304</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -110,7 +109,7 @@
 									<h5>tc: <span class="tsd-signature-type">TypeChecker</span></h5>
 								</li>
 								<li>
-									<h5>diagnostics: <span class="tsd-signature-type">Diagnostic</span><span class="tsd-signature-symbol">[]</span></h5>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> diagnostics: <span class="tsd-signature-type">Diagnostic</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> =&nbsp;node.getSourceFile().getPreEmitDiagnostics()</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -121,19 +120,18 @@
 					<a name="declarevariables" class="tsd-anchor"></a>
 					<h3>declare<wbr>Variables</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">declare<wbr>Variables<span class="tsd-signature-symbol">(</span>node<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Node</span>, tc<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TypeChecker</span>, diagnostics<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Diagnostic</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">declare<wbr>Variables<span class="tsd-signature-symbol">(</span>node<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Node</span>, tc<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TypeChecker</span>, diagnostics<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Diagnostic</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/d4316fe/ts-simple-ast-extra/src/refactor/declareVariable.ts#L18">refactor/declareVariable.ts:18</a></li>
+									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/26e96b2/ts-simple-ast-extra/src/refactor/declareVariable.ts#L5">refactor/declareVariable.ts:5</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Replace given node&#39;s VariableDeclarationList descendants with individual variable declaration statements one for each variable.
-									It will add types if variables in variable declaration list don&#39;t declare them</p>
+									<p>Will declare a variable or function on every identifier with error codes 2552 or 2304</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -145,7 +143,7 @@
 									<h5>tc: <span class="tsd-signature-type">TypeChecker</span></h5>
 								</li>
 								<li>
-									<h5>diagnostics: <span class="tsd-signature-type">Diagnostic</span><span class="tsd-signature-symbol">[]</span></h5>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> diagnostics: <span class="tsd-signature-type">Diagnostic</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> =&nbsp;node.getSourceFile().getPreEmitDiagnostics()</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>

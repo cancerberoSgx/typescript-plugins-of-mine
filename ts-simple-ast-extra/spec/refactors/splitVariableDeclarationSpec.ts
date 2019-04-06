@@ -1,7 +1,7 @@
+import { removeWhites } from 'misc-utils-of-mine-generic'
 import { Project, SyntaxKind } from 'ts-morph'
 import { splitVariableDeclaration, splitVariableDeclarations } from '../../src'
 
-import { removeWhites } from 'misc-utils-of-mine-generic'
 describe('splitVariableDeclaration', () => {
   describe('splitVariableDeclaration', () => {
     it('should split a variable declaration list into several statements and add types if list variables dont declare any', () => {

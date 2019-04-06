@@ -1,4 +1,4 @@
-import Project, { Diagnostic, DiagnosticMessageChain, SourceFile, ScriptTarget } from 'ts-morph'
+import Project, { Diagnostic, DiagnosticMessageChain, SourceFile } from 'ts-morph'
 
 export function createProject(...args: string[] | string[][]) {
   const project = new Project()

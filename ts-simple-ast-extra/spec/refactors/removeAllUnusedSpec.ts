@@ -1,6 +1,6 @@
+import { removeWhites } from 'misc-utils-of-mine-generic'
 import { Project } from 'ts-morph'
 import { removeAllUnused } from '../../src'
-import { removeWhites } from 'misc-utils-of-mine-generic'
 
 describe('removeAllUnused', () => {
   it('should remove all unused imports, functions, interfaces, classes parameters and variables', () => {

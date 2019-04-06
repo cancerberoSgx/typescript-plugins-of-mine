@@ -1,4 +1,4 @@
-import { Node, SyntaxKind, TypeGuards, ts } from 'ts-morph'
+import { Node, SyntaxKind, ts, TypeGuards } from 'ts-morph'
 import { notFalsy } from './misc'
 
 export function getNodeName(n: Node) {

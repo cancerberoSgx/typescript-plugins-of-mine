@@ -1,6 +1,6 @@
+import { removeWhites } from 'misc-utils-of-mine-generic'
 import { Project } from 'ts-morph'
 import { convertNamedImportsToNamespaceImport, convertNamespaceImportToNamedImports } from '../../src'
-import { removeWhites } from 'misc-utils-of-mine-generic'
 
 describe('convertImports', () => {
   it('convertImportNamespaceToNamed', () => {

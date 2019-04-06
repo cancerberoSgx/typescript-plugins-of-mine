@@ -1,12 +1,12 @@
 import {
+  CompilerOptions,
+  FormatCodeSettings,
   IndentationText,
-  QuoteKind,
   ManipulationSettings,
   NewLineKind,
-  UserPreferences,
-  FormatCodeSettings,
-  CompilerOptions,
-  ts
+  QuoteKind,
+  ts,
+  UserPreferences
 } from 'ts-morph'
 
 export function buildManipulationSettings(

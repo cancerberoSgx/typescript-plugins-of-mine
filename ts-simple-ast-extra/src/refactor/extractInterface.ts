@@ -1,14 +1,13 @@
 import {
-  TypeGuards,
-  ConstructorDeclarationStructure,
   ClassDeclaration,
-  StatementedNode,
+  ConstructorDeclarationStructure,
   InterfaceDeclarationStructure,
-  SyntaxKind,
   MethodSignatureStructure,
-  PropertySignatureStructure
+  PropertySignatureStructure,
+  StatementedNode,
+  SyntaxKind,
+  TypeGuards
 } from 'ts-morph'
-
 import { getImplementsAll } from '../types'
 
 export function extractInterface(

@@ -3,7 +3,6 @@ import { Identifier, Project, TypeGuards } from 'ts-morph'
 import { declareVariable, declareVariables } from '../../src'
 
 describe('declareVariable', () => {
-
   describe('declareVariable', () => {
     it('should declare a function if a call expression references one not defined. ', () => {
       const project = new Project()
@@ -41,7 +40,7 @@ describe('declareVariable', () => {
       )
     })
   })
-  
+
   describe('declareVariables', () => {
     it('should declare a functions and variables missing in a file', () => {
       const project = new Project()

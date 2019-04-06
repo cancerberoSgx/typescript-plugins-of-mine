@@ -1,5 +1,5 @@
-import { ArrayLiteralExpression, ObjectLiteralExpression } from 'ts-morph'
 import { quote } from 'misc-utils-of-mine-generic'
+import { ArrayLiteralExpression, ObjectLiteralExpression } from 'ts-morph'
 
 export function array2DInsert(init: ArrayLiteralExpression, fileId: number, index: number, data: string[]) {
   ensureArrayLength(init, fileId + 1, `[]`)

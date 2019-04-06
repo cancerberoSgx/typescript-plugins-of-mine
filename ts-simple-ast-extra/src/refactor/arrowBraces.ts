@@ -1,4 +1,4 @@
-import { Project, ArrowFunction } from 'ts-morph'
+import { ArrowFunction, Project } from 'ts-morph'
 import { applyRefactorEditInfo } from './changes'
 
 export function addBracesToArrowFunction(project: Project, arrowFunction: ArrowFunction) {

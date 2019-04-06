@@ -1,6 +1,6 @@
 import { removeWhites } from 'misc-utils-of-mine-generic'
 import { Project, SyntaxKind } from 'ts-morph'
-import { templateToStringConcatenation, templatesToStringConcatenations } from '../../src'
+import { templatesToStringConcatenations, templateToStringConcatenation } from '../../src'
 
 describe('stringConcatenationToTemplate', () => {
   describe('templateToStringConcatenation', () => {
