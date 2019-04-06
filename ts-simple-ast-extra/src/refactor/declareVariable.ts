@@ -12,10 +12,9 @@ import {
   Statement
 } from 'ts-morph'
 /**
- * Replace given node's VariableDeclarationList descendants with individual variable declaration statements one for each variable.
- * It will add types if variables in variable declaration list don't declare them
+ * Will declare a variable or function on every identifier with error codes 2552 or 2304 
  */
-export function declareVariables(node: Node, tc: TypeChecker, diagnostics: Diagnostic[]) {
+export function declareVariables(node: Node, tc: TypeChecker, diagnostics: Diagnostic[]=node.getSourceFile().getPreEmitDiagnostics()) {
   let c: Identifier | undefined
   while (
     (c = node.getFirstDescendant(
@@ -30,10 +29,9 @@ export function declareVariables(node: Node, tc: TypeChecker, diagnostics: Diagn
 }
 
 /**
- * Replace given VariableDeclarationList node with variable declaration statements one for each variable.
- * It will add types if variables in variable declaration list don't declare them
+ * Will declare a variable or function on given identifier with error codes 2552 or 2304 
  */
-export function declareVariable(node: Identifier, tc: TypeChecker, diagnostics: Diagnostic[]) {
+export function declareVariable(node: Identifier, tc: TypeChecker, diagnostics: Diagnostic[]=node.getSourceFile().getPreEmitDiagnostics()) {
   if (!diagnostics.find(d => (d.getCode() === 2304 || d.getCode() === 2552) && d.getStart() === node.getStart())) {
     throw 'cannot declare variable if there is no 2304 or 2552 error'
   }
