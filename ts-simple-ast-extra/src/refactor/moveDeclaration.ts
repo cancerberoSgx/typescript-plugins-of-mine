@@ -23,7 +23,7 @@ interface Options {
   target: SourceFile
 }
 
-type Declaration =
+export type Declaration =
   | ClassDeclaration
   | InterfaceDeclaration
   | EnumDeclaration
