@@ -1,13 +1,22 @@
 import { flatReadOnly } from 'misc-utils-of-mine-generic'
-import { Node, Project, SourceFile, TextChange, ts } from 'ts-morph'
+import { Node, Project, SourceFile, TextChange, ts, TextSpan, TextRange } from 'ts-morph'
 import { notUndefined } from '../misc'
 
 export function createTextChanges(textChanges: ts.TextChange[]): TextChange[] {
-  return textChanges.map(compilerNode => {
-    return new (TextChange as any)(compilerNode) // Hack because this constructor in internal
-  })
+  return textChanges.map(compilerNode => createTextChange(compilerNode))
+}
+export function createTextChange(compilerNode: ts.TextChange) {
+  return new (TextChange as any)(compilerNode) as TextChange // Hack because this constructor in internal
+}
+export function createTextSpan(compilerNode: ts.TextSpan) {
+  const span = new (TextSpan as any)(compilerNode) as TextSpan // Hack because this constructor in internal
+  ;(span as any).compilerObject = compilerNode
+  return span
 }
 
+export function createTextRange(compilerObject: ts.TextRange) {
+  const span = new (TextSpan as any)(compilerObject) as TextRange
+}
 export function applyTextChanges(code: string, textChanges: ts.TextChange[]): string {
   const simpleTextChanges = createTextChanges(textChanges)
   const sourceFile = applyTextChangesGetSourceFile()
@@ -99,7 +108,8 @@ export function applyAllSuggestedCodeFixes(
   let fixes = getSuggestedCodeFixesInside(project, containerNode, codes)
   while (fixes && fixes.length) {
     applyFileTextChanges(project, fixes[0].changes[0], removeEmpty, result)
-    fixes = getSuggestedCodeFixesInside(project, containerNode, codes) // TODO: performance we only need the first one. Also use combined CodeFix to apply several at once increases performance
+    // TODO: performance we only need the first one. Also use combined CodeFix to apply several at once increases performance
+    fixes = getSuggestedCodeFixesInside(project, containerNode, codes)
   }
   return result
 }
