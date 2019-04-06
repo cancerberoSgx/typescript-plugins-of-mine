@@ -85,13 +85,13 @@
 					<a name="removeallunused" class="tsd-anchor"></a>
 					<h3>remove<wbr>All<wbr>Unused</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">remove<wbr>All<wbr>Unused<span class="tsd-signature-symbol">(</span>project<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Project</span>, node<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Node</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/_refactor_changes_.applyfiletextchangesresult.html" class="tsd-signature-type">ApplyFileTextChangesResult</a></li>
+						<li class="tsd-signature tsd-kind-icon">remove<wbr>All<wbr>Unused<span class="tsd-signature-symbol">(</span>project<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Project</span>, sourceFileOrPath<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">SourceFile</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span>, formatSettings<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">FormatCodeSettings</span>, userPreferences<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">UserPreferences</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/87c2877/ts-simple-ast-extra/src/refactor/removeAllUnused.ts#L4">refactor/removeAllUnused.ts:4</a></li>
+									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/3a74ae8/ts-simple-ast-extra/src/refactor/removeAllUnused.ts#L3">refactor/removeAllUnused.ts:3</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -100,10 +100,16 @@
 									<h5>project: <span class="tsd-signature-type">Project</span></h5>
 								</li>
 								<li>
-									<h5>node: <span class="tsd-signature-type">Node</span></h5>
+									<h5>sourceFileOrPath: <span class="tsd-signature-type">SourceFile</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> formatSettings: <span class="tsd-signature-type">FormatCodeSettings</span><span class="tsd-signature-symbol"> =&nbsp;{}</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> userPreferences: <span class="tsd-signature-type">UserPreferences</span><span class="tsd-signature-symbol"> =&nbsp;{}</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="../interfaces/_refactor_changes_.applyfiletextchangesresult.html" class="tsd-signature-type">ApplyFileTextChangesResult</a></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 						</li>
 					</ul>
 				</section>

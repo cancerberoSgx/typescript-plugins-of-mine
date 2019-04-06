@@ -26,3 +26,6 @@
  * templateToStringConcatenation refactor
  * splitVariableDeclaration refactor
  * declareVariable refactor
+
+# 0.1.1
+ * removeAllUnused issue
