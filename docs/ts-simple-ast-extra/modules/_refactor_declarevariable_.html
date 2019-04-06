@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>&quot;refactor/extractInterface&quot; | ts-simple-ast-extra</title>
+	<title>&quot;refactor/declareVariable&quot; | ts-simple-ast-extra</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,10 +56,10 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="_refactor_extractinterface_.html">&quot;refactor/extractInterface&quot;</a>
+					<a href="_refactor_declarevariable_.html">&quot;refactor/declareVariable&quot;</a>
 				</li>
 			</ul>
-			<h1>External module &quot;refactor/extractInterface&quot;</h1>
+			<h1>External module &quot;refactor/declareVariable&quot;</h1>
 		</div>
 	</div>
 </header>
@@ -73,7 +73,8 @@
 						<section class="tsd-index-section tsd-is-external">
 							<h3>Functions</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-external"><a href="_refactor_extractinterface_.html#extractinterface" class="tsd-kind-icon">extract<wbr>Interface</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-external"><a href="_refactor_declarevariable_.html#declarevariable" class="tsd-kind-icon">declare<wbr>Variable</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-external"><a href="_refactor_declarevariable_.html#declarevariables" class="tsd-kind-icon">declare<wbr>Variables</a></li>
 							</ul>
 						</section>
 					</div>
@@ -82,31 +83,69 @@
 			<section class="tsd-panel-group tsd-member-group tsd-is-external">
 				<h2>Functions</h2>
 				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
-					<a name="extractinterface" class="tsd-anchor"></a>
-					<h3>extract<wbr>Interface</h3>
+					<a name="declarevariable" class="tsd-anchor"></a>
+					<h3>declare<wbr>Variable</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">extract<wbr>Interface<span class="tsd-signature-symbol">(</span>node<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ClassDeclaration</span>, dest<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">StatementedNode</span>, interfaceName<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, removeDocs<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">declare<wbr>Variable<span class="tsd-signature-symbol">(</span>node<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Identifier</span>, tc<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TypeChecker</span>, diagnostics<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Diagnostic</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/d4316fe/ts-simple-ast-extra/src/refactor/extractInterface.ts#L14">refactor/extractInterface.ts:14</a></li>
+									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/d4316fe/ts-simple-ast-extra/src/refactor/declareVariable.ts#L36">refactor/declareVariable.ts:36</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Replace given VariableDeclarationList node with variable declaration statements one for each variable.
+									It will add types if variables in variable declaration list don&#39;t declare them</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>node: <span class="tsd-signature-type">ClassDeclaration</span></h5>
+									<h5>node: <span class="tsd-signature-type">Identifier</span></h5>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> dest: <span class="tsd-signature-type">StatementedNode</span><span class="tsd-signature-symbol"> =&nbsp;node.getSourceFile()</span></h5>
+									<h5>tc: <span class="tsd-signature-type">TypeChecker</span></h5>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> interfaceName: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;node.getName() ? &#x27;I&#x27; + node.getName() : &#x27;IAnonymousClass&#x27;</span></h5>
+									<h5>diagnostics: <span class="tsd-signature-type">Diagnostic</span><span class="tsd-signature-symbol">[]</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
+					<a name="declarevariables" class="tsd-anchor"></a>
+					<h3>declare<wbr>Variables</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">declare<wbr>Variables<span class="tsd-signature-symbol">(</span>node<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Node</span>, tc<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TypeChecker</span>, diagnostics<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Diagnostic</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/d4316fe/ts-simple-ast-extra/src/refactor/declareVariable.ts#L18">refactor/declareVariable.ts:18</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Replace given node&#39;s VariableDeclarationList descendants with individual variable declaration statements one for each variable.
+									It will add types if variables in variable declaration list don&#39;t declare them</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>node: <span class="tsd-signature-type">Node</span></h5>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> removeDocs: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;false</span></h5>
+									<h5>tc: <span class="tsd-signature-type">TypeChecker</span></h5>
+								</li>
+								<li>
+									<h5>diagnostics: <span class="tsd-signature-type">Diagnostic</span><span class="tsd-signature-symbol">[]</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -122,14 +161,17 @@
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
 					<li class="current tsd-kind-external-module tsd-is-external">
-						<a href="_refactor_extractinterface_.html">"refactor/extract<wbr>Interface"</a>
+						<a href="_refactor_declarevariable_.html">"refactor/declare<wbr>Variable"</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
 					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
-						<a href="_refactor_extractinterface_.html#extractinterface" class="tsd-kind-icon">extract<wbr>Interface</a>
+						<a href="_refactor_declarevariable_.html#declarevariable" class="tsd-kind-icon">declare<wbr>Variable</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
+						<a href="_refactor_declarevariable_.html#declarevariables" class="tsd-kind-icon">declare<wbr>Variables</a>
 					</li>
 				</ul>
 			</nav>
