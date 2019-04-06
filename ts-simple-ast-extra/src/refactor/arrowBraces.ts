@@ -1,6 +1,9 @@
-import { ArrowFunction, Project, Node, SyntaxKind, RefactorEditInfo, TypeGuards, ts, SourceFile } from 'ts-morph'
-import { applyRefactorEditInfo, createTextSpan } from './changes'
+import { ArrowFunction, Node, Project, TypeGuards } from 'ts-morph'
+import { applyRefactorEditInfo } from './changes'
 
+/**
+ * Add braces to all arrow function descendants of given node without them.
+ */
 export function addBracesToArrowFunctions(project: Project, node: Node) {
   const arrows = node.getDescendants().filter(TypeGuards.isArrowFunction)
   arrows.forEach((a, i) => {
@@ -9,6 +12,9 @@ export function addBracesToArrowFunctions(project: Project, node: Node) {
   })
 }
 
+/**
+ * Add braces to given arrow function.
+ */
 export function addBracesToArrowFunction(project: Project, arrowFunction: ArrowFunction) {
   const edits = getRefactorEditInfo(project, arrowFunction)
   if (edits) {
@@ -28,6 +34,10 @@ function getRefactorEditInfo(project: Project, arrowFunction: ArrowFunction) {
       {}
     )
 }
+
+/**
+ * Remove braces from all node descendant arrow functions that allows it.
+ */
 export function removeBracesFromArrowFunctions(project: Project, node: Node) {
   const arrows = node.getDescendants().filter(TypeGuards.isArrowFunction)
   arrows.forEach((a, i) => {
@@ -36,6 +46,9 @@ export function removeBracesFromArrowFunctions(project: Project, node: Node) {
   })
 }
 
+/**
+ * Removes braces from given arrow function if allows it.
+ */
 export function removeBracesFromArrowFunction(project: Project, arrowFunction: ArrowFunction) {
   const range = { pos: arrowFunction.getStart(), end: arrowFunction.getEnd() }
   const edits = project

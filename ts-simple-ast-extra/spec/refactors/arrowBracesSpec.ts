@@ -1,9 +1,9 @@
 import { removeWhites } from 'misc-utils-of-mine-generic'
 import { Project, TypeGuards } from 'ts-morph'
 import {
-  removeBracesFromArrowFunction,
-  addBracesToArrowFunctions,
   addBracesToArrowFunction,
+  addBracesToArrowFunctions,
+  removeBracesFromArrowFunction,
   removeBracesFromArrowFunctions
 } from '../../src'
 
