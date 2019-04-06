@@ -1,25 +1,39 @@
-import { ts, Project, BinaryExpression, TypeChecker, TypeGuards, Node, Expression } from 'ts-morph'
+import { ts, BinaryExpression, TypeChecker, TypeGuards, Node, Expression } from 'ts-morph'
+
+/**
+ * Transform all string concatenation expressions found in node and its descendants to string template expressions.
+ */
+export function stringConcatenationsToTemplateExpressions(node: Node, tc: TypeChecker) {
+  let c: Node | undefined
+  while ((c = node.getFirstDescendant(d => stringConcatenationNodePredicate(d, tc)))) {
+    stringConcatenationToTemplateExpression(c, tc)
+  }
+}
 
 /**
  * Will transform node's ancestors binary expression which operator token is '+' and its left and right expressions are strings to a template expression.
  */
-export function stringConcatenationToTemplate(project: Project, node: Node) {
-  const tc = project.getProgram().getTypeChecker()
-  let innerStringConcatExpr = [node, ...node.getAncestors()].find(
-    a =>
-      TypeGuards.isBinaryExpression(a) &&
-      a.getOperatorToken().getText() === '+' &&
-      (isString(a.getLeft(), tc) || isString(a.getRight(), tc))
+export function stringConcatenationToTemplateExpression(node: Node, tc: TypeChecker) {
+  let innerStringConcatExpr = [node, ...node.getAncestors()].find(n =>
+    stringConcatenationNodePredicate(n, tc)
   ) as BinaryExpression
   // now we look the more leftest child to start with it
   let expr = innerStringConcatExpr
-  while ((expr = expr.getLeft() as BinaryExpression) && TypeGuards.isBinaryExpression(expr)) {
+  while (expr && (expr = expr.getLeft() as BinaryExpression) && TypeGuards.isBinaryExpression(expr)) {
     innerStringConcatExpr = expr
   }
   if (!innerStringConcatExpr) {
     throw 'changeConcatenationToTemplate aborted - no outerStringConcatExpression found'
   }
   stringConcatenation2TemplateExpressionRecursively(innerStringConcatExpr, tc)
+}
+
+function stringConcatenationNodePredicate(a: Node, tc: TypeChecker) {
+  return (
+    TypeGuards.isBinaryExpression(a) &&
+    a.getOperatorToken().getText() === '+' &&
+    (isString(a.getLeft(), tc) || isString(a.getRight(), tc))
+  )
 }
 
 let exprBuffer: string[] = []
@@ -57,6 +71,7 @@ function expression2String(expr: Expression): string {
   }
 }
 
+// TODO: do this better, don't think passing tc is necessary.
 function isString(expr: Expression, tc: TypeChecker): boolean {
   const t = tc.getTypeAtLocation(expr)
   return t.isStringLiteral()

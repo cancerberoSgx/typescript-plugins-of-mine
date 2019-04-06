@@ -5,17 +5,30 @@ type Quote = "'" | '"'
 interface Config {
   quote?: Quote
   wrapStringConcatenationWithParenthesis?: boolean
+  dontThrowOnNotFound?: boolean
 }
 
 /**
+ * Transform all template expressions to string concatenations in given node descendants.
+ */
+export function templatesToStringConcatenations(node: Node, config: Config = {}) {
+  let c: Node | undefined
+  while ((c = node.getFirstDescendant(d => !!templateToStringConcatenationFind(d)))) {
+    templateToStringConcatenation(c, config, true)
+  }
+}
+
+function templateToStringConcatenationFind(node: Node) {
+  return TypeGuards.isNoSubstitutionTemplateLiteral(node) || TypeGuards.isTemplateExpression(node)
+    ? node
+    : node.getFirstAncestorByKind(ts.SyntaxKind.TemplateExpression)
+}
+/**
  * will transform node's or first ancestor template expression into a string concatenation expression.
  */
-export function templateToStringConcatenation(node: Node, config?: Config) {
+export function templateToStringConcatenation(node: Node, config?: Config, dontFind = false) {
   config = { ...{ quote: '"', wrapStringConcatenationWithParenthesis: false }, ...(config || {}) }
-  const templateExpr =
-    TypeGuards.isNoSubstitutionTemplateLiteral(node) || TypeGuards.isTemplateExpression(node)
-      ? node
-      : node.getFirstAncestorByKind(ts.SyntaxKind.TemplateExpression)
+  const templateExpr = dontFind ? node : templateToStringConcatenationFind(node)
   if (templateExpr && TypeGuards.isTemplateExpression(templateExpr)) {
     let text: string
     if (TypeGuards.isNoSubstitutionTemplateLiteral(templateExpr)) {
