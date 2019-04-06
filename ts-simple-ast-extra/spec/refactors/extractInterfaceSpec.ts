@@ -1,5 +1,6 @@
 import { Project } from 'ts-morph'
 import { extractInterface } from '../../src'
+import { removeWhites } from 'misc-utils-of-mine-generic'
 
 describe('ExtractInterface', () => {
   it('should create an interface from given class with only public members, jsdocs and correct types and type params', () => {
@@ -70,7 +71,3 @@ describe('ExtractInterface', () => {
     )
   })
 })
-
-function removeWhites(s: string) {
-  return s.replace(/[\s\n]+/gm, ' ').trim()
-}
