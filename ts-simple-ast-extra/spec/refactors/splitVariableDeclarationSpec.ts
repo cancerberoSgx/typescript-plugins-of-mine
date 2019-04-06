@@ -1,5 +1,6 @@
 import { Project, SyntaxKind } from 'ts-morph'
 import { splitVariableDeclaration, splitVariableDeclarations } from '../../src'
+
 import { removeWhites } from 'misc-utils-of-mine-generic'
 describe('splitVariableDeclaration', () => {
   describe('splitVariableDeclaration', () => {
@@ -24,7 +25,6 @@ describe('splitVariableDeclaration', () => {
       )
     })
   })
-
   describe('splitVariableDeclarations', () => {
     it('should split all variable declaration lists found on given node descendants into several statements and add types if list variables dont declare any', () => {
       const project = new Project()
