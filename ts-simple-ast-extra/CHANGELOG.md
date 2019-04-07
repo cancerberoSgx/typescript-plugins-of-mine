@@ -29,3 +29,6 @@
 
 # 0.1.1
  * removeAllUnused issue
+
+# 0.1.2
+ * moveDeclaration issue with early removed nodes - imports not being removed in other files

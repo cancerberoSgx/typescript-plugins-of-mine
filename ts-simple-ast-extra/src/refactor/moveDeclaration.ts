@@ -13,7 +13,8 @@ import {
   SyntaxKind,
   TypeAliasDeclaration,
   TypeGuards,
-  VariableDeclaration
+  VariableDeclaration,
+  ImportSpecifier
 } from 'ts-morph'
 import { getNodeLocalNamesNotReferencing } from '..'
 import { notFalsy, notUndefined } from '../misc'
@@ -79,13 +80,54 @@ export function moveDeclaration(options: Options) {
 }
 
 function updateOtherFilesImports(node: Declaration, target: SourceFile, nodeName: Node & NamedNode) {
+  // console.log(nodeName.getSourceFile().getBaseName(), node.getSourceFile()!.getBaseName(), target.getBaseName(), nodeName.getText());
+  
+  const importSpecifiersWithoutDeclarations: ImportSpecifier[] = []
   node
     .findReferences()
     .map(r => r.getDefinition())
+    .map(n=>{
+      if(!n.getDeclarationNode()&& TypeGuards.isIdentifier(n.getNode())){
+        // in this case it cannot find the declaration node, probably because it was already removed ? 
+        // so we remove it here!
+        const is =  n.getNode().getFirstAncestorByKind(SyntaxKind.ImportSpecifier)
+        if(is){
+          importSpecifiersWithoutDeclarations.push(is)
+        //   if(is.getParent()!.getElements().length===1){
+        //     // TODO: support imports like import P, {a} from 'foo' - nex line break them
+        //     const id = is.getFirstAncestorByKind(SyntaxKind.ImportDeclaration)
+        //     if(id){
+        //       id.remove()
+        //     }
+        //   }
+        //   else {
+        //     is.remove()
+        //   }
+          return undefined
+        // }
+      // }
+      // console.log('0', n.getSourceFile().getBaseName(),  n.getSourceFile() !== node.getSourceFile(), n.getSourceFile() !== target, !!n.getDeclarationNode(), n.getNode().getFirstAncestorByKind(SyntaxKind.ImportSpecifier));
+      // return n
+      // return 
+        }
+        else {
+          //TODO: debug / log ? 
+          
+        }
+        return n
+      }
+        return n
+    })
+
+      .filter(notUndefined)
+
     .filter(r => r.getSourceFile() !== target && r.getSourceFile() !== node.getSourceFile())
     .map(d => d.getDeclarationNode())
     .filter(notFalsy)
+   
     .filter(TypeGuards.isImportSpecifier)
+    .concat(importSpecifiersWithoutDeclarations)
+    .filter((n,i,a)=>a.indexOf(n)===i) // dedup
     .forEach(d => {
       ensureImport(
         d.getSourceFile(),
@@ -96,21 +138,25 @@ function updateOtherFilesImports(node: Declaration, target: SourceFile, nodeName
       if (
         d.getParent()!.getElements().length <= 1 &&
         !d
-          .getParent()
+          .getParent() // TODO: use getAncestorByKind
           .getParent()
           .getParent()
           .getDefaultImport() &&
         !d
-          .getParent()
+          .getParent()// TODO: use getAncestorByKind
           .getParent()
           .getParent()
           .getNamespaceImport()
       ) {
-        d.getParent()
+        // console.log('1', d.getSourceFile().getBaseName());
+        
+        d.getParent()// TODO: use getAncestorByKind
           .getParent()
           .getParent()
           .remove()
       } else {
+        // console.log('2', d.getSourceFile().getBaseName());
+
         d.remove()
       }
     })
