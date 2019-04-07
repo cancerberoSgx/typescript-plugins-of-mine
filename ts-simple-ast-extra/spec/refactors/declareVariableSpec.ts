@@ -42,7 +42,7 @@ describe('declareVariable', () => {
   })
 
   describe('declareVariables', () => {
-    it('should declare a functions and variables missing in a file', () => {
+    it('should declare functions and variables missing in a file', () => {
       const project = new Project()
       const f = project.createSourceFile(
         'test.ts',
