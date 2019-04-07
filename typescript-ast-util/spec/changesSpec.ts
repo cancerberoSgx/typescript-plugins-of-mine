@@ -1,7 +1,5 @@
-import * as ts from "typescript";
-import { compileProject, createProgram } from "../src";
-import { diffAndCreateTextChanges, getTextFromFormattingEdits, changeText } from '../src/changes';
-import {Project, FileTextChanges, TextChange} from 'ts-simple-ast'
+import { Project, TextChange } from 'ts-morph';
+import { changeText, diffAndCreateTextChanges, getTextFromFormattingEdits } from '../src/changes';
 
 describe('diffAndCreateTextChanges', () => {
   function test(s1: string, s2: string){

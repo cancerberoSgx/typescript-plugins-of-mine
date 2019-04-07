@@ -1,6 +1,5 @@
 import * as diff from 'diff';
 import { SourceFile, TextChange, TextSpan } from 'typescript';
-// import { TextSpan } from 'ts-simple-ast';
 
 /** Taken from ts-simple-ast - TODO: it behaves differently than  ts.LanguageService's getCompletionEntryDetails or getEditsForRefactor - for it to work you will need to  `reverse()`  the edits*/
 export function getTextFromFormattingEdits(sourceFile: SourceFile | string, textChanges: ReadonlyArray<TextChange>) {
@@ -22,10 +21,10 @@ export function getTextFromFormattingEdits(sourceFile: SourceFile | string, text
 export function diffAndCreateTextChanges(s1: string, s2: string): TextChange[] {
   const result: TextChange[] = []
 
-  diff.structuredPatch('f1', 'f2', s1, s2, '', '').hunks.map(hunk => {
+  diff.structuredPatch('f1', 'f2', s1, s2, '', '').hunks.map((hunk: any) => {
     let index = 0
 
-    hunk.lines.map(line => {
+    hunk.lines.map((line: string) => {
       const add = line.startsWith('+')
       const deletion = line.startsWith('-')
       const s = line.substring(1, line.length) + '\n'
