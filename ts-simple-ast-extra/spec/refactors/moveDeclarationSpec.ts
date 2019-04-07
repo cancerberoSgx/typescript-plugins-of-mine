@@ -318,37 +318,45 @@ describe('moveDeclaration', () => {
   })
 
   it('should support a simple case with three files', () => {
-
     const { project, f1, f2, f3 } = createProject(
-      [`decl1.ts`, `
+      [
+        `decl1.ts`,
+        `
       export function f(a: string) { 
         return a + b(a) 
       }
       import { b } from './decl2'
-    `],
-      [`decl2.ts`, `
+    `
+      ],
+      [
+        `decl2.ts`,
+        `
       export function b(a: string) {
         return b
       }
-      `],
-      [`decl3.ts`, `
+      `
+      ],
+      [
+        `decl3.ts`,
+        `
       import { b } from './decl2'
       import { f } from './decl1'
       export class CCCC {
         m() {
           return b('asd') + f('asd')
         }
-      }`]
+      }`
+      ]
     )
     moveDeclaration({
       declaration: f2.getFunctionOrThrow('b'),
       target: f1
     })
-//     console.log(`
-// ${f1.getText()}
-// ${f2.getText()}
-// ${f3.getText()}
-// `)
+    //     console.log(`
+    // ${f1.getText()}
+    // ${f2.getText()}
+    // ${f3.getText()}
+    // `)
     expectNoErrors(project)
     expect(removeWhites(f1.getText())).toBe(
       removeWhites(`
