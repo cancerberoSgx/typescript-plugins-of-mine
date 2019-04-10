@@ -1,4 +1,4 @@
-import { Node } from 'ts-morph'
+import { Node, TypeGuards } from 'ts-morph'
 
 /**
  * like Node.getChildren but using forEachChild(). TODO: perhaps is a good idea to add a useForEachChild to
@@ -8,6 +8,15 @@ export function getChildrenForEachChild(n: Node): Node[] {
   const result: Node[] = []
   n.forEachChild(n => result.push(n))
   return result
+}
+/**
+ * Similar to  getChildren() but, if one of child is SyntaxList, it will return the syntax list getChildren() instead of it. This is to be coherent with getParent() where rotNode.getParent()===SourceFile but rootNode.getParent().getChildren() will be [SyntaxList, EndOfFileToken]
+ */
+export function getChildrenByPassSyntaxList(n: Node): Node[] {
+  return n
+    .getChildren()
+    .map(c => (TypeGuards.isSyntaxList(c) ? c.getChildren() : [c]))
+    .flat()
 }
 
 /**

@@ -23,6 +23,7 @@ describe('declareVariable', () => {
         )
       )
     })
+
     it('should declare a add let to a non declared variable assignation', () => {
       const project = new Project()
       const f = project.createSourceFile('test.ts', `a = [1,2]`)

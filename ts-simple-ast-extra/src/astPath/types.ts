@@ -2,9 +2,7 @@ import { SyntaxKind } from 'ts-morph'
 
 export interface BuildAstPathOptions {
   /**
-   * TODO
-   *
-   * Mode on which node's children are obtained (i.e.) `getChildren()` vs `forEachChildren()`.
+   * Mode on which node's children are obtained (i.e.) `getChildren()` vs `forEachChildren()`. Default value: `forEachChildren()`
    */
   mode?: 'getChildren' | 'forEachChildren'
   /**

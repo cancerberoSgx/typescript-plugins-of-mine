@@ -1,4 +1,4 @@
-import { ClassDeclaration, ExpressionWithTypeArguments, InterfaceDeclaration, Node, TypeGuards } from 'ts-morph'
+import { ClassDeclaration, ExpressionWithTypeArguments, InterfaceDeclaration, Node, TypeGuards, ts } from 'ts-morph'
 import { notUndefined } from './misc'
 /**
  * Returns all implements clauses of this class and its super classes both things recursively
@@ -100,4 +100,18 @@ export function isDeclaration(n: Node) {
     TypeGuards.isConstructSignatureDeclaration(n) ||
     TypeGuards.isMethodSignature(n)
   )
+}
+
+/** get the kind name as string of given kind value or node */
+export function getKindName(kind: number | ts.Node): string {
+  return kind || kind === 0 ? getEnumKey(ts.SyntaxKind, (kind as ts.Node).kind || kind) : 'undefined'
+}
+
+export function getEnumKey(anEnum: any, value: any): string {
+  for (const key in anEnum) {
+    if (value === anEnum[key]) {
+      return key
+    }
+  }
+  return ''
 }

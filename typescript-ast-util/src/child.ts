@@ -155,6 +155,13 @@ export function getNextSibling(node: ts.Node, getChildrenMode: boolean = false):
 /**
  * @param getChildrenMode if true it will use `node.getChildren()` o obtain children instead of default behavior that is using `node.forEachChild`
  */
+export function getSiblings(node: ts.Node, getChildrenMode: boolean = false): ts.Node[] {
+ return getChildren(node.parent, getChildrenMode).filter(c=>c!==node)
+}
+
+/**
+ * @param getChildrenMode if true it will use `node.getChildren()` o obtain children instead of default behavior that is using `node.forEachChild`
+ */
 export function getPreviousSibling(node: ts.Node, getChildrenMode: boolean = false): ts.Node | undefined {
   const children = getChildren(node.parent, getChildrenMode)
   const index = getChildIndex(node, getChildrenMode, children)

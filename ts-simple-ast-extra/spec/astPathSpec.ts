@@ -1,7 +1,7 @@
 import { Identifier, Project, TypeGuards } from 'ts-morph'
-import { buildAstPath, selectNode } from '../src'
+import { buildAstPath, selectNode, printAstPath, getKindName } from '../src'
 
-describe('ExtractInterface', () => {
+describe('astPath', () => {
   it('Should create astPath for a node and be able to select it from a SourceFile copy', () => {
     const project = new Project()
     const f = project.createSourceFile(
@@ -33,6 +33,42 @@ describe('ExtractInterface', () => {
     expect(n2!.getText()).toBe('aVariable1')
   })
 
+  it("should select SourceFile's children", () => {
+    const project = new Project()
+    const f = project.createSourceFile(
+      'test.ts',
+      `
+      class A {}
+      function f(){}
+      interface I {}`
+    )!
+    const n = f.getInterface('I')!
+    const sel = buildAstPath(n, undefined, { includeNodeKind: true })
+    expect(sel.path.map(p => p.index + ' - ' + getKindName(p.nodeKind!))).toEqual([
+      '0 - SourceFile',
+      '2 - InterfaceDeclaration'
+    ])
+    expect(selectNode(sel, f)!.getKindName()).toBe('InterfaceDeclaration')
+  })
+
+  it('should build selector and select using mode===getChildren', () => {
+    const project = new Project()
+    const f = project.createSourceFile(
+      'test.ts',
+      `
+      class A {}
+      function f(){}
+      interface I {}`
+    )!
+    const n = f.getInterface('I')!
+    const sel = buildAstPath(n, undefined, { includeNodeKind: true, mode: 'getChildren' })
+    expect(sel.path.map(p => p.index + ' - ' + getKindName(p.nodeKind!))).toEqual([
+      '0 - SourceFile',
+      '2 - InterfaceDeclaration'
+    ])
+    expect(selectNode(sel, f)!.getKindName()).toBe('InterfaceDeclaration')
+  })
+
   it('Should select another thing if structure changed', () => {
     const project = new Project()
     const f = project.createSourceFile(
@@ -46,8 +82,9 @@ describe('ExtractInterface', () => {
       .getDescendants()
       .filter(TypeGuards.isIdentifier)
       .find(i => i.getText() === 'aParameter1')!
-    const sel = buildAstPath(n)
+    const sel = buildAstPath(n, undefined, { includeNodeKind: true })
     expect(selectNode<Identifier>(sel, f)!.getText()).toBe('aParameter1')
+
     const f2 = project.createSourceFile(
       'test2.ts',
       `
@@ -65,7 +102,8 @@ describe('ExtractInterface', () => {
       `
       interface I<T=any>{
         m(i: number, g: (aParameter1: number)=>void)
-      }`
+      }
+      `
     )!
     const n = f
       .getDescendants()
@@ -73,6 +111,9 @@ describe('ExtractInterface', () => {
       .find(i => i.getText() === 'aParameter1')!
     const sel = buildAstPath(n)
     expect(selectNode<Identifier>(sel, f)!.getText()).toBe('aParameter1')
+    const sel2 = buildAstPath(n, undefined, { includeNodeKind: true, mode: 'getChildren' })
+    expect(selectNode<Identifier>(sel2, f)!.getText()).toBe('aParameter1')
+
     const f2 = project.createSourceFile(
       'test2.ts',
       `
@@ -81,6 +122,26 @@ describe('ExtractInterface', () => {
       }`
     )
     expect(selectNode<Identifier>(sel, f2)!.getText()).toBe('newParameter1')
+  })
+
+  it('Should print path with ancestors syntax kind and index', () => {
+    const project = new Project()
+    const f = project.createSourceFile(
+      'test.ts',
+      `
+      interface I<T=any>{
+        m(i: number, g: (aParameter1: number)=>void)
+      }
+      `
+    )!
+    const n = f
+      .getDescendants()
+      .filter(TypeGuards.isIdentifier)
+      .find(i => i.getText() === 'aParameter1')!
+    const sel = buildAstPath(n, n.getSourceFile(), { includeNodeKind: true })
+    expect(printAstPath(sel)).toBe(
+      'SourceFile>InterfaceDeclaration:nth-child(0)>MethodSignature:nth-child(2)>Parameter:nth-child(2)>FunctionType:nth-child(1)>Parameter:nth-child(0)>Identifier:nth-child(0)'
+    )
   })
 
   xit('Should fail to select if verifyNodeKind is provided and structure is the same but some node kind changed in the path', () => {})

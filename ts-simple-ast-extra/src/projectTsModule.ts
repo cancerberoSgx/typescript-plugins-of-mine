@@ -3,7 +3,7 @@
 import { basename } from 'path'
 import Project, { ProjectOptions } from 'ts-morph'
 import * as ts_module from 'typescript/lib/tsserverlibrary'
-import { buildManipulationSettings } from './projectClient'
+import { buildManipulationSettings } from './compilerOptions'
 
 /** gets the config file of given ts project or undefined if given is not a ConfiguredProject or tsconfig
  * cannot be found */
