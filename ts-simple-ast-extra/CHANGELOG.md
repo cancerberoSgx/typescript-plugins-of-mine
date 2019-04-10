@@ -32,3 +32,9 @@
 
 # 0.1.2
  * moveDeclaration issue with early removed nodes - imports not being removed in other files
+
+# 
+ * generalNode, fileNode
+ * astPath fix
+ * astPath support for mode (getChildren vs forEachhild)
+ * remove node.js dependency

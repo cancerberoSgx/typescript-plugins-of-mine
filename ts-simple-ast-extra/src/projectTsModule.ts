@@ -1,12 +1,14 @@
 // warning: this won't work on the client side - it's for typescript compiler plugin API - node.js only . TODO: remove to another package so this works 100% on the client side
 
-import { basename } from 'path'
-import Project, { ProjectOptions } from 'ts-morph'
+import {ts, Project, ProjectOptions } from 'ts-morph'
 import * as ts_module from 'typescript/lib/tsserverlibrary'
 import { buildManipulationSettings } from './compilerOptions'
+import { basename } from 'misc-utils-of-mine-generic';
 
-/** gets the config file of given ts project or undefined if given is not a ConfiguredProject or tsconfig
- * cannot be found */
+/** 
+ * Gets the config file of given ts project or undefined if given is not a ConfiguredProject or tsconfig
+ * cannot be found 
+ */
 export function getConfigFilePath(project: ts_module.server.Project): string | undefined {
   if ((project as ts_module.server.ConfiguredProject).getConfigFilePath) {
     return (project as ts_module.server.ConfiguredProject).getConfigFilePath()
@@ -37,12 +39,16 @@ export function createSimpleASTProject(
   return project
 }
 
-// TODO: encapsulate simple project creation here so we can start testing caching the project and refreshing
-// it instead of fully create it
+/**
+ * creates a ts-morph Project from given internal ts_module.server Project instance
+ * 
+ * TODO: encapsulate simple project creation here so we can start testing caching the project and refreshing it 
+ * instead of fully create it
+ */
 export function getSimpleProject(
   project: ts_module.server.Project,
-  formatOptions?: ts.FormatCodeSettings,
-  userPreferences?: ts_module.UserPreferences
+  formatOptions: ts.FormatCodeSettings={},
+  userPreferences: ts_module.UserPreferences={}
 ): Project {
   // TODO: try to cache and do unit test simulating TLS if(!simpleProject){
   let tsConfigPath: string = getConfigFilePath(project)!
