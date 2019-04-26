@@ -244,7 +244,7 @@ function addDeclaration(node: Declaration, target: SourceFile) {
   } else if (TypeGuards.isEnumDeclaration(node)) {
     target.insertEnum(index, node.getStructure())
   } else if (TypeGuards.isFunctionDeclaration(node)) {
-    target.insertFunction(index, node.getStructure())
+    target.insertFunction(index, node.getStructure() as any) // TODO: could be an overload!
   } else if (TypeGuards.isTypeAliasDeclaration(node)) {
     target.insertTypeAlias(index, node.getStructure())
   } else {

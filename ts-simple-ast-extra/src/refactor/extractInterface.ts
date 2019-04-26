@@ -6,7 +6,8 @@ import {
   PropertySignatureStructure,
   StatementedNode,
   SyntaxKind,
-  TypeGuards
+  TypeGuards,
+  StructureKind
 } from 'ts-morph'
 import { getImplementsAll } from '../types'
 
@@ -19,6 +20,7 @@ export function extractInterface(
   const structure: InterfaceDeclarationStructure = {
     name: interfaceName,
     methods: [],
+    kind: StructureKind.Interface,
     properties: [],
     constructSignatures: [],
     callSignatures: [],
@@ -41,6 +43,7 @@ export function extractInterface(
       }
       if (TypeGuards.isMethodDeclaration(member)) {
         const methodSignature: MethodSignatureStructure = {
+          kind: StructureKind.MethodSignature,
           typeParameters: member.getTypeParameters().map(p => p.getStructure()),
           docs: member.getJsDocs().length ? member.getJsDocs().map(d => d.getStructure()) : ['TODO: Document'],
           hasQuestionToken: member.hasQuestionToken(),
@@ -55,6 +58,7 @@ export function extractInterface(
       }
       if (TypeGuards.isPropertyDeclaration(member)) {
         const propertySignature: PropertySignatureStructure = {
+          kind: StructureKind.PropertySignature,
           docs: member.getJsDocs().length ? member.getJsDocs().map(d => d.getStructure()) : ['TODO: Document'],
           hasQuestionToken: member.hasQuestionToken(),
           name: member.getName(),
@@ -67,6 +71,7 @@ export function extractInterface(
       }
       if (TypeGuards.isConstructorDeclaration(member)) {
         const constructorSignature: ConstructorDeclarationStructure = {
+          kind: StructureKind.Constructor,
           typeParameters: member.getTypeParameters().map(p => p.getStructure()),
           docs: member.getJsDocs().length ? member.getJsDocs().map(d => d.getStructure()) : ['TODO: Document'],
           parameters: member.getParameters().map(p => p.getStructure()),
@@ -75,7 +80,7 @@ export function extractInterface(
             .getBaseTypeOfLiteralType()
             .getText()
         }
-        structure.constructSignatures!.push(constructorSignature)
+        structure.constructSignatures!.push(constructorSignature as any) // TODO: report issue to ts-morph
       }
     })
 

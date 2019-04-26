@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>&quot;refactor/convertImports&quot; | ts-simple-ast-extra</title>
+	<title>&quot;generalNode&quot; | ts-simple-ast-extra</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,10 +56,10 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="_refactor_convertimports_.html">&quot;refactor/convertImports&quot;</a>
+					<a href="_generalnode_.html">&quot;generalNode&quot;</a>
 				</li>
 			</ul>
-			<h1>External module &quot;refactor/convertImports&quot;</h1>
+			<h1>External module &quot;generalNode&quot;</h1>
 		</div>
 	</div>
 </header>
@@ -71,71 +71,131 @@
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section tsd-is-external">
+							<h3>Type aliases</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-type-alias tsd-parent-kind-external-module tsd-is-external"><a href="_generalnode_.html#generalnode" class="tsd-kind-icon">General<wbr>Node</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section tsd-is-external">
 							<h3>Functions</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-external"><a href="_refactor_convertimports_.html#convertnamedimportstonamespaceimport" class="tsd-kind-icon">convert<wbr>Named<wbr>Imports<wbr>ToNamespace<wbr>Import</a></li>
-								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-external"><a href="_refactor_convertimports_.html#convertnamespaceimporttonamedimports" class="tsd-kind-icon">convert<wbr>Namespace<wbr>Import<wbr>ToNamed<wbr>Imports</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-external"><a href="_generalnode_.html#getgeneralnodechildren" class="tsd-kind-icon">get<wbr>General<wbr>Node<wbr>Children</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-external"><a href="_generalnode_.html#getgeneralnodeparent" class="tsd-kind-icon">get<wbr>General<wbr>Node<wbr>Parent</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-external"><a href="_generalnode_.html#getgeneralnodepath" class="tsd-kind-icon">get<wbr>General<wbr>Node<wbr>Path</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group tsd-is-external">
+				<h2>Type aliases</h2>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-external-module tsd-is-external">
+					<a name="generalnode" class="tsd-anchor"></a>
+					<h3>General<wbr>Node</h3>
+					<div class="tsd-signature tsd-kind-icon">General<wbr>Node<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Node</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Directory</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/b2a6169/ts-simple-ast-extra/src/generalNode.ts#L11">generalNode.ts:11</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>General definition of nodes that contemplate everything, directories, sourceFiles, and nodes, with a common minimal API</p>
+						</div>
+					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group tsd-is-external">
 				<h2>Functions</h2>
 				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
-					<a name="convertnamedimportstonamespaceimport" class="tsd-anchor"></a>
-					<h3>convert<wbr>Named<wbr>Imports<wbr>ToNamespace<wbr>Import</h3>
+					<a name="getgeneralnodechildren" class="tsd-anchor"></a>
+					<h3>get<wbr>General<wbr>Node<wbr>Children</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">convert<wbr>Named<wbr>Imports<wbr>ToNamespace<wbr>Import<span class="tsd-signature-symbol">(</span>project<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Project</span>, node<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Node</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="../interfaces/_refactor_changes_.applyfiletextchangesresult.html" class="tsd-signature-type">ApplyFileTextChangesResult</a></li>
+						<li class="tsd-signature tsd-kind-icon">get<wbr>General<wbr>Node<wbr>Children<span class="tsd-signature-symbol">(</span>f<span class="tsd-signature-symbol">: </span><a href="_generalnode_.html#generalnode" class="tsd-signature-type">GeneralNode</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_generalnode_.html#generalnode" class="tsd-signature-type">GeneralNode</a><span class="tsd-signature-symbol">[]</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/b2a6169/ts-simple-ast-extra/src/refactor/convertImports.ts#L21">refactor/convertImports.ts:21</a></li>
+									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/b2a6169/ts-simple-ast-extra/src/generalNode.ts#L16">generalNode.ts:16</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns immediate children. In case of Nodes, children are obtained using forEachChild instead of getChildren method</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>project: <span class="tsd-signature-type">Project</span></h5>
-								</li>
-								<li>
-									<h5>node: <span class="tsd-signature-type">Node</span></h5>
+									<h5>f: <a href="_generalnode_.html#generalnode" class="tsd-signature-type">GeneralNode</a></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">undefined</span>
+							<h4 class="tsd-returns-title">Returns <a href="_generalnode_.html#generalnode" class="tsd-signature-type">GeneralNode</a><span class="tsd-signature-symbol">[]</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
+					<a name="getgeneralnodeparent" class="tsd-anchor"></a>
+					<h3>get<wbr>General<wbr>Node<wbr>Parent</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>General<wbr>Node<wbr>Parent<span class="tsd-signature-symbol">(</span>f<span class="tsd-signature-symbol">: </span><a href="_generalnode_.html#generalnode" class="tsd-signature-type">GeneralNode</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_generalnode_.html#generalnode" class="tsd-signature-type">GeneralNode</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/b2a6169/ts-simple-ast-extra/src/generalNode.ts#L25">generalNode.ts:25</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>get general node&#39;s parent</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>f: <a href="_generalnode_.html#generalnode" class="tsd-signature-type">GeneralNode</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="_generalnode_.html#generalnode" class="tsd-signature-type">GeneralNode</a>
 								<span class="tsd-signature-symbol"> | </span>
-								<a href="../interfaces/_refactor_changes_.applyfiletextchangesresult.html" class="tsd-signature-type">ApplyFileTextChangesResult</a>
+								<span class="tsd-signature-type">undefined</span>
 							</h4>
 						</li>
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
-					<a name="convertnamespaceimporttonamedimports" class="tsd-anchor"></a>
-					<h3>convert<wbr>Namespace<wbr>Import<wbr>ToNamed<wbr>Imports</h3>
+					<a name="getgeneralnodepath" class="tsd-anchor"></a>
+					<h3>get<wbr>General<wbr>Node<wbr>Path</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">convert<wbr>Namespace<wbr>Import<wbr>ToNamed<wbr>Imports<span class="tsd-signature-symbol">(</span>project<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Project</span>, node<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Node</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="../interfaces/_refactor_changes_.applyfiletextchangesresult.html" class="tsd-signature-type">ApplyFileTextChangesResult</a></li>
+						<li class="tsd-signature tsd-kind-icon">get<wbr>General<wbr>Node<wbr>Path<span class="tsd-signature-symbol">(</span>f<span class="tsd-signature-symbol">: </span><a href="_generalnode_.html#generalnode" class="tsd-signature-type">GeneralNode</a>, relativeTo<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/b2a6169/ts-simple-ast-extra/src/refactor/convertImports.ts#L4">refactor/convertImports.ts:4</a></li>
+									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/b2a6169/ts-simple-ast-extra/src/generalNode.ts#L32">generalNode.ts:32</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Directories and SourceFile path is given by getPath* methods. For nodes we use AstPath for defining their path.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>project: <span class="tsd-signature-type">Project</span></h5>
+									<h5>f: <a href="_generalnode_.html#generalnode" class="tsd-signature-type">GeneralNode</a></h5>
 								</li>
 								<li>
-									<h5>node: <span class="tsd-signature-type">Node</span></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> relativeTo: <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">undefined</span>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span>
 								<span class="tsd-signature-symbol"> | </span>
-								<a href="../interfaces/_refactor_changes_.applyfiletextchangesresult.html" class="tsd-signature-type">ApplyFileTextChangesResult</a>
+								<span class="tsd-signature-type">undefined</span>
 							</h4>
 						</li>
 					</ul>
@@ -149,17 +209,23 @@
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
 					<li class="current tsd-kind-external-module tsd-is-external">
-						<a href="_refactor_convertimports_.html">"refactor/convert<wbr>Imports"</a>
+						<a href="_generalnode_.html">"general<wbr>Node"</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
-						<a href="_refactor_convertimports_.html#convertnamedimportstonamespaceimport" class="tsd-kind-icon">convert<wbr>Named<wbr>Imports<wbr>ToNamespace<wbr>Import</a>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module tsd-is-external">
+						<a href="_generalnode_.html#generalnode" class="tsd-kind-icon">General<wbr>Node</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
-						<a href="_refactor_convertimports_.html#convertnamespaceimporttonamedimports" class="tsd-kind-icon">convert<wbr>Namespace<wbr>Import<wbr>ToNamed<wbr>Imports</a>
+						<a href="_generalnode_.html#getgeneralnodechildren" class="tsd-kind-icon">get<wbr>General<wbr>Node<wbr>Children</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
+						<a href="_generalnode_.html#getgeneralnodeparent" class="tsd-kind-icon">get<wbr>General<wbr>Node<wbr>Parent</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
+						<a href="_generalnode_.html#getgeneralnodepath" class="tsd-kind-icon">get<wbr>General<wbr>Node<wbr>Path</a>
 					</li>
 				</ul>
 			</nav>

@@ -10,5 +10,5 @@ export function removeAllUnused(
   const fix = project
     .getLanguageService()
     .getCombinedCodeFix(file, 'unusedIdentifier_delete', formatSettings, userPreferences)
-  project.applyFileTextChanges(fix.getChanges())
+  fix.getChanges().forEach(c => c.applyChanges({ overwrite: true }))
 }

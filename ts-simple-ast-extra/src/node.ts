@@ -1,4 +1,4 @@
-import { Node, TypeGuards } from 'ts-morph'
+import { Node, TypeGuards, SourceFile, Directory } from 'ts-morph'
 
 /**
  * like Node.getChildren but using forEachChild(). TODO: perhaps is a good idea to add a useForEachChild to
@@ -9,6 +9,7 @@ export function getChildrenForEachChild(n: Node): Node[] {
   n.forEachChild(n => result.push(n))
   return result
 }
+
 /**
  * Similar to  getChildren() but, if one of child is SyntaxList, it will return the syntax list getChildren() instead of it. This is to be coherent with getParent() where rotNode.getParent()===SourceFile but rootNode.getParent().getChildren() will be [SyntaxList, EndOfFileToken]
  */
@@ -20,11 +21,14 @@ export function getChildrenByPassSyntaxList(n: Node): Node[] {
 }
 
 /**
- *  try to call n.getName or returns empty string if there is no such method
- *  @param n
+ *  Try to call n.getName or returns empty string if there is no such method
  */
-export function getName(n: Node): string {
-  return (n as any).getName ? (n as any).getName() + '' : ''
+export function getName(n: Node) {
+  try {
+    return TypeGuards.hasName(n) ? n.getName() : undefined
+  } catch (error) {
+    return undefined
+  }
 }
 
 /**
@@ -64,4 +68,12 @@ export function visitChildrenRecursiveDeepFirst(
 
 export function isNode(n: any): n is Node {
   return n && typeof n.getText === 'function' && typeof n.getKindName === 'function'
+}
+
+export function isSourceFile(f: any): f is SourceFile {
+  return f && f.organizeImports
+}
+
+export function isDirectory(f: any): f is Directory {
+  return f && f.getDescendantSourceFiles && f.getDescendantDirectories
 }

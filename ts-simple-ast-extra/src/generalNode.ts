@@ -1,7 +1,7 @@
 import { Directory, Node } from 'ts-morph'
 import { getChildrenForEachChild, buildAstPath } from '.'
 import { printAstPath } from './astPath'
-import { isDirectory, isSourceFile } from './project'
+import { isDirectory, isSourceFile } from './node'
 import { getFilePath } from './fileNode'
 import { getRelativePath } from 'misc-utils-of-mine-generic'
 

@@ -276,7 +276,7 @@ describe('moveDeclaration', () => {
     expect(removeWhites(f2.getText())).toBe(
       removeWhites(`
       export enum E {
-        a = "a"
+        a = 'a'
       }
       export const a = 1
     `)

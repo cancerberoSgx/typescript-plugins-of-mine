@@ -93,7 +93,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/969dfdb/ts-simple-ast-extra/src/projectTsModule.ts#L25">projectTsModule.ts:25</a></li>
+									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/b2a6169/ts-simple-ast-extra/src/projectTsModule.ts#L27">projectTsModule.ts:27</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -129,12 +129,12 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/969dfdb/ts-simple-ast-extra/src/projectTsModule.ts#L10">projectTsModule.ts:10</a></li>
+									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/b2a6169/ts-simple-ast-extra/src/projectTsModule.ts#L12">projectTsModule.ts:12</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>gets the config file of given ts project or undefined if given is not a ConfiguredProject or tsconfig
+									<p>Gets the config file of given ts project or undefined if given is not a ConfiguredProject or tsconfig
 									cannot be found</p>
 								</div>
 							</div>
@@ -155,25 +155,32 @@
 					<a name="getsimpleproject" class="tsd-anchor"></a>
 					<h3>get<wbr>Simple<wbr>Project</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Simple<wbr>Project<span class="tsd-signature-symbol">(</span>project<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ts_module.server.Project</span>, formatOptions<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">ts.FormatCodeSettings</span>, userPreferences<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">ts_module.UserPreferences</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Project</span></li>
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Simple<wbr>Project<span class="tsd-signature-symbol">(</span>project<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ts_module.server.Project</span>, formatOptions<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">FormatCodeSettings</span>, userPreferences<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">ts_module.UserPreferences</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Project</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/969dfdb/ts-simple-ast-extra/src/projectTsModule.ts#L42">projectTsModule.ts:42</a></li>
+									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/b2a6169/ts-simple-ast-extra/src/projectTsModule.ts#L48">projectTsModule.ts:48</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>creates a ts-morph Project from given internal ts_module.server Project instance</p>
+								</div>
+								<p>TODO: encapsulate simple project creation here so we can start testing caching the project and refreshing it
+								instead of fully create it</p>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>project: <span class="tsd-signature-type">ts_module.server.Project</span></h5>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> formatOptions: <span class="tsd-signature-type">ts.FormatCodeSettings</span></h5>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> formatOptions: <span class="tsd-signature-type">FormatCodeSettings</span><span class="tsd-signature-symbol"> =&nbsp;{}</span></h5>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> userPreferences: <span class="tsd-signature-type">ts_module.UserPreferences</span></h5>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> userPreferences: <span class="tsd-signature-type">ts_module.UserPreferences</span><span class="tsd-signature-symbol"> =&nbsp;{}</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Project</span></h4>

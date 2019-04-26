@@ -33,8 +33,13 @@
 # 0.1.2
  * moveDeclaration issue with early removed nodes - imports not being removed in other files
 
-# 
+# 0.1.4
  * generalNode, fileNode
  * astPath fix
  * astPath support for mode (getChildren vs forEachhild)
  * remove node.js dependency
+
+# 0.1.5
+
+ * updates dependencies 
+ * updates ts-morph 2.1

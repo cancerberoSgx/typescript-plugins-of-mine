@@ -1,5 +1,5 @@
 import { Directory, Project, SourceFile } from 'ts-morph'
-import { isSourceFile } from './project'
+import { isSourceFile } from './node'
 
 /**
  * A general File definition that includes SourceFiles and Directories with common minimal API
@@ -17,4 +17,14 @@ export function getParent(f: File): File | undefined {
 
 export function getFilePath(f: File) {
   return isSourceFile(f) ? f.getFilePath() : f.getPath()
+}
+
+export function checkFilesInProject(files: (File)[], project: Project) {
+  files.forEach(file => {
+    if (isSourceFile(file) && !project.getSourceFile(file.getFilePath())) {
+      throw `File ${file.getFilePath()} not found in project`
+    } else if (!isSourceFile(file) && !project.getDirectory(file.getPath())) {
+      throw `Directory ${file.getPath()} not found in project`
+    }
+  })
 }
