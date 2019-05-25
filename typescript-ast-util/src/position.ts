@@ -1,6 +1,6 @@
 import * as ts from 'typescript';
 import { getKindName } from './types';
-import { findAscendant } from './child';
+import { findAscendant } from './node';
 // position & range helpers
 /** given a positionOrRange (common when developing LanguageServicePlugins) it will return en equivalent Range  */
 export function positionOrRangeToRange(positionOrRange: number | ts.TextRange): ts.TextRange {

@@ -9,7 +9,6 @@ I feel that I'm collecting utilities used in several plugins so I'm putting them
 
 # TODO
 
- * remove shelljs dependency so we can use this in the browser
  * rename / alias findChild to findDescendant
  * remove / investigate / rename / better jssdoc for findChild2()
  * document createProgram and other utilities

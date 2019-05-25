@@ -1,4 +1,4 @@
-export * from './child'
+export * from './node'
 export * from './position'
 export * from './types'
 export * from './compiler'

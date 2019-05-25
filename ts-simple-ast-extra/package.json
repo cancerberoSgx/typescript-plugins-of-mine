@@ -6,7 +6,8 @@
   "typings": "dist/src/index.d.ts",
   "scripts": {
     "test": "ts-node node_modules/jasmine/bin/jasmine --stop-on-failure=true --fail-fast=true",
-    "test-debug": "ts-node node_modules/jasmine/bin/jasmine --invert --inspect-brk",
+    "test-debug": "node --inspect-brk node_modules/ts-node/dist/bin node_modules/jasmine/bin/jasmine.js",
+
     "build": "tsc",
     "prepare": "npm run build",
     "clean": "rm -rf dist",

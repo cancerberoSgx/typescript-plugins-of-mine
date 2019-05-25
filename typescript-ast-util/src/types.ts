@@ -2,7 +2,7 @@
 
 import * as ts from 'typescript';
 import { isDeclaration } from '.';
-import { findChild } from './child';
+import { findChild } from './node';
 
 
 /** get the kind name as string of given kind value or node */

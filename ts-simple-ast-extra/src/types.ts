@@ -33,7 +33,6 @@ export const getImplementsAll = (cl: ClassDeclaration): ExpressionWithTypeArgume
 }
 
 /**
- *
  * Returns all the extended classes or interface of given class or interface declaration ,recursively
  */
 export const getExtendsRecursively = (decl: ClassDeclaration | InterfaceDeclaration): ExpressionWithTypeArguments[] => {
@@ -115,3 +114,6 @@ export function getEnumKey(anEnum: any, value: any): string {
   }
   return ''
 }
+
+
+

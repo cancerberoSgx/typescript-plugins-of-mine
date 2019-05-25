@@ -1,14 +1,13 @@
 
 import * as ts from 'typescript'
-// children helpers
 
 /**
  * Iterates recursively over all children of given node and apply visitor on each of them. If visitor returns
  * non falsy value then it stops visiting and that value is returned to the caller. See
  * https://en.wikipedia.org/wiki/Tree_traversal for the meaning of "DeepFirst". 
- * 
+ *
  * @param getChildrenMode if true it will use `node.getChildren()` o obtain children instead of default
- * behavior that is using `node.forEachChild`
+ * behavior that is using `node.forEachChild`.
  */
 export function visitChildrenRecursiveDeepFirst(
   node: ts.Node,
@@ -86,7 +85,8 @@ export function findChild(
 }
 
 /**
- * this iterated less child than findChild, we don't understand why yet... we need this because makes plugin-subclasses-of work (for some reason)
+ * This iterates less child than findChild, we don't understand why yet... we need this because makes
+ * plugin-subclasses-of work (for some reason).
  */
 export function findChild2(
   parent: ts.Node | undefined,
@@ -114,7 +114,8 @@ export function findChild2(
 
 /**
  * Return immediate children of given node. 
- * @param getChildrenMode if true it will use `node.getChildren()` o obtain children instead of default behavior that is using `node.forEachChild`
+ * @param getChildrenMode if true it will use `node.getChildren()` o obtain children instead of default
+ * behavior that is using `node.forEachChild`.
  */
 export function getChildren(node: ts.Node | undefined, getChildrenMode: boolean = false): ts.Node[] {
   if (!node) {
@@ -131,8 +132,9 @@ export function getChildren(node: ts.Node | undefined, getChildrenMode: boolean 
 }
 
 /**
- * @param getChildrenMode if true it will use `node.getChildren()` o obtain children instead of default behavior that is using `node.forEachChild`
- * @param children if caller already have called getChildren he can pass it here so this call is faster
+ * @param getChildrenMode if true it will use `node.getChildren()` o obtain children instead of default
+ * behavior that is using `node.forEachChild`.
+ * @param children if caller already have called getChildren he can pass it here so this call is faster.
  */
 export function getChildIndex(node: ts.Node, getChildrenMode: boolean = false, children: ts.Node[] | undefined = undefined): number {
   let result = -1
@@ -144,23 +146,28 @@ export function getChildIndex(node: ts.Node, getChildrenMode: boolean = false, c
   })
   return result
 }
+
 /**
- * @param getChildrenMode if true it will use `node.getChildren()` o obtain children instead of default behavior that is using `node.forEachChild`
+ * @param getChildrenMode if true it will use `node.getChildren()` o obtain children instead of default
+ * behavior that is using `node.forEachChild`.
  */
 export function getNextSibling(node: ts.Node, getChildrenMode: boolean = false): ts.Node | undefined {
   const children = getChildren(node.parent, getChildrenMode)
   const index = getChildIndex(node, getChildrenMode, children)
   return node.parent && index < children.length - 1 ? children[index + 1] : undefined
 }
+
 /**
- * @param getChildrenMode if true it will use `node.getChildren()` o obtain children instead of default behavior that is using `node.forEachChild`
+ * @param getChildrenMode if true it will use `node.getChildren()` o obtain children instead of default
+ * behavior that is using `node.forEachChild`
  */
 export function getSiblings(node: ts.Node, getChildrenMode: boolean = false): ts.Node[] {
  return getChildren(node.parent, getChildrenMode).filter(c=>c!==node)
 }
 
 /**
- * @param getChildrenMode if true it will use `node.getChildren()` o obtain children instead of default behavior that is using `node.forEachChild`
+ * @param getChildrenMode if true it will use `node.getChildren()` o obtain children instead of default
+ * behavior that is using `node.forEachChild`.
  */
 export function getPreviousSibling(node: ts.Node, getChildrenMode: boolean = false): ts.Node | undefined {
   const children = getChildren(node.parent, getChildrenMode)
@@ -168,10 +175,9 @@ export function getPreviousSibling(node: ts.Node, getChildrenMode: boolean = fal
   return index > 0 && node.parent ? children[index - 1] : undefined
 }
 
-// parent helpers
 /**
- * Find the parent for given node that comply with given predicate
- * @param orItSelf if true will first, check if node itself comply and if so returns it
+ * Find the parent for given node that comply with given predicate.
+ * @param orItSelf if true will first, check if node itself comply and if so returns it.
  */
 export function findAscendant<T extends ts.Node>(node: ts.Node | undefined, predicate: (node: ts.Node) => boolean, orItSelf: boolean = false): T | undefined {
   if (!node) {
@@ -188,7 +194,9 @@ export function findAscendant<T extends ts.Node>(node: ts.Node | undefined, pred
   }
 }
 
-/** get given node's ascendants in order from node.parent to topest one */
+/** 
+ * Gets given node's ascendants in order from node.parent to top most one .
+ */
 export function getAscendants(node: ts.Node | undefined): ts.Node[] {
   let a = node
   const result: ts.Node[] = []
@@ -196,4 +204,16 @@ export function getAscendants(node: ts.Node | undefined): ts.Node[] {
     result.push(a)
   }
   return result
+}
+
+/**
+ * Get the distance from given node to its ascendant .
+ */
+export function getDistanceToAncestor(node: ts.Node, ascendant: ts.Node): number{
+  if(node===ascendant||!node||!ascendant){
+    return 0
+  }
+  else {
+    return getDistanceToAncestor(node.parent, ascendant) + 1
+  }
 }
