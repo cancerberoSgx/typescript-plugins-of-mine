@@ -1,7 +1,7 @@
 {
   "name": "typescript-ast-util",
-  "version": "1.2.0",
-  "description": "general utilities for traversing, selecting, manipulating TypeScript ast",
+  "version": "1.2.1",
+  "description": "General utilities for traversing, selecting, manipulating TypeScript ast",
   "main": "dist/src/index.js",
   "typings": "dist/src/index.d.ts",
   "scripts": {
@@ -22,6 +22,7 @@
   "author": "Sebastian Gurin",
   "license": "MIT",
   "dependencies": {
+    "diff": "^4.0.1",
     "typescript": "^3.4.5"
   },
   "devDependencies": {
