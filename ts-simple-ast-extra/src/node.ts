@@ -5,11 +5,14 @@ import { Node, TypeGuards, SourceFile, Directory } from 'ts-morph'
  * ts-simple-ast getChildren that is optional but if provided do this ?
  */
 export function getChildrenForEachChild(n: Node): Node[] {
-  const result: Node[] = []
-  n.forEachChild(n => result.push(n))
-  return result
+  // const result: Node[] = []
+  // n.forEachChild(n => result.push(n))
+  // return result
+  return n.forEachChildAsArray()
 }
-
+// export function getChildren(node: Node, forEachChildMode=true){
+//   return forEachChildMode ? getChildrenForEachChild(node) : node.forEachChildAsArray()
+// }
 /**
  * Similar to  getChildren() but, if one of child is SyntaxList, it will return the syntax list getChildren() instead of it. This is to be coherent with getParent() where rotNode.getParent()===SourceFile but rootNode.getParent().getChildren() will be [SyntaxList, EndOfFileToken]
  */
