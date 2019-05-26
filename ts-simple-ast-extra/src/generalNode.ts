@@ -1,7 +1,7 @@
 import { Directory, Node } from 'ts-morph'
 import { getChildrenForEachChild, buildAstPath } from '.'
 import { printAstPath } from './astPath'
-import { isDirectory, isSourceFile } from './node'
+import { isDirectory, isSourceFile, isNode } from './node'
 import { getFilePath } from './fileNode'
 import { getRelativePath } from 'misc-utils-of-mine-generic'
 
@@ -17,6 +17,10 @@ export function getGeneralNodeChildren(f: GeneralNode): GeneralNode[] {
   return isDirectory(f)
     ? (f.getDirectories() as GeneralNode[]).concat(f.getSourceFiles() as GeneralNode[])
     : getChildrenForEachChild(f)
+}
+
+export function getGeneralNodeKindName(n: GeneralNode) {
+  return isNode(n) ? n.getKindName() : 'directory'
 }
 
 /**

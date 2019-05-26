@@ -72,7 +72,6 @@ export function getExtendsRecursivelyNames(decl: ClassDeclaration | InterfaceDec
     .filter((n, i, a) => a.indexOf(n) === i)
 }
 
-
 export const findInterfacesWithPropertyNamed = (decl: ClassDeclaration, memberName: string): InterfaceDeclaration[] =>
   getImplementsAll(decl)
     .map(expr =>
