@@ -12,3 +12,8 @@ export * from './fileNode'
 export * from './test'
 export * from './types'
 export * from './path'
+
+import * as tsm from 'ts-morph'
+export { tsm as tsMorph }
+import { ts } from 'ts-morph'
+export { ts }

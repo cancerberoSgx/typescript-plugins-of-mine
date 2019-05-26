@@ -8,28 +8,35 @@ export const getImplementsAll = (cl: ClassDeclaration): ExpressionWithTypeArgume
   cl.getImplements().forEach(impl => {
     // TODO: types like A|B
     result.push(impl)
-    impl
-      .getType()
-      .getSymbolOrThrow()
-      .getDeclarations()
-      .forEach(d => {
+    const s = impl.getType().getSymbol()
+
+    s &&
+      s.getDeclarations().forEach(d => {
         if (TypeGuards.isInterfaceDeclaration(d)) {
           result = result.concat(getExtendsRecursively(d))
         }
       })
   })
   getExtendsRecursively(cl).forEach(ext => {
-    ext
-      .getType()
-      .getSymbolOrThrow()
-      .getDeclarations()
-      .forEach(d => {
+    const s = ext.getType().getSymbol()
+
+    s &&
+      s.getDeclarations().forEach(d => {
         if (TypeGuards.isClassDeclaration(d)) {
           result = result.concat(getImplementsAll(d))
         }
       })
   })
-  return result
+  return result.filter(notUndefined).filter((n, i, a) => a.indexOf(n) === i)
+}
+
+/**
+ * Same as [[getImplementsAll]] but return just the name of implemented interfaces (removing type parameters)
+ */
+export function getImplementsAllNames(cl: ClassDeclaration) {
+  return getImplementsAll(cl)
+    .map(c => c.getExpression().getText())
+    .filter((n, i, a) => a.indexOf(n) === i)
 }
 
 /**
@@ -43,18 +50,26 @@ export const getExtendsRecursively = (decl: ClassDeclaration | InterfaceDeclarat
     : decl.getExtends()
   extendExpressions.filter(notUndefined).forEach(expr => {
     if (expr.getType().getSymbol()) {
-      expr
-        .getType()
-        .getSymbol()!
-        .getDeclarations()
-        .forEach(d => {
+      const s = expr.getType().getSymbol()
+
+      s &&
+        s.getDeclarations().forEach(d => {
           if (TypeGuards.isInterfaceDeclaration(d) || TypeGuards.isClassDeclaration(d)) {
             extendExpressions = extendExpressions.concat(getExtendsRecursively(d))
           }
         })
     }
   })
-  return extendExpressions.filter(notUndefined)
+  return extendExpressions.filter(notUndefined).filter((n, i, a) => n && a.indexOf(n) === i)
+}
+
+/**
+ * Same as [[getImplementsAll]] but return just the name of implemented interfaces (removing type parameters)
+ */
+export function getExtendsRecursivelyNames(decl: ClassDeclaration | InterfaceDeclaration) {
+  return getExtendsRecursively(decl)
+    .map(c => c.getExpression().getText())
+    .filter((n, i, a) => a.indexOf(n) === i)
 }
 
 export const findInterfacesWithPropertyNamed = (decl: ClassDeclaration, memberName: string): InterfaceDeclaration[] =>
