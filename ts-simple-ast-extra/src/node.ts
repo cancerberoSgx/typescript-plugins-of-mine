@@ -77,3 +77,10 @@ export function isSourceFile(f: any): f is SourceFile {
 export function isDirectory(f: any): f is Directory {
   return f && f.getDescendantSourceFiles && f.getDescendantDirectories
 }
+
+/**
+ * Gets the "first of the first" descendant 
+ */
+export function getFirstDescendant(node: Node): Node{
+  return !node.getFirstChild() ? node : getFirstDescendant(node.getFirstChild()!) 
+}

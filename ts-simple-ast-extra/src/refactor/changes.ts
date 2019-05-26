@@ -5,9 +5,11 @@ import { notUndefined } from '../misc'
 export function createTextChanges(textChanges: ts.TextChange[]): TextChange[] {
   return textChanges.map(compilerNode => createTextChange(compilerNode))
 }
+
 export function createTextChange(compilerNode: ts.TextChange) {
   return new (TextChange as any)(compilerNode) as TextChange // Hack because this constructor in internal
 }
+
 export function createTextSpan(compilerNode: ts.TextSpan) {
   const span = new (TextSpan as any)(compilerNode) as TextSpan // Hack because this constructor in internal
   ;(span as any).compilerObject = compilerNode
@@ -17,6 +19,7 @@ export function createTextSpan(compilerNode: ts.TextSpan) {
 export function createTextRange(compilerObject: ts.TextRange) {
   const span = new (TextSpan as any)(compilerObject) as TextRange
 }
+
 export function applyTextChanges(code: string, textChanges: ts.TextChange[]): string {
   const simpleTextChanges = createTextChanges(textChanges)
   const sourceFile = applyTextChangesGetSourceFile()
@@ -85,6 +88,7 @@ export function applyRefactorEditInfo(
   })
   return result
 }
+
 /**
  * Apply suggested code fixes like the ones returned by (`LanguageService#getSuggestionDiagnostics()`) to given `containerNode`.
  * Code fixes are given in `codes` or if not provided, all language service suggestions will be applied.

@@ -1,11 +1,11 @@
 {
   "name": "ts-simple-ast-extra",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "extra utilities for ts-morph",
   "main": "dist/src/index.js",
   "typings": "dist/src/index.d.ts",
   "scripts": {
-    "test": "ts-node node_modules/jasmine/bin/jasmine --stop-on-failure=true --fail-fast=true",
+    "test": "ts-node -T node_modules/jasmine/bin/jasmine --stop-on-failure=true --fail-fast=true",
     "test-debug": "node --inspect-brk node_modules/ts-node/dist/bin node_modules/jasmine/bin/jasmine.js",
 
     "build": "tsc",
