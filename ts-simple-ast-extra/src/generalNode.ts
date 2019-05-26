@@ -14,20 +14,28 @@ export type GeneralNode = Node | Directory
  * Returns immediate children. In case of Nodes, children are obtained using forEachChild instead of getChildren method
  */
 export function getGeneralNodeChildren(f: GeneralNode): GeneralNode[] {
-  return isDirectory(f)
+  return !f
+    ? []
+    : isDirectory(f)
     ? (f.getDirectories() as GeneralNode[]).concat(f.getSourceFiles() as GeneralNode[])
     : getChildrenForEachChild(f)
 }
 
 export function getGeneralNodeKindName(n: GeneralNode) {
-  return isNode(n) ? n.getKindName() : 'directory'
+  return !n ? undefined : isNode(n) ? n.getKindName() : 'directory'
 }
 
 /**
  * get general node's parent
  */
 export function getGeneralNodeParent(f: GeneralNode): GeneralNode | undefined {
-  return isDirectory(f) ? (f.getParent() as GeneralNode) : isSourceFile(f) ? f.getDirectory() : f.getParent()
+  return !f
+    ? undefined
+    : isDirectory(f)
+    ? (f.getParent() as GeneralNode)
+    : isSourceFile(f)
+    ? f.getDirectory()
+    : f.getParent()
 }
 
 /**

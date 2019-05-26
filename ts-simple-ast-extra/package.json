@@ -1,6 +1,6 @@
 {
   "name": "ts-simple-ast-extra",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "description": "extra utilities for ts-morph",
   "main": "dist/src/index.js",
   "typings": "dist/src/index.d.ts",
