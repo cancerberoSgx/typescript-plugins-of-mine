@@ -73,16 +73,22 @@
 						<section class="tsd-index-section tsd-is-external">
 							<h3>Type aliases</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-type-alias tsd-parent-kind-external-module tsd-is-external"><a href="_generalnode_.html#file" class="tsd-kind-icon">File</a></li>
 								<li class="tsd-kind-type-alias tsd-parent-kind-external-module tsd-is-external"><a href="_generalnode_.html#generalnode" class="tsd-kind-icon">General<wbr>Node</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section tsd-is-external">
 							<h3>Functions</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-external"><a href="_generalnode_.html#checkfilesinproject" class="tsd-kind-icon">check<wbr>Files<wbr>InProject</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-external"><a href="_generalnode_.html#getfilepath" class="tsd-kind-icon">get<wbr>File<wbr>Path</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-external"><a href="_generalnode_.html#getfilerelativepath" class="tsd-kind-icon">get<wbr>File<wbr>Relative<wbr>Path</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-external"><a href="_generalnode_.html#getgeneralnodechildren" class="tsd-kind-icon">get<wbr>General<wbr>Node<wbr>Children</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-external"><a href="_generalnode_.html#getgeneralnodekindname" class="tsd-kind-icon">get<wbr>General<wbr>Node<wbr>Kind<wbr>Name</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-external"><a href="_generalnode_.html#getgeneralnodeparent" class="tsd-kind-icon">get<wbr>General<wbr>Node<wbr>Parent</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-external"><a href="_generalnode_.html#getgeneralnodepath" class="tsd-kind-icon">get<wbr>General<wbr>Node<wbr>Path</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-external"><a href="_generalnode_.html#getparent" class="tsd-kind-icon">get<wbr>Parent</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-external"><a href="_generalnode_.html#isgeneralnode" class="tsd-kind-icon">is<wbr>General<wbr>Node</a></li>
 							</ul>
 						</section>
 					</div>
@@ -91,12 +97,27 @@
 			<section class="tsd-panel-group tsd-member-group tsd-is-external">
 				<h2>Type aliases</h2>
 				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-external-module tsd-is-external">
+					<a name="file" class="tsd-anchor"></a>
+					<h3>File</h3>
+					<div class="tsd-signature tsd-kind-icon">File<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">SourceFile</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Directory</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/916203e/ts-simple-ast-extra/src/generalNode.ts#L65">generalNode.ts:65</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>A general File definition that includes SourceFiles and Directories with common minimal API</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-external-module tsd-is-external">
 					<a name="generalnode" class="tsd-anchor"></a>
 					<h3>General<wbr>Node</h3>
 					<div class="tsd-signature tsd-kind-icon">General<wbr>Node<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Node</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Directory</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/b35103e/ts-simple-ast-extra/src/generalNode.ts#L11">generalNode.ts:11</a></li>
+							<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/916203e/ts-simple-ast-extra/src/generalNode.ts#L10">generalNode.ts:10</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -109,6 +130,81 @@
 			<section class="tsd-panel-group tsd-member-group tsd-is-external">
 				<h2>Functions</h2>
 				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
+					<a name="checkfilesinproject" class="tsd-anchor"></a>
+					<h3>check<wbr>Files<wbr>InProject</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">check<wbr>Files<wbr>InProject<span class="tsd-signature-symbol">(</span>files<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-type">SourceFile</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Directory</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">[]</span>, project<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Project</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/916203e/ts-simple-ast-extra/src/generalNode.ts#L80">generalNode.ts:80</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>files: <span class="tsd-signature-symbol">(</span><span class="tsd-signature-type">SourceFile</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Directory</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">[]</span></h5>
+								</li>
+								<li>
+									<h5>project: <span class="tsd-signature-type">Project</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
+					<a name="getfilepath" class="tsd-anchor"></a>
+					<h3>get<wbr>File<wbr>Path</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>File<wbr>Path<span class="tsd-signature-symbol">(</span>f<span class="tsd-signature-symbol">: </span><a href="_generalnode_.html#file" class="tsd-signature-type">File</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/916203e/ts-simple-ast-extra/src/generalNode.ts#L76">generalNode.ts:76</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>f: <a href="_generalnode_.html#file" class="tsd-signature-type">File</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
+					<a name="getfilerelativepath" class="tsd-anchor"></a>
+					<h3>get<wbr>File<wbr>Relative<wbr>Path</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>File<wbr>Relative<wbr>Path<span class="tsd-signature-symbol">(</span>f<span class="tsd-signature-symbol">: </span><a href="_generalnode_.html#file" class="tsd-signature-type">File</a>, project<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Project</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/916203e/ts-simple-ast-extra/src/generalNode.ts#L67">generalNode.ts:67</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>f: <a href="_generalnode_.html#file" class="tsd-signature-type">File</a></h5>
+								</li>
+								<li>
+									<h5>project: <span class="tsd-signature-type">Project</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
 					<a name="getgeneralnodechildren" class="tsd-anchor"></a>
 					<h3>get<wbr>General<wbr>Node<wbr>Children</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
@@ -118,7 +214,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/b35103e/ts-simple-ast-extra/src/generalNode.ts#L16">generalNode.ts:16</a></li>
+									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/916203e/ts-simple-ast-extra/src/generalNode.ts#L15">generalNode.ts:15</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -146,7 +242,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/b35103e/ts-simple-ast-extra/src/generalNode.ts#L24">generalNode.ts:24</a></li>
+									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/916203e/ts-simple-ast-extra/src/generalNode.ts#L27">generalNode.ts:27</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -172,7 +268,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/b35103e/ts-simple-ast-extra/src/generalNode.ts#L31">generalNode.ts:31</a></li>
+									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/916203e/ts-simple-ast-extra/src/generalNode.ts#L34">generalNode.ts:34</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -203,7 +299,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/b35103e/ts-simple-ast-extra/src/generalNode.ts#L44">generalNode.ts:44</a></li>
+									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/916203e/ts-simple-ast-extra/src/generalNode.ts#L47">generalNode.ts:47</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -227,6 +323,55 @@
 						</li>
 					</ul>
 				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
+					<a name="getparent" class="tsd-anchor"></a>
+					<h3>get<wbr>Parent</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Parent<span class="tsd-signature-symbol">(</span>f<span class="tsd-signature-symbol">: </span><a href="_generalnode_.html#file" class="tsd-signature-type">File</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_generalnode_.html#file" class="tsd-signature-type">File</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/916203e/ts-simple-ast-extra/src/generalNode.ts#L72">generalNode.ts:72</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>f: <a href="_generalnode_.html#file" class="tsd-signature-type">File</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="_generalnode_.html#file" class="tsd-signature-type">File</a>
+								<span class="tsd-signature-symbol"> | </span>
+								<span class="tsd-signature-type">undefined</span>
+							</h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
+					<a name="isgeneralnode" class="tsd-anchor"></a>
+					<h3>is<wbr>General<wbr>Node</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">is<wbr>General<wbr>Node<span class="tsd-signature-symbol">(</span>f<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/916203e/ts-simple-ast-extra/src/generalNode.ts#L23">generalNode.ts:23</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>f: <span class="tsd-signature-type">any</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
+						</li>
+					</ul>
+				</section>
 			</section>
 		</div>
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
@@ -243,7 +388,19 @@
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
 					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module tsd-is-external">
+						<a href="_generalnode_.html#file" class="tsd-kind-icon">File</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module tsd-is-external">
 						<a href="_generalnode_.html#generalnode" class="tsd-kind-icon">General<wbr>Node</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
+						<a href="_generalnode_.html#checkfilesinproject" class="tsd-kind-icon">check<wbr>Files<wbr>InProject</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
+						<a href="_generalnode_.html#getfilepath" class="tsd-kind-icon">get<wbr>File<wbr>Path</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
+						<a href="_generalnode_.html#getfilerelativepath" class="tsd-kind-icon">get<wbr>File<wbr>Relative<wbr>Path</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
 						<a href="_generalnode_.html#getgeneralnodechildren" class="tsd-kind-icon">get<wbr>General<wbr>Node<wbr>Children</a>
@@ -256,6 +413,12 @@
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
 						<a href="_generalnode_.html#getgeneralnodepath" class="tsd-kind-icon">get<wbr>General<wbr>Node<wbr>Path</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
+						<a href="_generalnode_.html#getparent" class="tsd-kind-icon">get<wbr>Parent</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
+						<a href="_generalnode_.html#isgeneralnode" class="tsd-kind-icon">is<wbr>General<wbr>Node</a>
 					</li>
 				</ul>
 			</nav>

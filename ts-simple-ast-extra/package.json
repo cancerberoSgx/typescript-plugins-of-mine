@@ -1,6 +1,6 @@
 {
   "name": "ts-simple-ast-extra",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "description": "extra utilities for ts-morph",
   "main": "dist/src/index.js",
   "typings": "dist/src/index.d.ts",
@@ -12,7 +12,8 @@
     "clean": "rm -rf dist",
     "prettier": " npx prettier  --write --arrow-parens avoid --parser typescript --use-tabs false --no-semi true --single-quote true --tab-width 2 --trailing-comma none --end-of-line lf --prose-wrap preserve --print-width 120 --jsx-bracket-same-line true \"src/**/*.ts*\" \"spec/**/*.ts*\"",
     "doc": "typedoc --mode modules --ignoreCompilerErrors --out ../docs/ts-simple-ast-extra src/index.ts ",
-    "all": "npm run clean && npm run prettier && npm run build && npm run test && npm run doc"
+    "all": "npm run clean && npm run prettier && npm run build && npm run test && npm run doc",
+    "all-publish": "npm run all && npm version patch && npm publish"
   },
   "keywords": [
     "TypeScript",
@@ -23,15 +24,17 @@
   "license": "MIT",
   "dependencies": {
     "misc-utils-of-mine-generic": "0.0.15",
-    "prettier": "^1.17.0",
     "ts-morph": "^2.0.1"
   },
   "devDependencies": {
+    "prettier": "^1.17.0",
     "@types/jasmine": "^3.3.12",
     "@types/node": "^11.13.7",
     "jasmine": "^3.4.0",
     "ts-node": "^8.1.0",
-    "typedoc": "^0.14.2",
+    "typedoc": "^0.14.2"
+  },
+  "peerDependencies": {
     "typescript": "^3.4.5"
   },
   "repository": "https://github.com/cancerberoSgx/typescript-plugin-of-mine/tree/master/ts-simple-ast-extra"

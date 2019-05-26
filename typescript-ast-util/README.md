@@ -13,3 +13,6 @@ I feel that I'm collecting utilities used in several plugins so I'm putting them
  * remove / investigate / rename / better jssdoc for findChild2()
  * document createProgram and other utilities
  * add example in ts-api playground
+
+
+  * transform easy and print api  base on : tests/transform2.ts

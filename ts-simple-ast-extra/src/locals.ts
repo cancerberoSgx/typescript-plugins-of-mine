@@ -1,15 +1,16 @@
 import { Node, SyntaxKind, ts, TypeGuards } from 'ts-morph'
 import { notFalsy } from './misc'
 
-export function getNodeName(n: Node) {
-  const id = n.getFirstChildByKind(SyntaxKind.Identifier)
-  return id ? id.getText() : undefined
-}
-
+/**
+ * Unstable API. Uses TS internals!
+ */
 export function getNodeLocalNames(target: Node) {
   return getLocals(target).map(s => s.escapedName.toString())
 }
 
+/**
+ * Unstable API. Uses TS internals!
+ */
 export function getNodeLocalsNotReferencing(target: Node, notReferencing: Node | string) {
   const name =
     typeof notReferencing === 'string'
@@ -25,6 +26,9 @@ export function getNodeLocalsNotReferencing(target: Node, notReferencing: Node |
   )
 }
 
+/**
+ * Unstable API. Uses TS internals!
+ */
 export function getNodeLocalsDeclarations(target: Node): ts.Declaration[] {
   return getLocals(target)
     .map(l => l.declarations && l.declarations)
@@ -32,10 +36,16 @@ export function getNodeLocalsDeclarations(target: Node): ts.Declaration[] {
     .filter(notFalsy)
 }
 
+/**
+ * Unstable API. Uses TS internals!
+ */
 export function getNodeLocalNamesNotReferencing(target: Node, notReferencing: Node | string) {
   return getNodeLocalsNotReferencing(target, notReferencing).map(n => n.escapedName.toString())
 }
 
+/**
+ * Unstable API. Uses TS internals!
+ */
 export function getLocals(n: Node): Symbol[] {
   const locals = (n.compilerNode as any)['locals'] as ts.SymbolTable
   if (!locals) {

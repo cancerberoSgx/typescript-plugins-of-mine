@@ -2,7 +2,6 @@ import { Directory, Node } from 'ts-morph'
 import { getChildrenForEachChild, buildAstPath } from '.'
 import { printAstPath } from './astPath'
 import { isDirectory, isSourceFile, isNode } from './node'
-import { getFilePath } from './fileNode'
 import { getRelativePath } from 'misc-utils-of-mine-generic'
 
 /**
@@ -21,8 +20,12 @@ export function getGeneralNodeChildren(f: GeneralNode): GeneralNode[] {
     : getChildrenForEachChild(f)
 }
 
+export function isGeneralNode(f: any): f is GeneralNode {
+  return f && (isNode(f) || isDirectory(f))
+}
+
 export function getGeneralNodeKindName(n: GeneralNode) {
-  return !n ? undefined : isNode(n) ? n.getKindName() : 'directory'
+  return !n ? undefined : isNode(n) ? n.getKindName() : 'Directory'
 }
 
 /**
@@ -52,4 +55,34 @@ export function getGeneralNodePath(f: GeneralNode, relativeTo?: string): string 
     const path = `${getGeneralNodePath(file, relativeTo)}#${nodePath}`
     return path
   }
+}
+
+import { Project, SourceFile } from 'ts-morph'
+
+/**
+ * A general File definition that includes SourceFiles and Directories with common minimal API
+ */
+export type File = SourceFile | Directory
+
+export function getFileRelativePath(f: File, project: Project) {
+  const rootDir = project.getRootDirectories()[0]
+  return rootDir.getRelativePathTo(f as SourceFile)
+}
+
+export function getParent(f: File): File | undefined {
+  return isSourceFile(f) ? f.getDirectory() : f.getParent()
+}
+
+export function getFilePath(f: File) {
+  return isSourceFile(f) ? f.getFilePath() : f.getPath()
+}
+
+export function checkFilesInProject(files: (File)[], project: Project) {
+  files.forEach(file => {
+    if (isSourceFile(file) && !project.getSourceFile(file.getFilePath())) {
+      throw `File ${file.getFilePath()} not found in project`
+    } else if (!isSourceFile(file) && !project.getDirectory(file.getPath())) {
+      throw `Directory ${file.getPath()} not found in project`
+    }
+  })
 }

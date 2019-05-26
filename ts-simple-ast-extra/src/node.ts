@@ -1,4 +1,4 @@
-import { Node, TypeGuards, SourceFile, Directory } from 'ts-morph'
+import { Node, TypeGuards, SourceFile, Directory, ts } from 'ts-morph'
 
 /**
  * like Node.getChildren but using forEachChild(). TODO: perhaps is a good idea to add a useForEachChild to
@@ -27,8 +27,12 @@ export function getChildrenByPassSyntaxList(n: Node): Node[] {
  *  Try to call n.getName or returns empty string if there is no such method
  */
 export function getName(n: Node) {
+  function getNodeName(n: Node) {
+    const id = n.getFirstChildByKind(ts.SyntaxKind.Identifier)
+    return id ? id.getText() : undefined
+  }
   try {
-    return TypeGuards.hasName(n) ? n.getName() : undefined
+    return TypeGuards.hasName(n) ? n.getName() : getNodeName(n) || undefined
   } catch (error) {
     return undefined
   }
