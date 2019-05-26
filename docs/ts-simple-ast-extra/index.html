@@ -79,6 +79,22 @@
 				<ul>
 					<li>build &quot;Incremental build support using the language services&quot; from <a href="https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API">https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API</a> so we can debug the whole experience in debugger instead of debugging using plugin manually in the editor!</li>
 				</ul>
+				<ul>
+					<li>INVESTIGATE THIS TO MOVE CLASSES:
+						<a href="https://basarat.gitbooks.io/typescript/docs/types/moving-types.html">https://basarat.gitbooks.io/typescript/docs/types/moving-types.html</a>
+						Copying both the Type + Value
+						If you want to move a class around, you might be tempted to do the following:
+						class Foo { }
+						var Bar = Foo;
+						var bar: Bar; // ERROR: cannot find name &#39;Bar&#39;
+						This is an error because var only copied the Foo into the variable declaration space and you therefore cannot use Bar as a type annotation. The proper way is to use the import keyword. Note that you can only use the import keyword in such a way if you are using namespaces or modules (more on these later):
+						namespace importing {
+						export class Foo { }
+					}</li>
+				</ul>
+				<p>import Bar = importing.Foo;
+					var bar: Bar; // Okay
+				This import trick only works for things that are both type and variable.</p>
 			</div>
 		</div>
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
@@ -182,6 +198,9 @@
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
 						<a href="modules/_refactor_templatetostringconcatenation_.html">"refactor/template<wbr>ToString<wbr>Concatenation"</a>
+					</li>
+					<li class=" tsd-kind-external-module tsd-is-external">
+						<a href="modules/_refactor_trailingsemicolons_.html">"refactor/trailing<wbr>Semicolons"</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
 						<a href="modules/_reference_.html">"reference"</a>

@@ -79,8 +79,14 @@ export function isDirectory(f: any): f is Directory {
 }
 
 /**
- * Gets the "first of the first" descendant 
+ * Gets the "first of the first" descendant
  */
-export function getFirstDescendant(node: Node): Node{
-  return !node.getFirstChild() ? node : getFirstDescendant(node.getFirstChild()!) 
+export function getFirstDescendant(node: Node): Node {
+  return !node.getFirstChild() ? node : getFirstDescendant(node.getFirstChild()!)
+}
+
+export function getLastToken(d: Node) {
+  try {
+    return d.getLastToken()
+  } catch (error) {}
 }

@@ -268,4 +268,3 @@ function getNodeNameForFile(node: Declaration | string, ...files: SourceFile[]) 
   }
   return nodeName
 }
-

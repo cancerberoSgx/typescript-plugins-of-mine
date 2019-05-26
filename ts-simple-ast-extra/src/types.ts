@@ -114,6 +114,3 @@ export function getEnumKey(anEnum: any, value: any): string {
   }
   return ''
 }
-
-
-

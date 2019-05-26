@@ -75,6 +75,8 @@
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-external"><a href="_node_.html#getchildrenbypasssyntaxlist" class="tsd-kind-icon">get<wbr>Children<wbr>ByPass<wbr>Syntax<wbr>List</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-external"><a href="_node_.html#getchildrenforeachchild" class="tsd-kind-icon">get<wbr>Children<wbr>For<wbr>Each<wbr>Child</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-external"><a href="_node_.html#getfirstdescendant" class="tsd-kind-icon">get<wbr>First<wbr>Descendant</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-external"><a href="_node_.html#getlasttoken" class="tsd-kind-icon">get<wbr>Last<wbr>Token</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-external"><a href="_node_.html#getname" class="tsd-kind-icon">get<wbr>Name</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-external"><a href="_node_.html#isdirectory" class="tsd-kind-icon">is<wbr>Directory</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-external"><a href="_node_.html#isnode" class="tsd-kind-icon">is<wbr>Node</a></li>
@@ -97,7 +99,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/b2a6169/ts-simple-ast-extra/src/node.ts#L16">node.ts:16</a></li>
+									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/f522417/ts-simple-ast-extra/src/node.ts#L16">node.ts:16</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -125,7 +127,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/b2a6169/ts-simple-ast-extra/src/node.ts#L7">node.ts:7</a></li>
+									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/f522417/ts-simple-ast-extra/src/node.ts#L7">node.ts:7</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -145,6 +147,60 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
+					<a name="getfirstdescendant" class="tsd-anchor"></a>
+					<h3>get<wbr>First<wbr>Descendant</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>First<wbr>Descendant<span class="tsd-signature-symbol">(</span>node<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Node</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Node</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/f522417/ts-simple-ast-extra/src/node.ts#L84">node.ts:84</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Gets the &quot;first of the first&quot; descendant</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>node: <span class="tsd-signature-type">Node</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Node</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
+					<a name="getlasttoken" class="tsd-anchor"></a>
+					<h3>get<wbr>Last<wbr>Token</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Last<wbr>Token<span class="tsd-signature-symbol">(</span>d<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Node</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Node</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Node</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/f522417/ts-simple-ast-extra/src/node.ts#L88">node.ts:88</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>d: <span class="tsd-signature-type">Node</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">undefined</span>
+								<span class="tsd-signature-symbol"> | </span>
+								<span class="tsd-signature-type">Node</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Node</span><span class="tsd-signature-symbol">&gt;</span>
+							</h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
 					<a name="getname" class="tsd-anchor"></a>
 					<h3>get<wbr>Name</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
@@ -154,7 +210,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/b2a6169/ts-simple-ast-extra/src/node.ts#L26">node.ts:26</a></li>
+									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/f522417/ts-simple-ast-extra/src/node.ts#L26">node.ts:26</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -185,7 +241,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/b2a6169/ts-simple-ast-extra/src/node.ts#L77">node.ts:77</a></li>
+									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/f522417/ts-simple-ast-extra/src/node.ts#L77">node.ts:77</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -208,7 +264,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/b2a6169/ts-simple-ast-extra/src/node.ts#L69">node.ts:69</a></li>
+									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/f522417/ts-simple-ast-extra/src/node.ts#L69">node.ts:69</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -231,7 +287,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/b2a6169/ts-simple-ast-extra/src/node.ts#L73">node.ts:73</a></li>
+									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/f522417/ts-simple-ast-extra/src/node.ts#L73">node.ts:73</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -254,7 +310,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/b2a6169/ts-simple-ast-extra/src/node.ts#L42">node.ts:42</a></li>
+									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/f522417/ts-simple-ast-extra/src/node.ts#L42">node.ts:42</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -345,6 +401,12 @@
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
 						<a href="_node_.html#getchildrenforeachchild" class="tsd-kind-icon">get<wbr>Children<wbr>For<wbr>Each<wbr>Child</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
+						<a href="_node_.html#getfirstdescendant" class="tsd-kind-icon">get<wbr>First<wbr>Descendant</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
+						<a href="_node_.html#getlasttoken" class="tsd-kind-icon">get<wbr>Last<wbr>Token</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
 						<a href="_node_.html#getname" class="tsd-kind-icon">get<wbr>Name</a>

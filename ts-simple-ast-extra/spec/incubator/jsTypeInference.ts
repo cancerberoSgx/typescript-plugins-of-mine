@@ -1,5 +1,5 @@
 // /**
-// Tool to automatically add (most) of the missing types to a JS file or project while migrating to TS. 
+// Tool to automatically add (most) of the missing types to a JS file or project while migrating to TS.
 
 //  * it will tun the "infer X form usage" TypeScript compiler fixes on given file or project0
 //  * if a projectis given it will try to organize it as a typescript project, try to install @types, create a tsconfig.json enable js etc and load it as a whole instead file by file so there is more chance to infer
