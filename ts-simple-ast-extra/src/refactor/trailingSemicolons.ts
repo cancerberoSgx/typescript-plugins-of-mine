@@ -10,7 +10,7 @@ export function removeTrailingSemicolons(f: SourceFile) {
       const s = d.getNextSibling()
       const fd = s && getFirstDescendant(s)
       // if next sibling exists and doesn't start with ( or [ and is not in the same line then we can remove the semi colon
-      if (!fd || fd.getStartLineNumber() > d.getStartLineNumber() && !['(', '['].includes(fd.getText().trim())) {
+      if (!fd || (fd.getStartLineNumber() > d.getStartLineNumber() && !['(', '['].includes(fd.getText().trim()))) {
         changes.push({ span: { start: lt.getFullStart(), length: lt.getFullWidth() }, newText: '' })
       }
     }

@@ -82,8 +82,4 @@ describe('trailingSemicolon', () => {
     `)
     )
   })
-
-
-
-
 })
