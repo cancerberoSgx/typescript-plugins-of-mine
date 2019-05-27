@@ -66,4 +66,24 @@ describe('trailingSemicolon', () => {
     `)
     )
   })
+
+  it('should not remove semicolons if next sibling is on the same line', () => {
+    const project = new Project({ useVirtualFileSystem: true })
+    const code = `
+    debugger
+    editor.getModel()!.onDidChangeContent(e => { debugger; setDirty() })
+    `
+    const f = project.createSourceFile('f1.ts', code)
+    removeTrailingSemicolons(f)
+    expect(removeWhites(f.getText())).toBe(
+      removeWhites(`
+      debugger
+      editor.getModel()!.onDidChangeContent(e => { debugger; setDirty() })
+    `)
+    )
+  })
+
+
+
+
 })
