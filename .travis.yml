@@ -1,6 +1,6 @@
 language: node_js
 node_js:
     - "11"
-install: cd ts-simple-ast; npm i;
+install: cd ts-simple-ast-extra; npm i;
 script: npm run coverage
 after_script: cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
