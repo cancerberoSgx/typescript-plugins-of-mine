@@ -28,16 +28,23 @@ export function getChildrenByPassSyntaxList(n: Node): Node[] {
  */
 export function getName(n: Node) {
   function getNodeName(n: Node) {
+    if (TypeGuards.isIdentifier(n)) {
+      return n.getText()
+    }
     const id = n.getFirstChildByKind(ts.SyntaxKind.Identifier)
     return id ? id.getText() : undefined
   }
   try {
-    return TypeGuards.hasName(n) ? n.getName() : getNodeName(n) || undefined
+    return (TypeGuards.hasName(n) ? n.getName() : getNodeName(n)) || undefined
   } catch (error) {
     return undefined
   }
 }
 
+// export function getNodeName(n: Node) {
+//   const id = n.getFirstChildByKind(ts.SyntaxKind.Identifier)
+//   return id ? id.getText() : undefined
+// }
 /**
  * Iterates recursively over all children of given node and apply visitor on each of them. If visitor returns
  * non falsy value then it stops visiting and that value is returned to the caller. See
