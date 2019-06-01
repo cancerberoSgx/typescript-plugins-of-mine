@@ -1,7 +1,6 @@
 language: node_js
 node_js:
-    - "10"
-script:
-    - npm run all-no-doc
-after_script: 
-    - "cd typescript-plugin-proactive-code-fixes && npm run test-coverage && cd .. && cat ./typescript-plugin-proactive-code-fixes/coverage/lcov.info | ./typescript-plugin-proactive-code-fixes/node_modules/coveralls/bin/coveralls.js"
+    - "11"
+install: cd ts-simple-ast; npm i;
+script: npm run coverage
+after_script: cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js

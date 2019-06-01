@@ -18,11 +18,11 @@
     "test": " npx yamat run npm test",
     "test-clone": "rm -rf ../typescript-plugins-of-mine-test && mkdir ../typescript-plugins-of-mine-test && cd ../typescript-plugins-of-mine-test && git clone ../typescript-plugins-of-mine/.git && cd typescript-plugins-of-mine  && npm install && npm test",
     "doc": " npx yamat run npm run doc",
-    "all": "npm run clean && npm i && npx yamat run npm i && npx yamat run npm run build && npm run test && npm run doc",
-    "clean": "npm run clean-no-doc; rm -rf docs",
-    "clean-no-doc": "find . -name \"node_modules\" -exec rm -rf '{}' + ; find . -name \"package-lock.json\" -exec rm -rf '{}' +; find . -name \"*.log\" -exec rm -rf '{}' +; find . -name \"dist\" -exec rm -rf '{}' +",
-    "all-no-doc": "npm run clean-no-doc && npm i && npx yamat run npm i && npx yamat run npm run build && npx yamat run npm test",
-    "all-light": "find . -name \"dist\" -exec rm -rf '{}' + && npm i && npx yamat run npm i && npx yamat run npm run build && npx yamat run npm test",
+    "all": "npm run clean && npx yamat run npm run build && npm run test && npm run doc",
+    "clean": "npx yamat run npm run clean && npm run clean-no-doc",
+    "clean-no-doc": "exit 0",
+    "all-no-doc": "exit 0",
+    "all-light": "npx yamat run npm run clean && npx yamat run npm run build && npx yamat run npm test",
     "yamat-link": "npx yamat link && npx yamat run \"rm -rf node_modules package-lock.json\" && npx yamat run \"npm i\" && npx yamat run \"npm run build\" && npx yamat run npm test",
     "yamat-unlink-pack": "npx yamat run \"rm -rf node_modules package-lock.json\" && npx yamat run npm i && npx yamat unlink --version pack && npx yamat run \"rm -rf node_modules package-lock.json\" && npx yamat run npm i && npx yamat run npm run build && npx yamat run npm run test",
     "yamat-patch-publish": "npx yamat run \"npm version patch\" && npx yamat unlink && npx yamat --break-on-error no run npm publish",
@@ -31,9 +31,9 @@
   },
   "repository": "https://github.com/cancerberoSgx/typescript-plugins-of-mine",
   "devDependencies": {
-    "yamat": "^0.1.1"
+    "yamat": "^0.1.2"
   },
   "dependencies": {
-    "ts-morph": "^1.3.3"
+    "ts-morph": "^2.3.0"
   }
 }

@@ -144,6 +144,51 @@ describe('astPath', () => {
     )
   })
 
+  it('Should print onlyIndex syntax and custom level separator', () => {
+    const project = new Project()
+    const f = project.createSourceFile(
+      'test.ts',
+      `
+      interface I<T=any>{
+        m(i: number, g: (aParameter1: number)=>void)
+      }
+      `
+    )!
+    const n = f
+      .getDescendants()
+      .filter(TypeGuards.isIdentifier)
+      .find(i => i.getText() === 'aParameter1')!
+    const sel = buildAstPath(n, n.getSourceFile(), { includeNodeKind: false })
+    expect(printAstPath(sel, { onlyIndex: true, levelSeparator: '/' })).toBe('0/0/2/2/1/0/0')
+    const n2 = f.getDescendants().find(d => d.getText() === 'void')!
+    const sel2 = buildAstPath(n2, n2.getSourceFile(), { includeNodeKind: false })
+    expect(printAstPath(sel2, { onlyIndex: true, levelSeparator: '/' })).toBe('0/0/2/2/1/1')
+  })
+
+  it('Should print onlyKindName syntax and custom level separator', () => {
+    const project = new Project()
+    const f = project.createSourceFile(
+      'test.ts',
+      `
+      interface I<T=any>{
+        m(i: number, g: (aParameter1: number)=>void)
+      }
+      `
+    )!
+    const n = f
+      .getDescendants()
+      .filter(TypeGuards.isIdentifier)
+      .find(i => i.getText() === 'aParameter1')!
+    const sel = buildAstPath(n, n.getSourceFile(), { includeNodeKind: true })
+    expect(printAstPath(sel, { onlyKindName: true, levelSeparator: '/' })).toBe(
+      'SourceFile/InterfaceDeclaration/MethodSignature/Parameter/FunctionType/Parameter/Identifier'
+    )
+    const n2 = f.getDescendants().find(d => d.getText() === 'void')!
+    const sel2 = buildAstPath(n2, n2.getSourceFile(), { includeNodeKind: true })
+    expect(printAstPath(sel2, { onlyKindName: true, levelSeparator: '/' })).toBe(
+      'SourceFile/InterfaceDeclaration/MethodSignature/Parameter/FunctionType/VoidKeyword'
+    )
+  })
   xit('Should fail to select if verifyNodeKind is provided and structure is the same but some node kind changed in the path', () => {})
 
   xit('Should select if verifyNodeKind is provided and kinds in the path did not change', () => {})

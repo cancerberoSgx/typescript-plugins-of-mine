@@ -10,3 +10,5 @@
 /tsconfig.json
 /declarations.d.ts
 *.tgz
+.nyc_output
+/coverage

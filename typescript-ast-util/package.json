@@ -23,15 +23,15 @@
   "license": "MIT",
   "dependencies": {
     "diff": "^4.0.1",
-    "typescript": "^3.4.5"
+    "typescript": "^3.5.1"
   },
   "devDependencies": {
     "@types/diff": "^4.0.2",
-    "@types/node": "^12.0.2",
-    "@types/jasmine": "^3.3.12",
+    "@types/node": "^12.0.4",
+    "@types/jasmine": "^3.3.13",
     "jasmine": "^3.4.0",
-    "ts-morph": "^2.1.2",
-    "ts-node": "^8.1.1",
+    "ts-morph": "^2.3.0",
+    "ts-node": "^8.2.0",
     "typedoc": "^0.14.2"
   },
   "repository": "https://github.com/cancerberoSgx/typescript-plugins-of-mine/tree/master/typescript-ast-util"

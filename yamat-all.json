@@ -2,61 +2,59 @@
   {
     "name": "typescript-ast-util",
     "path": "typescript-ast-util"
+  },  
+  {
+    "name": "input-ui-ipc-provider",
+    "path": "input-ui-ipc-provider"
   },
   {
-    "name": "typescript-node-ids",
-    "path": "typescript-node-ids"
+    "name": "ts-simple-ast-extra",
+    "path": "ts-simple-ast-extra"
   },
   {
     "name": "typescript-plugin-util",
     "path": "typescript-plugin-util"
   },
   {
-    "name": "sample-ts-plugin1",
-    "path": "sample-ts-plugin1"
-  },
-  {
-    "name": "typescript-plugin-extract-interface",
-    "path": "typescript-plugin-extract-interface"
+    "name": "typescript-plugins-text-based-user-interaction",
+    "path": "typescript-plugins-text-based-user-interaction"
   },
   {
     "name": "typescript-plugin-ast-inspector",
     "path": "typescript-plugin-ast-inspector"
   },
   {
-    "name": "typescript-plugin-subclasses-of",
-    "path": "typescript-plugin-subclasses-of"
-  },
-  {
-    "name": "typescript-plugin-add-type",
-    "path": "typescript-plugin-add-type"
-  },
-  {
-    "name": "typescript-plugins-text-based-user-interaction",
-    "path": "typescript-plugins-text-based-user-interaction"
-  },
-  {
-    "name": "typescript-plugin-move-file",
-    "path": "typescript-plugin-move-file"
-  },
-  {
     "name": "typescript-plugin-move-declaration",
     "path": "typescript-plugin-move-declaration"
   },
   {
-    "name": "typescript-plugin-method-delegate",
-    "path": "typescript-plugin-method-delegate"
-  },
-  {
     "name": "typescript-plugin-proactive-code-fixes",
     "path": "typescript-plugin-proactive-code-fixes"
-  }, 
-  {
-    "name": "sample-ts-plugin1-sample-project",
-    "path": "sample-ts-plugin1-sample-project"
   },
   {
-    "name": "typescript-plugin-extract-interface-client-project1",
-    "path": "typescript-plugin-extract-interface-client-project1"
+    "name": "typescript-plugin-function-signature-refactors",
+    "path": "typescript-plugin-function-signature-refactors"
+  },
+  {
+    "name": "input-ui-ipc-provider-vscode",
+    "path": "input-ui-ipc-provider-vscode"
+  },
+  {
+    "name": "input-ui-ipc-provider-test-typescript-plugin",
+    "path": "input-ui-ipc-provider-test-typescript-plugin"
+  },
+  {
+    "name": "input-ui-ipc-provider-test-vscode-extension",
+    "path": "input-ui-ipc-provider-test-vscode-extension"
+  },
+  {
+    "name": "sample-ts-plugin1",
+    "path": "sample-ts-plugin1"
+  },
+  {
+    "name": "vscode-typescript-refactors",
+    "path": "vscode-typescript-refactors"
   }
+  
+
 ]
