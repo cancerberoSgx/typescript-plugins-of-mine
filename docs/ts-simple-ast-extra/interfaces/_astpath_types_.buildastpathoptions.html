@@ -85,6 +85,7 @@
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_astpath_types_.buildastpathoptions.html#includenodekind" class="tsd-kind-icon">include<wbr>Node<wbr>Kind</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_astpath_types_.buildastpathoptions.html#includenodename" class="tsd-kind-icon">include<wbr>Node<wbr>Name</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_astpath_types_.buildastpathoptions.html#includepathtosourcefile" class="tsd-kind-icon">include<wbr>Path<wbr>ToSource<wbr>File</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_astpath_types_.buildastpathoptions.html#mode" class="tsd-kind-icon">mode</a></li>
 							</ul>
@@ -100,7 +101,7 @@
 					<div class="tsd-signature tsd-kind-icon">include<wbr>Node<wbr>Kind<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/8620a32/ts-simple-ast-extra/src/astPath/types.ts#L12">astPath/types.ts:12</a></li>
+							<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/83850fc/ts-simple-ast-extra/src/astPath/types.ts#L14">astPath/types.ts:14</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -111,20 +112,36 @@
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+					<a name="includenodename" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> include<wbr>Node<wbr>Name</h3>
+					<div class="tsd-signature tsd-kind-icon">include<wbr>Node<wbr>Name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/83850fc/ts-simple-ast-extra/src/astPath/types.ts#L20">astPath/types.ts:20</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>If true it will save the nodes names. Take into account that creating selectors could have some overhead
+							compared to not including this data.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
 					<a name="includepathtosourcefile" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> include<wbr>Path<wbr>ToSource<wbr>File</h3>
 					<div class="tsd-signature tsd-kind-icon">include<wbr>Path<wbr>ToSource<wbr>File<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/8620a32/ts-simple-ast-extra/src/astPath/types.ts#L19">astPath/types.ts:19</a></li>
+							<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/83850fc/ts-simple-ast-extra/src/astPath/types.ts#L28">astPath/types.ts:28</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>TODO</p>
 						</div>
-						<p>If true the selector will also contain the path from the root node to its source file so select can
-						verify this.</p>
+						<p>If true the selector will also contain the path from the root node to its source file so select can verify
+						this.</p>
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
@@ -133,12 +150,13 @@
 					<div class="tsd-signature tsd-kind-icon">mode<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"getChildren"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"forEachChildren"</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/8620a32/ts-simple-ast-extra/src/astPath/types.ts#L7">astPath/types.ts:7</a></li>
+							<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/83850fc/ts-simple-ast-extra/src/astPath/types.ts#L8">astPath/types.ts:8</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Mode on which node&#39;s children are obtained (i.e.) <code>getChildren()</code> vs <code>forEachChildren()</code>. Default value: <code>forEachChildren()</code></p>
+							<p>Mode on which node&#39;s children are obtained (i.e.) <code>getChildren()</code> vs <code>forEachChildren()</code>. Default value:
+							<code>forEachChildren()</code></p>
 						</div>
 					</div>
 				</section>
@@ -170,6 +188,9 @@
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
 								<a href="_astpath_types_.buildastpathoptions.html#includenodekind" class="tsd-kind-icon">include<wbr>Node<wbr>Kind</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+								<a href="_astpath_types_.buildastpathoptions.html#includenodename" class="tsd-kind-icon">include<wbr>Node<wbr>Name</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
 								<a href="_astpath_types_.buildastpathoptions.html#includepathtosourcefile" class="tsd-kind-icon">include<wbr>Path<wbr>ToSource<wbr>File</a>

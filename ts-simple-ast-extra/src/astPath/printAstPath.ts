@@ -8,6 +8,7 @@ interface Options {
   dontPrintSourceFilePrefix?: boolean
   onlyIndex?: boolean
   onlyKindName?: boolean
+  onlyNameOrKind?: boolean
   levelSeparator?: string
 }
 
@@ -16,7 +17,10 @@ export function printAstPath(path: AstPath, options: Options = {}): string {
     throw new Error('Ast path must be created with syntax kind information')
   }
   let s: string
-  if (path.createOptions.includeNodeKind && options.onlyKindName) {
+
+  if (path.createOptions.includeNodeName && options.onlyNameOrKind) {
+    s = path.path.map(p => `${p.nodeName}`).join(options.levelSeparator || '>')
+  } else if (path.createOptions.includeNodeKind && options.onlyKindName) {
     s = path.path.map(p => `${getKindName(p.nodeKind!)}`).join(options.levelSeparator || '>')
   } else if (options.onlyIndex) {
     s = path.path.map(p => `${p.index}`).join(options.levelSeparator || '>')

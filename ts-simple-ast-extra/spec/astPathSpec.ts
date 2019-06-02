@@ -189,6 +189,25 @@ describe('astPath', () => {
       'SourceFile/InterfaceDeclaration/MethodSignature/Parameter/FunctionType/VoidKeyword'
     )
   })
+
+  it('Should support name paths', () => {
+    const project = new Project()
+    const f = project.createSourceFile(
+      'jojojo.ts',
+      `
+      interface I<T=any>{
+        m(i: number, g: (aParameter1: number)=>void)
+      }
+      `
+    )!
+    const n = f.getDescendants().find(i => i.getText() === 'void')!
+
+    const sel = buildAstPath(n, n.getSourceFile(), { includeNodeName: true })
+    expect(printAstPath(sel, { onlyNameOrKind: true, levelSeparator: '/' })).toBe(
+      'jojojo/I/m/g/FunctionType/VoidKeyword'
+    )
+  })
+
   xit('Should fail to select if verifyNodeKind is provided and structure is the same but some node kind changed in the path', () => {})
 
   xit('Should select if verifyNodeKind is provided and kinds in the path did not change', () => {})

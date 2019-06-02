@@ -1,5 +1,5 @@
 import { Node, TypeGuards } from 'ts-morph'
-import { getChildrenForEachChild, getChildrenByPassSyntaxList } from '../node'
+import { getChildrenForEachChild, getChildrenByPassSyntaxList, getName } from '../node'
 import { AstPath, ASTPathNode, BuildAstPathOptions } from './types'
 /**
  * Creates a selector like `0/4/3/` where numbers are the child index of the node on that level with respect
@@ -24,14 +24,7 @@ export function buildAstPath(
     list.splice(0, list.findIndex(node => node === fromAncestor))
   }
   ;[...list.reverse(), node].forEach(a => {
-    //  let index:number
     let parent: Node | undefined = a.getParent()
-    //  if(!parent){
-    //    index=0
-    //  }
-    //  else if(options.mode==='getChildren') {
-    //   // parent  = TypeGuards.isSyntaxList(parent)
-    //  }
     const index = parent
       ? (options.mode === 'getChildren'
           ? getChildrenByPassSyntaxList(parent)
@@ -40,7 +33,8 @@ export function buildAstPath(
       : 0
     path.push({
       index,
-      ...(options.includeNodeKind ? { nodeKind: a.getKind(), parentKind: parent ? parent!.getKind() : undefined } : {})
+      ...(options.includeNodeKind ? { nodeKind: a.getKind(), parentKind: parent ? parent!.getKind() : undefined } : {}),
+      ...(options.includeNodeName ? { nodeName: getName(a) || a.getKindName() || a.getChildIndex() + '' } : {})
     })
   })
   return {

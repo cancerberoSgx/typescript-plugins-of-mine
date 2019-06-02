@@ -1,20 +1,18 @@
 import { Node, TypeGuards, SourceFile, Directory, ts } from 'ts-morph'
+import { setObjectProperty, getObjectProperty } from 'misc-utils-of-mine-generic'
 
 /**
  * like Node.getChildren but using forEachChild(). TODO: perhaps is a good idea to add a useForEachChild to
  * ts-simple-ast getChildren that is optional but if provided do this ?
  */
 export function getChildrenForEachChild(n: Node): Node[] {
-  // const result: Node[] = []
-  // n.forEachChild(n => result.push(n))
-  // return result
   return n.forEachChildAsArray()
 }
-// export function getChildren(node: Node, forEachChildMode=true){
-//   return forEachChildMode ? getChildrenForEachChild(node) : node.forEachChildAsArray()
-// }
+
 /**
- * Similar to  getChildren() but, if one of child is SyntaxList, it will return the syntax list getChildren() instead of it. This is to be coherent with getParent() where rotNode.getParent()===SourceFile but rootNode.getParent().getChildren() will be [SyntaxList, EndOfFileToken]
+ * Similar to  getChildren() but, if one of child is SyntaxList, it will return the syntax list getChildren()
+ * instead of it. This is to be coherent with getParent() where rotNode.getParent()===SourceFile but
+ * rootNode.getParent().getChildren() will be [SyntaxList, EndOfFileToken]
  */
 export function getChildrenByPassSyntaxList(n: Node): Node[] {
   return n
@@ -24,9 +22,13 @@ export function getChildrenByPassSyntaxList(n: Node): Node[] {
 }
 
 /**
- *  Try to call n.getName or returns empty string if there is no such method
+ *  Gets given node's name if any. First try to guess TypeGuards.hasName(n) ? n.getName() and if is not
+ *  supported try to read a children of type identifier. If none found returns undefined.
  */
 export function getName(n: Node) {
+  if (TypeGuards.isSourceFile(n)) {
+    return n.getBaseNameWithoutExtension()
+  }
   function getNodeName(n: Node) {
     if (TypeGuards.isIdentifier(n)) {
       return n.getText()
@@ -41,10 +43,20 @@ export function getName(n: Node) {
   }
 }
 
-// export function getNodeName(n: Node) {
-//   const id = n.getFirstChildByKind(ts.SyntaxKind.Identifier)
-//   return id ? id.getText() : undefined
-// }
+export function setNodeProperty(n: Node, path: string | (string | number)[], value: any) {
+  if (!(n as any).cannabis_meta) {
+    ;(n as any).cannabis_meta = {}
+  }
+  setObjectProperty((n as any).cannabis_meta, path, value)
+}
+
+export function getNodeProperty<T = any>(n: Node, path: string | (string | number)[]): T | undefined {
+  if (!(n as any).cannabis_meta) {
+    ;(n as any).cannabis_meta = {}
+  }
+  return getObjectProperty<T>((n as any).cannabis_meta, path)
+}
+
 /**
  * Iterates recursively over all children of given node and apply visitor on each of them. If visitor returns
  * non falsy value then it stops visiting and that value is returned to the caller. See

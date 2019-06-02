@@ -86,6 +86,7 @@
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_astpath_types_.astpathnode.html#index" class="tsd-kind-icon">index</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_astpath_types_.astpathnode.html#nodekind" class="tsd-kind-icon">node<wbr>Kind</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_astpath_types_.astpathnode.html#nodename" class="tsd-kind-icon">node<wbr>Name</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_astpath_types_.astpathnode.html#parentkind" class="tsd-kind-icon">parent<wbr>Kind</a></li>
 							</ul>
 						</section>
@@ -100,12 +101,12 @@
 					<div class="tsd-signature tsd-kind-icon">index<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/8620a32/ts-simple-ast-extra/src/astPath/types.ts#L24">astPath/types.ts:24</a></li>
+							<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/83850fc/ts-simple-ast-extra/src/astPath/types.ts#L35">astPath/types.ts:35</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>index of current node relative to is parent according to [[]]</p>
+							<p>Index of current node relative to is parent according to <a href="_astpath_types_.buildastpathoptions.html#mode">mode</a> option.</p>
 						</div>
 					</div>
 				</section>
@@ -115,9 +116,29 @@
 					<div class="tsd-signature tsd-kind-icon">node<wbr>Kind<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">SyntaxKind</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/8620a32/ts-simple-ast-extra/src/astPath/types.ts#L25">astPath/types.ts:25</a></li>
+							<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/83850fc/ts-simple-ast-extra/src/astPath/types.ts#L39">astPath/types.ts:39</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>If configured so it stores the node&#39;s syntax kind value.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+					<a name="nodename" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> node<wbr>Name</h3>
+					<div class="tsd-signature tsd-kind-icon">node<wbr>Name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/83850fc/ts-simple-ast-extra/src/astPath/types.ts#L43">astPath/types.ts:43</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>If configured so it stores the node&#39;s name (or syntax kind name if it no name.</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
 					<a name="parentkind" class="tsd-anchor"></a>
@@ -125,9 +146,14 @@
 					<div class="tsd-signature tsd-kind-icon">parent<wbr>Kind<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">SyntaxKind</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/8620a32/ts-simple-ast-extra/src/astPath/types.ts#L26">astPath/types.ts:26</a></li>
+							<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/83850fc/ts-simple-ast-extra/src/astPath/types.ts#L47">astPath/types.ts:47</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>If configured so it stores the node parent&#39;s syntax kind value.</p>
+						</div>
+					</div>
 				</section>
 			</section>
 		</div>
@@ -154,6 +180,9 @@
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
 								<a href="_astpath_types_.astpathnode.html#nodekind" class="tsd-kind-icon">node<wbr>Kind</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+								<a href="_astpath_types_.astpathnode.html#nodename" class="tsd-kind-icon">node<wbr>Name</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
 								<a href="_astpath_types_.astpathnode.html#parentkind" class="tsd-kind-icon">parent<wbr>Kind</a>
