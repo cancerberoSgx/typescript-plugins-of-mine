@@ -1,6 +1,6 @@
 import { flatReadOnly } from 'misc-utils-of-mine-generic'
 import { Node, Project, SourceFile, TextChange, TextRange, TextSpan, ts } from 'ts-morph'
-import { notUndefined } from '../misc'
+import { notUndefined } from 'misc-utils-of-mine-generic'
 
 export function createTextChanges(textChanges: ts.TextChange[]): TextChange[] {
   return textChanges.map(compilerNode => createTextChange(compilerNode))

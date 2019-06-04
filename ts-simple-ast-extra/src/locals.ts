@@ -1,5 +1,5 @@
 import { Node, SyntaxKind, ts, TypeGuards } from 'ts-morph'
-import { notFalsy } from './misc'
+import { notFalsy } from 'misc-utils-of-mine-generic'
 
 /**
  * Unstable API. Uses TS internals!

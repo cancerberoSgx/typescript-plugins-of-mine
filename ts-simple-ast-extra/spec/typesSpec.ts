@@ -1,5 +1,13 @@
-import { getExtendsRecursively, getImplementsAll, getImplementsAllNames } from '../src'
+import {
+  getExtendsRecursively,
+  getImplementsAll,
+  getImplementsAllNames,
+  getSymbolFlags,
+  getTypeFlags,
+  getObjectFlags
+} from '../src'
 import { getFile } from './testUtil'
+import { SyntaxKind } from 'ts-morph'
 
 describe('types', () => {
   const code1 = `
@@ -12,6 +20,7 @@ class A implements I{}
 class B extends A implements J{}
 class C<T> extends B implements I2<T>{}
 class D<T> extends C<T> implements I3{} 
+var x = new A()
 `
 
   it('getExtendsRecursively', () => {

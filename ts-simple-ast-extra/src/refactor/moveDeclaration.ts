@@ -17,7 +17,7 @@ import {
   ImportSpecifier
 } from 'ts-morph'
 import { getNodeLocalNamesNotReferencing } from '..'
-import { notFalsy, notUndefined } from '../misc'
+import { notFalsy, notUndefined } from 'misc-utils-of-mine-generic'
 
 interface Options {
   declaration: Declaration

@@ -1,5 +1,6 @@
 import { ClassDeclaration, ExpressionWithTypeArguments, InterfaceDeclaration, Node, TypeGuards, ts } from 'ts-morph'
-import { notUndefined } from './misc'
+import { notUndefined } from 'misc-utils-of-mine-generic'
+
 /**
  * Returns all implements clauses of this class and its super classes both things recursively
  */
@@ -9,7 +10,6 @@ export const getImplementsAll = (cl: ClassDeclaration): ExpressionWithTypeArgume
     // TODO: types like A|B
     result.push(impl)
     const s = impl.getType().getSymbol()
-
     s &&
       s.getDeclarations().forEach(d => {
         if (TypeGuards.isInterfaceDeclaration(d)) {
@@ -19,7 +19,6 @@ export const getImplementsAll = (cl: ClassDeclaration): ExpressionWithTypeArgume
   })
   getExtendsRecursively(cl).forEach(ext => {
     const s = ext.getType().getSymbol()
-
     s &&
       s.getDeclarations().forEach(d => {
         if (TypeGuards.isClassDeclaration(d)) {
@@ -128,4 +127,12 @@ export function getEnumKey(anEnum: any, value: any): string {
     }
   }
   return ''
+}
+
+export function getEnumKeyAndValue(e: any) {
+  const a = []
+  for (const key in e) {
+    a.push({ key, value: e[key] })
+  }
+  return a
 }
