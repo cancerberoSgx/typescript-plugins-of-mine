@@ -1,15 +1,15 @@
-import { Project, SourceFile } from 'ts-morph';
-import { FormatCodeSettings, getDefaultFormatCodeSettings } from 'typescript';
-import { addTrailingSemicolons, removeTrailingSemicolons } from './trailingSemicolons';
+import { Project, SourceFile } from 'ts-morph'
+import { FormatCodeSettings, getDefaultFormatCodeSettings } from 'typescript'
+import { addTrailingSemicolons, removeTrailingSemicolons } from './trailingSemicolons'
 
-interface Options extends Partial<FormatCodeSettings> {
+export interface FormatOptions extends Partial<FormatCodeSettings> {
   file: SourceFile
   project: Project
   trailingSemicolons?: 'never' | 'always'
   newLineCharacter?: string
 }
 
-export function format(options: Options) {
+export function format(options: FormatOptions) {
   options = Object.assign({}, getDefaultFormatCodeSettings(options.newLineCharacter || '\n'), options)
   if (options.trailingSemicolons === 'never') {
     removeTrailingSemicolons(options.file)

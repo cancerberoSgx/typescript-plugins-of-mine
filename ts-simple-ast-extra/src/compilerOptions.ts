@@ -25,6 +25,7 @@ export function buildManipulationSettings(
   }
   const obj: ManipulationSettings = {
     indentationText,
+    usePrefixAndSuffixTextForRename: false,
     newLineKind: !formatOptions
       ? NewLineKind.LineFeed
       : formatOptions.newLineCharacter === '\n'
