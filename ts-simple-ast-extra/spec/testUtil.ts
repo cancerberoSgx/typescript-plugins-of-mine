@@ -1,4 +1,5 @@
 import { Project, Diagnostic, DiagnosticMessageChain, SourceFile } from 'ts-morph'
+import { diffLines } from 'diff'
 
 export function createProject(...args: string[] | string[][]) {
   const project = new Project()
@@ -50,4 +51,17 @@ function print(s: DiagnosticMessageChain | undefined): string {
   } else {
     return `${s.getMessageText()} - ${print(s.getNext())}`
   }
+}
+
+require('colors')
+export function expectEqualsAndDiff(a: string, b: string) {
+  const d = diffLines(a, b)
+  const diff = d.filter(part => part.added || part.removed)
+  if (diff.length) {
+    d.forEach(part => {
+      var color = part.added ? 'green' : part.removed ? 'red' : 'grey'
+      process.stderr.write(part.value.replace(/[ \t]/g, '·')[color as any])
+    })
+  }
+  expect(diff.length).toEqual(0, 'Strings Different')
 }

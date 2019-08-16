@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>&quot;refactor/splitVariableDeclaration&quot; | ts-simple-ast-extra</title>
+	<title>&quot;refactor/format&quot; | ts-simple-ast-extra</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,10 +56,10 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="_refactor_splitvariabledeclaration_.html">&quot;refactor/splitVariableDeclaration&quot;</a>
+					<a href="_refactor_format_.html">&quot;refactor/format&quot;</a>
 				</li>
 			</ul>
-			<h1>External module &quot;refactor/splitVariableDeclaration&quot;</h1>
+			<h1>External module &quot;refactor/format&quot;</h1>
 		</div>
 	</div>
 </header>
@@ -70,11 +70,16 @@
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
+						<section class="tsd-index-section tsd-is-external tsd-is-not-exported">
+							<h3>Interfaces</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-interface tsd-parent-kind-external-module tsd-is-external tsd-is-not-exported"><a href="../interfaces/_refactor_format_.options.html" class="tsd-kind-icon">Options</a></li>
+							</ul>
+						</section>
 						<section class="tsd-index-section tsd-is-external">
 							<h3>Functions</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-external"><a href="_refactor_splitvariabledeclaration_.html#splitvariabledeclaration" class="tsd-kind-icon">split<wbr>Variable<wbr>Declaration</a></li>
-								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-external"><a href="_refactor_splitvariabledeclaration_.html#splitvariabledeclarations" class="tsd-kind-icon">split<wbr>Variable<wbr>Declarations</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-external"><a href="_refactor_format_.html#format" class="tsd-kind-icon">format</a></li>
 							</ul>
 						</section>
 					</div>
@@ -83,60 +88,25 @@
 			<section class="tsd-panel-group tsd-member-group tsd-is-external">
 				<h2>Functions</h2>
 				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
-					<a name="splitvariabledeclaration" class="tsd-anchor"></a>
-					<h3>split<wbr>Variable<wbr>Declaration</h3>
+					<a name="format" class="tsd-anchor"></a>
+					<h3>format</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">split<wbr>Variable<wbr>Declaration<span class="tsd-signature-symbol">(</span>node<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">VariableDeclarationList</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">format<span class="tsd-signature-symbol">(</span>options<span class="tsd-signature-symbol">: </span><a href="../interfaces/_refactor_format_.options.html" class="tsd-signature-type">Options</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">SourceFile</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/1f9ae2f/ts-simple-ast-extra/src/refactor/splitVariableDeclaration.ts#L21">refactor/splitVariableDeclaration.ts:21</a></li>
+									<li>Defined in refactor/format.ts:13</li>
 								</ul>
 							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Replace given VariableDeclarationList node with variable declaration statements one for each variable.
-									It will add types if variables in variable declaration list don&#39;t declare them</p>
-								</div>
-							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>node: <span class="tsd-signature-type">VariableDeclarationList</span></h5>
+									<h5>options: <a href="../interfaces/_refactor_format_.options.html" class="tsd-signature-type">Options</a></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
-					<a name="splitvariabledeclarations" class="tsd-anchor"></a>
-					<h3>split<wbr>Variable<wbr>Declarations</h3>
-					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">split<wbr>Variable<wbr>Declarations<span class="tsd-signature-symbol">(</span>node<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Node</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/1f9ae2f/ts-simple-ast-extra/src/refactor/splitVariableDeclaration.ts#L6">refactor/splitVariableDeclaration.ts:6</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Replace given node&#39;s VariableDeclarationList descendants with individual variable declaration statements one for each variable.
-									It will add types if variables in variable declaration list don&#39;t declare them</p>
-								</div>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>node: <span class="tsd-signature-type">Node</span></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">SourceFile</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -149,17 +119,17 @@
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
 					<li class="current tsd-kind-external-module tsd-is-external">
-						<a href="_refactor_splitvariabledeclaration_.html">"refactor/split<wbr>Variable<wbr>Declaration"</a>
+						<a href="_refactor_format_.html">"refactor/format"</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
-						<a href="_refactor_splitvariabledeclaration_.html#splitvariabledeclaration" class="tsd-kind-icon">split<wbr>Variable<wbr>Declaration</a>
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-is-external tsd-is-not-exported">
+						<a href="../interfaces/_refactor_format_.options.html" class="tsd-kind-icon">Options</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
-						<a href="_refactor_splitvariabledeclaration_.html#splitvariabledeclarations" class="tsd-kind-icon">split<wbr>Variable<wbr>Declarations</a>
+						<a href="_refactor_format_.html#format" class="tsd-kind-icon">format</a>
 					</li>
 				</ul>
 			</nav>

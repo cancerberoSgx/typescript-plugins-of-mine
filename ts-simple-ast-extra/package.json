@@ -1,6 +1,6 @@
 {
   "name": "ts-simple-ast-extra",
-  "version": "0.1.15",
+  "version": "0.1.16",
   "description": "extra utilities for ts-morph",
   "main": "dist/src/index.js",
   "typings": "dist/src/index.d.ts",
@@ -30,9 +30,12 @@
   },
   "devDependencies": {
     "@istanbuljs/nyc-config-typescript": "^0.1.3",
+    "@types/diff": "^4.0.2",
     "@types/jasmine": "^3.3.13",
     "@types/node": "^12.0.4",
+    "colors": "^1.3.3",
     "coveralls": "^3.0.3",
+    "diff": "^4.0.1",
     "jasmine": "^3.4.0",
     "nyc": "^14.1.1",
     "prettier": "^1.17.1",
