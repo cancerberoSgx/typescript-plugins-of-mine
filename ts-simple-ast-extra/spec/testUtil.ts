@@ -1,5 +1,6 @@
-import { Project, Diagnostic, DiagnosticMessageChain, SourceFile } from 'ts-morph'
+import { Project, SourceFile } from 'ts-morph'
 import { diffLines } from 'diff'
+import { printDiagnostics } from '../src/diagnostics';
 
 export function createProject(...args: string[] | string[][]) {
   const project = new Project()
@@ -33,24 +34,9 @@ export function getFile(code: string) {
 
 export function expectNoErrors(project: Project) {
   expect(
-    project
-      .getPreEmitDiagnostics()
-      .map(d => getDiagnosticMessage(d))
-      .join(', ')
+    printDiagnostics(project)
+      .join('\n')
   ).toBe('')
-}
-
-export function getDiagnosticMessage(d: Diagnostic) {
-  const s = d.getMessageText()
-  return `${d.getSourceFile() && d.getSourceFile()!.getBaseName()}: ${typeof s === 'string' ? s : print(s.getNext())}`
-}
-
-function print(s: DiagnosticMessageChain | undefined): string {
-  if (!s) {
-    return ''
-  } else {
-    return `${s.getMessageText()} - ${print(s.getNext())}`
-  }
 }
 
 require('colors')

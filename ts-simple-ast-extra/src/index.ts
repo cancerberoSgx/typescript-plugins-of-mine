@@ -9,6 +9,7 @@ export * from './generalNode'
 export * from './types'
 export * from './flags'
 export * from './path'
+export * from './diagnostics'
 
 import * as tsMorph from 'ts-morph'
 export { tsMorph }
