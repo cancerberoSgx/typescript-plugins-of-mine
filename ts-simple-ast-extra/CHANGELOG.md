@@ -36,10 +36,21 @@
 # 0.1.4
  * generalNode, fileNode
  * astPath fix
- * astPath support for mode (getChildren vs forEachhild)
+ * astPath support for mode (getChildren vs forEachChild)
  * remove node.js dependency
 
-# 0.1.5
-
+# 0.1.6
  * updates dependencies 
+ * trailingSemicolon
+ * compatible with browser
+
+# 0.2.2
+ * format
  * updates ts-morph 2.1
+ * diagnostics
+ * deps updated - ts-morph 3
+ * node / types flags
+
+# 0.2.3
+ * docs
+ * Project exposed

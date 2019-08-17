@@ -14,3 +14,4 @@ export * from './diagnostics'
 import * as tsMorph from 'ts-morph'
 export { tsMorph }
 export { ts } from 'ts-morph'
+export { Project } from 'ts-morph'

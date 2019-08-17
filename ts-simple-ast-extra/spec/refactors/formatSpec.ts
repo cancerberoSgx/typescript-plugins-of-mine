@@ -60,16 +60,12 @@ for (let i = 0; i < 2; i++) { }
   it('should remove semicolons and tab 2 spaces', () => {
     const project = new Project()
     expectNoErrors(project)
-
     const file = project.createSourceFile('f1.ts', code)
     const output = format({
       file,
       project,
       trailingSemicolons: 'never',
-      convertTabsToSpaces: true,
-      indentSize: 2,
-      insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: false,
-      insertSpaceBeforeFunctionParenthesis: false
+      indentSize: 2
     })
 
     const expected = `

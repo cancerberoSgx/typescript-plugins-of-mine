@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>&quot;path&quot; | ts-simple-ast-extra</title>
+	<title>&quot;diagnostics&quot; | ts-simple-ast-extra</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,10 +56,10 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="_path_.html">&quot;path&quot;</a>
+					<a href="_diagnostics_.html">&quot;diagnostics&quot;</a>
 				</li>
 			</ul>
-			<h1>External module &quot;path&quot;</h1>
+			<h1>External module &quot;diagnostics&quot;</h1>
 		</div>
 	</div>
 </header>
@@ -73,10 +73,9 @@
 						<section class="tsd-index-section tsd-is-external">
 							<h3>Functions</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-external"><a href="_path_.html#getabsolutepath" class="tsd-kind-icon">get<wbr>Absolute<wbr>Path</a></li>
-								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-external"><a href="_path_.html#getbasepath" class="tsd-kind-icon">get<wbr>Base<wbr>Path</a></li>
-								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-external"><a href="_path_.html#getfilefromrelativepath" class="tsd-kind-icon">get<wbr>File<wbr>From<wbr>Relative<wbr>Path</a></li>
-								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-external"><a href="_path_.html#getrelativepath" class="tsd-kind-icon">get<wbr>Relative<wbr>Path</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-external"><a href="_diagnostics_.html#getdiagnosticmessage" class="tsd-kind-icon">get<wbr>Diagnostic<wbr>Message</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-external tsd-is-not-exported"><a href="_diagnostics_.html#print" class="tsd-kind-icon">print</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-external"><a href="_diagnostics_.html#printdiagnostics" class="tsd-kind-icon">print<wbr>Diagnostics</a></li>
 							</ul>
 						</section>
 					</div>
@@ -85,25 +84,45 @@
 			<section class="tsd-panel-group tsd-member-group tsd-is-external">
 				<h2>Functions</h2>
 				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
-					<a name="getabsolutepath" class="tsd-anchor"></a>
-					<h3>get<wbr>Absolute<wbr>Path</h3>
+					<a name="getdiagnosticmessage" class="tsd-anchor"></a>
+					<h3>get<wbr>Diagnostic<wbr>Message</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Absolute<wbr>Path<span class="tsd-signature-symbol">(</span>relativePath<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, project<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Project</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Diagnostic<wbr>Message<span class="tsd-signature-symbol">(</span>d<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Diagnostic</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/caa5474/ts-simple-ast-extra/src/path.ts#L9">path.ts:9</a></li>
+									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/caa5474/ts-simple-ast-extra/src/diagnostics.ts#L7">diagnostics.ts:7</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>relativePath: <span class="tsd-signature-type">string</span></h5>
+									<h5>d: <span class="tsd-signature-type">Diagnostic</span></h5>
 								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module tsd-is-external tsd-is-not-exported">
+					<a name="print" class="tsd-anchor"></a>
+					<h3>print</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module tsd-is-external tsd-is-not-exported">
+						<li class="tsd-signature tsd-kind-icon">print<span class="tsd-signature-symbol">(</span>s<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">DiagnosticMessageChain</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/caa5474/ts-simple-ast-extra/src/diagnostics.ts#L12">diagnostics.ts:12</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
 								<li>
-									<h5>project: <span class="tsd-signature-type">Project</span></h5>
+									<h5>s: <span class="tsd-signature-type">DiagnosticMessageChain</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
@@ -111,16 +130,16 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
-					<a name="getbasepath" class="tsd-anchor"></a>
-					<h3>get<wbr>Base<wbr>Path</h3>
+					<a name="printdiagnostics" class="tsd-anchor"></a>
+					<h3>print<wbr>Diagnostics</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Base<wbr>Path<span class="tsd-signature-symbol">(</span>project<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Project</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+						<li class="tsd-signature tsd-kind-icon">print<wbr>Diagnostics<span class="tsd-signature-symbol">(</span>project<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Project</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/caa5474/ts-simple-ast-extra/src/path.ts#L4">path.ts:4</a></li>
+									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/caa5474/ts-simple-ast-extra/src/diagnostics.ts#L3">diagnostics.ts:3</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -129,64 +148,7 @@
 									<h5>project: <span class="tsd-signature-type">Project</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
-					<a name="getfilefromrelativepath" class="tsd-anchor"></a>
-					<h3>get<wbr>File<wbr>From<wbr>Relative<wbr>Path</h3>
-					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>File<wbr>From<wbr>Relative<wbr>Path<span class="tsd-signature-symbol">(</span>path<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, project<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Project</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">SourceFile</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Directory</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/caa5474/ts-simple-ast-extra/src/path.ts#L17">path.ts:17</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>path: <span class="tsd-signature-type">string</span></h5>
-								</li>
-								<li>
-									<h5>project: <span class="tsd-signature-type">Project</span></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">undefined</span>
-								<span class="tsd-signature-symbol"> | </span>
-								<span class="tsd-signature-type">SourceFile</span>
-								<span class="tsd-signature-symbol"> | </span>
-								<span class="tsd-signature-type">Directory</span>
-							</h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
-					<a name="getrelativepath" class="tsd-anchor"></a>
-					<h3>get<wbr>Relative<wbr>Path</h3>
-					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Relative<wbr>Path<span class="tsd-signature-symbol">(</span>path<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, project<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Project</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/caa5474/ts-simple-ast-extra/src/path.ts#L13">path.ts:13</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>path: <span class="tsd-signature-type">string</span></h5>
-								</li>
-								<li>
-									<h5>project: <span class="tsd-signature-type">Project</span></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -199,23 +161,20 @@
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
 					<li class="current tsd-kind-external-module tsd-is-external">
-						<a href="_path_.html">"path"</a>
+						<a href="_diagnostics_.html">"diagnostics"</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
 					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
-						<a href="_path_.html#getabsolutepath" class="tsd-kind-icon">get<wbr>Absolute<wbr>Path</a>
+						<a href="_diagnostics_.html#getdiagnosticmessage" class="tsd-kind-icon">get<wbr>Diagnostic<wbr>Message</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-external tsd-is-not-exported">
+						<a href="_diagnostics_.html#print" class="tsd-kind-icon">print</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
-						<a href="_path_.html#getbasepath" class="tsd-kind-icon">get<wbr>Base<wbr>Path</a>
-					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
-						<a href="_path_.html#getfilefromrelativepath" class="tsd-kind-icon">get<wbr>File<wbr>From<wbr>Relative<wbr>Path</a>
-					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
-						<a href="_path_.html#getrelativepath" class="tsd-kind-icon">get<wbr>Relative<wbr>Path</a>
+						<a href="_diagnostics_.html#printdiagnostics" class="tsd-kind-icon">print<wbr>Diagnostics</a>
 					</li>
 				</ul>
 			</nav>

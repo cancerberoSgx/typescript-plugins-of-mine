@@ -67,40 +67,133 @@
 				<a href="#ts-simple-ast-extra" id="ts-simple-ast-extra" style="color: inherit; text-decoration: none;">
 					<h1>ts-simple-ast-extra</h1>
 				</a>
+				<p>High level TypeScript Compiler API and refactor tools based on ts-morph (ex ts-simple-ast) library</p>
+				<a href="#contents" id="contents" style="color: inherit; text-decoration: none;">
+					<h2>Contents</h2>
+				</a>
+				<!-- toc -->
 				<ul>
-					<li><p>extra utilities for ts-simple-ast that make sense on my plugins, like abstract types, test helpers, utilities, etc</p>
+					<li><a href="#summary">Summary</a></li>
+					<li><a href="#install">Install</a></li>
+					<li><a href="#usage">Usage</a></li>
+					<li><a href="#refactors">Refactors</a><ul>
+							<li><a href="#addbracestoarrowfunctions">addBracesToArrowFunctions</a></li>
+							<li><a href="#format">format</a></li>
+						</ul>
 					</li>
-					<li><p>while typescript-ast-util and typescript-plugin-util must remain independent on any library - this is very dependant on ts-simple-ast. </p>
+					<li><a href="#api-docs">API docs</a></li>
+					<li><a href="#changelog">CHANGELOG</a></li>
+					<li><a href="#todo">TODO</a></li>
+					<li><a href="#related-projects">Related projects</a></li>
+				</ul>
+				<!-- tocstop -->
+				<a href="#summary" id="summary" style="color: inherit; text-decoration: none;">
+					<h2>Summary</h2>
+				</a>
+				<ul>
+					<li><p>Browser support (out of the box)</p>
 					</li>
-					<li><p>Lots of code refactors.</p>
+					<li><p>Many APIs for project&#39;s <strong>code refactors</strong>. </p>
+						<ul>
+							<li>in general based on TypeScript built in code fixes and refactors</li>
+							<li>Easy to use</li>
+							<li>have tests but use at your own risk</li>
+						</ul>
 					</li>
 				</ul>
+				<ul>
+					<li><p>APIs useful to me that unfortunately are out of topic to pull them to in ts-morph like astPath or generalNode abstraction or </p>
+					</li>
+					<li><p>utilities related with TypeScript Plugin development like abstract types, Tests Helpers, AST, repeated code, codefixes generic structure, etc</p>
+					</li>
+					<li><p>Access to not so public areas of TypeScript APIs or some encapsulated hacks</p>
+					</li>
+				</ul>
+				<a href="#install" id="install" style="color: inherit; text-decoration: none;">
+					<h2>Install</h2>
+				</a>
+				<p>npm install ts-simple-ast-extra</p>
+				<a href="#usage" id="usage" style="color: inherit; text-decoration: none;">
+					<h2>Usage</h2>
+				</a>
+				<p>NOTE: Currently, although there is API documentation I would say the best source of documentation are the test. </p>
+				<ul>
+					<li>There are many different kind of APIs. Each file in src implements a &quot;topic&quot;. </li>
+					<li>Each file or &quot;topic&quot; has a test at <code>spec</code> folder using the same name. At the beggining there is alwasys a simple usage
+					<code>src/refactor</code> contain many interesting code refactors at the project level</li>
+				</ul>
+				<a href="#refactors" id="refactors" style="color: inherit; text-decoration: none;">
+					<h2>Refactors</h2>
+				</a>
+				<p>In general they have the same API, you pass a SourceFile and the Project (they need access to the LanguageService):</p>
+				<a href="#addbracestoarrowfunctions" id="addbracestoarrowfunctions" style="color: inherit; text-decoration: none;">
+					<h3>addBracesToArrowFunctions</h3>
+				</a>
+				<pre><code class="language-ts"><span class="hljs-keyword">import</span> {Project, addBracesToArrowFunctions} <span class="hljs-keyword">from</span> <span class="hljs-string">'ts-simple-ast-extra'</span>
+<span class="hljs-keyword">const</span> project = <span class="hljs-keyword">new</span> Project()
+<span class="hljs-keyword">const</span> f = project.createSourceFile(<span class="hljs-string">'f1.ts'</span>,  <span class="hljs-string">`
+  const c = a =&gt; a+1
+  export f = (b:number h: Date[])=&gt;null
+`</span>)
+addBracesToArrowFunctions(project, f)
+<span class="hljs-built_in">console</span>.log(f.getText())
+<span class="hljs-comment">/*
+const c = a =&gt; { 
+  return a + 1; 
+} 
+export f = (b:number h: Date[])=&gt;{ 
+  return null; 
+}
+*/</span></code></pre>
+				<a href="#format" id="format" style="color: inherit; text-decoration: none;">
+					<h3>format</h3>
+				</a>
+				<pre><code class="language-ts"><span class="hljs-keyword">import</span> {Project, format} <span class="hljs-keyword">from</span> <span class="hljs-string">'ts-simple-ast-extra'</span>
+<span class="hljs-keyword">const</span> project = <span class="hljs-keyword">new</span> Project()
+<span class="hljs-keyword">const</span> file = project.createSourceFile(<span class="hljs-string">'f2.ts'</span>,  <span class="hljs-string">`
+function f(){
+alert(1);
+log(2,function(){
+return 1+g(a=&gt;{
+return 2
+}              )
+}    );
+}`</span>)
+<span class="hljs-keyword">const</span> output = format({
+  file,
+  project,
+  trailingSemicolons: <span class="hljs-string">'never'</span>,
+  indentSize: <span class="hljs-number">2</span>,
+})
+<span class="hljs-built_in">console</span>.log(f.getText())
+<span class="hljs-comment">/*
+function f() {
+  alert(1)
+  log(2, function() {
+    return 1 + g(a =&gt; {
+      return 2
+    })
+  })
+}
+*/</span></code></pre>
 				<a href="#api-docs" id="api-docs" style="color: inherit; text-decoration: none;">
-					<h1>API docs</h1>
+					<h2>API docs</h2>
 				</a>
-				<p><a href="../docs/typescript-plugins-util/modules/_index_.html">See apidocs</a></p>
+				<p><a href="https://cancerberosgx.github.io/typescript-plugins-of-mine/ts-simple-ast-extra/">See API docs</a></p>
+				<a href="#changelog" id="changelog" style="color: inherit; text-decoration: none;">
+					<h2>CHANGELOG</h2>
+				</a>
+				<p><a href="CHANGELOG.md">CHANGELOG.md</a></p>
 				<a href="#todo" id="todo" style="color: inherit; text-decoration: none;">
-					<h1>TODO</h1>
+					<h2>TODO</h2>
+				</a>
+				<p><a href="TODO.md">TODO.md</a></p>
+				<a href="#related-projects" id="related-projects" style="color: inherit; text-decoration: none;">
+					<h2>Related projects</h2>
 				</a>
 				<ul>
-					<li>build &quot;Incremental build support using the language services&quot; from <a href="https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API">https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API</a> so we can debug the whole experience in debugger instead of debugging using plugin manually in the editor!</li>
+					<li><a href="typescript-ast-util">../typescript-ast-util</a> - similar objectives but independent on any library accessing directly TypeScript API</li>
 				</ul>
-				<ul>
-					<li>INVESTIGATE THIS TO MOVE CLASSES:
-						<a href="https://basarat.gitbooks.io/typescript/docs/types/moving-types.html">https://basarat.gitbooks.io/typescript/docs/types/moving-types.html</a>
-						Copying both the Type + Value
-						If you want to move a class around, you might be tempted to do the following:
-						class Foo { }
-						var Bar = Foo;
-						var bar: Bar; // ERROR: cannot find name &#39;Bar&#39;
-						This is an error because var only copied the Foo into the variable declaration space and you therefore cannot use Bar as a type annotation. The proper way is to use the import keyword. Note that you can only use the import keyword in such a way if you are using namespaces or modules (more on these later):
-						namespace importing {
-						export class Foo { }
-					}</li>
-				</ul>
-				<p>import Bar = importing.Foo;
-					var bar: Bar; // Okay
-				This import trick only works for things that are both type and variable.</p>
 			</div>
 		</div>
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
@@ -135,6 +228,9 @@
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
 						<a href="modules/_compileroptions_.html">"compiler<wbr>Options"</a>
+					</li>
+					<li class=" tsd-kind-external-module tsd-is-external">
+						<a href="modules/_diagnostics_.html">"diagnostics"</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
 						<a href="modules/_flags_.html">"flags"</a>

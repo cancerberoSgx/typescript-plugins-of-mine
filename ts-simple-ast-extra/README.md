@@ -1,32 +1,126 @@
 # ts-simple-ast-extra
 
- * extra utilities for ts-simple-ast that make sense on my plugins, like abstract types, test helpers, utilities, etc
-
- * while typescript-ast-util and typescript-plugin-util must remain independent on any library - this is very dependant on ts-simple-ast. 
-
- * Lots of code refactors.
-
-# API docs
-
-[See apidocs](../docs/typescript-plugins-util/modules/_index_.html)
-
-# TODO
-
-* build "Incremental build support using the language services" from https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API so we can debug the whole experience in debugger instead of debugging using plugin manually in the editor!
+High level TypeScript Compiler API and refactor tools based on ts-morph (ex ts-simple-ast) library
 
 
-* INVESTIGATE THIS TO MOVE CLASSES:
-https://basarat.gitbooks.io/typescript/docs/types/moving-types.html
-Copying both the Type + Value
-If you want to move a class around, you might be tempted to do the following:
-class Foo { }
-var Bar = Foo;
-var bar: Bar; // ERROR: cannot find name 'Bar'
-This is an error because var only copied the Foo into the variable declaration space and you therefore cannot use Bar as a type annotation. The proper way is to use the import keyword. Note that you can only use the import keyword in such a way if you are using namespaces or modules (more on these later):
-namespace importing {
-    export class Foo { }
+## Contents
+
+<!-- toc -->
+
+- [Summary](#summary)
+- [Install](#install)
+- [Usage](#usage)
+- [Refactors](#refactors)
+  * [addBracesToArrowFunctions](#addbracestoarrowfunctions)
+  * [format](#format)
+- [API docs](#api-docs)
+- [CHANGELOG](#changelog)
+- [TODO](#todo)
+- [Related projects](#related-projects)
+
+<!-- tocstop -->
+
+## Summary
+
+ * Browser support (out of the box)
+
+ * Many APIs for project's **code refactors**. 
+   * in general based on TypeScript built in code fixes and refactors
+   * Easy to use
+   * have tests but use at your own risk
+
+
+ * APIs useful to me that unfortunately are out of topic to pull them to in ts-morph like astPath or generalNode abstraction or 
+
+ * utilities related with TypeScript Plugin development like abstract types, Tests Helpers, AST, repeated code, codefixes generic structure, etc
+
+ * Access to not so public areas of TypeScript APIs or some encapsulated hacks
+
+## Install
+
+npm install ts-simple-ast-extra
+
+## Usage
+
+NOTE: Currently, although there is API documentation I would say the best source of documentation are the test. 
+ * There are many different kind of APIs. Each file in src implements a "topic". 
+ * Each file or "topic" has a test at `spec` folder using the same name. At the beggining there is alwasys a simple usage
+`src/refactor` contain many interesting code refactors at the project level
+
+## Refactors
+
+In general they have the same API, you pass a SourceFile and the Project (they need access to the LanguageService):
+
+
+
+### addBracesToArrowFunctions
+```ts
+import {Project, addBracesToArrowFunctions} from 'ts-simple-ast-extra'
+const project = new Project()
+const f = project.createSourceFile('f1.ts',  `
+  const c = a => a+1
+  export f = (b:number h: Date[])=>null
+`)
+addBracesToArrowFunctions(project, f)
+console.log(f.getText())
+/*
+const c = a => { 
+  return a + 1; 
+} 
+export f = (b:number h: Date[])=>{ 
+  return null; 
 }
+*/
+```
 
-import Bar = importing.Foo;
-var bar: Bar; // Okay
-This import trick only works for things that are both type and variable.
+### format
+
+
+```ts
+import {Project, format} from 'ts-simple-ast-extra'
+const project = new Project()
+const file = project.createSourceFile('f2.ts',  `
+function f(){
+alert(1);
+log(2,function(){
+return 1+g(a=>{
+return 2
+}              )
+}    );
+}`)
+const output = format({
+  file,
+  project,
+  trailingSemicolons: 'never',
+  indentSize: 2,
+})
+console.log(f.getText())
+/*
+function f() {
+  alert(1)
+  log(2, function() {
+    return 1 + g(a => {
+      return 2
+    })
+  })
+}
+*/
+```
+
+
+
+## API docs
+
+[See API docs](https://cancerberosgx.github.io/typescript-plugins-of-mine/ts-simple-ast-extra/)
+
+## CHANGELOG
+
+[CHANGELOG.md](CHANGELOG.md)
+
+## TODO
+
+[TODO.md](TODO.md)
+
+## Related projects
+
+ * [../typescript-ast-util](typescript-ast-util) - similar objectives but independent on any library accessing directly TypeScript API

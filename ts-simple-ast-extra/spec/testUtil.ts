@@ -1,6 +1,6 @@
 import { Project, SourceFile } from 'ts-morph'
 import { diffLines } from 'diff'
-import { printDiagnostics } from '../src/diagnostics';
+import { printDiagnostics } from '../src/diagnostics'
 
 export function createProject(...args: string[] | string[][]) {
   const project = new Project()
@@ -33,10 +33,7 @@ export function getFile(code: string) {
 }
 
 export function expectNoErrors(project: Project) {
-  expect(
-    printDiagnostics(project)
-      .join('\n')
-  ).toBe('')
+  expect(printDiagnostics(project).join('\n')).toBe('')
 }
 
 require('colors')

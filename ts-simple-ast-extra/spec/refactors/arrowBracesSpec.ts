@@ -62,11 +62,13 @@ describe('arrowBraces', () => {
 
     it('should remove braces from arrow all descendant arrow functions', () => {
       const project = new Project()
-      const code = `
-      const c = a => { return a+1; }
-      export f = (a:number)=>{return a+1}
-    `
-      const f = project.createSourceFile('f1.ts', code)
+      const f = project.createSourceFile(
+        'f1.ts',
+        `
+        const c = a => { return a+1; }
+        export f = (a:number)=>{return a+1}
+      `
+      )
       removeBracesFromArrowFunctions(project, f)
       expect(removeWhites(f.getText())).toBe(
         removeWhites(`
