@@ -95,4 +95,3 @@ for (let i = 0; i < 2; i++) { }
     expectEqualsAndDiff(output.getText().trim(), expected)
   })
 })
-

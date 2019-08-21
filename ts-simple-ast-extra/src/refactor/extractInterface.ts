@@ -83,7 +83,6 @@ export function extractInterface(
         structure.constructSignatures!.push(constructorSignature as any) // TODO: report issue to ts-morph
       }
     })
-
   node.getImplements().forEach((I, i) => node.removeImplements(i))
   node.addImplements(
     `${structure.name}${
