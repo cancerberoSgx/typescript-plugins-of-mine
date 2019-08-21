@@ -3,7 +3,7 @@ import * as ts from 'typescript';
 import { getKindName, findAscendant } from 'typescript-ast-util';
 import { CodeFix, CodeFixOptions } from '../codeFixes';
 import { Statement } from '../../../typescript-ast-util/node_modules/typescript/lib/tsserverlibrary';
-import { Block, SourceFile, TypeGuards, StatementedNode, Node, VariableStatementStructure } from 'ts-simple-ast';
+import { Block, SourceFile, TypeGuards, StatementedNode, Node, VariableStatementStructure } from 'ts-morph';
 import { buildRefactorEditInfo } from '../util';
 
 /**

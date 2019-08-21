@@ -1,5 +1,5 @@
 
-import { VariableDeclarationKind, TypeGuards, VariableDeclaration, FunctionDeclaration, MethodDeclaration, ParameterDeclaration, PropertyDeclaration } from 'ts-simple-ast';
+import { VariableDeclarationKind, TypeGuards, VariableDeclaration, FunctionDeclaration, MethodDeclaration, ParameterDeclaration, PropertyDeclaration } from 'ts-morph';
 import * as ts from 'typescript';
 import { getKindName, findAscendant, getTypeStringFor } from 'typescript-ast-util';
 import { CodeFix, CodeFixOptions } from '../codeFixes';

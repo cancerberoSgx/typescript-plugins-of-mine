@@ -1,4 +1,4 @@
-import { Scope, TypeGuards } from 'ts-simple-ast';
+import { Scope, TypeGuards } from 'ts-morph';
 import * as ts from 'typescript';
 import { getKindName, findChild, findAscendant } from 'typescript-ast-util';
 import { CodeFix, CodeFixOptions } from '../codeFixes';
@@ -109,7 +109,7 @@ export const memberChangeScope: CodeFix = {
         options.log(`scope changed to public`)
       }
       else {
-        options.log(`scope not changed because ${declaration.getKindName()} not isScopedNode nor isClassDeclaration `)
+        options.log(`scope not changed because ${(declaration as any).getKindName()} not isScopedNode nor isClassDeclaration `)
       }
     })
   }

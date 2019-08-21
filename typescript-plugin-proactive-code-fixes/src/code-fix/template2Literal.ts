@@ -1,4 +1,4 @@
-import { BinaryExpression, Expression, NoSubstitutionTemplateLiteral, TemplateExpression, TypeChecker, TypeGuards, Node } from "ts-simple-ast";
+import { BinaryExpression, Expression, NoSubstitutionTemplateLiteral, TemplateExpression, TypeChecker, TypeGuards, Node } from "ts-morph";
 import * as ts from 'typescript';
 import { findAscendant } from "typescript-ast-util";
 import { CodeFix, CodeFixOptions } from "../codeFixes";

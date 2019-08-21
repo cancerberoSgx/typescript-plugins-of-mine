@@ -1,5 +1,5 @@
 import { now } from 'hrtime-now';
-import { ClassDeclaration, HeritageClause, InterfaceDeclaration, TypeGuards } from 'ts-simple-ast';
+import { ClassDeclaration, HeritageClause, InterfaceDeclaration, TypeGuards } from 'ts-morph';
 import * as ts from 'typescript';
 import { findAscendant, getKindName } from 'typescript-ast-util';
 import { CodeFix, CodeFixOptions } from '../codeFixes';

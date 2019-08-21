@@ -1,5 +1,5 @@
 import * as shell from 'shelljs';
-import Project, { SourceFile } from 'ts-simple-ast';
+import Project, { SourceFile } from 'ts-morph';
 import { getDiagnosticsInCurrentLocation } from 'typescript-ast-util';
 import { CodeFix, codeFixes, CodeFixOptions } from '../src/typings';
 import { ScriptTarget } from '../../typescript-ast-util/node_modules/typescript/lib/tsserverlibrary';
@@ -130,7 +130,7 @@ export function basicTest(position: number, config: DefaultBeforeEachResult, fix
 export function testCodeFixRefactorEditInfo(code: string, cursorPosition: number|ts.TextRange, codeFixName: string): ts.RefactorEditInfo{
   const project = new Project({
     // useVirtualFileSystem: true
-  // TODO : ts-simple-ast : useVirtualFileSystem: true : breaks typechecker if we dont manually load libts.d.ts
+  // TODO : ts-morph : useVirtualFileSystem: true : breaks typechecker if we dont manually load libts.d.ts
   })
   const sourceFile = project.createSourceFile('foo.ts', code)
   return testCodeFixRefactorEditInfo2(sourceFile, project, cursorPosition, codeFixName)

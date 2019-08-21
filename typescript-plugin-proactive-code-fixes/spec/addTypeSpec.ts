@@ -1,4 +1,4 @@
-import { applyTextChanges } from 'ts-simple-ast-extra';
+import { applyTextChanges } from 'ts-morph-extra';
 import { addType } from '../src/code-fix/addType';
 import { testCodeFixRefactorEditInfo } from './testUtil';
 describe('addType', () => {

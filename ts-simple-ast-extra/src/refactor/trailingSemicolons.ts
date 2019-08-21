@@ -1,6 +1,23 @@
 import { SourceFile, ts, TypeGuards } from 'ts-morph'
 import { createTextChanges } from '..'
 import { getFirstDescendant, getLastToken } from '../node'
+import { RefactorFormatBaseOptions } from './format';
+
+
+export interface TrailingSemicolonsOptions extends RefactorFormatBaseOptions {
+  trailingSemicolons?: 'never' | 'always'
+}
+
+export function trailingSemicolons(options: TrailingSemicolonsOptions) {
+  if (!options.trailingSemicolons) {
+    return
+  }
+  if (options.trailingSemicolons === 'never') {
+    removeTrailingSemicolons(options.file)
+  } else if (options.trailingSemicolons === 'always') {
+    addTrailingSemicolons(options.file)
+  }
+}
 
 export function removeTrailingSemicolons(f: SourceFile) {
   const changes: ts.TextChange[] = []
@@ -23,13 +40,10 @@ export function addTrailingSemicolons(f: SourceFile) {
   f.getDescendantStatements().forEach(d => {
     // add semicolon only if there is not already one, and the last token is not }
     const lt = d.getLastToken()
-    if (
-      lt &&
-      !TypeGuards.isSemicolonToken(lt) &&
-      !lt!
-        .getText()
-        .trim()
-        .endsWith('}')
+    if (lt && !TypeGuards.isSemicolonToken(lt) && !lt!
+      .getText()
+      .trim()
+      .endsWith('}')
     ) {
       changes.push({ span: { start: lt!.getEnd(), length: 0 }, newText: ';' })
     }

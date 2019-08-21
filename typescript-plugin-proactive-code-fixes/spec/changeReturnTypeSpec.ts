@@ -1,4 +1,4 @@
-import { applyTextChanges } from 'ts-simple-ast-extra';
+import { applyTextChanges } from 'ts-morph-extra';
 import { changeReturnType } from '../src/code-fix/changeReturnType';
 import { testCodeFixRefactorEditInfo } from './testUtil';
 

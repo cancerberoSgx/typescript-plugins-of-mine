@@ -1,4 +1,4 @@
-import { TypeGuards, Identifier } from 'ts-simple-ast';
+import { TypeGuards, Identifier } from 'ts-morph';
 import * as ts from 'typescript';
 import { getKindName, getTypeStringFor } from 'typescript-ast-util';
 import { CodeFix, CodeFixOptions } from '../codeFixes';

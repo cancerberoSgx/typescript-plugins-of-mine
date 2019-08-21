@@ -1,7 +1,7 @@
 import { declareMember } from '../src/code-fix/declareMember';
 import { removeWhiteSpaces, testCodeFixRefactorEditInfo, testCodeFixRefactorEditInfo2 } from './testUtil';
-import Project, { TypeGuards, Identifier } from 'ts-simple-ast';
-import { applyTextChanges } from 'ts-simple-ast-extra';
+import Project, { TypeGuards, Identifier } from 'ts-morph';
+import { applyTextChanges } from 'ts-morph-extra';
 
 describe('declareMember', () => {
 

@@ -1,4 +1,4 @@
-import { CodeFix } from 'ts-simple-ast-extra';
+import { CodeFix } from 'ts-morph-extra';
 import { addReturnStatement } from './code-fix/addReturnStatement';
 import { arrowFunctionBodyTransformations } from './code-fix/arrowFunctionTransformations';
 import { const2let } from './code-fix/const2let';
@@ -24,7 +24,7 @@ import { removeComments } from './code-fix/removeComments';
 import { addType } from './code-fix/addType';
 import { changeReturnType } from './code-fix/changeReturnType';
 
-export {CodeFix, CodeFixOptions} from 'ts-simple-ast-extra';
+export {CodeFix, CodeFixOptions} from 'ts-morph-extra';
 
 export const codeFixes: CodeFix[] = [codeFixCreateConstructor, codeFixCreateVariable, declareClass, const2let, nameFunction, implementInterfaceObjectLiteral, declareReturnType, declareMember, addReturnStatement, implementInterfaceMember, renameVariable, splitVariableDeclarationList, toNamedParameters, memberChangeScope, removeEmptyLines, arrowFunctionBodyTransformations, extractInterface, methodDelegate, template2Literal, stringChangeQuoteChar, organizeImportsAndFormat, removeComments, addType, 
   changeReturnType

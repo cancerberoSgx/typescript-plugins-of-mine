@@ -1,6 +1,4 @@
-import { now } from "hrtime-now";
-import { ClassDeclaration, InterfaceDeclaration, MethodDeclarationStructure, MethodSignatureStructure, PropertyDeclaration, PropertySignature, Scope, TypeGuards } from "ts-simple-ast";
-import * as ts from 'typescript';
+import { ClassDeclaration, InterfaceDeclaration, MethodDeclarationStructure, MethodSignatureStructure, PropertyDeclaration, PropertySignature, Scope, TypeGuards,ts, StructureKind } from "ts-morph";
 import { findAscendant } from "typescript-ast-util";
 import { CodeFix, CodeFixOptions } from "../codeFixes";
 
@@ -101,7 +99,7 @@ function methodDelegateOnInterface(interfaceDeclaration: InterfaceDeclaration, p
   const decl = propertySignature.getType().getSymbol().getDeclarations()[0]
   if (TypeGuards.isClassDeclaration(decl)) {
     const methods = getClassMethodStructures(decl, propertySignature.getName())
-    interfaceDeclaration.addMethods(methods)
+    interfaceDeclaration.addMethods(methods as any)
   }
   if (TypeGuards.isInterfaceDeclaration(decl)) {
     interfaceDeclaration.addMethods(getInterfaceMethodStructures(decl))
@@ -126,17 +124,22 @@ function getInterfaceMethodStructures(decl: InterfaceDeclaration): MethodSignatu
 
   return decl.getMethods().map(method => ({
     name: method.getName(),
+  kind: StructureKind.MethodSignature as any,
     hasQuestionToken: method.hasQuestionToken(),
     returnType: method.getReturnTypeNodeOrThrow().getText(),
     docs: method.getJsDocs().map(d => ({ description: d.getInnerText().replace(/\r?\n/g, "\r\n") })),
     typeParameters: method.getTypeParameters().map(p => ({
       name: p.getName(),
-      constraint: p.getConstraint() == null ? undefined : p.getConstraint()!.getText()
+      constraint: p.getConstraint() == null ? undefined : p.getConstraint()!.getText(),
+  // kind: StructureKind.TypeParameter as any
+
     })),
     parameters: method.getParameters().map(p => ({
-      name: p.getNameOrThrow(),
+      name: p.getName(),
+  // kind: StructureKind.Parameter,
       hasQuestionToken: p.hasQuestionToken(),
-      type: p.getTypeNodeOrThrow().getText()
+      type: p.getTypeNodeOrThrow().getText(),
+
     }))
   }))
 
@@ -144,6 +147,7 @@ function getInterfaceMethodStructures(decl: InterfaceDeclaration): MethodSignatu
 function getClassMethodStructures(decl: ClassDeclaration | InterfaceDeclaration, memberName: string): MethodDeclarationStructure[] {
   if (TypeGuards.isClassDeclaration(decl)) {
     return decl.getInstanceMethods().map(method => ({
+  kind: StructureKind.Method  as any,
       name: method.getName(),
       returnType: method.getReturnTypeNode() == null ? undefined : method.getReturnTypeNodeOrThrow().getText(),
       docs: method.getJsDocs().map(d => ({ description: d.getInnerText().replace(/\r?\n/g, "\r\n") })),
@@ -153,7 +157,7 @@ function getClassMethodStructures(decl: ClassDeclaration | InterfaceDeclaration,
         constraint: p.getConstraint() == null ? undefined : p.getConstraint()!.getText()
       })),
       parameters: method.getParameters().map(p => ({
-        name: p.getNameOrThrow(),
+        name: p.getName(),
         hasQuestionToken: p.hasQuestionToken(),
         type: p.getTypeNode() == null ? undefined : p.getTypeNodeOrThrow().getText(),
         isRestParameter: p.isRestParameter(),
@@ -164,6 +168,7 @@ function getClassMethodStructures(decl: ClassDeclaration | InterfaceDeclaration,
   }
   else if (TypeGuards.isInterfaceDeclaration(decl)) {
     return decl.getMethods().map(method => ({
+  kind: StructureKind.MethodSignature as any,
       name: method.getName(),
       returnType: method.getReturnTypeNode() == null ? undefined : method.getReturnTypeNodeOrThrow().getText(),
       docs: method.getJsDocs().map(d => ({ description: d.getInnerText().replace(/\r?\n/g, "\r\n") })),
@@ -173,7 +178,7 @@ function getClassMethodStructures(decl: ClassDeclaration | InterfaceDeclaration,
         constraint: p.getConstraint() == null ? undefined : p.getConstraint()!.getText()
       })),
       parameters: method.getParameters().map(p => ({
-        name: p.getNameOrThrow(),
+        name: p.getName(),
         hasQuestionToken: p.hasQuestionToken(),
         type: p.getTypeNode() == null ? undefined : p.getTypeNodeOrThrow().getText(),
         isRestParameter: p.isRestParameter(),

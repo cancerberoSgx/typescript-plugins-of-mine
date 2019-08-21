@@ -1,5 +1,5 @@
 
-import Project, { ClassDeclaration } from 'ts-simple-ast';
+import Project, { ClassDeclaration } from 'ts-morph';
 import { removeComments } from '../src/code-fix/removeComments';
 import { testCodeFixRefactorEditInfo2 } from './testUtil';
 

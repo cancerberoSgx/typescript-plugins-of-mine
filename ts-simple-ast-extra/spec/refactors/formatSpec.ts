@@ -14,7 +14,7 @@ function f(){
 alert(1)
 log(2,function(){
 return 1 + g(a=>{
-return 2
+return "2"
 })
 });
 }
@@ -44,7 +44,7 @@ function f() {
     alert(1)
     log(2, function() {
         return 1 + g(a => {
-            return 2
+            return "2"
         })
     });
 }
@@ -82,7 +82,7 @@ function f() {
   alert(1)
   log(2, function() {
     return 1 + g(a => {
-      return 2
+      return "2"
     })
   })
 }
@@ -95,3 +95,4 @@ for (let i = 0; i < 2; i++) { }
     expectEqualsAndDiff(output.getText().trim(), expected)
   })
 })
+

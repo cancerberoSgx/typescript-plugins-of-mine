@@ -1,6 +1,6 @@
 // not an issue - just use getFullStart, getFullWidth, etc
 
-import Project, { TypeGuards, Identifier } from 'ts-simple-ast';
+import Project, { TypeGuards, Identifier } from 'ts-morph';
 
 const project1 = new Project({
   useVirtualFileSystem: true

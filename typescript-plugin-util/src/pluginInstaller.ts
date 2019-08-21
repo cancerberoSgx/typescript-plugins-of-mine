@@ -1,11 +1,9 @@
 import * as ts_module from 'typescript/lib/tsserverlibrary'
-import { LanguageService } from 'typescript';
-import { LanguageServiceOptionals } from './LanguageServiceOptionals';
-
 
 export function initReturnTypeSignature(modules: { typescript: typeof ts_module }): { create: (info: ts_module.server.PluginCreateInfo) => ts.LanguageService } {
   return undefined as any
 }
+
 /**
  * SCreates the `create` function - handles only that part
  * @param languageService Object like LanguageService but with optional keys. Basically your plugin implementation. The type should be LanguageService, but can't because properties are all optional
@@ -19,7 +17,7 @@ export function pluginCreateCreate(languageService: LanguageServiceOptionals,
     onCreate(info)
     const proxy: ts.LanguageService = Object.create(null)
     for (let k of Object.keys(info.languageService) as Array<keyof ts.LanguageService>) {
-      const x = info.languageService[k]
+      const x = info.languageService[k] as any
       proxy[k] = (...args: Array<{}>) => x.apply(info.languageService, args)
     }
     for (let i in languageService) {
@@ -80,7 +78,7 @@ export  function getPluginCreate(languageService:LanguageServiceOptionals, cb: (
     })
 }
 
-
+export type  LanguageServiceOptionals = Partial<ts.LanguageService>
 
 
 

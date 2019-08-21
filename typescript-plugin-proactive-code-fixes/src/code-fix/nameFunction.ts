@@ -1,5 +1,5 @@
 
-import { TypeGuards } from 'ts-simple-ast';
+import { TypeGuards } from 'ts-morph';
 import * as ts from 'typescript';
 import { findAscendant, getKindName } from 'typescript-ast-util';
 import { CodeFix, CodeFixOptions } from '../codeFixes';

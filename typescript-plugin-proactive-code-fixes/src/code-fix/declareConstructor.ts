@@ -1,5 +1,5 @@
 import { fromNow, now, timeFrom } from 'hrtime-now';
-import { Scope, TypeGuards } from 'ts-simple-ast';
+import { Scope, TypeGuards } from 'ts-morph';
 import * as ts from 'typescript';
 import { findAscendant, getKindName } from 'typescript-ast-util';
 import { CodeFix, CodeFixOptions } from '../codeFixes';
@@ -88,7 +88,7 @@ export const codeFixCreateConstructor: CodeFix = {
           }),
         t => arg.log(`addConstructor took ${t}`)
       )
-      // heads up : must find openBrace to get position where to insert because constructorDeclaration.getStart() is wrong, see below - ts-simple-ast issue
+      // heads up : must find openBrace to get position where to insert because constructorDeclaration.getStart() is wrong, see below - ts-morph issue
       const openBrace = classDeclaration.getChildren().find(c => c.getKind() === ts.SyntaxKind.OpenBraceToken)
       return buildRefactorEditInfo(arg.sourceFile, '\n' + constructorDeclaration.getText(), openBrace.getEnd(), 0)
     } else {
@@ -98,7 +98,7 @@ export const codeFixCreateConstructor: CodeFix = {
   }
 };
 
-// TODO : issue ts-simple-ast  
+// TODO : issue ts-morph  
 
 // const constructorDeclaration = 
 //         classDeclaration.addConstructor({

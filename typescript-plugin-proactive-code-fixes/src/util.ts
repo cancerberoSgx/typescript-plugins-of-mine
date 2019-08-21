@@ -1,12 +1,13 @@
-import { ClassDeclaration, ExpressionWithTypeArguments, FunctionLikeDeclaration, InterfaceDeclaration, MethodSignature, Node, ParameterDeclaration, ParameterDeclarationStructure, SyntaxKind, Type, TypeGuards, StringLiteral, NoSubstitutionTemplateLiteral, SourceFile, MethodDeclaration } from "ts-simple-ast";
+import { ClassDeclaration, ExpressionWithTypeArguments, FunctionLikeDeclaration, InterfaceDeclaration, MethodSignature, Node, ParameterDeclaration, ParameterDeclarationStructure, SyntaxKind, Type, TypeGuards, StringLiteral, NoSubstitutionTemplateLiteral, SourceFile, MethodDeclaration, StructureKind } from "ts-morph";
 import * as ts from 'typescript'
 
 export const buildParameterStructure = (p: ParameterDeclaration): ParameterDeclarationStructure => ({
-  name: p.getNameOrThrow(),
+  name: p.getName(),
   hasQuestionToken: p.hasQuestionToken(),
   type: p.getTypeNode() == null ? undefined : p.getTypeNodeOrThrow().getText(),
   isRestParameter: p.isRestParameter(),
-  scope: p.hasScopeKeyword() ? p.getScope() : undefined
+  scope: p.hasScopeKeyword() ? p.getScope() : undefined,
+  kind: StructureKind.Parameter
 })
 
 

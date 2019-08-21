@@ -1,6 +1,6 @@
 
 
-import {Project, TypeGuards } from 'ts-simple-ast';
+import {Project, TypeGuards } from 'ts-morph';
 
 const project1 = new Project({
   useVirtualFileSystem: true

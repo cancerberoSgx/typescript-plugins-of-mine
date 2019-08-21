@@ -1,7 +1,7 @@
 
 
-import { TypeGuards } from 'ts-simple-ast';
-import * as ts from 'typescript';
+import { TypeGuards, ts } from 'ts-morph';
+// import * as ts from 'typescript';
 import { findAscendant, getKindName } from 'typescript-ast-util';
 import { CodeFix, CodeFixOptions } from '../codeFixes';
 import { findInterfacesWithPropertyNamed, fixSignature } from '../util';

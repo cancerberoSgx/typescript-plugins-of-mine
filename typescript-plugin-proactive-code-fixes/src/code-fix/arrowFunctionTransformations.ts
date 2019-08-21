@@ -1,4 +1,4 @@
-import { ArrowFunction, TypeGuards } from 'ts-simple-ast';
+import { ArrowFunction, TypeGuards } from 'ts-morph';
 import * as ts from 'typescript';
 import { findAscendant } from 'typescript-ast-util';
 import { CodeFix, CodeFixOptions } from '../codeFixes';
@@ -63,7 +63,7 @@ export const arrowFunctionBodyTransformations: CodeFix = {
     if (description === DESCRIPTION_REMOVE_BODY) {
       const firstChild = simpleArrow.getBody().getChildSyntaxList().getFirstChild()
       if (TypeGuards.isReturnStatement(firstChild)) {
-        // TODO : ts-simple-ast dont support ArrowFunctionStructure, yet so we do it based on strings
+        // TODO : ts-morph dont support ArrowFunctionStructure, yet so we do it based on strings
         const newText =
           (hasTypeParameters ? '<' : '') + simpleArrow.getTypeParameters().map(tp => tp.getText()).join(', ') + (hasTypeParameters ? '>' : '') +
           (parameterListMustHaveParen ? '(' : '') + simpleArrow.getParameters().map(p => p.getText()).join(', ') + (parameterListMustHaveParen ? ')' : '') +

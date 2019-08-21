@@ -1,4 +1,4 @@
-import { Node, SourceFile, ReferenceEntry, Project, ClassDeclaration, TypeGuards } from 'ts-simple-ast'
+import { Node, SourceFile, ReferenceEntry, Project, ClassDeclaration, TypeGuards } from 'ts-morph'
 import { ok, equal } from 'assert';
 
 const project = new Project({ useVirtualFileSystem: true })

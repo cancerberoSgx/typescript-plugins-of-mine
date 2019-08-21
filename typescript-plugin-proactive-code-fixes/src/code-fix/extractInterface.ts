@@ -1,5 +1,5 @@
-import { ClassDeclaration, InterfaceDeclarationStructure, MethodSignatureStructure, ObjectLiteralExpression, PropertySignatureStructure, Scope, TypeGuards, TypeParameterDeclarationStructure } from 'ts-simple-ast';
-import * as ts from 'typescript';
+import { ClassDeclaration, InterfaceDeclarationStructure, MethodSignatureStructure, ObjectLiteralExpression, PropertySignatureStructure, Scope, TypeGuards, TypeParameterDeclarationStructure, ts } from 'ts-morph';
+// import * as ts from 'typescript';
 import { findAscendant, getKindName } from 'typescript-ast-util';
 import { CodeFix, CodeFixOptions } from '../codeFixes';
 

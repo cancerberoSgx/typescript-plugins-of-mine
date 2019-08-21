@@ -1,6 +1,6 @@
 import { now, timeFrom } from 'hrtime-now';
-import { Project, SourceFile } from 'ts-simple-ast';
-import { CodeFix, CodeFixOptions, getSimpleProject } from 'ts-simple-ast-extra';
+import { Project, SourceFile } from 'ts-morph';
+import { CodeFix, CodeFixOptions, getSimpleProject } from 'ts-morph-extra';
 import { findChildContainedRange, findChildContainingRange, findChildContainingRangeLight, getKindName, positionOrRangeToNumber, positionOrRangeToRange, updateSourceFile } from 'typescript-ast-util';
 import { getPluginCreate, LanguageServiceOptionals } from 'typescript-plugin-util';
 import * as ts_module from 'typescript/lib/tsserverlibrary';

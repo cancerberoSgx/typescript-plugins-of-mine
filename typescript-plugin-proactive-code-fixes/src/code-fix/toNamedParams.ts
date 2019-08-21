@@ -1,5 +1,5 @@
 
-import { FunctionTypeNode, InterfaceDeclarationStructure, ParameterDeclarationStructure, TypeGuards, Node, SyntaxList } from 'ts-simple-ast';
+import { FunctionTypeNode, InterfaceDeclarationStructure, ParameterDeclarationStructure, TypeGuards, Node, SyntaxList } from 'ts-morph';
 import * as ts from 'typescript';
 import { findAscendant, getKindName } from 'typescript-ast-util';
 import { CodeFix, CodeFixOptions } from '../codeFixes';

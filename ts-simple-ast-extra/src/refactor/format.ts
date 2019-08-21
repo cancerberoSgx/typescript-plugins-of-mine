@@ -1,12 +1,15 @@
-import { Project, SourceFile } from 'ts-morph'
+import { Project, SourceFile, UserPreferences } from 'ts-morph'
 import { FormatCodeSettings, getDefaultFormatCodeSettings } from 'typescript'
 import { addTrailingSemicolons, removeTrailingSemicolons } from './trailingSemicolons'
+import { quotes, QuotesOptions } from './quotes';
 
-export interface FormatOptions extends Partial<FormatCodeSettings> {
+export interface RefactorFormatBaseOptions extends Partial<FormatCodeSettings> {
   file: SourceFile
   project: Project
-  trailingSemicolons?: 'never' | 'always'
-  newLineCharacter?: string
+}
+
+export interface FormatOptions extends QuotesOptions {
+
 }
 
 export function format(options: FormatOptions) {
@@ -15,6 +18,9 @@ export function format(options: FormatOptions) {
     removeTrailingSemicolons(options.file)
   } else if (options.trailingSemicolons === 'always') {
     addTrailingSemicolons(options.file)
+  }
+  if (options.quotePreference ) {
+    quotes(options as FormatOptions&{quotePreference: }>)
   }
   const edits = options.project
     .getLanguageService()

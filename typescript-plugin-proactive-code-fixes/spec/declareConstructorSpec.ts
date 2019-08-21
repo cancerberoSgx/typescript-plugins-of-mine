@@ -1,4 +1,4 @@
-import { applyTextChanges } from 'ts-simple-ast-extra';
+import { applyTextChanges } from 'ts-morph-extra';
 import { codeFixCreateConstructor } from '../src/code-fix/declareConstructor';
 import { removeWhiteSpaces,testCodeFixRefactorEditInfo } from './testUtil';
 

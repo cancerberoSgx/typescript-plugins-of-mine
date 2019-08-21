@@ -1,4 +1,4 @@
-import { NoSubstitutionTemplateLiteral, StringLiteral, TypeGuards } from "ts-simple-ast";
+import { NoSubstitutionTemplateLiteral, StringLiteral, TypeGuards } from "ts-morph";
 import * as ts from 'typescript';
 import { CodeFix, CodeFixOptions } from "../codeFixes";
 import { quote, changeQuoteChar, buildRefactorEditInfo } from "../util";

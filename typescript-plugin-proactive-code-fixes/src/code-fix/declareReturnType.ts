@@ -1,8 +1,8 @@
 
 import { fromNow, now, timeFrom } from 'hrtime-now';
-import * as tsa from 'ts-simple-ast';
-import { InterfaceDeclarationStructure, TypeGuards } from 'ts-simple-ast';
-import * as ts from 'typescript';
+// import * as tsa from 'ts-morph';
+import { InterfaceDeclarationStructure, TypeGuards, ts, Node, SignaturedDeclaration } from 'ts-morph';
+// import * as ts from 'typescript';
 import { getKindName } from 'typescript-ast-util';
 import { CodeFix, CodeFixOptions } from '../codeFixes';
 import { buildRefactorEditInfo } from '../util';
@@ -96,7 +96,7 @@ export const declareReturnType: CodeFix = {
   description: (arg: CodeFixOptions): string => `Declare interface "${arg.containingTargetLight.getText()}"`,
 
   apply: (arg: CodeFixOptions) => {
-    const decl: tsa.Node & tsa.SignaturedDeclaration = arg.simpleNode.getAncestors().find(TypeGuards.isSignaturedDeclaration)
+    const decl: Node & SignaturedDeclaration = arg.simpleNode.getAncestors().find(TypeGuards.isSignaturedDeclaration)
     const interfaceStructure = fromNow(
       () => inferReturnType(decl, arg),
       t => arg.log('apply inferReturnType took ' + t)
@@ -113,7 +113,7 @@ export const declareReturnType: CodeFix = {
 }
 
 
-const inferReturnType = (decl: tsa.Node & tsa.SignaturedDeclaration, arg: CodeFixOptions): InterfaceDeclarationStructure => {
+const inferReturnType = (decl: Node & SignaturedDeclaration, arg: CodeFixOptions): InterfaceDeclarationStructure => {
   const project = arg.simpleProject
   const tmpFunctionName = `__function_name_${Date.now()}_`
   const tmpVariableName = `__variable_name_${Date.now()}_`
@@ -141,7 +141,7 @@ const inferReturnType = (decl: tsa.Node & tsa.SignaturedDeclaration, arg: CodeFi
     t => arg.log(`apply inferReturnType getTypeChecker().getTypeAtLocation took ${t}`)
   )
   const intStructureT0 = now()
-  const intStructure: tsa.InterfaceDeclarationStructure = {
+  const intStructure: InterfaceDeclarationStructure = {
     // docs: ['TODO: Document me'],
     name: decl.getReturnTypeNode().getText(),
     properties: type.getProperties()
