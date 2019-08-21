@@ -1,6 +1,6 @@
-import { Project, SyntaxKind } from 'ts-morph'
-import { GeneralNode, getGeneralNodePath, getGeneralNodeChildren, getGeneralNodeParent } from '../src'
 import { pwd } from 'shelljs'
+import { Project, SyntaxKind } from 'ts-morph'
+import { GeneralNode, getGeneralNodeChildren, getGeneralNodeParent, getGeneralNodePath } from '../src'
 
 describe('generalNode', () => {
   it('should have path', () => {

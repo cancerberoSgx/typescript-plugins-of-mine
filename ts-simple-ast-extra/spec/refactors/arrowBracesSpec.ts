@@ -1,11 +1,6 @@
 import { removeWhites } from 'misc-utils-of-mine-generic'
 import { Project, TypeGuards } from 'ts-morph'
-import {
-  addBracesToArrowFunction,
-  addBracesToArrowFunctions,
-  removeBracesFromArrowFunction,
-  removeBracesFromArrowFunctions
-} from '../../src'
+import { addBracesToArrowFunction, addBracesToArrowFunctions, removeBracesFromArrowFunction, removeBracesFromArrowFunctions } from '../../src'
 
 describe('arrowBraces', () => {
   describe('addBracesToArrowFunctions', () => {

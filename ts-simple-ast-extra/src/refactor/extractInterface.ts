@@ -1,14 +1,4 @@
-import {
-  ClassDeclaration,
-  ConstructorDeclarationStructure,
-  InterfaceDeclarationStructure,
-  MethodSignatureStructure,
-  PropertySignatureStructure,
-  StatementedNode,
-  SyntaxKind,
-  TypeGuards,
-  StructureKind
-} from 'ts-morph'
+import { ClassDeclaration, ConstructorDeclarationStructure, InterfaceDeclarationStructure, MethodSignatureStructure, PropertySignatureStructure, StatementedNode, StructureKind, SyntaxKind, TypeGuards } from 'ts-morph'
 import { getImplementsAll } from '../types'
 
 export function extractInterface(
@@ -86,12 +76,12 @@ export function extractInterface(
   node.getImplements().forEach((I, i) => node.removeImplements(i))
   node.addImplements(
     `${structure.name}${
-      node.getTypeParameters().length
-        ? node
-            .getTypeParameters()
-            .map(t => `<${t.getText()}>`)
-            .join(', ')
-        : ''
+    node.getTypeParameters().length
+      ? node
+        .getTypeParameters()
+        .map(t => `<${t.getText()}>`)
+        .join(', ')
+      : ''
     }`
   )
   if (removeDocs) {

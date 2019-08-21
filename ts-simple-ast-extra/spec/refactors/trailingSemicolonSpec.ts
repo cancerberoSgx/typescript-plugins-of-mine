@@ -1,6 +1,6 @@
 import { removeWhites } from 'misc-utils-of-mine-generic'
 import { Project } from 'ts-morph'
-import { removeTrailingSemicolons, addTrailingSemicolons } from '../../src/refactor/trailingSemicolons'
+import { addTrailingSemicolons, removeTrailingSemicolons } from '../../src/refactor/trailingSemicolons'
 
 describe('trailingSemicolon', () => {
   it('should remove trailing semicolon without breaking code', () => {

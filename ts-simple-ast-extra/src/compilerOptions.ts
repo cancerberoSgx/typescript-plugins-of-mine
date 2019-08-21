@@ -1,13 +1,4 @@
-import {
-  CompilerOptions,
-  FormatCodeSettings,
-  IndentationText,
-  ManipulationSettings,
-  NewLineKind,
-  QuoteKind,
-  ts,
-  UserPreferences
-} from 'ts-morph'
+import { CompilerOptions, FormatCodeSettings, IndentationText, ManipulationSettings, NewLineKind, QuoteKind, ts, UserPreferences } from 'ts-morph'
 
 export function buildManipulationSettings(
   formatOptions?: FormatCodeSettings,
@@ -29,8 +20,8 @@ export function buildManipulationSettings(
     newLineKind: !formatOptions
       ? NewLineKind.LineFeed
       : formatOptions.newLineCharacter === '\n'
-      ? NewLineKind.LineFeed
-      : NewLineKind.CarriageReturnLineFeed,
+        ? NewLineKind.LineFeed
+        : NewLineKind.CarriageReturnLineFeed,
     quoteKind: userPreferences && userPreferences.quotePreference === 'double' ? QuoteKind.Double : QuoteKind.Single,
     insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces:
       !!formatOptions && !!formatOptions.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces

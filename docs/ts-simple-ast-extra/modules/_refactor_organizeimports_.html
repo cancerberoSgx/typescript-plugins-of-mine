@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>&quot;refactor/extractInterface&quot; | ts-simple-ast-extra</title>
+	<title>&quot;refactor/organizeImports&quot; | ts-simple-ast-extra</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,10 +56,10 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="_refactor_extractinterface_.html">&quot;refactor/extractInterface&quot;</a>
+					<a href="_refactor_organizeimports_.html">&quot;refactor/organizeImports&quot;</a>
 				</li>
 			</ul>
-			<h1>External module &quot;refactor/extractInterface&quot;</h1>
+			<h1>External module &quot;refactor/organizeImports&quot;</h1>
 		</div>
 	</div>
 </header>
@@ -71,9 +71,15 @@
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section tsd-is-external">
+							<h3>Interfaces</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-interface tsd-parent-kind-external-module tsd-is-external"><a href="../interfaces/_refactor_organizeimports_.organizeimportsoptions.html" class="tsd-kind-icon">Organize<wbr>Imports<wbr>Options</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section tsd-is-external">
 							<h3>Functions</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-external"><a href="_refactor_extractinterface_.html#extractinterface" class="tsd-kind-icon">extract<wbr>Interface</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-external"><a href="_refactor_organizeimports_.html#organizeimports" class="tsd-kind-icon">organize<wbr>Imports</a></li>
 							</ul>
 						</section>
 					</div>
@@ -82,34 +88,28 @@
 			<section class="tsd-panel-group tsd-member-group tsd-is-external">
 				<h2>Functions</h2>
 				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
-					<a name="extractinterface" class="tsd-anchor"></a>
-					<h3>extract<wbr>Interface</h3>
+					<a name="organizeimports" class="tsd-anchor"></a>
+					<h3>organize<wbr>Imports</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">extract<wbr>Interface<span class="tsd-signature-symbol">(</span>node<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ClassDeclaration</span>, dest<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">StatementedNode</span>, interfaceName<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, removeDocs<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">organize<wbr>Imports<span class="tsd-signature-symbol">(</span>options<span class="tsd-signature-symbol">: </span><a href="../interfaces/_refactor_organizeimports_.organizeimportsoptions.html" class="tsd-signature-type">OrganizeImportsOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">SourceFile</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/fd62238/ts-simple-ast-extra/src/refactor/extractInterface.ts#L4">refactor/extractInterface.ts:4</a></li>
+									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/fd62238/ts-simple-ast-extra/src/refactor/organizeImports.ts#L12">refactor/organizeImports.ts:12</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>node: <span class="tsd-signature-type">ClassDeclaration</span></h5>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> dest: <span class="tsd-signature-type">StatementedNode</span><span class="tsd-signature-symbol"> =&nbsp;node.getSourceFile()</span></h5>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> interfaceName: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;node.getName() ? &#x27;I&#x27; + node.getName() : &#x27;IAnonymousClass&#x27;</span></h5>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> removeDocs: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;false</span></h5>
+									<h5>options: <a href="../interfaces/_refactor_organizeimports_.organizeimportsoptions.html" class="tsd-signature-type">OrganizeImportsOptions</a></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">undefined</span>
+								<span class="tsd-signature-symbol"> | </span>
+								<span class="tsd-signature-type">SourceFile</span>
+							</h4>
 						</li>
 					</ul>
 				</section>
@@ -122,14 +122,17 @@
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
 					<li class="current tsd-kind-external-module tsd-is-external">
-						<a href="_refactor_extractinterface_.html">"refactor/extract<wbr>Interface"</a>
+						<a href="_refactor_organizeimports_.html">"refactor/organize<wbr>Imports"</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-is-external">
+						<a href="../interfaces/_refactor_organizeimports_.organizeimportsoptions.html" class="tsd-kind-icon">Organize<wbr>Imports<wbr>Options</a>
+					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
-						<a href="_refactor_extractinterface_.html#extractinterface" class="tsd-kind-icon">extract<wbr>Interface</a>
+						<a href="_refactor_organizeimports_.html#organizeimports" class="tsd-kind-icon">organize<wbr>Imports</a>
 					</li>
 				</ul>
 			</nav>

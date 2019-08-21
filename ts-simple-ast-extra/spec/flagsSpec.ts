@@ -1,13 +1,6 @@
-import {
-  getExtendsRecursively,
-  getImplementsAll,
-  getImplementsAllNames,
-  getSymbolFlags,
-  getTypeFlags,
-  getObjectFlags
-} from '../src'
-import { getFile } from './testUtil'
 import { SyntaxKind } from 'ts-morph'
+import { getObjectFlags, getSymbolFlags, getTypeFlags } from '../src'
+import { getFile } from './testUtil'
 
 describe('flags', () => {
   const code1 = `

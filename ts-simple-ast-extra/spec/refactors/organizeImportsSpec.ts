@@ -1,7 +1,6 @@
 import { Project } from 'ts-morph'
-import { format, organizeImports } from '../../src'
-import { expectEqualsAndDiff, expectNoErrors } from '../testUtil'
-import { quotes } from '../../src/refactor/quotes'
+import { format } from '../../src'
+import { expectEqualsAndDiff } from '../testUtil'
 
 describe('should organizeImprots', () => {
   it('simple all', () => {

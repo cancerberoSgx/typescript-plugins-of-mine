@@ -1,4 +1,4 @@
-import { Symbol, TypeFlags, SymbolFlags, Type, ObjectFlags } from 'ts-morph'
+import { ObjectFlags, Symbol, SymbolFlags, Type, TypeFlags } from 'ts-morph'
 import { getEnumKeyAndValue } from './types'
 
 export function getSymbolFlags(s: Symbol): string[] {

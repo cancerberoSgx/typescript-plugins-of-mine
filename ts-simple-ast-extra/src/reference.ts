@@ -1,5 +1,5 @@
-import { Identifier } from 'ts-morph'
 import { notUndefined } from 'misc-utils-of-mine-generic'
+import { Identifier } from 'ts-morph'
 
 export function getDefinitionsOf(id: Identifier) {
   return id

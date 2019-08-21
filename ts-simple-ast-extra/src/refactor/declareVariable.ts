@@ -57,7 +57,7 @@ function ${functionName}(${functionArguments.join(', ')}): ${returnType} {
 `
     if (!TypeGuards.isPropertyAccessExpression(parent.getChildAtIndex(0))) {
       // it's function call and the function is not a member i.e bar()
-      ;(statementAncestor.getParent()! as Block).insertStatements(statementAncestor.getChildIndex(), functionText)
+      ; (statementAncestor.getParent()! as Block).insertStatements(statementAncestor.getChildIndex(), functionText)
     } else {
       // it's a function call and the function is a member, i.e : foo.bar() - this is tackled by another fix: declareMember
       // TODO
@@ -69,7 +69,7 @@ function ${functionName}(${functionArguments.join(', ')}): ${returnType} {
       TypeGuards.isStatement(node.getParentOrThrow().getParentOrThrow())
     ) {
       // is an expression like a=1 we only preppend 'let '
-      ;(statementAncestor.getParent() as Block).insertStatements(
+      ; (statementAncestor.getParent() as Block).insertStatements(
         statementAncestor.getChildIndex(),
         `let ${node.getParent()!.getText()}`
       )
@@ -77,7 +77,7 @@ function ${functionName}(${functionArguments.join(', ')}): ${returnType} {
     } else {
       // other wise we create a new statement 'let a' at the top
       // TODO: test
-      ;(statementAncestor.getParent()! as Block).insertStatements(0, `let ${(node as Identifier).getText()};\n`)
+      ; (statementAncestor.getParent()! as Block).insertStatements(0, `let ${(node as Identifier).getText()};\n`)
     }
   }
 }

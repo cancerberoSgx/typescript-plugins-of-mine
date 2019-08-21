@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>&quot;diagnostics&quot; | ts-simple-ast-extra</title>
+	<title>&quot;refactor/quotes&quot; | ts-simple-ast-extra</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,10 +56,10 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="_diagnostics_.html">&quot;diagnostics&quot;</a>
+					<a href="_refactor_quotes_.html">&quot;refactor/quotes&quot;</a>
 				</li>
 			</ul>
-			<h1>External module &quot;diagnostics&quot;</h1>
+			<h1>External module &quot;refactor/quotes&quot;</h1>
 		</div>
 	</div>
 </header>
@@ -71,58 +71,111 @@
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section tsd-is-external">
+							<h3>Interfaces</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-interface tsd-parent-kind-external-module tsd-is-external"><a href="../interfaces/_refactor_quotes_.quotesoptions.html" class="tsd-kind-icon">Quotes<wbr>Options</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section tsd-is-external tsd-is-not-exported">
+							<h3>Type aliases</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-type-alias tsd-parent-kind-external-module tsd-is-external tsd-is-not-exported"><a href="_refactor_quotes_.html#quotable" class="tsd-kind-icon">Quotable</a></li>
+								<li class="tsd-kind-type-alias tsd-parent-kind-external-module tsd-is-external tsd-is-not-exported"><a href="_refactor_quotes_.html#quote" class="tsd-kind-icon">Quote</a></li>
+								<li class="tsd-kind-type-alias tsd-parent-kind-external-module tsd-is-external tsd-is-not-exported"><a href="_refactor_quotes_.html#quotechar" class="tsd-kind-icon">Quote<wbr>Char</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section tsd-is-external">
 							<h3>Functions</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-external"><a href="_diagnostics_.html#getdiagnosticmessage" class="tsd-kind-icon">get<wbr>Diagnostic<wbr>Message</a></li>
-								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-external tsd-is-not-exported"><a href="_diagnostics_.html#print" class="tsd-kind-icon">print</a></li>
-								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-external"><a href="_diagnostics_.html#printdiagnostics" class="tsd-kind-icon">print<wbr>Diagnostics</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-external"><a href="_refactor_quotes_.html#changequotechar" class="tsd-kind-icon">change<wbr>Quote<wbr>Char</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-external"><a href="_refactor_quotes_.html#quote-1" class="tsd-kind-icon">quote</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-external"><a href="_refactor_quotes_.html#quotes" class="tsd-kind-icon">quotes</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
+			<section class="tsd-panel-group tsd-member-group tsd-is-external tsd-is-not-exported">
+				<h2>Type aliases</h2>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-external-module tsd-is-external tsd-is-not-exported">
+					<a name="quotable" class="tsd-anchor"></a>
+					<h3>Quotable</h3>
+					<div class="tsd-signature tsd-kind-icon">Quotable<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">StringLiteral</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">NoSubstitutionTemplateLiteral</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/fd62238/ts-simple-ast-extra/src/refactor/quotes.ts#L9">refactor/quotes.ts:9</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-external-module tsd-is-external tsd-is-not-exported">
+					<a name="quote" class="tsd-anchor"></a>
+					<h3>Quote</h3>
+					<div class="tsd-signature tsd-kind-icon">Quote<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"auto"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"double"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"single"</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/fd62238/ts-simple-ast-extra/src/refactor/quotes.ts#L8">refactor/quotes.ts:8</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-external-module tsd-is-external tsd-is-not-exported">
+					<a name="quotechar" class="tsd-anchor"></a>
+					<h3>Quote<wbr>Char</h3>
+					<div class="tsd-signature tsd-kind-icon">Quote<wbr>Char<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"&quot;"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"&#x27;"</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/fd62238/ts-simple-ast-extra/src/refactor/quotes.ts#L10">refactor/quotes.ts:10</a></li>
+						</ul>
+					</aside>
+				</section>
+			</section>
 			<section class="tsd-panel-group tsd-member-group tsd-is-external">
 				<h2>Functions</h2>
 				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
-					<a name="getdiagnosticmessage" class="tsd-anchor"></a>
-					<h3>get<wbr>Diagnostic<wbr>Message</h3>
+					<a name="changequotechar" class="tsd-anchor"></a>
+					<h3>change<wbr>Quote<wbr>Char</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Diagnostic<wbr>Message<span class="tsd-signature-symbol">(</span>d<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Diagnostic</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+						<li class="tsd-signature tsd-kind-icon">change<wbr>Quote<wbr>Char<span class="tsd-signature-symbol">(</span>node<span class="tsd-signature-symbol">: </span><a href="_refactor_quotes_.html#quotable" class="tsd-signature-type">Quotable</a>, newQuoteChar<span class="tsd-signature-symbol">: </span><a href="_refactor_quotes_.html#quotechar" class="tsd-signature-type">QuoteChar</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/fd62238/ts-simple-ast-extra/src/diagnostics.ts#L7">diagnostics.ts:7</a></li>
+									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/fd62238/ts-simple-ast-extra/src/refactor/quotes.ts#L31">refactor/quotes.ts:31</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>d: <span class="tsd-signature-type">Diagnostic</span></h5>
+									<h5>node: <a href="_refactor_quotes_.html#quotable" class="tsd-signature-type">Quotable</a></h5>
+								</li>
+								<li>
+									<h5>newQuoteChar: <a href="_refactor_quotes_.html#quotechar" class="tsd-signature-type">QuoteChar</a></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module tsd-is-external tsd-is-not-exported">
-					<a name="print" class="tsd-anchor"></a>
-					<h3>print</h3>
-					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module tsd-is-external tsd-is-not-exported">
-						<li class="tsd-signature tsd-kind-icon">print<span class="tsd-signature-symbol">(</span>s<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">DiagnosticMessageChain</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
+					<a name="quote-1" class="tsd-anchor"></a>
+					<h3>quote</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">quote<span class="tsd-signature-symbol">(</span>s<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, q<span class="tsd-signature-symbol">: </span><a href="_refactor_quotes_.html#quotechar" class="tsd-signature-type">QuoteChar</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/fd62238/ts-simple-ast-extra/src/diagnostics.ts#L12">diagnostics.ts:12</a></li>
+									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/fd62238/ts-simple-ast-extra/src/refactor/quotes.ts#L26">refactor/quotes.ts:26</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>s: <span class="tsd-signature-type">DiagnosticMessageChain</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></h5>
+									<h5>s: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5>q: <a href="_refactor_quotes_.html#quotechar" class="tsd-signature-type">QuoteChar</a></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
@@ -130,25 +183,25 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
-					<a name="printdiagnostics" class="tsd-anchor"></a>
-					<h3>print<wbr>Diagnostics</h3>
+					<a name="quotes" class="tsd-anchor"></a>
+					<h3>quotes</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">print<wbr>Diagnostics<span class="tsd-signature-symbol">(</span>project<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Project</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></li>
+						<li class="tsd-signature tsd-kind-icon">quotes<span class="tsd-signature-symbol">(</span>options<span class="tsd-signature-symbol">: </span><a href="../interfaces/_refactor_quotes_.quotesoptions.html" class="tsd-signature-type">QuotesOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/fd62238/ts-simple-ast-extra/src/diagnostics.ts#L3">diagnostics.ts:3</a></li>
+									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/fd62238/ts-simple-ast-extra/src/refactor/quotes.ts#L12">refactor/quotes.ts:12</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>project: <span class="tsd-signature-type">Project</span></h5>
+									<h5>options: <a href="../interfaces/_refactor_quotes_.quotesoptions.html" class="tsd-signature-type">QuotesOptions</a></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -161,20 +214,32 @@
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
 					<li class="current tsd-kind-external-module tsd-is-external">
-						<a href="_diagnostics_.html">"diagnostics"</a>
+						<a href="_refactor_quotes_.html">"refactor/quotes"</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
-						<a href="_diagnostics_.html#getdiagnosticmessage" class="tsd-kind-icon">get<wbr>Diagnostic<wbr>Message</a>
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-is-external">
+						<a href="../interfaces/_refactor_quotes_.quotesoptions.html" class="tsd-kind-icon">Quotes<wbr>Options</a>
 					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-external tsd-is-not-exported">
-						<a href="_diagnostics_.html#print" class="tsd-kind-icon">print</a>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module tsd-is-external tsd-is-not-exported">
+						<a href="_refactor_quotes_.html#quotable" class="tsd-kind-icon">Quotable</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module tsd-is-external tsd-is-not-exported">
+						<a href="_refactor_quotes_.html#quote" class="tsd-kind-icon">Quote</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module tsd-is-external tsd-is-not-exported">
+						<a href="_refactor_quotes_.html#quotechar" class="tsd-kind-icon">Quote<wbr>Char</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
-						<a href="_diagnostics_.html#printdiagnostics" class="tsd-kind-icon">print<wbr>Diagnostics</a>
+						<a href="_refactor_quotes_.html#changequotechar" class="tsd-kind-icon">change<wbr>Quote<wbr>Char</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
+						<a href="_refactor_quotes_.html#quote-1" class="tsd-kind-icon">quote</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
+						<a href="_refactor_quotes_.html#quotes" class="tsd-kind-icon">quotes</a>
 					</li>
 				</ul>
 			</nav>

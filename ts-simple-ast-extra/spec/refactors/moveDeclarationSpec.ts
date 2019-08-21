@@ -381,9 +381,9 @@ describe('moveDeclaration', () => {
     )
   })
 
-  xit('should support variables and', () => {})
+  xit('should support variables and', () => { })
 
-  xit('should throw on unnamed node and files should not change', () => {})
+  xit('should throw on unnamed node and files should not change', () => { })
 
   describe('moveDeclaration in a sample project', () => {
     it('should move abstract declaration in complex tsconfig project', () => {

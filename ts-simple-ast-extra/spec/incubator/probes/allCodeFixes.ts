@@ -1,7 +1,7 @@
-import * as ts from 'typescript'
+import { writeFileSync } from 'fs'
 import { flat } from 'misc-utils-of-mine-generic'
 import { Project } from 'ts-morph'
-import { writeFileSync } from 'fs'
+import * as ts from 'typescript'
 let supportedCodeFixes: TsDiagnostic[]
 export function getAllSupportedCodeFixeDefinitions() {
   if (!supportedCodeFixes) {

@@ -54,3 +54,6 @@
 # 0.2.3
  * docs
  * Project exposed
+ * OrganizeImports
+ * quotePreferences
+ * replaced prettier by ts-refactor

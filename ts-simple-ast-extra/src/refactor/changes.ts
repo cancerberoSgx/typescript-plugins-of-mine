@@ -1,6 +1,5 @@
-import { flatReadOnly } from 'misc-utils-of-mine-generic'
+import { flatReadOnly, notUndefined } from 'misc-utils-of-mine-generic'
 import { Node, Project, SourceFile, TextChange, TextRange, TextSpan, ts } from 'ts-morph'
-import { notUndefined } from 'misc-utils-of-mine-generic'
 
 export function createTextChanges(textChanges: ts.TextChange[]): TextChange[] {
   return textChanges.map(compilerNode => createTextChange(compilerNode))
@@ -12,7 +11,7 @@ export function createTextChange(compilerNode: ts.TextChange) {
 
 export function createTextSpan(compilerNode: ts.TextSpan) {
   const span = new (TextSpan as any)(compilerNode) as TextSpan // Hack because this constructor in internal
-  ;(span as any).compilerObject = compilerNode
+    ; (span as any).compilerObject = compilerNode
   return span
 }
 
@@ -53,8 +52,8 @@ export function applyFileTextChanges(
   if (!file && !ftc.isNewFile) {
     throw new Error(
       'FileTextChanges instructed to modify existing file ' +
-        file +
-        " but it doesn't exist. Refusing to create it. Aborting!"
+      file +
+      " but it doesn't exist. Refusing to create it. Aborting!"
     )
   }
   let created

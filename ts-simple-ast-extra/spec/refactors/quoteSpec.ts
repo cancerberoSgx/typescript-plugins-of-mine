@@ -1,7 +1,6 @@
 import { Project } from 'ts-morph'
-import { format } from '../../src'
-import { expectEqualsAndDiff, expectNoErrors } from '../testUtil'
 import { quotes } from '../../src/refactor/quotes'
+import { expectEqualsAndDiff, expectNoErrors } from '../testUtil'
 
 describe('should change strings in templates, and change only spaces', () => {
   it('simple all', () => {

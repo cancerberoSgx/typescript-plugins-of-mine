@@ -11,7 +11,6 @@ describe('moveToNewFile', () => {
     const f = project.createSourceFile('f1.ts', code)
 
     const result = moveToNewFile(project, f.getClass('Class1')!)
-    // console.log(result);
 
     expect(f.getText()).not.toContain('class Class1')
     expect(f.getText()).toContain('import { Class1 } from "./Class1";')

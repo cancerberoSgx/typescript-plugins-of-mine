@@ -1,5 +1,5 @@
-import { Project, SourceFile } from 'ts-morph'
 import { diffLines } from 'diff'
+import { Project, SourceFile } from 'ts-morph'
 import { printDiagnostics } from '../src/diagnostics'
 
 export function createProject(...args: string[] | string[][]) {
@@ -14,7 +14,7 @@ export function createProject(...args: string[] | string[][]) {
   expectNoErrors(project)
   const fileMap: { f1: SourceFile; f2: SourceFile; f3: SourceFile; f4: SourceFile } = {} as any
   files.forEach((f, i) => {
-    ;(fileMap as any)[`f${i + 1}`] = f
+    ; (fileMap as any)[`f${i + 1}`] = f
   })
   return { project, ...fileMap }
 }

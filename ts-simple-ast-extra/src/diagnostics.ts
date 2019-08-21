@@ -1,4 +1,4 @@
-import { Project, Diagnostic, DiagnosticMessageChain } from 'ts-morph'
+import { Diagnostic, DiagnosticMessageChain, Project } from 'ts-morph'
 
 export function printDiagnostics(project: Project) {
   return project.getPreEmitDiagnostics().map(getDiagnosticMessage)

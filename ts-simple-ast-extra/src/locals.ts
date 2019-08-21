@@ -1,5 +1,5 @@
-import { Node, SyntaxKind, ts, TypeGuards } from 'ts-morph'
 import { notFalsy } from 'misc-utils-of-mine-generic'
+import { Node, ts, TypeGuards } from 'ts-morph'
 
 /**
  * Unstable API. Uses TS internals!
@@ -16,8 +16,8 @@ export function getNodeLocalsNotReferencing(target: Node, notReferencing: Node |
     typeof notReferencing === 'string'
       ? notReferencing
       : TypeGuards.hasName(notReferencing)
-      ? notReferencing.getName()
-      : undefined
+        ? notReferencing.getName()
+        : undefined
   if (!name) {
     throw 'notReferencing not must have a name'
   }

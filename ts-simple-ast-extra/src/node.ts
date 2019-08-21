@@ -1,5 +1,5 @@
-import { Node, TypeGuards, SourceFile, Directory, ts } from 'ts-morph'
-import { setObjectProperty, getObjectProperty } from 'misc-utils-of-mine-generic'
+import { getObjectProperty, setObjectProperty } from 'misc-utils-of-mine-generic'
+import { Directory, Node, SourceFile, ts, TypeGuards } from 'ts-morph'
 
 /**
  * like Node.getChildren but using forEachChild(). TODO: perhaps is a good idea to add a useForEachChild to
@@ -45,14 +45,14 @@ export function getName(n: Node) {
 
 export function setNodeProperty(n: Node, path: string | (string | number)[], value: any) {
   if (!(n as any).cannabis_meta) {
-    ;(n as any).cannabis_meta = {}
+    ; (n as any).cannabis_meta = {}
   }
   setObjectProperty((n as any).cannabis_meta, path, value)
 }
 
 export function getNodeProperty<T = any>(n: Node, path: string | (string | number)[]): T | undefined {
   if (!(n as any).cannabis_meta) {
-    ;(n as any).cannabis_meta = {}
+    ; (n as any).cannabis_meta = {}
   }
   return getObjectProperty<T>((n as any).cannabis_meta, path)
 }
@@ -114,5 +114,5 @@ export function getFirstDescendant(node: Node): Node {
 export function getLastToken(d: Node) {
   try {
     return d.getLastToken()
-  } catch (error) {}
+  } catch (error) { }
 }

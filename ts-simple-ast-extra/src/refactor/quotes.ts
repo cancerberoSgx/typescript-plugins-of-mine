@@ -1,12 +1,4 @@
-import {
-  Project,
-  SourceFile,
-  UserPreferences,
-  StringLiteral,
-  NoSubstitutionTemplateLiteral,
-  TypeGuards
-} from 'ts-morph'
-import { FormatCodeSettings, getDefaultFormatCodeSettings } from 'typescript'
+import { NoSubstitutionTemplateLiteral, StringLiteral, TypeGuards, UserPreferences } from 'ts-morph'
 import { RefactorFormatBaseOptions } from './format'
 
 export interface QuotesOptions extends RefactorFormatBaseOptions {
@@ -17,13 +9,12 @@ type Quote = UserPreferences['quotePreference']
 type Quotable = StringLiteral | NoSubstitutionTemplateLiteral
 type QuoteChar = '"' | "'"
 
-
 export function quotes(options: QuotesOptions) {
   if (!options.quotePreference) {
     return
   }
   var q = options.quotePreference === 'single' ? "'" : options.quotePreference === 'double' ? '"' : undefined
-  if (!q||!options.quotePreference) {
+  if (!q || !options.quotePreference) {
     return
   }
   options.file

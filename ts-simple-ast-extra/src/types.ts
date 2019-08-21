@@ -1,5 +1,5 @@
-import { ClassDeclaration, ExpressionWithTypeArguments, InterfaceDeclaration, Node, TypeGuards, ts } from 'ts-morph'
 import { notUndefined } from 'misc-utils-of-mine-generic'
+import { ClassDeclaration, ExpressionWithTypeArguments, InterfaceDeclaration, Node, ts, TypeGuards } from 'ts-morph'
 
 /**
  * Returns all implements clauses of this class and its super classes both things recursively

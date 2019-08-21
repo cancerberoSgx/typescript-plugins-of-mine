@@ -1,5 +1,5 @@
+import { } from 'ts-morph'
 import { AstPath } from '.'
-import {} from 'ts-morph'
 import { getKindName } from '../types'
 
 interface Options {

@@ -1,6 +1,6 @@
 {
   "name": "ts-simple-ast-extra",
-  "version": "0.2.3",
+  "version": "0.3.4",
   "description": "High level TypeScript Compiler API and refactor tools based on ts-morph (ex ts-simple-ast) library",
   "main": "dist/src/index.js",
   "typings": "dist/src/index.d.ts",
@@ -12,10 +12,12 @@
     "coverage": "npx nyc --nycrc-path nyc.config.js npm test",
     "prepare": "npm run build",
     "clean": "rm -rf dist",
-    "prettier": " npx prettier  --write --arrow-parens avoid --parser typescript --use-tabs false --no-semi true --single-quote true --tab-width 2 --trailing-comma none --end-of-line lf --prose-wrap preserve --print-width 120 --jsx-bracket-same-line true \"src/**/*.ts*\" \"spec/**/*.ts*\"",
+    "format": "npx ts-refactor format \"src/**/*.ts*\" \"spec/**/*.ts*\" ./formatCodeSettings.json --tsConfigPath ./tsconfig.json --dontAsk",
+    "organizeImports": "npx ts-refactor organizeImports \"src/**/*.ts*\" \"spec/**/*.ts*\" ./formatCodeSettings.json --tsConfigPath ./tsconfig.json --dontAsk ",
+    "lint": " npm run organizeImports && npm run format",
     "doc": "typedoc --mode modules --ignoreCompilerErrors --out ../docs/ts-simple-ast-extra src/index.ts && npm run docs-readme-toc ",
     "docs-readme-toc": "npx markdown-toc README.md -i",
-    "all": "npm run clean && npm run prettier && npm run build && npm run test && npm run doc",
+    "all": "npm run clean && npm run lint && npm run build && npm run test && npm run doc",
     "all-publish": "npm run all && npm version patch && npm publish"
   },
   "keywords": [
@@ -26,8 +28,7 @@
   "author": "Sebastian Gurin",
   "license": "MIT",
   "dependencies": {
-    "micromatch": "^4.0.2",
-    "misc-utils-of-mine-generic": "0.2.18",
+    "misc-utils-of-mine-generic": "0.2.21",
     "ts-morph": "^3.1.3"
   },
   "devDependencies": {
@@ -43,9 +44,9 @@
     "jasmine": "^3.4.0",
     "markdown-toc": "^1.2.0",
     "nyc": "^14.1.1",
-    "prettier": "^1.18.2",
     "shelljs": "^0.8.3",
     "ts-node": "^8.3.0",
+    "ts-refactor": "0.0.9",
     "typedoc": "^0.15.0",
     "watch": "^1.0.2"
   },

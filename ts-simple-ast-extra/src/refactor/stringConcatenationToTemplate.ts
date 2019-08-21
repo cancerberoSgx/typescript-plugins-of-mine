@@ -77,9 +77,9 @@ function isString(expr: Expression, tc: TypeChecker): boolean {
   return t.isStringLiteral()
     ? true
     : t.getSymbol()
-    ? !!t
+      ? !!t
         .getSymbol()!
         .getDeclarations()
         .find(d => tc.getTypeAtLocation(d).isStringLiteral())
-    : false
+      : false
 }

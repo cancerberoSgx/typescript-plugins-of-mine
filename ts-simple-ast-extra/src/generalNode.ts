@@ -1,20 +1,20 @@
-import { Directory, Node, Project, SourceFile } from 'ts-morph'
-import { getChildrenForEachChild, buildAstPath } from '.'
+import { getRelativePath } from 'misc-utils-of-mine-generic'
+import { Directory, Node, SourceFile } from 'ts-morph'
+import { buildAstPath } from '.'
 import { printAstPath } from './astPath'
-import { isDirectory, isSourceFile, isNode, getName } from './node'
-import { getRelativePath, setObjectProperty, getObjectProperty } from 'misc-utils-of-mine-generic'
+import { getName, isDirectory, isNode, isSourceFile } from './node'
 
 /**
  * General definition of nodes that contemplate everything, directories, sourceFiles, and nodes, with a common minimal API
  */
 export type GeneralNode = Node | Directory
 
-// a hack to guess what's the top-level directory of this project - since getParentDirectory() will keep navigating to the FS root
-export function getGeneralNodeRootFor(f: GeneralNode): GeneralNode {
-  //TODO
-  var a = getGeneralNodeAncestors(f)
-  return a.length ? a[a.length - 1] : f
-}
+// // a hack to guess what's the top-level directory of this project - since getParentDirectory() will keep navigating to the FS root
+// export function getGeneralNodeRootFor(f: GeneralNode): GeneralNode {
+//   //TODO
+//   var a = getGeneralNodeAncestors(f)
+//   return a.length ? a[a.length - 1] : f
+// }
 
 /**
  * Returns immediate children. In case of Nodes, children are obtained using forEachChild or getChildren according to
@@ -28,48 +28,48 @@ export function getGeneralNodeChildren(
   return !f
     ? []
     : isDirectory(f)
-    ? (f.getDirectories() as GeneralNode[])
+      ? (f.getDirectories() as GeneralNode[])
         .concat(f.getSourceFiles())
         .filter(f => includeFilesInNodeModules || !getGeneralNodePath(f).includes('node_modules'))
-    : f
-    ? getChildren
-      ? f.getChildren()
-      : f.forEachChildAsArray()
-    : []
+      : f
+        ? getChildren
+          ? f.getChildren()
+          : f.forEachChildAsArray()
+        : []
 }
 
-export function getGeneralNodeParent(f: GeneralNode): GeneralNode | undefined {
-  var root = getGeneralNodeRootFor(f)
-  if (!f || (isDirectory(f) && isDirectory(root) && !root.isAncestorOf(f))) {
-    return undefined
-  }
-  return isDirectory(f)
-    ? f.getParent() && f.getParent()!.isDescendantOf(root as Directory)
-      ? (f.getParent() as GeneralNode)
-      : undefined
-    : isSourceFile(f)
-    ? f.getDirectory()
-    : f.getParent()
-}
+// export function getGeneralNodeParent(f: GeneralNode): GeneralNode | undefined {
+//   var root = getGeneralNodeRootFor(f)
+//   if (!f || (isDirectory(f) && isDirectory(root) && !root.isAncestorOf(f))) {
+//     return undefined
+//   }
+//   return isDirectory(f)
+//     ? f.getParent() && f.getParent()!.isDescendantOf(root as Directory)
+//       ? (f.getParent() as GeneralNode)
+//       : undefined
+//     : isSourceFile(f)
+//       ? f.getDirectory()
+//       : f.getParent()
+// }
 
-export function getGeneralNodeAncestors(n: GeneralNode) {
-  // const propName = 'ancestors'
-  // if (getConfig('cacheAncestors')) {
-  //   const cached = getNodeProperty(n, propName)
-  //   if (typeof cached !== 'undefined') {
-  //     return cached
-  //   }
-  // }
-  const value: GeneralNode[] = []
-  let b: GeneralNode | undefined = n
-  while ((b = getGeneralNodeParent(b)) && b !== n) {
-    value.push(b)
-  }
-  // if (getConfig('cacheAncestors')) {
-  //   setNodeProperty(n, propName, value)
-  // }
-  return value
-}
+// export function getGeneralNodeAncestors(n: GeneralNode) {
+//   // const propName = 'ancestors'
+//   // if (getConfig('cacheAncestors')) {
+//   //   const cached = getNodeProperty(n, propName)
+//   //   if (typeof cached !== 'undefined') {
+//   //     return cached
+//   //   }
+//   // }
+//   const value: GeneralNode[] = []
+//   let b: GeneralNode | undefined = n
+//   while ((b = getGeneralNodeParent(b)) && b !== n) {
+//     value.push(b)
+//   }
+//   // if (getConfig('cacheAncestors')) {
+//   //   setNodeProperty(n, propName, value)
+//   // }
+//   return value
+// }
 
 // /**
 //  * Returns immediate children. In case of Nodes, children are obtained using forEachChild instead of getChildren method
@@ -90,18 +90,18 @@ export function getGeneralNodeKindName(n: GeneralNode) {
   return !n ? undefined : isNode(n) ? n.getKindName() : 'Directory'
 }
 
-// /**
-//  * get general node's parent
-//  */
-// export function getGeneralNodeParent(f: GeneralNode): GeneralNode | undefined {
-//   return !f
-//     ? undefined
-//     : isDirectory(f)
-//     ? (f.getParent() as GeneralNode)
-//     : isSourceFile(f)
-//     ? f.getDirectory()
-//     : f.getParent()
-// }
+/**
+ * get general node's parent
+ */
+export function getGeneralNodeParent(f: GeneralNode): GeneralNode | undefined {
+  return !f
+    ? undefined
+    : isDirectory(f)
+      ? (f.getParent() as GeneralNode)
+      : isSourceFile(f)
+        ? f.getDirectory()
+        : f.getParent()
+}
 
 /**
  * Directories and SourceFile path is given by getPath* methods. For nodes we use AstPath for defining their path.

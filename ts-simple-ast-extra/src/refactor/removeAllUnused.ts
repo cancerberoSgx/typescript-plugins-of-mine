@@ -1,4 +1,4 @@
-import { Project, SourceFile, FormatCodeSettings, UserPreferences } from 'ts-morph'
+import { FormatCodeSettings, Project, SourceFile, UserPreferences } from 'ts-morph'
 
 export function removeAllUnused(
   project: Project,

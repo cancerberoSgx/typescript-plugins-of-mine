@@ -1,5 +1,5 @@
 import { Node } from 'ts-morph'
-import { getChildrenForEachChild, getChildrenByPassSyntaxList } from '../node'
+import { getChildrenByPassSyntaxList, getChildrenForEachChild } from '../node'
 import { AstPath, SelectOptions } from './types'
 /**
  * Will select a node from given AstPath. Will look up from rootNode will loop up for a node in a
@@ -12,11 +12,11 @@ export function selectNode<T extends Node>(astPath: AstPath, rootNode: Node, opt
   let c: Node | undefined
   let { path } = astPath
   const tail = path.slice(1, path.length)
-  ;[...tail].forEach(pathNode => {
-    const children =
-      astPath.createOptions.mode === 'getChildren' ? getChildrenByPassSyntaxList(n) : getChildrenForEachChild(n)
-    c = children[pathNode.index]
-    n = c
-  })
+    ;[...tail].forEach(pathNode => {
+      const children =
+        astPath.createOptions.mode === 'getChildren' ? getChildrenByPassSyntaxList(n) : getChildrenForEachChild(n)
+      c = children[pathNode.index]
+      n = c
+    })
   return n as T
 }

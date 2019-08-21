@@ -1,5 +1,5 @@
 import { Identifier, Project, TypeGuards } from 'ts-morph'
-import { buildAstPath, selectNode, printAstPath, getKindName } from '../src'
+import { buildAstPath, getKindName, printAstPath, selectNode } from '../src'
 
 describe('astPath', () => {
   it('Should create astPath for a node and be able to select it from a SourceFile copy', () => {
@@ -208,9 +208,9 @@ describe('astPath', () => {
     )
   })
 
-  xit('Should fail to select if verifyNodeKind is provided and structure is the same but some node kind changed in the path', () => {})
+  xit('Should fail to select if verifyNodeKind is provided and structure is the same but some node kind changed in the path', () => { })
 
-  xit('Should select if verifyNodeKind is provided and kinds in the path did not change', () => {})
+  xit('Should select if verifyNodeKind is provided and kinds in the path did not change', () => { })
 
-  xit('Should select if kinds in the path changed but verifyNodeKind was not provided ', () => {})
+  xit('Should select if kinds in the path changed but verifyNodeKind was not provided ', () => { })
 })

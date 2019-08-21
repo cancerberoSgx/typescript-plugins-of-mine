@@ -1,23 +1,6 @@
-import {
-  BindingName,
-  ClassDeclaration,
-  EnumDeclaration,
-  FunctionDeclaration,
-  Identifier,
-  ImportDeclaration,
-  InterfaceDeclaration,
-  NamedNode,
-  Node,
-  QualifiedName,
-  SourceFile,
-  SyntaxKind,
-  TypeAliasDeclaration,
-  TypeGuards,
-  VariableDeclaration,
-  ImportSpecifier
-} from 'ts-morph'
-import { getNodeLocalNamesNotReferencing } from '..'
 import { notFalsy, notUndefined } from 'misc-utils-of-mine-generic'
+import { BindingName, ClassDeclaration, EnumDeclaration, FunctionDeclaration, Identifier, ImportDeclaration, ImportSpecifier, InterfaceDeclaration, NamedNode, Node, QualifiedName, SourceFile, SyntaxKind, TypeAliasDeclaration, TypeGuards, VariableDeclaration } from 'ts-morph'
+import { getNodeLocalNamesNotReferencing } from '..'
 
 interface Options {
   declaration: Declaration
@@ -110,7 +93,7 @@ function updateOtherFilesImports(node: Declaration, target: SourceFile, nodeName
         d.getSourceFile(),
         target,
         nodeName.getFirstChildByKindOrThrow(SyntaxKind.Identifier) ||
-          nodeName.getFirstChildByKindOrThrow(SyntaxKind.QualifiedName)
+        nodeName.getFirstChildByKindOrThrow(SyntaxKind.QualifiedName)
       )
       if (
         d.getParent()!.getElements().length <= 1 &&

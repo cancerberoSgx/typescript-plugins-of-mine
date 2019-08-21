@@ -1,5 +1,5 @@
+import { indent } from 'misc-utils-of-mine-generic'
 import { Project, ts } from 'ts-morph'
-import { repeat, indent } from 'misc-utils-of-mine-generic'
 
 // function test() {
 const p = new Project({
@@ -21,7 +21,7 @@ const f1 = p.getSourceFileOrThrow('Unit.ts')
 const navTree = p.getLanguageService().compilerObject.getNavigationTree(f1.getFilePath())
 function print(n: ts.NavigationTree, level = 0) {
   console.log(indent(level), n.text, n.kind, n.kindModifiers)
-  ;(n.childItems || []).forEach(c => print(c, level + 1))
+    ; (n.childItems || []).forEach(c => print(c, level + 1))
 }
 print(navTree)
 // console.log();

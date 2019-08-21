@@ -66,9 +66,9 @@ export function templateToStringConcatenation(node: Node, config?: Config, dontF
     templateExpr.replaceWithText(text)
   } else {
     throw 'No template expression found on given node or its ancestors. Given node was: ' +
-      node.getText() +
-      ' - kind: ' +
-      node.getKindName()
+    node.getText() +
+    ' - kind: ' +
+    node.getKindName()
   }
 }
 
