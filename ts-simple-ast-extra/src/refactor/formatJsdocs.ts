@@ -3,7 +3,7 @@ import { JSDoc, Node, SyntaxKind } from 'ts-morph'
 import { RefactorFormatBaseOptions, setupProjectManipulationSettings } from './format'
 
 interface ConcreteFormatJsdocsOptions {
-  formatJsdocs?: boolean  
+  formatJsdocs?: boolean
   formatJsdocsFormatBefore?: boolean
   formatJsdocsFormatAfter?: boolean
 }
@@ -20,9 +20,9 @@ export function formatJsdocs(o: FormatJsdocsOptions) {
   if (!o._projectManipulationSetted) {
     setupProjectManipulationSettings(o)
   }
-if(o.formatJsdocsFormatBefore){
-  o.file.formatText(o)
-}
+  if (o.formatJsdocsFormatBefore) {
+    o.file.formatText(o)
+  }
 
   // formatOnly({file: o.file, project: o.project, indentSize: 2, convertTabsToSpaces: true})
   o.file.getDescendantsOfKind(SyntaxKind.JSDocComment).sort((a, b) => a.getFullStart() > b.getFullStart() ? -1 : 1).forEach(node => {
@@ -34,9 +34,9 @@ if(o.formatJsdocsFormatBefore){
     // console.log(s);
   })
 
-if(typeof o.formatJsdocsFormatAfter==='undefined'||o.formatJsdocsFormatAfter){
-  o.file.formatText(o)
-}
+  if (typeof o.formatJsdocsFormatAfter === 'undefined' || o.formatJsdocsFormatAfter) {
+    o.file.formatText(o)
+  }
 
 }
 
@@ -62,7 +62,7 @@ function formatJsdocComment(o: FormatJsdocsOptions & { node: JSDoc }) {
   var i3 = indent2.length ? indent2.substring(0, indent2.length - (o.indentSize || 2)) : indent2
   const prefix = indent2 === '' ? ' ' : ' '
   // const indent2 = indent===''?indent:indent.substring(0, indent.length-1)
- return  `${i3}/**${o.newLineCharacter || '\n'}${prefix}* ${a.join(`${o.newLineCharacter || '\n'}${prefix}* `)}${o.newLineCharacter || '\n'}${prefix}*/`
+  return `${i3}/**${o.newLineCharacter || '\n'}${prefix}* ${a.join(`${o.newLineCharacter || '\n'}${prefix}* `)}${o.newLineCharacter || '\n'}${prefix}*/`
   // const r= `${indent}${indent===''?'':''}/**${o.newLineCharacter||'\n'}${indent}${prefix}* ${a.join(`${o.newLineCharacter||'\n'}${indent}${prefix}* `)}${o.newLineCharacter||'\n'}${indent}${prefix}*/`
   // console.log({indent, r});
   // return r
@@ -74,19 +74,19 @@ function formatJsdocComment(o: FormatJsdocsOptions & { node: JSDoc }) {
 
 }
 
-    /**
-     * https://github.com/dsherret/ts-morph/pull/691
-     */
-    function getInnerText(n:JSDoc) {
-        const innerTextWithStars = n.getText().replace(/^\/\*\*[^\S\n]*\n?/, "").replace(/(\r?\n)?[^\S\n]*\*\/$/, "");
-        return innerTextWithStars.split(/\n/).map(line => {
-            const starPos = line.indexOf("*");
-            if (starPos === -1 || line.substring(0, starPos).trim() !== "")
-                return line;
-            const substringStart = line[starPos + 1] === " " ? starPos + 2 : starPos + 1;
-            return line.substring(substringStart);
-        }).join("\n");
-    }
+/**
+ * https://github.com/dsherret/ts-morph/pull/691
+ */
+function getInnerText(n: JSDoc) {
+  const innerTextWithStars = n.getText().replace(/^\/\*\*[^\S\n]*\n?/, "").replace(/(\r?\n)?[^\S\n]*\*\/$/, "")
+  return innerTextWithStars.split(/\n/).map(line => {
+    const starPos = line.indexOf("*")
+    if (starPos === -1 || line.substring(0, starPos).trim() !== "")
+      return line
+    const substringStart = line[starPos + 1] === " " ? starPos + 2 : starPos + 1
+    return line.substring(substringStart)
+  }).join("\n")
+}
 
 function getIndent(o: FormatJsdocsOptions & { node: Node }) {
   // const l = o.project.getLanguageService().compilerObject.getIndentationAtPosition(o.file.getFilePath(), o.node.getStart(), o)
