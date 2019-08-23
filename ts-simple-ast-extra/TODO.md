@@ -10,6 +10,8 @@
 -[x] refactor format: provide string level APIs
 -[x] format refactors: Option to check for compile errors.
 -[x] refactor convertParamsToDestructuredObjectSpec
+-[x] refactor formatJsdoc
+-[x] refactor emptyLines
 
 ## Ideas
 

@@ -61,3 +61,6 @@
 # 0.3.6
  * emptyLines refactor
  * convertParamsToDestructuredObjectSpec refactor
+ 
+# 0.3.7
+ * refactor formatJsdoc

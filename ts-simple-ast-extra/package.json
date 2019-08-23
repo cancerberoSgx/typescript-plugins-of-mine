@@ -1,6 +1,6 @@
 {
   "name": "ts-simple-ast-extra",
-  "version": "0.3.6",
+  "version": "0.3.7",
   "description": "High level TypeScript Compiler API and refactor tools based on ts-morph (ex ts-simple-ast) library",
   "main": "dist/src/index.js",
   "typings": "dist/src/index.d.ts",
@@ -23,12 +23,13 @@
   "keywords": [
     "TypeScript",
     "TypeScript Language Service",
-    "plugin"
+    "plugin",
+    "refactor"
   ],
   "author": "Sebastian Gurin",
   "license": "MIT",
   "dependencies": {
-    "misc-utils-of-mine-generic": "0.2.21",
+    "misc-utils-of-mine-generic": "0.2.24",
     "ts-morph": "^3.1.3"
   },
   "devDependencies": {

@@ -89,6 +89,9 @@
 					</li>
 					<li>
 						<a href="_refactor_emptylines_.emptylinesoptions.html" class="tsd-signature-type">EmptyLinesOptions</a>
+					</li>
+					<li>
+						<a href="_refactor_formatjsdocs_.formatjsdocsoptions.html" class="tsd-signature-type">FormatJsdocsOptions</a>
 						<ul class="tsd-hierarchy">
 							<li>
 								<span class="target">FormatOptions</span>
@@ -105,9 +108,9 @@
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="_refactor_format_.formatoptions.html#emptylinesmax" class="tsd-kind-icon">empty<wbr>Lines<wbr>Max</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="_refactor_format_.formatoptions.html#emptylinesnewlinechar" class="tsd-kind-icon">empty<wbr>Lines<wbr>New<wbr>Line<wbr>Char</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="_refactor_format_.formatoptions.html#emptylinestrim" class="tsd-kind-icon">empty<wbr>Lines<wbr>Trim</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite tsd-is-inherited tsd-is-external"><a href="_refactor_format_.formatoptions.html#file" class="tsd-kind-icon">file</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="_refactor_format_.formatoptions.html#formatjsdocs" class="tsd-kind-icon">format<wbr>Jsdocs</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite tsd-is-inherited tsd-is-external"><a href="_refactor_format_.formatoptions.html#project" class="tsd-kind-icon">project</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="_refactor_format_.formatoptions.html#quotepreference" class="tsd-kind-icon">quote<wbr>Preference</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="_refactor_format_.formatoptions.html#trailingsemicolons" class="tsd-kind-icon">trailing<wbr>Semicolons</a></li>
@@ -126,18 +129,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="_refactor_emptylines_.concreteemptylineoptions.html">ConcreteEmptyLineOptions</a>.<a href="_refactor_emptylines_.concreteemptylineoptions.html#emptylinesmax">emptyLinesMax</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/6fb055a/ts-simple-ast-extra/src/refactor/emptyLines.ts#L4">refactor/emptyLines.ts:4</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
-					<a name="emptylinesnewlinechar" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> empty<wbr>Lines<wbr>New<wbr>Line<wbr>Char</h3>
-					<div class="tsd-signature tsd-kind-icon">empty<wbr>Lines<wbr>New<wbr>Line<wbr>Char<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
-					<aside class="tsd-sources">
-						<p>Inherited from <a href="_refactor_emptylines_.concreteemptylineoptions.html">ConcreteEmptyLineOptions</a>.<a href="_refactor_emptylines_.concreteemptylineoptions.html#emptylinesnewlinechar">emptyLinesNewLineChar</a></p>
-						<ul>
-							<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/6fb055a/ts-simple-ast-extra/src/refactor/emptyLines.ts#L6">refactor/emptyLines.ts:6</a></li>
+							<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/78df0aa/ts-simple-ast-extra/src/refactor/emptyLines.ts#L5">refactor/emptyLines.ts:5</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -148,7 +140,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="_refactor_emptylines_.concreteemptylineoptions.html">ConcreteEmptyLineOptions</a>.<a href="_refactor_emptylines_.concreteemptylineoptions.html#emptylinestrim">emptyLinesTrim</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/6fb055a/ts-simple-ast-extra/src/refactor/emptyLines.ts#L5">refactor/emptyLines.ts:5</a></li>
+							<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/78df0aa/ts-simple-ast-extra/src/refactor/emptyLines.ts#L6">refactor/emptyLines.ts:6</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -160,7 +152,18 @@
 						<p>Inherited from <a href="_refactor_format_.refactorinputoptions.html">RefactorInputOptions</a>.<a href="_refactor_format_.refactorinputoptions.html#file">file</a></p>
 						<p>Overrides <a href="_refactor_format_.refactorinputoptions.html">RefactorInputOptions</a>.<a href="_refactor_format_.refactorinputoptions.html#file">file</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/6fb055a/ts-simple-ast-extra/src/refactor/format.ts#L11">refactor/format.ts:11</a></li>
+							<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/78df0aa/ts-simple-ast-extra/src/refactor/format.ts#L12">refactor/format.ts:12</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+					<a name="formatjsdocs" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> format<wbr>Jsdocs</h3>
+					<div class="tsd-signature tsd-kind-icon">format<wbr>Jsdocs<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="_refactor_formatjsdocs_.concreteformatjsdocsoptions.html">ConcreteFormatJsdocsOptions</a>.<a href="_refactor_formatjsdocs_.concreteformatjsdocsoptions.html#formatjsdocs">formatJsdocs</a></p>
+						<ul>
+							<li>Defined in refactor/formatJsdocs.ts:6</li>
 						</ul>
 					</aside>
 				</section>
@@ -172,7 +175,7 @@
 						<p>Inherited from <a href="_refactor_format_.refactorinputoptions.html">RefactorInputOptions</a>.<a href="_refactor_format_.refactorinputoptions.html#project">project</a></p>
 						<p>Overrides <a href="_refactor_format_.refactorinputoptions.html">RefactorInputOptions</a>.<a href="_refactor_format_.refactorinputoptions.html#project">project</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/6fb055a/ts-simple-ast-extra/src/refactor/format.ts#L12">refactor/format.ts:12</a></li>
+							<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/78df0aa/ts-simple-ast-extra/src/refactor/format.ts#L13">refactor/format.ts:13</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -183,7 +186,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="_refactor_quotes_.quotesoptions.html">QuotesOptions</a>.<a href="_refactor_quotes_.quotesoptions.html#quotepreference">quotePreference</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/6fb055a/ts-simple-ast-extra/src/refactor/quotes.ts#L5">refactor/quotes.ts:5</a></li>
+							<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/78df0aa/ts-simple-ast-extra/src/refactor/quotes.ts#L5">refactor/quotes.ts:5</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -194,7 +197,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="_refactor_trailingsemicolons_.trailingsemicolonsoptions.html">TrailingSemicolonsOptions</a>.<a href="_refactor_trailingsemicolons_.trailingsemicolonsoptions.html#trailingsemicolons">trailingSemicolons</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/6fb055a/ts-simple-ast-extra/src/refactor/trailingSemicolons.ts#L7">refactor/trailingSemicolons.ts:7</a></li>
+							<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/78df0aa/ts-simple-ast-extra/src/refactor/trailingSemicolons.ts#L7">refactor/trailingSemicolons.ts:7</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -205,7 +208,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="_refactor_format_.refactorbaseoptions.html">RefactorBaseOptions</a>.<a href="_refactor_format_.refactorbaseoptions.html#verifyerrors">verifyErrors</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/6fb055a/ts-simple-ast-extra/src/refactor/format.ts#L16">refactor/format.ts:16</a></li>
+							<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/78df0aa/ts-simple-ast-extra/src/refactor/format.ts#L17">refactor/format.ts:17</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -236,13 +239,13 @@
 								<a href="_refactor_format_.formatoptions.html#emptylinesmax" class="tsd-kind-icon">empty<wbr>Lines<wbr>Max</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
-								<a href="_refactor_format_.formatoptions.html#emptylinesnewlinechar" class="tsd-kind-icon">empty<wbr>Lines<wbr>New<wbr>Line<wbr>Char</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
 								<a href="_refactor_format_.formatoptions.html#emptylinestrim" class="tsd-kind-icon">empty<wbr>Lines<wbr>Trim</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite tsd-is-inherited tsd-is-external">
 								<a href="_refactor_format_.formatoptions.html#file" class="tsd-kind-icon">file</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+								<a href="_refactor_format_.formatoptions.html#formatjsdocs" class="tsd-kind-icon">format<wbr>Jsdocs</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite tsd-is-inherited tsd-is-external">
 								<a href="_refactor_format_.formatoptions.html#project" class="tsd-kind-icon">project</a>
@@ -274,6 +277,9 @@
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
 						<a href="../modules/_refactor_format_.html#format" class="tsd-kind-icon">format</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
+						<a href="../modules/_refactor_format_.html#formatonly" class="tsd-kind-icon">format<wbr>Only</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
 						<a href="../modules/_refactor_format_.html#formatstring" class="tsd-kind-icon">format<wbr>String</a>
