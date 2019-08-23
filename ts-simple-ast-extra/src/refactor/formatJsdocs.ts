@@ -18,7 +18,7 @@ export function formatJsdocs(o: FormatJsdocsOptions) {
   if (!o._projectManipulationSetted) {
     setupProjectManipulationSettings(o)
   }
-  // o.file.formatText()
+
 
   // formatOnly({file: o.file, project: o.project, indentSize: 2, convertTabsToSpaces: true})
   o.file.getDescendantsOfKind(SyntaxKind.JSDocComment).sort((a, b) => a.getFullStart() > b.getFullStart() ? -1 : 1).forEach(node => {
@@ -29,9 +29,10 @@ export function formatJsdocs(o: FormatJsdocsOptions) {
     }
     // console.log(s);
   })
+    o.file.formatText(o)
 }
 
-export function formatJsdocComment(o: FormatJsdocsOptions & { node: JSDoc }) {
+function formatJsdocComment(o: FormatJsdocsOptions & { node: JSDoc }) {
   // const indent = repeat(o.node.getIndentationLevel(), s)'  '
   const target = o.node.getNextSibling()
   if (!target) {
@@ -40,19 +41,23 @@ export function formatJsdocComment(o: FormatJsdocsOptions & { node: JSDoc }) {
   // const indent = ''
   const indent2 = getIndent({ ...o, node: target })
 
-  const text = o.node.getInnerText() || ''
-  const a = text.split(detectNewline(text)).map(l => {
-    const s = l.trimLeft()
-    return s.startsWith('*') ? s.substring(1) : s
-  })
-  // console.log(a);
+  const text = getInnerText(o.node)
+  // const text = o.node.getFullText().trim().substring(3, o.node.getFullText().length-2)
+  // console.log({text});
+  // process.exit(1)
+  const a = text.split(detectNewline(text))
+  // const hasAsterix = !o.node.getFullText().trim().substring(3, o.node.getFullText().length-2).split(detectNewline(text)).find(l=>!l.trimLeft().startsWith('*'))
+  // const a = lines.map(l => {
+  // return l
+  //   // return hasAsterix ? l.trimLeft().substring(1) : l
+  // })
   var i3 = indent2.length ? indent2.substring(0, indent2.length - (o.indentSize || 2)) : indent2
   const prefix = indent2 === '' ? ' ' : ' '
   // const indent2 = indent===''?indent:indent.substring(0, indent.length-1)
-  const r = `${i3}/**${o.newLineCharacter || '\n'}${prefix}* ${a.join(`${o.newLineCharacter || '\n'}${prefix}* `)}${o.newLineCharacter || '\n'}${prefix}*/`
+ return  `${i3}/**${o.newLineCharacter || '\n'}${prefix}* ${a.join(`${o.newLineCharacter || '\n'}${prefix}* `)}${o.newLineCharacter || '\n'}${prefix}*/`
   // const r= `${indent}${indent===''?'':''}/**${o.newLineCharacter||'\n'}${indent}${prefix}* ${a.join(`${o.newLineCharacter||'\n'}${indent}${prefix}* `)}${o.newLineCharacter||'\n'}${indent}${prefix}*/`
   // console.log({indent, r});
-  return r
+  // return r
   // return `/** ${text} seba */`
   // const a = o.node.getFullText().split('\n')
 
@@ -60,6 +65,21 @@ export function formatJsdocComment(o: FormatJsdocsOptions & { node: JSDoc }) {
   // if(a)
 
 }
+
+    /**
+     * https://github.com/dsherret/ts-morph/pull/691
+     */
+    function getInnerText(n:JSDoc) {
+        const innerTextWithStars = n.getText().replace(/^\/\*\*[^\S\n]*\n?/, "").replace(/(\r?\n)?[^\S\n]*\*\/$/, "");
+
+        return innerTextWithStars.split(/\n/).map(line => {
+            const starPos = line.indexOf("*");
+            if (starPos === -1 || line.substring(0, starPos).trim() !== "")
+                return line;
+            const substringStart = line[starPos + 1] === " " ? starPos + 2 : starPos + 1;
+            return line.substring(substringStart);
+        }).join("\n");
+    }
 
 function getIndent(o: FormatJsdocsOptions & { node: Node }) {
   // const l = o.project.getLanguageService().compilerObject.getIndentationAtPosition(o.file.getFilePath(), o.node.getStart(), o)
