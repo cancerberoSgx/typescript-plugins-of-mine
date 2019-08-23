@@ -3,7 +3,9 @@ import { JSDoc, Node, SyntaxKind } from 'ts-morph'
 import { RefactorFormatBaseOptions, setupProjectManipulationSettings } from './format'
 
 interface ConcreteFormatJsdocsOptions {
-  formatJsdocs?: boolean
+  formatJsdocs?: boolean  
+  formatJsdocsFormatBefore?: boolean
+  formatJsdocsFormatAfter?: boolean
 }
 
 export interface FormatJsdocsOptions extends RefactorFormatBaseOptions, ConcreteFormatJsdocsOptions {
@@ -18,7 +20,9 @@ export function formatJsdocs(o: FormatJsdocsOptions) {
   if (!o._projectManipulationSetted) {
     setupProjectManipulationSettings(o)
   }
-
+if(o.formatJsdocsFormatBefore){
+  o.file.formatText(o)
+}
 
   // formatOnly({file: o.file, project: o.project, indentSize: 2, convertTabsToSpaces: true})
   o.file.getDescendantsOfKind(SyntaxKind.JSDocComment).sort((a, b) => a.getFullStart() > b.getFullStart() ? -1 : 1).forEach(node => {
@@ -29,7 +33,11 @@ export function formatJsdocs(o: FormatJsdocsOptions) {
     }
     // console.log(s);
   })
-    o.file.formatText(o)
+
+if(typeof o.formatJsdocsFormatAfter==='undefined'||o.formatJsdocsFormatAfter){
+  o.file.formatText(o)
+}
+
 }
 
 function formatJsdocComment(o: FormatJsdocsOptions & { node: JSDoc }) {
@@ -71,7 +79,6 @@ function formatJsdocComment(o: FormatJsdocsOptions & { node: JSDoc }) {
      */
     function getInnerText(n:JSDoc) {
         const innerTextWithStars = n.getText().replace(/^\/\*\*[^\S\n]*\n?/, "").replace(/(\r?\n)?[^\S\n]*\*\/$/, "");
-
         return innerTextWithStars.split(/\n/).map(line => {
             const starPos = line.indexOf("*");
             if (starPos === -1 || line.substring(0, starPos).trim() !== "")
