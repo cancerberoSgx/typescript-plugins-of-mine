@@ -10,11 +10,10 @@ export interface RefactorFormatBaseOptions extends Partial<FormatCodeSettings> {
   project: Project
 }
 
-export interface FormatOptions
-  extends RefactorFormatBaseOptions,
-  QuotesOptions,
-  TrailingSemicolonsOptions,
-  RemoveProperties<OrganizeImportsOptions, 'quotePreference'> { }
+export interface FormatOptions extends RefactorFormatBaseOptions, QuotesOptions, TrailingSemicolonsOptions,
+  RemoveProperties<OrganizeImportsOptions, 'quotePreference'> {
+
+}
 
 export function format(options: FormatOptions) {
   options = Object.assign({}, getDefaultFormatCodeSettings(options.newLineCharacter || '\n'), options)
@@ -29,4 +28,19 @@ export function format(options: FormatOptions) {
     .getFormattingEditsForDocument(options.file.getSourceFile().getFilePath(), options)
   file = options.file.getSourceFile().applyTextChanges(edits || [])
   return file
+}
+
+interface FormatBaseNoInput extends RemoveProperties<FormatOptions, 'file' | 'project'> {
+
+}
+
+export interface FormatStringOptions extends FormatBaseNoInput {
+  code: string
+}
+
+export function formatString(options: FormatStringOptions): string {
+  const project = new Project()
+  const file = project.createSourceFile('f1.ts', options.code)
+  const output = format({ ...options, file, project })
+  return output.getFullText()
 }
