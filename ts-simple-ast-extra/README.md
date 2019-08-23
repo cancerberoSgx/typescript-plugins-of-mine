@@ -29,7 +29,6 @@ High level TypeScript Compiler API and refactor tools based on ts-morph (ex ts-s
    * Easy to use
    * have tests but use at your own risk
 
-
  * APIs useful to me that unfortunately are out of topic to pull them to in ts-morph like astPath or generalNode abstraction or 
 
  * utilities related with TypeScript Plugin development like abstract types, Tests Helpers, AST, repeated code, codefixes generic structure, etc
@@ -52,8 +51,8 @@ NOTE: Currently, although there is API documentation I would say the best source
 In general they have the same API, you pass a SourceFile and the Project (they need access to the LanguageService):
 
 
-
 ### addBracesToArrowFunctions
+
 ```ts
 import {Project, addBracesToArrowFunctions} from 'ts-simple-ast-extra'
 const project = new Project()
@@ -106,8 +105,6 @@ function f() {
 }
 */
 ```
-
-
 
 ## API docs
 

@@ -33,7 +33,7 @@ export function declareVariable(
   }
   const parent = node.getParent()
   const container = parent.getFirstAncestorByKind(SyntaxKind.Block) || node.getSourceFile()
-  const statementAncestor = parent.getAncestors().find(a => a.getParent() === container) as Statement // || node.getSourceFile()
+  const statementAncestor = parent.getAncestors().find(a => a.getParent() === container) as Statement
   if (
     TypeGuards.isIdentifier(node) &&
     TypeGuards.isCallExpression(parent) &&

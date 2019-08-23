@@ -28,21 +28,16 @@ export interface FormatOptions extends RefactorBaseOptions, RefactorFormatBaseOp
 
 export function format(options: FormatOptions) {
   options = Object.assign({}, ts.getDefaultFormatCodeSettings(options.newLineCharacter || detectNewline(options.file.getFullText()) || '\n'), options)
-  // options.file.detec
-  // options.project.manipulationSettings.set({indentationText: options.convertTabsToSpaces?})
   if (options.verifyErrors) {
     const d = options.verifyErrors === 'all' ? options.project.getPreEmitDiagnostics() : options.verifyErrors === 'semantical' ? options.project.getProgram().getSemanticDiagnostics() : options.verifyErrors === 'syntactical' ? options.project.getProgram().getSyntacticDiagnostics() : []
     checkThrow(d.length === 0, `TypeScript errors found and verifyErrors === '${options.verifyErrors}' was used. Aborting. \nErrors:\n * ${d.map(getDiagnosticMessage).join('\n * ')}`)
   }
-
-  // if(typeof options.indentSize==='undefined'||typeof options.convertTabsToSpaces==='undefined'){
   setupProjectManipulationSettings(options)
-  // tryTo(()=>formatJsdocs(options))
+  emptyLines(options)
   formatJsdocs(options)
   organizeImports(options) // Important: this first since TS won't respect formatSettings and do "heuristics"
   trailingSemicolons(options)
   quotes(options)
-  emptyLines(options)
   formatOnly(options)
   return options.file
 }
@@ -64,7 +59,6 @@ export function setupProjectManipulationSettings(options: FormatOptions) {
 }
 
 export function formatOnly(options: RefactorFormatBaseOptions) {
-  // options.file.formatText({...options, })
   const edits = options.project
     .getLanguageService()
     .getFormattingEditsForDocument(options.file.getFilePath(), options)
