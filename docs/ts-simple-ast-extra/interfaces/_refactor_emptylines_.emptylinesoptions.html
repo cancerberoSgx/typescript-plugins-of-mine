@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>OrganizeImportsOptions | ts-simple-ast-extra</title>
+	<title>EmptyLinesOptions | ts-simple-ast-extra</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,13 +56,13 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="../modules/_refactor_organizeimports_.html">&quot;refactor/organizeImports&quot;</a>
+					<a href="../modules/_refactor_emptylines_.html">&quot;refactor/emptyLines&quot;</a>
 				</li>
 				<li>
-					<a href="_refactor_organizeimports_.organizeimportsoptions.html">OrganizeImportsOptions</a>
+					<a href="_refactor_emptylines_.emptylinesoptions.html">EmptyLinesOptions</a>
 				</li>
 			</ul>
-			<h1>Interface OrganizeImportsOptions</h1>
+			<h1>Interface EmptyLinesOptions</h1>
 		</div>
 	</div>
 </header>
@@ -73,13 +73,18 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<a href="_refactor_format_.refactorformatbaseoptions.html" class="tsd-signature-type">RefactorFormatBaseOptions</a>
+						<a href="_refactor_format_.refactorinputoptions.html" class="tsd-signature-type">RefactorInputOptions</a>
 					</li>
 					<li>
-						<span class="tsd-signature-type">object</span>
+						<a href="_refactor_emptylines_.concreteemptylineoptions.html" class="tsd-signature-type">ConcreteEmptyLineOptions</a>
 						<ul class="tsd-hierarchy">
 							<li>
-								<span class="target">OrganizeImportsOptions</span>
+								<span class="target">EmptyLinesOptions</span>
+								<ul class="tsd-hierarchy">
+									<li>
+										<a href="_refactor_format_.formatoptions.html" class="tsd-signature-type">FormatOptions</a>
+									</li>
+								</ul>
 							</li>
 						</ul>
 					</li>
@@ -89,19 +94,54 @@
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
-						<section class="tsd-index-section tsd-is-external">
+						<section class="tsd-index-section tsd-is-inherited tsd-is-external">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="_refactor_organizeimports_.organizeimportsoptions.html#file" class="tsd-kind-icon">file</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_refactor_organizeimports_.organizeimportsoptions.html#organizeimports" class="tsd-kind-icon">organize<wbr>Imports</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="_refactor_organizeimports_.organizeimportsoptions.html#project" class="tsd-kind-icon">project</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="_refactor_emptylines_.emptylinesoptions.html#emptylinesmax" class="tsd-kind-icon">empty<wbr>Lines<wbr>Max</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="_refactor_emptylines_.emptylinesoptions.html#emptylinesnewlinechar" class="tsd-kind-icon">empty<wbr>Lines<wbr>New<wbr>Line<wbr>Char</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="_refactor_emptylines_.emptylinesoptions.html#emptylinestrim" class="tsd-kind-icon">empty<wbr>Lines<wbr>Trim</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="_refactor_emptylines_.emptylinesoptions.html#file" class="tsd-kind-icon">file</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="_refactor_emptylines_.emptylinesoptions.html#project" class="tsd-kind-icon">project</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
-			<section class="tsd-panel-group tsd-member-group tsd-is-external">
+			<section class="tsd-panel-group tsd-member-group tsd-is-inherited tsd-is-external">
 				<h2>Properties</h2>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+					<a name="emptylinesmax" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> empty<wbr>Lines<wbr>Max</h3>
+					<div class="tsd-signature tsd-kind-icon">empty<wbr>Lines<wbr>Max<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="_refactor_emptylines_.concreteemptylineoptions.html">ConcreteEmptyLineOptions</a>.<a href="_refactor_emptylines_.concreteemptylineoptions.html#emptylinesmax">emptyLinesMax</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/6fb055a/ts-simple-ast-extra/src/refactor/emptyLines.ts#L4">refactor/emptyLines.ts:4</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+					<a name="emptylinesnewlinechar" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> empty<wbr>Lines<wbr>New<wbr>Line<wbr>Char</h3>
+					<div class="tsd-signature tsd-kind-icon">empty<wbr>Lines<wbr>New<wbr>Line<wbr>Char<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="_refactor_emptylines_.concreteemptylineoptions.html">ConcreteEmptyLineOptions</a>.<a href="_refactor_emptylines_.concreteemptylineoptions.html#emptylinesnewlinechar">emptyLinesNewLineChar</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/6fb055a/ts-simple-ast-extra/src/refactor/emptyLines.ts#L6">refactor/emptyLines.ts:6</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+					<a name="emptylinestrim" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> empty<wbr>Lines<wbr>Trim</h3>
+					<div class="tsd-signature tsd-kind-icon">empty<wbr>Lines<wbr>Trim<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="_refactor_emptylines_.concreteemptylineoptions.html">ConcreteEmptyLineOptions</a>.<a href="_refactor_emptylines_.concreteemptylineoptions.html#emptylinestrim">emptyLinesTrim</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/6fb055a/ts-simple-ast-extra/src/refactor/emptyLines.ts#L5">refactor/emptyLines.ts:5</a></li>
+						</ul>
+					</aside>
+				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
 					<a name="file" class="tsd-anchor"></a>
 					<h3>file</h3>
@@ -110,16 +150,6 @@
 						<p>Inherited from <a href="_refactor_format_.refactorinputoptions.html">RefactorInputOptions</a>.<a href="_refactor_format_.refactorinputoptions.html#file">file</a></p>
 						<ul>
 							<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/6fb055a/ts-simple-ast-extra/src/refactor/format.ts#L11">refactor/format.ts:11</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-					<a name="organizeimports" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> organize<wbr>Imports</h3>
-					<div class="tsd-signature tsd-kind-icon">organize<wbr>Imports<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/6fb055a/ts-simple-ast-extra/src/refactor/organizeImports.ts#L5">refactor/organizeImports.ts:5</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -143,32 +173,44 @@
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
 					<li class="current tsd-kind-external-module tsd-is-external">
-						<a href="../modules/_refactor_organizeimports_.html">"refactor/organize<wbr>Imports"</a>
+						<a href="../modules/_refactor_emptylines_.html">"refactor/empty<wbr>Lines"</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-is-external tsd-is-not-exported">
+						<a href="_refactor_emptylines_.concreteemptylineoptions.html" class="tsd-kind-icon">Concrete<wbr>Empty<wbr>Line<wbr>Options</a>
+					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface tsd-parent-kind-external-module tsd-is-external">
-						<a href="_refactor_organizeimports_.organizeimportsoptions.html" class="tsd-kind-icon">Organize<wbr>Imports<wbr>Options</a>
+						<a href="_refactor_emptylines_.emptylinesoptions.html" class="tsd-kind-icon">Empty<wbr>Lines<wbr>Options</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
-								<a href="_refactor_organizeimports_.organizeimportsoptions.html#file" class="tsd-kind-icon">file</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-								<a href="_refactor_organizeimports_.organizeimportsoptions.html#organizeimports" class="tsd-kind-icon">organize<wbr>Imports</a>
+								<a href="_refactor_emptylines_.emptylinesoptions.html#emptylinesmax" class="tsd-kind-icon">empty<wbr>Lines<wbr>Max</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
-								<a href="_refactor_organizeimports_.organizeimportsoptions.html#project" class="tsd-kind-icon">project</a>
+								<a href="_refactor_emptylines_.emptylinesoptions.html#emptylinesnewlinechar" class="tsd-kind-icon">empty<wbr>Lines<wbr>New<wbr>Line<wbr>Char</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+								<a href="_refactor_emptylines_.emptylinesoptions.html#emptylinestrim" class="tsd-kind-icon">empty<wbr>Lines<wbr>Trim</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+								<a href="_refactor_emptylines_.emptylinesoptions.html#file" class="tsd-kind-icon">file</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+								<a href="_refactor_emptylines_.emptylinesoptions.html#project" class="tsd-kind-icon">project</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
 					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
-						<a href="../modules/_refactor_organizeimports_.html#organizeimports" class="tsd-kind-icon">organize<wbr>Imports</a>
+						<a href="../modules/_refactor_emptylines_.html#emptylines" class="tsd-kind-icon">empty<wbr>Lines</a>
+					</li>
+					<li class=" tsd-kind-object-literal tsd-parent-kind-external-module tsd-is-external tsd-is-not-exported">
+						<a href="../modules/_refactor_emptylines_.html#defaultoptions" class="tsd-kind-icon">default<wbr>Options</a>
 					</li>
 				</ul>
 			</nav>

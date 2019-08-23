@@ -12,3 +12,7 @@
 *.tgz
 .nyc_output
 /coverage
+.vscode
+nyc.config.js
+formatCodeSettings.json
+TODO.md

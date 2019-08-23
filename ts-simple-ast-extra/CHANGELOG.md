@@ -57,4 +57,7 @@
  * OrganizeImports
  * quotePreferences
  * replaced prettier by ts-refactor
+ 
+# 0.3.6
  * emptyLines refactor
+ * convertParamsToDestructuredObjectSpec refactor

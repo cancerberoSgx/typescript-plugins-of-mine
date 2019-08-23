@@ -15,7 +15,7 @@ const defaultOptions: Required<ConcreteEmptyLineOptions> = {
 }
 
 export function emptyLines(o: EmptyLinesOptions) {
-  if(typeof o.emptyLinesMax==='undefined') {
+  if (typeof o.emptyLinesMax === 'undefined') {
     return undefined
   }
   const s = o.file.getFullText()
@@ -33,7 +33,7 @@ export function emptyLines(o: EmptyLinesOptions) {
       a.push((empty && o.emptyLinesTrim) ? line.trim() : line)
     }
   })
-  const r =  a.join(o.emptyLinesNewLineChar!)
+  const r = a.join(o.emptyLinesNewLineChar!)
   o.file.replaceWithText(r)
   return r
 }

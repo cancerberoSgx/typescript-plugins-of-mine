@@ -15,7 +15,7 @@ export function organizeImports(options: OrganizeImportsOptions) {
   }
   const file = options.file.organizeImports(options, options)
   // if (!options.noModify) {
-    options.file.replaceWithText(file.getFullText())
+  options.file.replaceWithText(file.getFullText())
   // }
   return file
 }
