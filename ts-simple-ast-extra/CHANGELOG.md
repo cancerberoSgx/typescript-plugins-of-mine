@@ -57,3 +57,4 @@
  * OrganizeImports
  * quotePreferences
  * replaced prettier by ts-refactor
+ * emptyLines refactor

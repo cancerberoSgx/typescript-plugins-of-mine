@@ -1,12 +1,14 @@
 
 # TODO
- * use ts-refactor instead prettier.
- * browser tests
- * refactor/organizeImports
- * use ts-morph extract interface refactor
- * move the project to its own repo - change its name to something more meanful related to refactors.  * Command line Application ? separate project ? 
- * test against pure JS (no tsconfig.json) projects
- * refactors: provide string level APIs and build projects for users. Also at file-represented-with-string-level API. Option to check for compile errors.
+-[x] use ts-refactor instead prettier.
+-[ ] browser tests
+-[x] refactor/organizeImports
+-[ ] use ts-morph extract interface refactor
+-[ ] move the project to its own repo - change its name to something more meanful related to refactors. 
+  -[ ] Command line Application ? separate project ? 
+-[ ] test against pure JS (no tsconfig.json) projects
+-[x] refactor format: provide string level APIs
+-[ ] refactors: Option to check for compile errors.
 
 * build "Incremental build support using the language services" from https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API so we can debug the whole experience in debugger instead of debugging using plugin manually in the editor!
 
