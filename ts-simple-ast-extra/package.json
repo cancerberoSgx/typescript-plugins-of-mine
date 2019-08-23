@@ -29,6 +29,7 @@
   "author": "Sebastian Gurin",
   "license": "MIT",
   "dependencies": {
+    "detect-indent": "^6.0.0",
     "misc-utils-of-mine-generic": "0.2.24",
     "ts-morph": "^3.1.3"
   },

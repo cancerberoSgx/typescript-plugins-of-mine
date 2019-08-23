@@ -46,10 +46,10 @@ export const a = 1
  */
 export class C {
   /**
-    * fosd
-    * @param {number} a foo bar
-    * @returns {number} jfjfjf
-    */
+   * fosd
+   * @param {number} a foo bar
+   * @returns {number} jfjfjf
+   */
   m(a:number) { return 1 }
 }
 export interface I {
@@ -57,14 +57,14 @@ export interface I {
     o:string[]
     b: (g:{
       /**
-        * hello
-        */
+       * hello
+       */
       p:boolean
       })=>void,
     uu: {
       /**
-        * hello world
-        */
+       * hello world
+       */
       o:number
     }
   }
@@ -73,12 +73,9 @@ export interface I {
     const project = new Project()
     const file = project.createSourceFile('test.ts', code)
     expectNoErrors(project)
-
     formatJsdocs({ project, file, formatJsdocs: true })
     expectNoErrors(project)
-
     expectEqualsAndDiff(file.getFullText().trim(), expected)
-
     //  expect(file.getText().trim()).toBe(expected)
     //  console.log(file.getFullText());
 

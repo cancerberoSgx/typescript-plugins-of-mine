@@ -1,6 +1,7 @@
 import { Project } from 'ts-morph'
 import { format, formatString } from '../../src'
 import { expectEqualsAndDiff, expectNoErrors } from '../testUtil'
+
 describe('format', () => {
   const code = `
 const {r, log, g} = require('f');
@@ -67,7 +68,6 @@ for (let i = 0; i < 2; i++) { }
       trailingSemicolons: 'never',
       indentSize: 2
     })
-
     const expected = `
 const { r, log, g } = require('f')
 class C {
@@ -101,7 +101,6 @@ for (let i = 0; i < 2; i++) { }
       trailingSemicolons: 'never',
       indentSize: 2
     })
-
     const expected = `
 const { r, log, g } = require('f')
 class C {
@@ -172,10 +171,10 @@ export const a = 1
  */
 export class C {
   /**
-    * fosd
-    * @param {number} a foo bar
-    * @returns {number} jfjfjf
-    */
+   * fosd
+   * @param {number} a foo bar
+   * @returns {number} jfjfjf
+   */
   m(a: number) { return 1 }
 }
 export interface I {
@@ -183,19 +182,18 @@ export interface I {
     o: string[]
     b: (g: {
       /**
-        * hello
-        */
+       * hello
+       */
       p: boolean
     }) => void,
     uu: {
       /**
-        * hello world
-        */
+       * hello world
+       */
       o: number
     }
   }
 }`.trim()
-
     const project = new Project()
     expectNoErrors(project)
     const file = project.createSourceFile('f1.ts', code)
@@ -210,6 +208,5 @@ export interface I {
     expectNoErrors(project)
     expectEqualsAndDiff(file.getFullText().trim(), expected)
   })
-
 
 })
