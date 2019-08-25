@@ -178,16 +178,16 @@ export declare function findTransformECC(templateImage: string, inputImage: stri
  * 
  *  'bar  '
  * 
- * (the equation holds with homogeneous coordinates for homography). It returns
- * the final enhanced correlation coefficient, that is the correlation coefficient
- * between the template image and the final warped input image. When a  '$3times
- * 3$ ' matrix is given with motionType =0, 1 or 2, the third row is ignored.
+ * (the equation holds with homogeneous coordinates for homography). It returns the
+ * final enhanced correlation coefficient, that is the correlation coefficient
+ * between the template image and the final warped input image. When a  '$3times 3$
+ * ' matrix is given with motionType =0, 1 or 2, the third row is ignored.
  * 
  * Unlike findHomography and estimateRigidTransform, the function findTransformECC
  * implements an area-based alignment that builds on intensity similarities. In
- * essence, the function updates the initial transformation that roughly aligns
- * the images. If this information is missing, the identity warp (unity matrix) is
- * used as an initialization. Note that if images undergo strong
+ * essence, the function updates the initial transformation that roughly aligns the
+ * images. If this information is missing, the identity warp (unity matrix) is used
+ * as an initialization. Note that if images undergo strong
  * displacements/rotations, an initial transformation that roughly aligns the
  * images is necessary (e.g., a simple euclidean/similarity transform that allows
  * for the images showing the same image content approximately). Use inverse
@@ -207,8 +207,8 @@ export declare function findTransformECC(templateImage: string, inputImage: stri
  * parameters being estimated.MOTION_EUCLIDEAN sets a Euclidean (rigid)
  * transformation as motion model; three parameters are estimated; warpMatrix is
  * $2times 3$.MOTION_AFFINE sets an affine motion model (DEFAULT); six parameters
- * are estimated; warpMatrix is $2times 3$.MOTION_HOMOGRAPHY sets a homography as
- * a motion model; eight parameters are estimated; 'warpMatrix ' is $3times 3$.
+ * are estimated; warpMatrix is $2times 3$.MOTION_HOMOGRAPHY sets a homography as a
+ * motion model; eight parameters are estimated; 'warpMatrix ' is $3times 3$.
  * @param criteria parameter, specifying the termination criteria of the ECC
  * algorithm; criteria.epsilon defines the threshold of the increment in the
  * correlation coefficient between two iterations (a negative criteria.epsilon
@@ -223,8 +223,9 @@ export declare function findTransformECC(templateImage: string, inputImage: stri
     const project = new Project()
     const file = project.createSourceFile('test.ts', code)
     expectNoErrors(project)
-    formatJsdocs({ project, file, formatJsdocs: true, lineBreak: 80 })
+    formatJsdocs({ project, file, formatJsdocs: true, jsdocLineMaxLength: 80 })
     expectNoErrors(project)
-    expectEqualsAndDiff(file.getFullText().trim(), expected)
+    const actual = file.getFullText().trim()
+    expectEqualsAndDiff(actual, expected)
   })
 })

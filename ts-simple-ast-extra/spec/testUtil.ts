@@ -22,10 +22,10 @@ export function createProject(...args: string[] | string[][]) {
 let project: Project | undefined
 let file: SourceFile | undefined
 
-export function getFile(code: string) {
+export function getFile(code: string, fileName = 'foo.ts') {
   if (!file) {
     project = new Project({})
-    file = project.createSourceFile('foo.ts', code)
+    file = project.createSourceFile(fileName, code)
   } else if (code) {
     file = file.replaceWithText(code) as SourceFile
   }

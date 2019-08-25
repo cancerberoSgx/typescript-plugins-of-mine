@@ -9,3 +9,4 @@ dist
 tmp*
 .nyc_output
 /coverage
+.vscode
