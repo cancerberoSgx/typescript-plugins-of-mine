@@ -1,4 +1,4 @@
-import { detectNewline } from 'misc-utils-of-mine-generic'
+import { detectNewline, lineBreak } from 'misc-utils-of-mine-generic'
 import { JSDoc, Node, SyntaxKind } from 'ts-morph'
 import { RefactorFormatBaseOptions, setupProjectManipulationSettings } from './format'
 
@@ -6,6 +6,7 @@ interface ConcreteFormatJsdocsOptions {
   formatJsdocs?: boolean
   formatJsdocsFormatBefore?: boolean
   formatJsdocsFormatAfter?: boolean
+  lineBreak?: number
 }
 
 export interface FormatJsdocsOptions extends RefactorFormatBaseOptions, ConcreteFormatJsdocsOptions {
@@ -40,7 +41,11 @@ function formatJsdocComment(o: FormatJsdocsOptions & { node: JSDoc }) {
   }
   const indent2 = getIndent({ ...o, node: target })
   const text = getInnerText(o.node)
-  const a = text.split(detectNewline(text))
+  const newLine = detectNewline(text)
+  let a = text.split(newLine)
+  if (o.lineBreak) {
+    a = a.map(l => lineBreak(l, o.lineBreak || 40, newLine).split(newLine)).flat()
+  }
   var i3 = indent2.length ? indent2.substring(0, indent2.length - (o.indentSize || 2)) : indent2
   const prefix = indent2 === '' ? ' ' : ' '
   return `${i3}/**${o.newLineCharacter || '\n'}${prefix}* ${a.join(`${o.newLineCharacter || '\n'}${prefix}* `)}${o.newLineCharacter || '\n'}${prefix}*/`

@@ -64,3 +64,6 @@
  
 # 0.3.7
  * refactor formatJsdoc
+
+# 0.3.8
+ * refactor formatJsdoc lineBreak

@@ -5,6 +5,7 @@
 -[ ] use ts-morph extract interface refactor instead ours
 -[ ] move the project to its own repo - change its name to something more meanful related to refactors. 
   -[ ] Command line Application ? separate project ? 
+-[x] formatJsdoc refactor: add line break
 -[x] use ts-refactor instead prettier.
 -[x] refactor/organizeImports
 -[x] refactor format: provide string level APIs
