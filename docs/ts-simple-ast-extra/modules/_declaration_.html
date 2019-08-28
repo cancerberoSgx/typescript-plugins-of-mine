@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>&quot;refactor/extractInterface&quot; | ts-simple-ast-extra</title>
+	<title>&quot;declaration&quot; | ts-simple-ast-extra</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,10 +56,10 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="_refactor_extractinterface_.html">&quot;refactor/extractInterface&quot;</a>
+					<a href="_declaration_.html">&quot;declaration&quot;</a>
 				</li>
 			</ul>
-			<h1>External module &quot;refactor/extractInterface&quot;</h1>
+			<h1>External module &quot;declaration&quot;</h1>
 		</div>
 	</div>
 </header>
@@ -70,10 +70,17 @@
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
+						<section class="tsd-index-section tsd-is-external tsd-is-not-exported">
+							<h3>Interfaces</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-interface tsd-parent-kind-external-module tsd-is-external tsd-is-not-exported"><a href="../interfaces/_declaration_.propertydeclaration.html" class="tsd-kind-icon">Property<wbr>Declaration</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-external-module tsd-is-external tsd-is-not-exported"><a href="../interfaces/_declaration_.s.html" class="tsd-kind-icon">S</a></li>
+							</ul>
+						</section>
 						<section class="tsd-index-section tsd-is-external">
 							<h3>Functions</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-external"><a href="_refactor_extractinterface_.html#extractinterface" class="tsd-kind-icon">extract<wbr>Interface</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-external"><a href="_declaration_.html#getproperties" class="tsd-kind-icon">get<wbr>Properties</a></li>
 							</ul>
 						</section>
 					</div>
@@ -82,34 +89,25 @@
 			<section class="tsd-panel-group tsd-member-group tsd-is-external">
 				<h2>Functions</h2>
 				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
-					<a name="extractinterface" class="tsd-anchor"></a>
-					<h3>extract<wbr>Interface</h3>
+					<a name="getproperties" class="tsd-anchor"></a>
+					<h3>get<wbr>Properties</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">extract<wbr>Interface<span class="tsd-signature-symbol">(</span>node<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ClassDeclaration</span>, dest<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">StatementedNode</span>, interfaceName<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, removeDocs<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Properties<span class="tsd-signature-symbol">(</span>t<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Type</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/_declaration_.propertydeclaration.html" class="tsd-signature-type">PropertyDeclaration</a><span class="tsd-signature-symbol">[]</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/d8e9742/ts-simple-ast-extra/src/refactor/extractInterface.ts#L4">refactor/extractInterface.ts:4</a></li>
+									<li>Defined in declaration.ts:20</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>node: <span class="tsd-signature-type">ClassDeclaration</span></h5>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> dest: <span class="tsd-signature-type">StatementedNode</span><span class="tsd-signature-symbol"> =&nbsp;node.getSourceFile()</span></h5>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> interfaceName: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;node.getName() ? &#x27;I&#x27; + node.getName() : &#x27;IAnonymousClass&#x27;</span></h5>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> removeDocs: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;false</span></h5>
+									<h5>t: <span class="tsd-signature-type">Type</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/_declaration_.propertydeclaration.html" class="tsd-signature-type">PropertyDeclaration</a><span class="tsd-signature-symbol">[]</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -122,14 +120,20 @@
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
 					<li class="current tsd-kind-external-module tsd-is-external">
-						<a href="_refactor_extractinterface_.html">"refactor/extract<wbr>Interface"</a>
+						<a href="_declaration_.html">"declaration"</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-is-external tsd-is-not-exported">
+						<a href="../interfaces/_declaration_.propertydeclaration.html" class="tsd-kind-icon">Property<wbr>Declaration</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-is-external tsd-is-not-exported">
+						<a href="../interfaces/_declaration_.s.html" class="tsd-kind-icon">S</a>
+					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
-						<a href="_refactor_extractinterface_.html#extractinterface" class="tsd-kind-icon">extract<wbr>Interface</a>
+						<a href="_declaration_.html#getproperties" class="tsd-kind-icon">get<wbr>Properties</a>
 					</li>
 				</ul>
 			</nav>

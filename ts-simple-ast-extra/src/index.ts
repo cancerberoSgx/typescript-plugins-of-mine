@@ -1,6 +1,7 @@
 export { Project, ts } from 'ts-morph'
 export * from './astPath'
 export * from './compilerOptions'
+export * from './declaration'
 export * from './diagnostics'
 export * from './flags'
 export * from './generalNode'

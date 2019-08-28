@@ -1,6 +1,6 @@
 {
   "name": "ts-simple-ast-extra",
-  "version": "0.3.10",
+  "version": "0.3.11",
   "description": "High level TypeScript Compiler API and refactor tools based on ts-morph (ex ts-simple-ast) library",
   "main": "dist/src/index.js",
   "typings": "dist/src/index.d.ts",

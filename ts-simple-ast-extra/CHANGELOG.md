@@ -67,3 +67,6 @@
 
 # 0.3.8
  * refactor formatJsdoc lineBreak
+
+#0.3.11
+ * declarations : getProperties

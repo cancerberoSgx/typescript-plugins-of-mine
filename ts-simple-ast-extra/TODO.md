@@ -1,5 +1,6 @@
 
 # TODO
+-[ ] comments refactor: remove comments - remove empty comments - wordWrap text (we could generalize formatJsdocs)
 -[ ] test against pure JS (no tsconfig.json) projects
 -[ ] browser tests
 -[ ] use ts-morph extract interface refactor instead ours
@@ -13,6 +14,7 @@
 -[x] refactor convertParamsToDestructuredObjectSpec
 -[x] refactor formatJsdoc
 -[x] refactor emptyLines
+-[x] declarations : getProperties
 
 ## Ideas
 

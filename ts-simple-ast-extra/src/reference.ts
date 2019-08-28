@@ -30,6 +30,7 @@ export function getTypeReferencesByDefinitionOrigin(o: ExternalTypeReferences) {
       try {
         const typeName = r.getTypeName()
         const name = TypeGuards.isIdentifier(typeName) ? typeName : typeName.getRight()
+
         const definitions = name.getDefinitions()
         // console.log(definitions.map(d => d.getContainerName()));
         // console.log(name.getText(), r.getParent().getText(), name.getDefinitionNodes().map(d => d.getText()+' - '+d.getSourceFile().getSourceFile().getBaseName()));
