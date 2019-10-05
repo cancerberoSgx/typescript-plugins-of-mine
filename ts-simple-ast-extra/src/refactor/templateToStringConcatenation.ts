@@ -48,7 +48,7 @@ export function templateToStringConcatenation(node: Node, config?: Config, dontF
         TypeGuards.isConditionalExpression(expr) ||
         (TypeGuards.isBinaryExpression(expr) &&
           expr.getOperatorToken().getText() === '+' &&
-          (TypeGuards.isBinaryExpression(expr.getParent()) ||
+          (expr.getParent() && TypeGuards.isBinaryExpression(expr.getParent()!) ||
             expr.getFirstDescendantByKind(ts.SyntaxKind.BinaryExpression))) ||
         // TODO: probably there are other cases missing here.
         (TypeGuards.isBinaryExpression(expr) && expr.getOperatorToken().getText() !== '+')

@@ -1,4 +1,4 @@
-import { notUndefined } from 'misc-utils-of-mine-generic'
+import { getEnumKey, notUndefined } from 'misc-utils-of-mine-generic'
 import { ClassDeclaration, ExpressionWithTypeArguments, InterfaceDeclaration, Node, ts, TypeGuards } from 'ts-morph'
 
 /**
@@ -71,8 +71,11 @@ export function getExtendsRecursivelyNames(decl: ClassDeclaration | InterfaceDec
     .filter((n, i, a) => a.indexOf(n) === i)
 }
 
-export const findInterfacesWithPropertyNamed = (decl: ClassDeclaration, memberName: string): InterfaceDeclaration[] =>
-  getImplementsAll(decl)
+/**
+ * Find any interface implemented by given class which declares a member with given name
+ */
+export function findInterfacesWithPropertyNamed(decl: ClassDeclaration, memberName: string): InterfaceDeclaration[] {
+  return getImplementsAll(decl)
     .map(expr =>
       expr
         .getType()
@@ -83,6 +86,7 @@ export const findInterfacesWithPropertyNamed = (decl: ClassDeclaration, memberNa
     .filter(TypeGuards.isInterfaceDeclaration)
     .filter(d => d.getMembers().find(m => TypeGuards.isPropertyNamedNode(m) && m.getName() === memberName))
     .filter((value, pos, arr) => arr.indexOf(value) === pos) // union
+}
 
 export function isDeclaration(n: Node) {
   return (
@@ -118,21 +122,4 @@ export function isDeclaration(n: Node) {
 /** get the kind name as string of given kind value or node */
 export function getKindName(kind: number | ts.Node): string {
   return kind || kind === 0 ? getEnumKey(ts.SyntaxKind, (kind as ts.Node).kind || kind) : 'undefined'
-}
-
-export function getEnumKey(anEnum: any, value: any): string {
-  for (const key in anEnum) {
-    if (value === anEnum[key]) {
-      return key
-    }
-  }
-  return ''
-}
-
-export function getEnumKeyAndValue(e: any) {
-  const a = []
-  for (const key in e) {
-    a.push({ key, value: e[key] })
-  }
-  return a
 }

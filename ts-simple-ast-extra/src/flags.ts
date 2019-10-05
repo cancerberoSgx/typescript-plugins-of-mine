@@ -1,5 +1,5 @@
+import { getEnumKeyAndValue } from 'misc-utils-of-mine-generic'
 import { ObjectFlags, Symbol, SymbolFlags, Type, TypeFlags } from 'ts-morph'
-import { getEnumKeyAndValue } from './types'
 
 export function getSymbolFlags(s: Symbol): string[] {
   const v: string[] = []

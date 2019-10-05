@@ -6,3 +6,9 @@
 // if (n && !TypeGuards.isSemicolonToken(n)) {
 //   var c = n.getKindName()
 // }
+
+
+// p.declaration.getType().getSymbol() -- often returns undefined - it should be in the types.
+
+
+// getStaticMethods, getStaticProperties, getInstanceMethods, getConstructors() they all support  getJsDocs() but getInstanceProperties() don't and it should

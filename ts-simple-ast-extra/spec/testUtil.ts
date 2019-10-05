@@ -36,6 +36,7 @@ export function expectNoErrors(project: Project) {
   expect(printDiagnostics(project).join('\n')).toBe('')
 }
 
+// TODO: move this and colors dependency to misc-generic-* project
 require('colors')
 export function expectEqualsAndDiff(a: string, b: string) {
   const d = diffLines(a, b)

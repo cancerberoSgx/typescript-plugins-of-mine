@@ -1,7 +1,6 @@
 # ts-simple-ast-extra
 
-High level TypeScript Compiler API and refactor tools based on ts-morph (ex ts-simple-ast) library
-
+High level TypeScript Compiler API and TypeScript/JavaScript refactor APIs based on ts-morph (ex ts-simple-ast) library.
 
 ## Contents
 
@@ -26,8 +25,10 @@ High level TypeScript Compiler API and refactor tools based on ts-morph (ex ts-s
 
  * Many APIs for project's **code refactors**. 
    * in general based on TypeScript built in code fixes and refactors
-   * Easy to use
-   * have tests but use at your own risk
+   * Easy to use.
+   * Configurable
+   * Composable
+   * Have tests but use at your own risk
 
  * APIs useful to me that unfortunately are out of topic to pull them to in ts-morph like astPath or generalNode abstraction or 
 
@@ -37,11 +38,14 @@ High level TypeScript Compiler API and refactor tools based on ts-morph (ex ts-s
 
 ## Install
 
+```
 npm install ts-simple-ast-extra
+```
 
 ## Usage
 
 NOTE: Currently, although there is API documentation I would say the best source of documentation are the test. 
+
  * There are many different kind of APIs. Each file in src implements a "topic". 
  * Each file or "topic" has a test at `spec` folder using the same name. At the beggining there is alwasys a simple usage
 `src/refactor` contain many interesting code refactors at the project level
@@ -73,7 +77,6 @@ export f = (b:number h: Date[])=>{
 ```
 
 ### format
-
 
 ```ts
 import {Project, format} from 'ts-simple-ast-extra'

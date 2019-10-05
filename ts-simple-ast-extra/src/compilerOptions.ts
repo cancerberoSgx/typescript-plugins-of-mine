@@ -15,6 +15,7 @@ export function buildManipulationSettings(
     }
   }
   const obj: ManipulationSettings = {
+    useTrailingCommas: false,
     indentationText,
     usePrefixAndSuffixTextForRename: false,
     newLineKind: !formatOptions

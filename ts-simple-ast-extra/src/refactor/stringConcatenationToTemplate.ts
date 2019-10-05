@@ -40,12 +40,15 @@ let exprBuffer: string[] = []
 
 function stringConcatenation2TemplateExpressionRecursively(exprBase: BinaryExpression, tc: TypeChecker) {
   exprBuffer = []
-  let expr: Node = exprBase
+  let expr: Node | undefined = exprBase
   stringConcatenation2TemplateExpression(exprBase, tc, true)
   while ((expr = expr.getParent()) && TypeGuards.isBinaryExpression(expr)) {
     stringConcatenation2TemplateExpression(expr, tc)
   }
   const text = `\`${exprBuffer.join('')}\``
+  if (!expr) {
+    throw new Error('Expected defined Expression Node')
+  }
   expr.getFirstChildByKind(ts.SyntaxKind.BinaryExpression)!.replaceWithText(text)
 }
 

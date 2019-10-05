@@ -38,8 +38,8 @@ class C {
         return [
             1,
             2, 3
-        ]    
-}
+        ]
+    }
 }
 function f() {
     alert(1)
@@ -75,8 +75,8 @@ class C {
     return [
       1,
       2, 3
-    ]  
-}
+    ]
+  }
 }
 function f() {
   alert(1)
@@ -108,8 +108,8 @@ class C {
     return [
       1,
       2, 3
-    ]  
-}
+    ]
+  }
 }
 function f() {
   alert(1)

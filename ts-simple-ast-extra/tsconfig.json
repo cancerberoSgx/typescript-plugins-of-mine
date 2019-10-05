@@ -8,8 +8,7 @@
     "strict": true,  
     "esModuleInterop": true,
     "declaration": true,
-    "skipLibCheck": true,
-    "sourceMap": true,
+    "sourceMap": true
   }, 
   "include": ["src", "spec"] 
 }

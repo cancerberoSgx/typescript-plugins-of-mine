@@ -74,8 +74,6 @@
 							<h3>Functions</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-external"><a href="_types_.html#findinterfaceswithpropertynamed" class="tsd-kind-icon">find<wbr>Interfaces<wbr>With<wbr>Property<wbr>Named</a></li>
-								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-external"><a href="_types_.html#getenumkey" class="tsd-kind-icon">get<wbr>Enum<wbr>Key</a></li>
-								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-external"><a href="_types_.html#getenumkeyandvalue" class="tsd-kind-icon">get<wbr>Enum<wbr>Key<wbr>And<wbr>Value</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-external"><a href="_types_.html#getextendsrecursively" class="tsd-kind-icon">get<wbr>Extends<wbr>Recursively</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-external"><a href="_types_.html#getextendsrecursivelynames" class="tsd-kind-icon">get<wbr>Extends<wbr>Recursively<wbr>Names</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-external"><a href="_types_.html#getimplementsall" class="tsd-kind-icon">get<wbr>Implements<wbr>All</a></li>
@@ -91,7 +89,7 @@
 				<h2>Functions</h2>
 				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
 					<a name="findinterfaceswithpropertynamed" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagConst">Const</span> find<wbr>Interfaces<wbr>With<wbr>Property<wbr>Named</h3>
+					<h3>find<wbr>Interfaces<wbr>With<wbr>Property<wbr>Named</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
 						<li class="tsd-signature tsd-kind-icon">find<wbr>Interfaces<wbr>With<wbr>Property<wbr>Named<span class="tsd-signature-symbol">(</span>decl<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ClassDeclaration</span>, memberName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">InterfaceDeclaration</span><span class="tsd-signature-symbol">[]</span></li>
 					</ul>
@@ -99,9 +97,14 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/d8e9742/ts-simple-ast-extra/src/types.ts#L74">types.ts:74</a></li>
+									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/9906da9/ts-simple-ast-extra/src/types.ts#L77">types.ts:77</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Find any interface implemented by given class which declares a member with given name</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
@@ -116,55 +119,6 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
-					<a name="getenumkey" class="tsd-anchor"></a>
-					<h3>get<wbr>Enum<wbr>Key</h3>
-					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Enum<wbr>Key<span class="tsd-signature-symbol">(</span>anEnum<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/d8e9742/ts-simple-ast-extra/src/types.ts#L123">types.ts:123</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>anEnum: <span class="tsd-signature-type">any</span></h5>
-								</li>
-								<li>
-									<h5>value: <span class="tsd-signature-type">any</span></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
-					<a name="getenumkeyandvalue" class="tsd-anchor"></a>
-					<h3>get<wbr>Enum<wbr>Key<wbr>And<wbr>Value</h3>
-					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Enum<wbr>Key<wbr>And<wbr>Value<span class="tsd-signature-symbol">(</span>e<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">[]</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/d8e9742/ts-simple-ast-extra/src/types.ts#L132">types.ts:132</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>e: <span class="tsd-signature-type">any</span></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">[]</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
 					<a name="getextendsrecursively" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagConst">Const</span> get<wbr>Extends<wbr>Recursively</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
@@ -174,7 +128,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/d8e9742/ts-simple-ast-extra/src/types.ts#L44">types.ts:44</a></li>
+									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/9906da9/ts-simple-ast-extra/src/types.ts#L44">types.ts:44</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -202,7 +156,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/d8e9742/ts-simple-ast-extra/src/types.ts#L68">types.ts:68</a></li>
+									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/9906da9/ts-simple-ast-extra/src/types.ts#L68">types.ts:68</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -230,7 +184,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/d8e9742/ts-simple-ast-extra/src/types.ts#L7">types.ts:7</a></li>
+									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/9906da9/ts-simple-ast-extra/src/types.ts#L7">types.ts:7</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -258,7 +212,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/d8e9742/ts-simple-ast-extra/src/types.ts#L35">types.ts:35</a></li>
+									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/9906da9/ts-simple-ast-extra/src/types.ts#L35">types.ts:35</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -286,7 +240,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/d8e9742/ts-simple-ast-extra/src/types.ts#L119">types.ts:119</a></li>
+									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/9906da9/ts-simple-ast-extra/src/types.ts#L123">types.ts:123</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -314,7 +268,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/d8e9742/ts-simple-ast-extra/src/types.ts#L87">types.ts:87</a></li>
+									<li>Defined in <a href="https://github.com/cancerberoSgx/typescript-plugins-of-mine/blob/9906da9/ts-simple-ast-extra/src/types.ts#L91">types.ts:91</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -344,12 +298,6 @@
 				<ul class="before-current">
 					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
 						<a href="_types_.html#findinterfaceswithpropertynamed" class="tsd-kind-icon">find<wbr>Interfaces<wbr>With<wbr>Property<wbr>Named</a>
-					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
-						<a href="_types_.html#getenumkey" class="tsd-kind-icon">get<wbr>Enum<wbr>Key</a>
-					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
-						<a href="_types_.html#getenumkeyandvalue" class="tsd-kind-icon">get<wbr>Enum<wbr>Key<wbr>And<wbr>Value</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
 						<a href="_types_.html#getextendsrecursively" class="tsd-kind-icon">get<wbr>Extends<wbr>Recursively</a>

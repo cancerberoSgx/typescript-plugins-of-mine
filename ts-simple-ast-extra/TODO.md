@@ -1,20 +1,23 @@
 
 # TODO
--[ ] comments refactor: remove comments - remove empty comments - wordWrap text (we could generalize formatJsdocs)
--[ ] test against pure JS (no tsconfig.json) projects
--[ ] browser tests
--[ ] use ts-morph extract interface refactor instead ours
--[ ] move the project to its own repo - change its name to something more meanful related to refactors. 
-  -[ ] Command line Application ? separate project ? 
--[x] formatJsdoc refactor: add line break
--[x] use ts-refactor instead prettier.
--[x] refactor/organizeImports
--[x] refactor format: provide string level APIs
--[x] format refactors: Option to check for compile errors.
--[x] refactor convertParamsToDestructuredObjectSpec
--[x] refactor formatJsdoc
--[x] refactor emptyLines
--[x] declarations : getProperties
+
+- [ ] CLI tool for refactors
+- [ ] TypeScript plugin for refactors
+- [ ] comments refactor: remove comments - remove empty comments - wordWrap text (we could generalize formatJsdocs)
+- [ ] test against pure JS (no tsconfig.json) projects
+- [ ] browser tests
+- [ ] use ts-morph extract interface refactor instead ours
+- [ ] move the project to its own repo - change its name to something more meanful related to refactors. 
+  - [ ] Command line Application ? separate project ? 
+- [x] formatJsdoc refactor: add line break
+- [x] use ts-refactor instead prettier.
+- [x] refactor/organizeImports
+- [x] refactor format: provide string level APIs
+- [x] format refactors: Option to check for compile errors.
+- [x] refactor convertParamsToDestructuredObjectSpec
+- [x] refactor formatJsdoc
+- [x] refactor emptyLines
+- [x] declarations : getProperties
 
 ## Ideas
 
