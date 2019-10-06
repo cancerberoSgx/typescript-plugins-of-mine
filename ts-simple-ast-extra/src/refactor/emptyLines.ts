@@ -2,7 +2,14 @@ import { detectNewline } from 'misc-utils-of-mine-generic'
 import { RefactorFormatBaseOptions } from './format'
 
 interface ConcreteEmptyLineOptions {
+  /**
+   * Maximum number of continuos empty lines allowed. 
+   */
   emptyLinesMax?: number
+
+  /**
+   * Trim lines first in order to assert they are empty.
+   */
   emptyLinesTrim?: boolean
 }
 export interface EmptyLinesOptions extends RefactorFormatBaseOptions, ConcreteEmptyLineOptions {

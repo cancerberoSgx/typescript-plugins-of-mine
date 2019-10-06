@@ -17,7 +17,7 @@ export interface RefactorBaseOptions {
   verifyErrors?: 'all' | 'syntactical' | 'semantical'
 }
 
-export interface RefactorFormatBaseOptions extends Partial<FormatCodeSettings>, RefactorInputOptions {
+export interface RefactorFormatBaseOptions extends FormatCodeSettings, RefactorInputOptions {
   _projectManipulationSetted?: boolean
 }
 

@@ -2,15 +2,16 @@ import { notUndefined } from 'misc-utils-of-mine-generic'
 import { Identifier, Node, SyntaxKind, TypeGuards } from 'ts-morph'
 
 export function getDefinitionsOf(id: Identifier) {
-  return id
-    .findReferences()
-    .map(r =>
-      r
-        .getDefinition()
-        .getNode()
-        .getParent()
-    )
-    .filter(notUndefined)
+  return id.getDefinitionNodes()
+  // return id
+  //   .findReferences()
+  //   .map(r =>
+  //     r
+  //       .getDefinition()
+  //       .getNode()
+  //       .getParent()
+  //   )
+  //   .filter(notUndefined)
 }
 
 interface ExternalTypeReferences {
