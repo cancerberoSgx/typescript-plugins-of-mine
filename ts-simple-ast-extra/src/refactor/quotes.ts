@@ -19,8 +19,8 @@ export function quotes(options: QuotesOptions) {
   }
   options.file
     .getDescendants()
-    .filter(d => TypeGuards.isStringLiteral(d) || TypeGuards.isNoSubstitutionTemplateLiteral(d))
-    .forEach(d => changeQuoteChar(d as any, q as QuoteChar))
+    .filter(d => TypeGuards.isStringLiteral(d))
+    .forEach(d => changeQuoteChar(d as any, q as QuoteChar, options))
 }
 
 export function quote(s: string, q: QuoteChar) {
@@ -28,7 +28,17 @@ export function quote(s: string, q: QuoteChar) {
   return q + newLiteral + q
 }
 
-export function changeQuoteChar(node: Quotable, newQuoteChar: QuoteChar) {
-  const newText = quote(node.getLiteralText(), newQuoteChar)
-  node.replaceWithText(newText)
+export function changeQuoteChar(node: Quotable, newQuoteChar: QuoteChar, options: QuotesOptions) {
+  const s = node.getText()
+  if (s.startsWith(newQuoteChar)) {
+    return
+  }
+  var newText = quote(s.substring(1, s.length - 1), newQuoteChar)
+  try {
+    node.replaceWithText(newText)
+  } catch (ex) {
+    options.debug && console.error('Error with format quotes', {
+      newQuoteChar, oldText: node.getText(), newText, pos: node.getPos(), file: node.getSourceFile().getFilePath()
+    })
+  }
 }

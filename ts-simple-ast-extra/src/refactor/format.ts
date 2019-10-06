@@ -11,6 +11,7 @@ import { trailingSemicolons, TrailingSemicolonsOptions } from './trailingSemicol
 export interface RefactorInputOptions {
   file: SourceFile
   project: Project
+  debug?: boolean
 }
 
 export interface RefactorBaseOptions {
