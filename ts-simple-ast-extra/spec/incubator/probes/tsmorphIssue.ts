@@ -1,4 +1,3 @@
-import { Project, TypeGuards } from 'ts-morph'
 
 // const project = new Project()
 // const file = project.createSourceFile('f1.ts', 'var a = 1')

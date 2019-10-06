@@ -20,5 +20,5 @@
   "importModuleSpecifierPreference": "relative",
   "importModuleSpecifierEnding": "minimal",
   "allowTextChangesInNewFiles": true,
-  "trailingSemicolon": false
+  "trailingSemicolon": "never"
 }
