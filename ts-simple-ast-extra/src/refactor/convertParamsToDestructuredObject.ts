@@ -10,7 +10,7 @@ export function convertParamsToDestructuredObject(o: ConvertParamsToDestructured
   if (params.length === 0)
     return
   const edits = o.project.getLanguageService().getEditsForRefactor(o.file.getFilePath(), {}, params[0],
-    "Convert parameters to destructured object", "Convert parameters to destructured object", o)
+    'Convert parameters to destructured object', 'Convert parameters to destructured object', o)
   if (edits)
     edits.applyChanges({ overwrite: true })
 }

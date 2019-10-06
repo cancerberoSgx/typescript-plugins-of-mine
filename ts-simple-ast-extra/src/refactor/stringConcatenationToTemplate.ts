@@ -1,7 +1,8 @@
 import { BinaryExpression, Expression, Node, ts, TypeChecker, TypeGuards } from 'ts-morph'
 
 /**
- * Transform all string concatenation expressions found in node and its descendants to string template expressions.
+ * Transform all string concatenation expressions found in node and its descendants to string template
+ * expressions.
  */
 export function stringConcatenationsToTemplateExpressions(node: Node, tc: TypeChecker) {
   let c: Node | undefined
@@ -11,7 +12,8 @@ export function stringConcatenationsToTemplateExpressions(node: Node, tc: TypeCh
 }
 
 /**
- * Will transform node's ancestors binary expression which operator token is '+' and its left and right expressions are strings to a template expression.
+ * Will transform node's ancestors binary expression which operator token is '+' and its left and right
+ * expressions are strings to a template expression.
  */
 export function stringConcatenationToTemplateExpression(node: Node, tc: TypeChecker) {
   let innerStringConcatExpr = [node, ...node.getAncestors()].find(n =>

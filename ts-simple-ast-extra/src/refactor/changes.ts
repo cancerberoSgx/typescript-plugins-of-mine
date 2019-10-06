@@ -53,7 +53,7 @@ export function applyFileTextChanges(
     throw new Error(
       'FileTextChanges instructed to modify existing file ' +
       file +
-      " but it doesn't exist. Refusing to create it. Aborting!"
+      ' but it doesn\'t exist. Refusing to create it. Aborting!'
     )
   }
   let created
@@ -89,11 +89,13 @@ export function applyRefactorEditInfo(
 }
 
 /**
- * Apply suggested code fixes like the ones returned by (`LanguageService#getSuggestionDiagnostics()`) to given `containerNode`.
+ * Apply suggested code fixes like the ones returned by (`LanguageService#getSuggestionDiagnostics()`) to given
+ * `containerNode`.
  * Code fixes are given in `codes` or if not provided, all language service suggestions will be applied.
- *
+ * 
  * @param containerNode the node inside which to apply code fixes.
- * @param codes code fixes codes to apply. If not provided all language service suggestions code fixes that apply to
+ * @param codes code fixes codes to apply. If not provided all language service suggestions code fixes that apply
+ * to
  * `containerNode` will be applied.
  */
 export function applyAllSuggestedCodeFixes(

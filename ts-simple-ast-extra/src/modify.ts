@@ -10,7 +10,9 @@ export function array2DInsert(init: ArrayLiteralExpression, fileId: number, inde
   })
 }
 
-/** makes sure there are items until index-1 (se we can add the index-th) */
+/**
+ * makes sure there are items until index-1 (se we can add the index-th)
+ */
 export function ensureArrayLength(a: ArrayLiteralExpression, index: number, item: string) {
   if (index >= a.getElements().length) {
     for (let i = a.getElements().length; i < index; i++) {

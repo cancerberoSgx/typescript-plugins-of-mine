@@ -33,7 +33,7 @@ describe('astPath', () => {
     expect(n2!.getText()).toBe('aVariable1')
   })
 
-  it("should select SourceFile's children", () => {
+  it('should select SourceFile\'s children', () => {
     const project = new Project()
     const f = project.createSourceFile(
       'test.ts',

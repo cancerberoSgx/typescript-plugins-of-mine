@@ -7,13 +7,13 @@ export interface QuotesOptions extends RefactorFormatBaseOptions {
 
 type Quote = UserPreferences['quotePreference']
 type Quotable = StringLiteral | NoSubstitutionTemplateLiteral
-type QuoteChar = '"' | "'"
+type QuoteChar = '"' | '\''
 
 export function quotes(options: QuotesOptions) {
   if (!options.quotePreference) {
     return
   }
-  var q = options.quotePreference === 'single' ? "'" : options.quotePreference === 'double' ? '"' : undefined
+  var q = options.quotePreference === 'single' ? '\'' : options.quotePreference === 'double' ? '"' : undefined
   if (!q || !options.quotePreference) {
     return
   }

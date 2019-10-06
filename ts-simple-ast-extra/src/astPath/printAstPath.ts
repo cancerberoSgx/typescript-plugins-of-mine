@@ -3,7 +3,9 @@ import { AstPath } from '.'
 import { getKindName } from '../types'
 
 interface Options {
-  /** will throw if path doesn't have syntax kind information */
+  /**
+   * will throw if path doesn't have syntax kind information
+   */
   forceKindOrThrow?: boolean
   dontPrintSourceFilePrefix?: boolean
   onlyIndex?: boolean

@@ -5,7 +5,8 @@ import { printAstPath } from './astPath'
 import { getName, isDirectory, isNode, isSourceFile } from './node'
 
 /**
- * General definition of nodes that contemplate everything, directories, sourceFiles, and nodes, with a common minimal API
+ * General definition of nodes that contemplate everything, directories, sourceFiles, and nodes, with a common
+ * minimal API
  */
 export type GeneralNode = Node | Directory
 
@@ -17,7 +18,8 @@ export type GeneralNode = Node | Directory
 // }
 
 /**
- * Returns immediate children. In case of Nodes, children are obtained using forEachChild or getChildren according to
+ * Returns immediate children. In case of Nodes, children are obtained using forEachChild or getChildren
+ * according to
  * given getChildren parameter or to global config
  */
 export function getGeneralNodeChildren(
@@ -104,7 +106,8 @@ export function getGeneralNodeParent(f: GeneralNode): GeneralNode | undefined {
 }
 
 /**
- * Directories and SourceFile path is given by getPath* methods. For nodes we use AstPath for defining their path.
+ * Directories and SourceFile path is given by getPath* methods. For nodes we use AstPath for defining their
+ * path.
  */
 export function getGeneralNodePath(f: GeneralNode, relativeTo?: string): string {
   if (isDirectory(f) || isSourceFile(f)) {

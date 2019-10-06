@@ -1,6 +1,6 @@
 import { Node, NoSubstitutionTemplateLiteral, StringLiteral, ts, TypeGuards } from 'ts-morph'
 
-type Quote = "'" | '"'
+type Quote = '\'' | '"'
 
 interface Config {
   quote?: Quote

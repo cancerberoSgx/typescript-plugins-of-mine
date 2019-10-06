@@ -11,6 +11,6 @@ describe('convertToEs6Module', () => {
     `
     const f = project.createSourceFile('f1.ts', code)
     convertToEs6Module(project, f)
-    expect(f.getText()).toContain("import r=require('f')")
+    expect(f.getText()).toContain('import r=require(\'f\')')
   })
 })

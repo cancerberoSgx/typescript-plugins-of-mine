@@ -119,7 +119,9 @@ export function isDeclaration(n: Node) {
   )
 }
 
-/** get the kind name as string of given kind value or node */
+/**
+ * get the kind name as string of given kind value or node
+ */
 export function getKindName(kind: number | ts.Node): string {
   return kind || kind === 0 ? getEnumKey(ts.SyntaxKind, (kind as ts.Node).kind || kind) : 'undefined'
 }

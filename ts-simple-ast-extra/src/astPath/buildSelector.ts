@@ -4,13 +4,16 @@ import { AstPath, ASTPathNode, BuildAstPathOptions } from './types'
 /**
  * Creates a selector like `0/4/3/` where numbers are the child index of the node on that level with respect
  * to the parent (getChildIndex()), starting from the sourceFile.
- *
+ * 
  * TODO. add a second destination node that by default is the SourceFile
- *
- * TODO: we can include extra node attribute information like id, name, or the type (:statement, :expression, :declaration, :function, or :pattern) so we can generate richer - human path strings representations and have more ways of validating the path
- *
- * In particular nested attributes is interesting in tsquery since we can search for names inheritance, etc : Identifier[name="Animal"], IfStatement:has([name="foo"]), TODO: investigate
- *
+ * 
+ * TODO: we can include extra node attribute information like id, name, or the type (:statement, :expression,
+ * :declaration, :function, or :pattern) so we can generate richer - human path strings representations and have
+ * more ways of validating the path
+ * 
+ * In particular nested attributes is interesting in tsquery since we can search for names inheritance, etc :
+ * Identifier[name="Animal"], IfStatement:has([name="foo"]), TODO: investigate
+ * 
  * )
  */
 export function buildAstPath(

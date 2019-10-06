@@ -61,7 +61,7 @@ export function getNodeProperty<T = any>(n: Node, path: string | (string | numbe
  * Iterates recursively over all children of given node and apply visitor on each of them. If visitor returns
  * non falsy value then it stops visiting and that value is returned to the caller. See
  * https://en.wikipedia.org/wiki/Tree_traversal for the meaning of "DeepFirst".
- *
+ * 
  * @param getChildrenMode if true it will use `node.getChildren()` o obtain children instead of default
  * behavior that is using `node.forEachChild`
  */

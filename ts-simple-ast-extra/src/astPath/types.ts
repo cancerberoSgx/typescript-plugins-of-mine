@@ -20,10 +20,10 @@ export interface BuildAstPathOptions {
   includeNodeName?: boolean
 
   /**
-   TODO 
-
-   If true the selector will also contain the path from the root node to its source file so select can verify
-   this. 
+   *    TODO 
+   * 
+   *    If true the selector will also contain the path from the root node to its source file so select can verify
+   *    this. 
    */
   includePathToSourceFile?: boolean
 }
@@ -59,7 +59,7 @@ export interface AstPath {
 export interface SelectOptions {
   /**
    * TODO
-   *
+   * 
    * If true and the Ast path includes them, it will verify that each node kind on the path matches the AST's
    */
   verifyNodeKind?: boolean
