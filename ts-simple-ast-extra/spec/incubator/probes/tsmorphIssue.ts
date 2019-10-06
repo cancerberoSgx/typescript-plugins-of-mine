@@ -1,4 +1,4 @@
-// import { Project, TypeGuards } from 'ts-morph'
+import { Project, TypeGuards } from 'ts-morph'
 
 // const project = new Project()
 // const file = project.createSourceFile('f1.ts', 'var a = 1')
@@ -12,3 +12,9 @@
 
 
 // getStaticMethods, getStaticProperties, getInstanceMethods, getConstructors() they all support  getJsDocs() but getInstanceProperties() don't and it should
+
+
+
+// const project = new Project()
+// const file = project.createSourceFile('f1.ts', 'f(()=>a())')
+// file.getDescendantStatements().forEach(s=>console.log(s.getText()))

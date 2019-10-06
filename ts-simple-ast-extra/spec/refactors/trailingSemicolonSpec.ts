@@ -82,4 +82,14 @@ describe('trailingSemicolon', () => {
     `)
     )
   })
+
+  it('should not add semicolon on inner arrow expressions', () => {
+    const project = new Project({ useVirtualFileSystem: true })
+    const code = `f ( () => a() )`
+    const f = project.createSourceFile('f1.ts', code)
+    addTrailingSemicolons(f)
+    expect(removeWhites(f.getText())).toBe(
+      removeWhites(`f ( () => a() );`)
+    )
+  })
 })
