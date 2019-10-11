@@ -1,5 +1,5 @@
 import { Project } from 'ts-morph'
-import { quotes } from '../../src/refactor/quotes'
+import { quotes } from '../../src/refactor'
 import { expectEqualsAndDiff, expectNoErrors } from '../testUtil'
 
 describe('should change strings in templates, and change only spaces', () => {

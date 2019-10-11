@@ -2,6 +2,7 @@
 # TODO
 
 - [ ] CLI tool for refactors
+- [ ] move astgeneralnode implementation from cannabis - use the same.
 - [ ] TypeScript plugin for refactors
 - [ ] comments refactor: remove comments - remove empty comments - wordWrap text (we could generalize formatJsdocs)
 - [ ] test against pure JS (no tsconfig.json) projects

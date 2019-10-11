@@ -1,5 +1,5 @@
 import { Project } from 'ts-morph'
-import { format, formatString } from '../../src/refactor/format'
+import { format, formatString } from '../../src/refactor/impl/format'
 import { expectEqualsAndDiff, expectNoErrors } from '../testUtil'
 
 describe('format', () => {

@@ -16,7 +16,7 @@
     "doc": "typedoc --mode modules --ignoreCompilerErrors --out ../docs/ts-simple-ast-extra src/index.ts && npm run docs-readme-toc ",
     "docs-readme-toc": "npx markdown-toc README.md -i",
     "all": "npm run clean && npm run lint && npm run build && npm run test && npm run doc",
-    "all-publish": "npm run all && npm version patch && npm publish"
+    "all-publish": "npm run all && git commit -a -m \"version patch\" && npm version patch && npm publish"
   },
   "keywords": [
     "TypeScript",

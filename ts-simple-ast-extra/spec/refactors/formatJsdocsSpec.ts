@@ -1,5 +1,5 @@
 import { Project } from 'ts-morph'
-import { formatJsdocs } from '../../src/refactor/formatJsdocs'
+import { formatJsdocs } from '../../src/refactor/impl/formatJsdocs'
 import { expectEqualsAndDiff, expectNoErrors } from '../testUtil'
 
 describe('formatJsdocs', () => {
