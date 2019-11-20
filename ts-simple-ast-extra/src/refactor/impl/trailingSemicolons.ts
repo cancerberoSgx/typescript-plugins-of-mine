@@ -48,7 +48,8 @@ export function addTrailingSemicolons(f: SourceFile) {
       // add semicolon only if there is not already one
       return
     }
-    else if (lt.getText().trim().endsWith('}')) {
+    //@ts-ignore TODO: should be else if. ts-morph issue?
+    else if (lt.getText().trim().endsWith('}')) { 
       // is block-like declaration - then it doesn't need
       return
     }
