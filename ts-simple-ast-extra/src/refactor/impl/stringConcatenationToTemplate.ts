@@ -44,7 +44,7 @@ function stringConcatenation2TemplateExpressionRecursively(exprBase: BinaryExpre
   exprBuffer = []
   let expr: Node | undefined = exprBase
   stringConcatenation2TemplateExpression(exprBase, tc, true)
-  while ((expr = expr.getParent()) && TypeGuards.isBinaryExpression(expr)) {
+  while ((expr = expr.getParent()) && stringConcatenationNodePredicate(expr, tc)) {
     stringConcatenation2TemplateExpression(expr, tc)
   }
   const text = `\`${exprBuffer.join('')}\``
