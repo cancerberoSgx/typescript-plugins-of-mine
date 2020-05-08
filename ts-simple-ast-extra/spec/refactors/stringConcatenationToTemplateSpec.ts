@@ -39,6 +39,9 @@ describe('stringConcatenationToTemplate', () => {
         function g(a: number) {
           return a + 2
         } 
+        const text1 = 'ba'
+        const text2 = 'ar'
+        const isTheSame = text1 + 'r' === 'b' + text2
       `
       )!
       stringConcatenationsToTemplateExpressions(f, project.getTypeChecker())
@@ -53,6 +56,9 @@ describe('stringConcatenationToTemplate', () => {
         function g(a: number) {
           return a + 2
         }
+        const text1 = 'ba'
+        const text2 = 'ar'
+        const isTheSame = \`\${text1}r\` === \`b\${text2}\`
       `)
       )
     })
