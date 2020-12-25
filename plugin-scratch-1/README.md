@@ -1,0 +1,1 @@
+simple ts plugin with latest typescript and without libraries
